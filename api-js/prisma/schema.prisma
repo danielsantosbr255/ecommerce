@@ -33,10 +33,12 @@ model User {
 
 model Product {
   id          String      @id @default(uuid())
-  name        String
+  title       String
   description String
   price       Decimal
   stock       Int
+  image       String      @default("image")
+  category    String      @default("products")
   createdAt   DateTime    @default(now())
   cartItems   CartItem[]
   OrderItem   OrderItem[]

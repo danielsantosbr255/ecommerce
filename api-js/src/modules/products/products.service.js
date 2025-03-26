@@ -10,15 +10,16 @@ module.exports = {
         return prisma.product.findUnique({ where: { id } });
     },
 
-    createProduct({ name, description, price, stock }) {
-        // const existProduct = prisma.product.findFirst({ where: { name } });
-        return prisma.product.create({ data: { name, description, price, stock } });
+    createProduct({ title, description, price, stock, image, category }) {
+        return prisma.product.create({
+            data: { title, description, price, stock, image, category },
+        });
     },
 
-    updateProduct(id, { name, description, price, stock }) {
+    updateProduct(id, { title, description, price, stock, image, category }) {
         return prisma.product.update({
             where: { id },
-            data: { name, description, price, stock },
+            data: { title, description, price, stock, image, category },
         });
     },
 

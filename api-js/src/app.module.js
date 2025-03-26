@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const errorHandler = require("./config/middlewares/error.handler");
 const authMiddleware = require("./config/middlewares/auth.middleware");
@@ -11,6 +12,7 @@ const ordersModule = require("./modules/orders/orders.module");
 const app = express();
 
 app.use(express.json());
+// app.use(express.static(path.join(__dirname, "config/public")));
 
 app.use("/auth", authModule);
 app.use("/products", productsModule);
