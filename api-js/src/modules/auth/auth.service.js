@@ -1,6 +1,6 @@
-const tools = require("../../config/utils/Tools");
-const { prisma } = require("../../config/database/prisma");
-const CustomError = require("../../config/utils/CustomError");
+const tools = require("../../common/utils/Tools");
+const { prisma } = require("../../common/database/prisma");
+const CustomError = require("../../common/utils/CustomError");
 
 module.exports = {
     async signUp(userData) {
@@ -21,10 +21,10 @@ module.exports = {
         const { email, password } = body;
 
         const user = await prisma.user.findUnique({ where: { email } });
-        if (!user) throw new Error("Usuário não encontrado");
+        if (!user) throw new CustomError("Usuário não encontrado", 404);
 
         const matchPassword = await tools.verifyPassword(password, user.password);
-        if (!matchPassword) throw new Error("Email ou Senhs Inválidos");
+        if (!matchPassword) throw new CustomError("Email ou Senha Inválidos", 403);
 
         const token = tools.generateToken({ id: user.id, role: user.role });
         return token;

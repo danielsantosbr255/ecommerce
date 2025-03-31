@@ -1,5 +1,5 @@
 const services = require("./products.service");
-const validator = require("../../config/validators/product.validator");
+const validator = require("../../common/validators/product.validator");
 
 module.exports = {
     async getProducts(req, res) {

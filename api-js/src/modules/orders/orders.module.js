@@ -1,10 +1,8 @@
 const router = require("express").Router();
 const controller = require("./orders.controller");
-const authMiddleware = require("../../config/middlewares/auth.middleware");
+const authMiddleware = require("../../common/middlewares/auth.middleware");
 
-router.use(authMiddleware()); // Only authenticated users can access these routes
-
-router.get("/", controller.getOrdersByUserId);
-router.post("/checkout", controller.createOrder);
+router.get("orders/", authMiddleware(), controller.getOrdersByUserId);
+router.post("orders/checkout", authMiddleware(), controller.createOrder);
 
 module.exports = router;

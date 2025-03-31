@@ -1,5 +1,5 @@
 const service = require("./user.service");
-const dataValidator = require("../../config/validators/user.validator");
+const dataValidator = require("../../common/validators/user.validator");
 
 module.exports = {
     async getUsers(req, res) {
@@ -12,8 +12,8 @@ module.exports = {
         return res.json(user);
     },
 
-    async updateUser(req, res) {        
-        const validateData = dataValidator.update(req.body)                
+    async updateUser(req, res) {
+        const validateData = dataValidator.update(req.body);
         const updatedUser = await service.updateUser(req.params.id, validateData);
         return res.json(updatedUser);
     },
@@ -26,11 +26,11 @@ module.exports = {
     // MY ACCOUNT
     async getMyProfile(req, res) {
         const user = await service.getUserById(req.user.id);
-        return res.json(user);
+        return res.json({ user });
     },
 
     async updateMyProfile(req, res) {
-        const validatedData = dataValidator.updateProfile(req.body)
+        const validatedData = dataValidator.updateProfile(req.body);
         const updatedUser = await service.updateUser(req.user.id, validatedData);
         return res.json(updatedUser);
     },

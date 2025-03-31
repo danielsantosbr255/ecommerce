@@ -1,5 +1,5 @@
-const CustomError = require("../../config/utils/CustomError");
-const { prisma } = require("../../config/database/prisma");
+const CustomError = require("../../common/utils/CustomError");
+const { prisma } = require("../../common/database/prisma");
 
 module.exports = {
     async getUsers() {

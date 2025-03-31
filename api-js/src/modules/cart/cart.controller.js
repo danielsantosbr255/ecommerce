@@ -1,5 +1,5 @@
 const service = require("./cart.service");
-const validator = require("../../config/validators/cart.validator");
+const validator = require("../../common/validators/cart.validator");
 
 module.exports = {
     async addToCart(req, res) {

@@ -1,16 +1,16 @@
 const { z } = require("zod");
 
 const msg = {
-    email: "E-mail inválido",
-    required: "Campo Obrigatório",
-    partial_error: "Dados Inválidos!",
-    minLength: (num) => `Deve ter pelo menos ${num} caracteres`,
+    invalid: "inválido",
+    required: "é obrigatório",
+    partial: "Dados Inválidos!",
+    minLength: (num) => `deve ter pelo menos ${num} caracteres`,
 };
 
 const role = z.string().optional();
-const name = z.string().min(2, msg.minLength(2)).optional();
-const email = z.string().email(msg.email).optional();
-const password = z.string().min(5, msg.minLength(5)).optional();
+const name = z.string({ required_error: msg.required }).min(3, msg.minLength(3));
+const email = z.string({ required_error: msg.required }).email(msg.invalid)
+const password = z.string({ required_error: msg.required }).min(5, msg.minLength(5))
 
 module.exports = {
     signUp(data) {

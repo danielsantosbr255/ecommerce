@@ -1,0 +1,65 @@
+"use client";
+
+import Link from "next/link";
+import React, { useState } from "react";
+import Form from "@/components/forms/Form";
+import Input from "@/components/inputs/Input";
+import Button from "@/components/buttons/Button";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogIn } from "lucide-react";
+
+export default function SignIn() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const { error, loading, login } = useAuth();
+
+    const handleLogin = async (e: any) => {
+        e.preventDefault();
+        await login(email, password);
+    };
+
+    return (
+        <div className="bg-gray-200 flex flex-col w-auto items-center justify-center h-screen">
+            <Form title="Login">
+                <form onSubmit={handleLogin} className="flex flex-col gap-4">
+                    <Input
+                        required
+                        type="email"
+                        placeholder="Seu E-mail"
+                        onChange={(e: any) => {
+                            setEmail(e.target.value);
+                        }}
+                    />
+                    <Input
+                        required
+                        minLength={5}
+                        type="password"
+                        placeholder="Sua Senha"
+                        onChange={(e: any) => {
+                            setPassword(e.target.value);
+                        }}
+                    />
+                    <Button>
+                        Entrar <LogIn />
+                    </Button>
+
+                    {/* ERROR */}
+                    <p className="text-red-500 text-center">{error}</p>
+
+                    <div className="flex justify-between">
+                        <Link
+                            href="/auth/signup"
+                            className="text-sm text-gray-400 hover:text-gray-500"
+                        >
+                            Não possui uma conta?
+                        </Link>
+                        <Link href="#" className="text-sm text-gray-400 hover:text-gray-500">
+                            Esqueceu a senha?
+                        </Link>
+                    </div>
+                </form>
+            </Form>
+        </div>
+    );
+}

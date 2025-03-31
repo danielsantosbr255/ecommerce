@@ -1,5 +1,5 @@
 const service = require("./auth.service");
-const userValidator = require("../../config/validators/user.validator");
+const userValidator = require("../../common/validators/user.validator");
 
 const authController = {
     async signUp(req, res) {
