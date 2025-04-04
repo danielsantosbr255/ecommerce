@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+
 const errorHandler = require("./common/middlewares/error.handler");
 
 const AuthModule = require("./modules/auth/auth.module");
@@ -10,10 +13,12 @@ const ProductsModule = require("./modules/products/products.module");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-app.use([AuthModule, UserModule, ProductsModule, CartModule, OrdersModule]);
+app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule);
 
 app.use(errorHandler);
 

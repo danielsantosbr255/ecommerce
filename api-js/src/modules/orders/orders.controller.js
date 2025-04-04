@@ -7,7 +7,12 @@ module.exports = {
     },
 
     async getOrdersByUserId(req, res) {
-        const orders = await service.getOrdersByUserId(req.user.id);
+        const orders = await service.getOrdersByUserId(req);
+        res.json(orders);
+    },
+
+    async findAllOrders(req, res) {
+        const orders = await service.findAllOrders(req);
         res.json(orders);
     },
 };

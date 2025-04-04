@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/headers/Navbar";
+import Footer from "@/components/footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
@@ -22,10 +23,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="pt">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-l from-gray-100 to-gray-50`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
                 <AuthProvider>
                     <Navbar />
                     {children}
+                    <Footer />
                 </AuthProvider>
             </body>
         </html>

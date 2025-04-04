@@ -1,3 +1,4 @@
+const { accessibleBy } = require("@casl/prisma");
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
 
@@ -34,10 +35,22 @@ module.exports = {
         return order;
     },
 
-    async getOrdersByUserId(userId) {
-        const orders = await prisma.order.findMany({
-            where: { userId },
+    async getOrdersByUserId(req) {
+        const orders = await prisma.order.findUnique({
+            where: {
+                userId: req.params.id,
+                AND: [accessibleBy(req.ability, "read").Order],
+            },
             include: { items: true },
+        });
+        return orders;
+    },
+
+    async findAllOrders(req) {
+        const orders = await prisma.order.findMany({
+            where: {
+                AND: [accessibleBy(req.ability, "read").Order],
+            },
         });
         return orders;
     },

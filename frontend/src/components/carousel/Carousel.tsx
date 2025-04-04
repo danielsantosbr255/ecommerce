@@ -1,16 +1,11 @@
 "use client";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-
-
-interface Product {
-    title: string;
-    price: string;
-    image: string;
-}
+import { ProductType } from "@/types/ProductType";
+import Image from "next/image";
 
 interface ProductsCarouselProps {
-    products: Product[];
+    products: ProductType[];
 }
 
 export default function Carousel({ products }: ProductsCarouselProps) {
@@ -34,11 +29,15 @@ export default function Carousel({ products }: ProductsCarouselProps) {
                 {products.slice(startIndex, startIndex + itemsPerPage).map((product, index) => (
                     <div key={index} className="w-1/5 flex-shrink-1 p-2">
                         <div className="bg-white shadow-sm rounded-sm p-4 text-center">
-                            <img
-                                src={product.image}
+                            <Image
+                                src={`http://localhost:3001${product.image}`}
+                                width={400}
+                                height={700}
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 alt={product.title}
                                 className="w-full h-40 object-cover mb-2 rounded"
                             />
+
                             <h1 className="text-sm font-semibold truncate">{product.title}</h1>
                             <p className="text-amber-500 font-bold">{product.price}</p>
                         </div>
@@ -51,13 +50,13 @@ export default function Carousel({ products }: ProductsCarouselProps) {
                 onClick={prevSlide}
                 className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/50 p-2 rounded-full"
             >
-                <ArrowLeft/>
+                <ArrowLeft />
             </button>
             <button
                 onClick={nextSlide}
                 className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/50 p-2 rounded-full"
             >
-                <ArrowRight/>
+                <ArrowRight />
             </button>
         </div>
     );

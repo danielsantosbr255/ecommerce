@@ -37,7 +37,7 @@ model Product {
   description String
   price       Decimal
   stock       Int
-  image       String      @default("image")
+  image       String      @default("")
   category    String      @default("products")
   createdAt   DateTime    @default(now())
   cartItems   CartItem[]

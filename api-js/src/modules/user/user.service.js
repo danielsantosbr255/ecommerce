@@ -7,7 +7,7 @@ module.exports = {
     },
 
     async getUserById(id) {
-        const user = await prisma.user.findUnique({ where: { id } });
+        const user = await prisma.user.findUnique({ where: { id }, omit: { password: true } });
         if (!user) throw new CustomError("Usuário não encontrado", 404);
         return user;
     },

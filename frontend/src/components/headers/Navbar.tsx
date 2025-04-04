@@ -28,32 +28,46 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="fixed top-0 w-full flex items-center py-2 px-8 justify-between z-50 bg-neutral-800 text-gray-300">
-            <Link href="/" className="font-bold text-xl h-12 flex items-center text-amber-500">
-                <FlameKindling className="size-10" />
-                Fireforge Labs
-            </Link>
+        <nav className="fixed bg-white w-full top-0 z-50 shadow-md">
+            <div className="flex mx-auto lg:max-w-10/12 py-3 px-2 items-center justify-between z-50 text-gray-500">
+                <div className="hidden md:flex gap-6 items-center font-semibold text-sm">
+                    <Link href="/" className="font-bold text-sm h-12 flex items-center text-amber-500 mr-5 focus:outline-none">
+                        <FlameKindling className="size-8" />
+                        Fireforge Labs
+                    </Link>
+                    <Link className="" href="/">
+                        Início
+                    </Link>
+                    <Link className="" href="/">
+                        Loja
+                    </Link>
+                    <Link className="" href="/">
+                        Sobre
+                    </Link>
+                    <Link className="" href="/">
+                        Contato
+                    </Link>
+                </div>
+                {/* Campo de pesquisa */}
 
-            {/* Campo de pesquisa */}
-            <div className="hidden md:block">
-                <SearchBar onSearch={handleSearch} />
+                <div className="hidden gap-8 md:flex items-center">
+                    <SearchBar onSearch={handleSearch} />
+
+                    <Link href={user ? "/account" : "/auth/signin"}>
+                        {user ? <UserCircle className="h-6 w-6" /> : <LogIn />}
+                    </Link>
+                    <Link className="" href="#">
+                        <Bell />
+                    </Link>
+                    <Link className="" href="#">
+                        <ShoppingCart />
+                    </Link>
+                </div>
+
+                <button className="md:hidden">
+                    <Menu className="h-6 w-6" />
+                </button>
             </div>
-
-            <div className="hidden gap-8 md:flex">
-                <Link className="" href="#">
-                    <ShoppingCart />
-                </Link>
-                <Link className="" href="#">
-                    <Bell />
-                </Link>
-                <Link href={user ? "/account" : "/auth/signin"}>
-                    {user ? <UserCircle className="h-6 w-6" /> : <LogIn />}
-                </Link>
-            </div>
-
-            <button className="md:hidden">
-                <Menu className="h-6 w-6" />
-            </button>
         </nav>
     );
 }

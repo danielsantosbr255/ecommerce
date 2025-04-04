@@ -3,25 +3,25 @@ const bcrypt = require("bcryptjs");
 const CustomError = require("./CustomError");
 
 module.exports = {
-    hashPassword: (password) => {
-        return bcrypt.hash(password, 10);
+    generateToken(payload, secret, expiresIn="15m") {
+        return jwt.sign(payload, secret, { expiresIn, algorithm: 'HS256'});
     },
 
-    generateToken: (payload) => {
-        return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
-    },
+    verifyToken(token, secret) {
+        if (!token) throw new CustomError("Token não fornecido!", 403);
 
-    verifyPassword: (password, cryptPassword) => {
-        return bcrypt.compare(password, cryptPassword);
-    },
-
-    verifyToken: (token) => {
-        if (!token) throw new CustomError("Token não fornecido!");
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-            if (error) throw new CustomError("Token inválido!");
+        const decoded = jwt.verify(token, secret, (error, decoded) => {
+            if (error) throw new CustomError("Token inválido!", 403);
             return decoded;
         });
         return decoded;
+    },
+
+    verifyPassword(password, cryptPassword) {
+        return bcrypt.compare(password, cryptPassword);
+    },
+
+    hashPassword(password) {
+        return bcrypt.hash(password, 10);
     },
 };
