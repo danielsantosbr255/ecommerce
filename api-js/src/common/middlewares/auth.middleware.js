@@ -1,6 +1,7 @@
 const { defineAbilitiesFor } = require("../utils/abilities");
 const { prisma } = require("../database/prisma");
 const tools = require("../utils/Tools");
+const CustomError = require("../utils/CustomError");
 
 module.exports = {
     async verifyToken(req, res, next) {

@@ -1,63 +1,76 @@
 "use client";
-import { useState } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+
 import { ProductType } from "@/types/ProductType";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 interface ProductsCarouselProps {
     products: ProductType[];
 }
 
+const getValidImageUrl = (imagePath: string) => {
+    if (!imagePath) return "/placeholder.jpg";
+    const baseUrl = "http://localhost:3001";
+    return `${baseUrl}/${imagePath.replace(/^\/+/, "")}`;
+};
+
 export default function Carousel({ products }: ProductsCarouselProps) {
-    const [startIndex, setStartIndex] = useState(0);
-    const itemsPerPage = 5;
-
-    const nextSlide = () => {
-        setStartIndex((prev) => (prev + itemsPerPage >= products.length ? 0 : prev + 1));
-    };
-
-    const prevSlide = () => {
-        setStartIndex((prev) => (prev === 0 ? products.length - itemsPerPage : prev - 1));
-    };
-
     return (
-        <div className="bg-gray-500 relative w-full mx-auto overflow-hidden p-4">
-            <h2 className="text-2xl text-white font-bold text-center mb-4">Destaques</h2>
+        <div className="relative">
+            {/* Botões personalizados */}
+            <div className="swiper-button-prev !text-amber-500 !left-0 -translate-x-10 z-10 hidden md:flex" />
+            <div className="swiper-button-next !text-amber-500 !right-0 translate-x-10 z-10 hidden md:flex" />
 
-            {/* Produtos visíveis */}
-            <div className="flex space-x-5">
-                {products.slice(startIndex, startIndex + itemsPerPage).map((product, index) => (
-                    <div key={index} className="w-1/5 flex-shrink-1 p-2">
-                        <div className="bg-white shadow-sm rounded-sm p-4 text-center">
+            <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={20}
+                slidesPerView={products.length < 4 ? products.length : 4}
+                navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                }}
+                autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                }}
+                pagination={{
+                    el: ".swiper-pagination",
+                    clickable: true,
+                }}
+                loop
+                breakpoints={{
+                    320: { slidesPerView: 1 },
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 4 },
+                }}
+                className="h-auto max-h-[400px] pb-10"
+            >
+                {products.map((product) => (
+                    <SwiperSlide key={product.id} className="h-auto">
+                        <div className="w-full flex flex-col bg-gray-50 p-2 rounded-lg border border-amber-500/20">
                             <Image
-                                src={`http://localhost:3001${product.image}`}
-                                width={400}
-                                height={700}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                src={getValidImageUrl(product.image)}
                                 alt={product.title}
-                                className="w-full h-40 object-cover mb-2 rounded"
+                                width={180}
+                                height={150}
+                                className="object-cover aspect-[3/3] scale-80 w-full rounded-lg hover:border border-amber-500"
                             />
-
-                            <h1 className="text-sm font-semibold truncate">{product.title}</h1>
-                            <p className="text-amber-500 font-bold">{product.price}</p>
+                            <h3 className="text-sm font-semibold truncate">{product.title}</h3>
+                            <p className="text-amber-500 text-sm">$ {product.price}</p>
+                            <button className="flex justify-center items-center py-1 px-3 rounded-md text-sm cursor-pointer bg-white hover:bg-amber-500 text-amber-500 hover:text-white border border-amber-500">
+                                Adicionar ao Carrinho
+                            </button>
                         </div>
-                    </div>
+                    </SwiperSlide>
                 ))}
-            </div>
+            </Swiper>
 
-            {/* Botões de Navegação */}
-            <button
-                onClick={prevSlide}
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/50 p-2 rounded-full"
-            >
-                <ArrowLeft />
-            </button>
-            <button
-                onClick={nextSlide}
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/50 p-2 rounded-full"
-            >
-                <ArrowRight />
-            </button>
+            {/* Paginação personalizada */}
+            <div className="swiper-pagination !-bottom-5 mt-4 flex justify-center items-center" />
         </div>
     );
 }

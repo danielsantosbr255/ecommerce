@@ -8,7 +8,7 @@ type ProductProps = {
 
 export default function Product({ product }: ProductProps) {
     return (
-        <div className="w-full aspect-[3/3] flex flex-col text-black gap-1 p-2 rounded-xl cursor-pointer hover:scale-105 hover:bg-gray-100 transition-all">
+        <div className="w-full aspect-[3/3] flex flex-col text-black gap-1 p-2 rounded-xl cursor-pointer hover:scale-105 hover:bg-gray-100 hover:shadow transition-all">
             <div className="relative w-full h-full scale-100 bg-gray-50 rounded-xl hover:border border-amber-500 shadow-md transition-all">
                 <ProductImage product={product} fill />
             </div>

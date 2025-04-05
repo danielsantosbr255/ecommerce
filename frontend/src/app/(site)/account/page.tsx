@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import React, { useEffect } from "react";
-import { User, ShoppingBag, Wallet, MapPinHouse, LogOutIcon } from "lucide-react";
+import { User, ShoppingBag, Wallet, MapPinHouse, LogOutIcon, Loader2 } from "lucide-react";
 
 function Card({ children, Icon }: any) {
     return (
@@ -24,11 +24,17 @@ export default function Profile() {
         if (!loading && !user) logout();
     }, [user, loading, router]);
 
-    if (loading) return null;
-    if (!loading && !user) return null;
+    if (loading)
+        return (
+            <div className="bg-gray-200 flex flex-col justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-500 flex justify-center items-center"></div>
+            </div>
+        );
 
+    if (!loading && !user) return null;
+    
     return (
-        <div className="bg-gray-200 flex justify-center items-center w-auto h-screen p-4 mt-18">
+        <div className="bg-gray-200 flex justify-center items-center w-auto h-screen p-4">
             <div className="bg-gray-50 flex flex-col justify-around items-center gap-10 p-5 rounded-sm shadow-sm w-5xl">
                 <div className="text-2xl font-bold flex items-center gap-2">
                     <User className="text-amber-500" size={50} />

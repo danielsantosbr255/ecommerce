@@ -1,5 +1,6 @@
 const CustomError = require("../../common/utils/CustomError");
 const { prisma } = require("../../common/database/prisma");
+const tools = require("../../common/utils/tools");
 
 module.exports = {
     async getUsers() {
