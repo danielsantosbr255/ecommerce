@@ -1,4 +1,3 @@
-import AdminLayout from "@/components/admin/AdminLayout";
 import ProductForm from "@/components/forms/ProductForm";
 
 type Product = {
@@ -18,12 +17,13 @@ async function getProduct(id: string): Promise<Product> {
 }
 
 export default async function EditProductPage({ params }: { params: { id: string } }) {
-    const product = await getProduct(params.id);
+    const { id } = await params;
+    const product = await getProduct(id);
 
     return (
-        <AdminLayout>
+        <>
             <h2 className="text-2xl font-semibold mb-4">Editar Produto</h2>
             <ProductForm initialData={product} />
-        </AdminLayout>
+        </>
     );
 }

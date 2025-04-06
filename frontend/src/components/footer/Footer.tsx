@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Footer() {
     return (
-        <footer className="flex flex-col w-full border-t-2 border-gray-100 justify-center items-center p-4 text-gray-700 font-semibold">
+        <footer className="flex flex-col w-full border-t-2 mt-auto border-gray-100 justify-center items-center p-4 text-gray-700 font-semibold">
             <div className="flex gap-2 justify-center items-center text-white mb-2 animate-pulse">
                 <a
                     href="https://github.com/danielsantosbr255"

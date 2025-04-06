@@ -26,7 +26,6 @@ module.exports = {
             update: { quantity: { increment: quantity } },
             create: { userId, productId, quantity },
         });
-
         return cart;
     },
 
@@ -39,7 +38,7 @@ module.exports = {
     async getCart(userId) {
         const items = await prisma.user.findUnique({
             where: { id: userId },
-            select: { cart: { select: { quantity: true, product: true } } },
+            select: { cart: { select: { id: true, quantity: true, product: true } } },
         });
         return items.cart;
     },

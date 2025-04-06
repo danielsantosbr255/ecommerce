@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
+import Gate from "@/components/gate/Gate";
 
 export const metadata: Metadata = {
     title: "Fireforge Labs",
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="pt-BR">
             <body>
-                <AuthProvider>{children}</AuthProvider>
+                <AuthProvider>
+                    <Gate>{children}</Gate>
+                </AuthProvider>
             </body>
         </html>
     );

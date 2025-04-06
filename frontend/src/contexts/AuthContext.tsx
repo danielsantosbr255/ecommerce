@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import apiManager from "@/utils/apiManager";
 import { useRouter } from "next/navigation";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
     id: string;
@@ -26,96 +27,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [accessToken, setAccessToken] = useState(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
     const router = useRouter();
 
-    // Função para buscar usuário
-    const fetchUser = useCallback(async (token: string) => {
-        try {
-            const res = await fetch("http://localhost:3001/account", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) throw new Error("Falha ao obter usuário");
-
-            setUser(data.user);
-        } catch (err) {
-            setUser(null);
-            setAccessToken(null);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    // SignUP
-    const signUp = async (name: string, email: string, password: string) => {
-        try {
-            const response = await fetch("http://localhost:3001/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
-                credentials: "include",
-            });
-
-            const data = await response.json();
-
-            if (response.ok) setAccessToken(data.token);
-            else setError(data.message);
-
-            fetchUser(data.token);
-            router.push("/account");
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Erro desconhecido");
-            alert("Falha ao efetuar cadastro");
-        }
+    const fetchUser = async (token: string) => {
+        const user = await apiManager.user.fetchUser(token);
+        setUser(user);
+        setAccessToken(token);
+        setLoading(false);
     };
 
-    // Login
+    const signUp = async (name: string, email: string, password: string) => {
+        setError(null);
+        const { token } = await apiManager.user.signUp(name, email, password);
+        if (!token) return setError("Falha ao cadastrar-se");
+
+        fetchUser(token);
+        router.push("/account");
+    };
+
     const login = async (email: string, password: string) => {
-        try {
-            const response = await fetch("http://localhost:3001/auth/signin", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-                credentials: "include",
-            });
+        setError(null);
+        const { token } = await apiManager.user.signin(email, password);
+        if (!token) return setError("Falha ao efetuar o login");
 
-            const data = await response.json();
-
-            if (response.ok) setAccessToken(data.token);
-            else setError(data.message);
-
-            fetchUser(data.token);
-            router.push("/account");
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Erro desconhecido");
-        }
+        await fetchUser(token);
+        router.push("/account");
     };
 
     const refreshToken = async () => {
-        const res = await fetch("http://localhost:3001/auth/refresh", {
-            method: "POST",
-            credentials: "include",
-        });
-        const data = await res.json();
+        const token = await apiManager.user.refreshToken();
+        if (token) return await fetchUser(token);
 
-        if (res.ok) {
-            setAccessToken(data.token);
-            fetchUser(data.token);
-        } else {
-            setUser(null);
-            setAccessToken(null);
-        }
+        setUser(null);
+        setLoading(false);
+        setAccessToken(null);
+        setError("Falha ao atualizar o token");
     };
 
-    // Logout
     const logout = async () => {
-        const res = await fetch("http://localhost:3001/auth/logout", {
-            method: "POST",
-            credentials: "include",
-        });
+        apiManager.user.logout();
         setUser(null);
         setAccessToken(null);
         router.push("/auth/signin");

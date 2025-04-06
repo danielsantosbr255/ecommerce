@@ -23,14 +23,7 @@ export default function Profile() {
     useEffect(() => {
         if (!loading && !user) logout();
     }, [user, loading, router]);
-
-    if (loading)
-        return (
-            <div className="bg-gray-200 flex flex-col justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-500 flex justify-center items-center"></div>
-            </div>
-        );
-
+    
     if (!loading && !user) return null;
     
     return (

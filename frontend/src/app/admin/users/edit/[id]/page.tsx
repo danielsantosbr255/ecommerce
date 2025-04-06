@@ -3,11 +3,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function EditUserPage() {
-    const { accessToken, loading } = useAuth();
+    const { accessToken } = useAuth();
     const router = useRouter();
     const params = useParams();
     const userId = params.id as string;
@@ -35,8 +34,8 @@ export default function EditUserPage() {
                 console.error("Erro ao carregar usuário:", error);
             }
         }
-        if (!loading) fetchUser();
-    }, [userId, accessToken, loading]);
+        fetchUser();
+    }, [userId, accessToken]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -79,7 +78,7 @@ export default function EditUserPage() {
     };
 
     return (
-        <AdminLayout>
+        <>
             <h2 className="text-2xl font-bold mb-4">Editar Usuário</h2>
             <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
                 <input
@@ -112,7 +111,7 @@ export default function EditUserPage() {
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    className="w-full border px-3 py-2 rounded"
+                    className="w-full border px-4 py-2 rounded"
                 >
                     <option value="USER">Usuário</option>
                     <option value="ADMIN">Administrador</option>
@@ -133,6 +132,6 @@ export default function EditUserPage() {
                     </button>
                 </div>
             </form>
-        </AdminLayout>
+        </>
     );
 }

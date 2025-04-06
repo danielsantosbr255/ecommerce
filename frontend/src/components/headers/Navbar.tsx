@@ -73,7 +73,7 @@ export default function Navbar() {
                     <Link className="" href="#">
                         <Bell />
                     </Link>
-                    <Link className="" href="#">
+                    <Link className="" href="/cart">
                         <ShoppingCart />
                     </Link>
                 </div>

@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Rotas protegidas
-const protectedRoutes = ["/account", "/dashboard"];
+const protectedRoutes = ["/account", "/admin"];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const refreshToken = request.cookies.get("refreshToken")?.value;
 
     if (protectedRoutes.includes(request.nextUrl.pathname) && !refreshToken) {
@@ -16,5 +16,5 @@ export function middleware(request: NextRequest) {
 
 // Define para quais rotas o middleware será executado
 export const config = {
-    matcher: protectedRoutes, // Rotas protegidas
+    matcher: ["/account/:path*", "/admin/:path*"], // Rotas protegidas
 };

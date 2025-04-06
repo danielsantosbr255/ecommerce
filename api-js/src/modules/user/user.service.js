@@ -8,13 +8,16 @@ module.exports = {
     },
 
     async getUserById(id) {
-        const user = await prisma.user.findUnique({ where: { id }, omit: { password: true } });
+        const user = await prisma.user.findUnique({
+            where: { id },
+            omit: { password: true },
+        });
         if (!user) throw new CustomError("Usuário não encontrado", 404);
         return user;
     },
 
     async updateUser(id, userData) {
-        const { name, email, password, role } = userData;
+        let { name, email, password, role } = userData;
 
         const user = await prisma.user.findUnique({
             where: { id },
@@ -28,6 +31,8 @@ module.exports = {
             if (existingEmail) throw new CustomError("Email já cadastrado.", 400);
         }
 
+        if (password && password.length === 0) password = undefined;
+        
         if (password && (await tools.verifyPassword(password, user.password))) {
             throw new CustomError("A senha não pode ser igual", 400);
         }

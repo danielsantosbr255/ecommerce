@@ -3,7 +3,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface UserType {
@@ -36,7 +35,7 @@ export default function UsersPage() {
     }, [accessToken, loading]);
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-semibold">Usuários</h2>
                 <Link
@@ -71,6 +70,6 @@ export default function UsersPage() {
                     ))}
                 </div>
             )}
-        </AdminLayout>
+        </>
     );
 }

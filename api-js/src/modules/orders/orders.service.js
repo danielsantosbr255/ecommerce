@@ -38,10 +38,10 @@ module.exports = {
     async getOrdersByUserId(req) {
         const orders = await prisma.order.findUnique({
             where: {
-                userId: req.params.id,
+                id: req.params.id,
                 AND: [accessibleBy(req.ability, "read").Order],
             },
-            include: { items: true },
+            include: { user: true, items: { include: { product: true } } },
         });
         return orders;
     },
@@ -51,6 +51,7 @@ module.exports = {
             where: {
                 AND: [accessibleBy(req.ability, "read").Order],
             },
+            include: { user: true },
         });
         return orders;
     },

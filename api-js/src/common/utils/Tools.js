@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 const CustomError = require("./CustomError");
 
 module.exports = {
-    generateToken(payload, secret, expiresIn="15m") {
-        return jwt.sign(payload, secret, { expiresIn, algorithm: 'HS256'});
+    generateToken(payload, secret, expiresIn = "15m") {
+        return jwt.sign(payload, secret, { expiresIn, algorithm: "HS256" });
     },
 
     verifyToken(token, secret) {

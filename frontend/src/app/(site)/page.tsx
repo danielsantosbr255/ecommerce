@@ -3,6 +3,7 @@ import Carousel from "@/components/carousel/Carousel";
 import Product from "@/components/products/Product";
 import { ProductType } from "@/types/ProductType";
 import { Crown, ShoppingBag, CircleArrowDown } from "lucide-react";
+import Link from "next/link";
 
 const getProducts = async () => {
     try {
@@ -31,12 +32,12 @@ export default async function Home() {
                 <h1 className="text-white">
                     Confira os melhores produtos do mercado em um só lugar!
                 </h1>
-                <CircleArrowDown className="text-amber-500 scale-200 animate-bounce"/>
+                <CircleArrowDown className="text-amber-500 scale-200 animate-bounce" />
             </div>
 
             <div className="bg-gray-600/10 w-full max-w-10/12 shadow-lg rounded-xl h-auto flex flex-col items-center justify-center pb-8">
                 <h1 className="text-amber-500 text-2xl font-bold py-4 flex gap-4 justify-center items-center">
-                    <Crown className="scale-150"/> Destaques 
+                    <Crown className="scale-150" /> Destaques
                 </h1>
                 <div className=" w-full max-w-10/12 h-auto">
                     <Carousel products={products} />
@@ -49,7 +50,9 @@ export default async function Home() {
                 </h2>
                 <div className="grid grid-cols-1 px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7 xl:px-0">
                     {products.map((product: ProductType) => (
-                        <Product key={product.id} product={product} />
+                        <Link key={product.id} href={`/product/${product.id}`}>
+                            <Product product={product} />
+                        </Link>
                     ))}
                 </div>
             </section>

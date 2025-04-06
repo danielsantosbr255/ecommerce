@@ -1,34 +1,71 @@
-// "use client";
+"use client";
+
 import Link from "next/link";
-import AdminLayout from "@/components/admin/AdminLayout";
-import { ProductType } from "@/types/ProductType";
-import DeleteButton from "@/components/buttons/DeleteButton";
+import { useAuth } from "@/contexts/AuthContext";
+import useSWR from "swr";
 
-async function getProducts(): Promise<ProductType[]> {
-    const res = await fetch("http://localhost:3001/products", {
-        cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch");
-    return res.json();
-}
+type Product = {
+    id: string;
+    title: string;
+    price: number;
+    stock: number;
+    imageUrl?: string;
+};
 
-export default async function ProductsPage() {
-    const products = await getProducts();
+const fetcher = (url: string, token: string) =>
+    fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
+    }).then((res) => res.json());
+
+export default function ProductsPage() {
+    const { accessToken } = useAuth();
+    console.log(accessToken);
+
+    const {
+        data: products,
+        mutate,
+        isLoading,
+    } = useSWR(
+        accessToken ? ["http://localhost:3001/products", accessToken] : null,
+        ([url, token]) => fetcher(url, token),
+        {
+            refreshInterval: 10000, // Revalida a cada 10s
+            revalidateOnFocus: true,
+        }
+    );
+
+    const handleDelete = async (id: string) => {
+        const confirmed = confirm("Tem certeza que deseja excluir?");
+        if (!confirmed) return;
+
+        const res = await fetch(`http://localhost:3001/products/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (res.ok) mutate(); // atualiza lista após exclusão
+        else alert("Erro ao deletar o produto");
+    };
+
+    if (isLoading) return <p>Carregando produtos...</p>;
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-semibold">Produtos</h2>
                 <Link
                     href="/admin/products/create"
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer"
                 >
                     + Novo Produto
                 </Link>
             </div>
 
             <div className="grid gap-4">
-                {products.map((product) => (
+                {products?.map((product: Product) => (
                     <div
                         key={product.id}
                         className="bg-white p-4 rounded shadow flex justify-between items-center"
@@ -45,11 +82,16 @@ export default async function ProductsPage() {
                             >
                                 Editar
                             </Link>
-                            <DeleteButton productId={product.id} />
+                            <button
+                                onClick={() => handleDelete(product.id)}
+                                className="text-red-600 hover:underline cursor-pointer"
+                            >
+                                Excluir
+                            </button>
                         </div>
                     </div>
                 ))}
             </div>
-        </AdminLayout>
+        </>
     );
 }

@@ -18,8 +18,7 @@ const getValidImageUrl = (imagePath: string) => {
 
 export default function ProductImage({ product, fill }: ProductImageProps) {
     const [loading, setLoading] = useState(true);
-    // if (!product.image) return;
-
+    
     if (fill) {
         return (
             <Image
