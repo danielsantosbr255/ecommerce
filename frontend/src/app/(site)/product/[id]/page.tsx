@@ -14,16 +14,8 @@ type Review = {
     comment: string;
 };
 
-const getValidImageUrl = (imagePath: string | null = null) => {
-    if (!imagePath) return "http://localhost:3001/uploads/placeholder.png"; // Caso a URL seja undefined ou vazia
-
-    const baseUrl = "http://localhost:3001";
-
-    return `${baseUrl}/${imagePath.replace(/^\/+/, "")}`;
-};
-
 export default function ProductPage() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<ProductType | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [newReview, setNewReview] = useState<Review>({
@@ -49,10 +41,10 @@ export default function ProductPage() {
             setProducts(products);
         }
 
-        async function fetchReviews() {
-            const data = await ProductsUtil.fetchReviews(id);
-            setReviews(data);
-        }
+        // async function fetchReviews() {
+        //     const data = await ProductsUtil.fetchReviews(id);
+        //     setReviews(data);
+        // }
 
         if (id) {
             fetchProduct();

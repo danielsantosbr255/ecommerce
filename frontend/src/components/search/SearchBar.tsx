@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Search, X } from "lucide-react";
 
-export default function SearchBar({ onSearch }: any) {
+type SearchBarProps = {
+    onSearch?: (query: string) => void;
+};
+
+export default function SearchBar({ onSearch }: SearchBarProps) {
     const [query, setQuery] = useState("");
 
-    const handleChange = (e: any) => {
-        setQuery(e.target.value);
-        if (onSearch) onSearch(e.target.value);
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setQuery(value);
+        onSearch?.(value);
     };
 
     const clearSearch = () => {
         setQuery("");
-        if (onSearch) onSearch("");
+        onSearch?.("");
     };
 
     return (

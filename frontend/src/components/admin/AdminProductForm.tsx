@@ -1,4 +1,5 @@
 import { ProductType } from "@/types/ProductType";
+import Image from "next/image";
 import React, { useState, useRef } from "react";
 
 interface Props {
@@ -125,7 +126,7 @@ const AdminProductForm: React.FC<Props> = ({ onAddProduct }) => {
                     </label>
                     {imagePreviewUrl && (
                         <div className="mb-2">
-                            <img
+                            <Image
                                 src={imagePreviewUrl}
                                 alt="Prévia da Imagem"
                                 className="max-h-32 rounded-md"

@@ -2,7 +2,7 @@
 
 import userUtil from "@/utils/user.util";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { UserType } from "@/types/UserType";
 
 interface AuthContextType {
@@ -24,12 +24,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const router = useRouter();
 
-    const fetchUser = async (token: string) => {
+    const fetchUser = useCallback(async (token: string) => {
         const user = await userUtil.fetchUser(token);
         setUser(user);
         setAccessToken(token);
         setLoading(false);
-    };
+    }, []);
 
     const signUp = async (name: string, email: string, password: string) => {
         setError(null);
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         router.push("/account");
     };
 
-    const refreshToken = async () => {
+    const refreshToken = useCallback(async () => {
         const token = await userUtil.refreshToken();
 
         if (token) return await fetchUser(token);
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
         setAccessToken(null);
         setError("Falha ao atualizar o token");
-    };
+    }, [fetchUser]);
 
     const logout = async () => {
         await userUtil.logout();
@@ -69,9 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         refreshToken();
-        const interval = setInterval(refreshToken, 14 * 60 * 1000); // Refresh antes de expirar
+        const interval = setInterval(refreshToken, 14 * 60 * 1000); // 14 minutos
         return () => clearInterval(interval);
-    }, []);
+    }, [refreshToken]);
 
     return (
         <AuthContext.Provider value={{ user, loading, error, accessToken, signUp, login, logout }}>

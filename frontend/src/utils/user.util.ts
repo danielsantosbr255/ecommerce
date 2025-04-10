@@ -1,4 +1,4 @@
-const localhost: string = "http://localhost:3001";
+const localhost: string = process.env.NEXT_PUBLIC_API_URL;
 
 class UserUtil {
     async fetchUser(token: string) {

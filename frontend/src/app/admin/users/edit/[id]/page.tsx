@@ -21,7 +21,7 @@ export default function EditUserPage() {
     useEffect(() => {
         async function fetchUser() {
             try {
-                const res = await fetch(`http://localhost:3001/users/${userId}`, {
+                const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/users/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -45,7 +45,7 @@ export default function EditUserPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:3001/users/${userId}`, {
+            const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/users/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function EditUserPage() {
     const handleDelete = async () => {
         if (!confirm("Tem certeza que deseja excluir este usuário?")) return;
         try {
-            const res = await fetch(`http://localhost:3001/users/${userId}`, {
+            const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/users/${userId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${accessToken}`,

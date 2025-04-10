@@ -6,7 +6,7 @@ import userUtil from "@/utils/user.util";
 import ProductsUtil from "@/utils/products.util";
 
 const AdminDashboardContent = () => {
-    const { user, accessToken } = useAuth();
+    const { accessToken } = useAuth();
     const [products, setProducts] = useState([]);
     const [users, setUsers] = useState([]);
 
@@ -23,7 +23,7 @@ const AdminDashboardContent = () => {
 
         fetchUsers();
         fetchProducts();
-    }, []);
+    }, [accessToken]);
 
     const totalProducts = products.length;
     const totalUsers = users.length;

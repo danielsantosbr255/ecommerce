@@ -35,7 +35,7 @@ export default function OrderDetailsPage() {
     useEffect(() => {
         async function fetchOrder() {
             try {
-                const res = await fetch(`http://localhost:3001/orders/${id}`, {
+                const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/orders/${id}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -58,7 +58,7 @@ export default function OrderDetailsPage() {
 
     const handleUpdate = async () => {
         try {
-            const res = await fetch(`http://localhost:3001/orders/${id}`, {
+            const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/orders/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

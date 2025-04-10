@@ -1,5 +1,4 @@
 "use client";
-import AdminLayout from "@/components/layouts/AdminLayout";
 import React, { useState } from "react";
 
 interface User {

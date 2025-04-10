@@ -38,7 +38,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         const url = initialData?.id ? `/users/${initialData.id}` : "/products";
         const method = initialData?.id ? "PUT" : "POST";
 
-        const res = await fetch(`http://localhost:3001${url}`, {
+        const res = await fetch(`process.env.NEXT_PUBLIC_API_URL${url}`, {
             method,
             body: formData,
             headers: {
@@ -47,7 +47,8 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         });
 
         if (res.ok) {
-            onSuccess ? onSuccess() : router.push("/admin/products");
+            if (onSuccess) onSuccess();
+            else router.push("/admin/users");
         } else {
             alert("Erro ao salvar usuário");
         }

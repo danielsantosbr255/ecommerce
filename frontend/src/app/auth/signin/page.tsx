@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import Form from "@/components/forms/Form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
@@ -12,11 +12,19 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { error, loading, login } = useAuth();
+    const { error, login } = useAuth();
 
-    const handleLogin = async (e: any) => {
+    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await login(email, password);
+    };
+
+    const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+    };
+
+    const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
     };
 
     return (
@@ -27,18 +35,14 @@ export default function SignIn() {
                         required
                         type="email"
                         placeholder="Seu E-mail"
-                        onChange={(e: any) => {
-                            setEmail(e.target.value);
-                        }}
+                        onChange={handleEmailChange}
                     />
                     <Input
                         required
                         minLength={5}
                         type="password"
                         placeholder="Sua Senha"
-                        onChange={(e: any) => {
-                            setPassword(e.target.value);
-                        }}
+                        onChange={handlePasswordChange}
                     />
                     <Button>
                         Entrar <LogIn />

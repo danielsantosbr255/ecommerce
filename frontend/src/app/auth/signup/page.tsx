@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import Form from "@/components/forms/Form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
@@ -13,9 +13,9 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { signUp, error } = useAuth();
+    const { signUp } = useAuth();
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await signUp(name, email, password);
     };
@@ -28,7 +28,7 @@ export default function SignIn() {
                         required
                         type="text"
                         placeholder="Seu Nome"
-                        onChange={(e: any) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setName(e.target.value);
                         }}
                     />
@@ -36,7 +36,7 @@ export default function SignIn() {
                         required
                         type="email"
                         placeholder="Seu E-mail"
-                        onChange={(e: any) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setEmail(e.target.value);
                         }}
                     />
@@ -45,7 +45,7 @@ export default function SignIn() {
                         minLength={5}
                         type="password"
                         placeholder="Sua Senha"
-                        onChange={(e: any) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setPassword(e.target.value);
                         }}
                     />
@@ -54,13 +54,13 @@ export default function SignIn() {
                     </Button>
 
                     {/* ERROR */}
-                    {Array.isArray(error) ? (
+                    {/* {Array.isArray(error) ? (
                         error.map((error: any) => (
                             <p className="text-red-500 text-center">{error}</p>
                         ))
                     ) : (
                         <p className="text-red-500 text-center">{error}</p>
-                    )}
+                    )} */}
 
                     <Link
                         href="/auth/signin"

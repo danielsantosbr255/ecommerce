@@ -9,7 +9,7 @@ import AdminProductFilters from "@/components/admin/AdminProductFilters";
 import AdminProductForm from "@/components/admin/AdminProductForm";
 import { useAuth } from "@/contexts/AuthContext";
 
-const AdminProductsPage = () => {
+const AdminProductsPage: React.FC = () => {
     const [products, setProducts] = useState<ProductType[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterCategory, setFilterCategory] = useState("");
@@ -25,7 +25,7 @@ const AdminProductsPage = () => {
         try {
             const fetchedProducts = await ProductsUtil.fetchProducts();
             setProducts(fetchedProducts);
-        } catch (err: any) {
+        } catch (err) {
             setError("Erro ao carregar os produtos.");
             toast.error("Erro ao carregar os produtos.");
             console.error("Erro ao carregar produtos:", err);
@@ -49,13 +49,19 @@ const AdminProductsPage = () => {
     };
 
     const handleDeleteProduct = async (id: string) => {
+        if (!accessToken) {
+            toast.error("Token de acesso não disponível.");
+            return;
+        }
+
         if (confirm("Tem certeza que deseja excluir este produto?")) {
             try {
                 await ProductsUtil.deleteProduct(accessToken, id);
                 setProducts((prev) => prev.filter((product) => product.id !== id));
                 toast.success("Produto excluído com sucesso!");
-            } catch (err: any) {
-                toast.error(err.message || "Erro ao excluir o produto.");
+            } catch (err) {
+                const message = err instanceof Error ? err.message : "Erro ao excluir o produto.";
+                toast.error(message);
                 console.error("Erro ao excluir produto:", err);
             }
         }
@@ -65,6 +71,11 @@ const AdminProductsPage = () => {
         productData: Omit<ProductType, "id" | "image">,
         imageFile: File | null
     ) => {
+        if (!accessToken) {
+            toast.error("Token de acesso não disponível.");
+            return;
+        }
+
         try {
             const formData = new FormData();
             formData.append("title", productData.title);
@@ -78,11 +89,11 @@ const AdminProductsPage = () => {
                 accessToken,
                 formData
             )) as ProductType;
-
             setProducts((prev) => [...prev, addedProduct]);
             toast.success("Produto adicionado com sucesso!");
-        } catch (err: any) {
-            toast.error(err.message || "Erro ao adicionar o produto.");
+        } catch (err) {
+            const message = err instanceof Error ? err.message : "Erro ao adicionar o produto.";
+            toast.error(message);
             console.error("Erro ao adicionar produto:", err);
         }
     };
@@ -128,7 +139,6 @@ const AdminProductsPage = () => {
             </div>
 
             <AdminProductForm onAddProduct={handleAddProduct} />
-
             <ToastContainer />
         </div>
     );

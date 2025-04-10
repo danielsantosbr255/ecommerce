@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "../search/SearchBar";
@@ -9,7 +10,6 @@ import {
     Bell,
     FlameKindling,
     UserCircle,
-    Loader2,
     ShieldUser,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,13 +18,13 @@ export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState("");
 
     const auth = useAuth();
-    if (!auth) return;
+    if (!auth) return null;
 
-    const { user, loading } = auth;
+    const { user } = auth;
 
-    const handleSearch = (query: any) => {
+    const handleSearch = (query: string) => {
         setSearchQuery(query);
-        console.log("Buscando por:", query); // Aqui você pode conectar a um sistema de busca
+        console.log("Buscando por:", searchQuery);
     };
 
     return (
@@ -38,18 +38,10 @@ export default function Navbar() {
                         <FlameKindling className="size-8" />
                         Fireforge Labs
                     </Link>
-                    <Link className="" href="/">
-                        Início
-                    </Link>
-                    <Link className="" href="/">
-                        Loja
-                    </Link>
-                    <Link className="" href="/">
-                        Sobre
-                    </Link>
-                    <Link className="" href="/">
-                        Contato
-                    </Link>
+                    <Link href="/">Início</Link>
+                    <Link href="/">Loja</Link>
+                    <Link href="/">Sobre</Link>
+                    <Link href="/">Contato</Link>
                 </div>
 
                 {/* Campo de pesquisa */}
@@ -62,10 +54,10 @@ export default function Navbar() {
                     <Link href={user ? "/account" : "/auth/signin"}>
                         {user ? <UserCircle className="scale-120" /> : <LogIn />}
                     </Link>
-                    <Link className="" href="#">
+                    <Link href="#">
                         <Bell />
                     </Link>
-                    <Link className="" href="/cart">
+                    <Link href="/cart">
                         <ShoppingCart />
                     </Link>
                 </div>

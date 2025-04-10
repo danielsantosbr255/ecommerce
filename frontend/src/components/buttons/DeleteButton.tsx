@@ -18,7 +18,7 @@ export default function DeleteButton({ userId, productId, token }: Props) {
         const id = userId ?? productId;
         const resource = userId ? "users" : "products";
 
-        const res = await fetch(`http://localhost:3001/${resource}/${id}`, {
+        const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/${resource}/${id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,

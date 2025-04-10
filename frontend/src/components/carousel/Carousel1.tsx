@@ -30,7 +30,7 @@ export default function Carousel({ products }: ProductsCarouselProps) {
                     <div key={index} className="w-1/5 flex-shrink-1 p-2">
                         <div className="bg-white shadow-sm rounded-sm p-4 text-center">
                             <Image
-                                src={`http://localhost:3001${product.image}`}
+                                src={`process.env.NEXT_PUBLIC_API_URL${product.image}`}
                                 width={400}
                                 height={700}
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

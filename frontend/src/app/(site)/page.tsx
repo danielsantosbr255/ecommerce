@@ -1,20 +1,11 @@
-// import Carousel from "@/components/carousel/Carousel";
 import Carousel from "@/components/carousel/Carousel";
 import Product from "@/components/products/Product";
 import { ProductType } from "@/types/ProductType";
+import ProductsUtil from "@/utils/products.util";
 import { Crown, ShoppingBag, CircleArrowDown } from "lucide-react";
 
-const getProducts = async () => {
-    try {
-        const products = await fetch("http://localhost:3001/products");
-        return products.json();
-    } catch (error) {
-        return [];
-    }
-};
-
 export default async function Home() {
-    const products = await getProducts();
+    const products = await ProductsUtil.fetchProducts();
 
     if (products.length === 0)
         return (

@@ -25,7 +25,7 @@ export default function CartPage() {
     useEffect(() => {
         async function fetchCart() {
             try {
-                const res = await fetch("http://localhost:3001/cart", {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
                     cache: "no-store",
                     credentials: "include",
                     headers: {
@@ -49,7 +49,7 @@ export default function CartPage() {
 
     const handleRemoveItem = async (itemId: string) => {
         try {
-            await fetch(`http://localhost:3001/cart/${itemId}`, {
+            await fetch(`process.env.NEXT_PUBLIC_API_URL/cart/${itemId}`, {
                 method: "DELETE",
                 credentials: "include",
                 headers: {
@@ -65,7 +65,7 @@ export default function CartPage() {
 
     const handleClearCart = async () => {
         try {
-            await fetch("http://localhost:3001/cart/clear", {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/clear`, {
                 method: "DELETE",
                 credentials: "include",
                 headers: {

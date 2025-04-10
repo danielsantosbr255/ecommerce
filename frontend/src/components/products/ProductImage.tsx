@@ -12,7 +12,7 @@ type ProductImageProps = {
 };
 
 const PLACEHOLDER_IMAGE = "/placeholder.jpg";
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getValidImageUrl = (imagePath?: string): string => {
     if (!imagePath) return PLACEHOLDER_IMAGE;

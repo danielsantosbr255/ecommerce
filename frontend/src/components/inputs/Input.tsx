@@ -1,7 +1,12 @@
-import React from 'react'
+import React from "react";
 
-export default function Input(props: any) {
-  return (
-    <input className='bg-gray-100 p-5 rounded-lg border border-gray-200 focus:outline-amber-500' {...props} />
-  )
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+
+export default function Input({ className = "", ...props }: InputProps) {
+    return (
+        <input
+            className={`bg-gray-100 p-5 rounded-lg border border-gray-200 focus:outline-amber-500 ${className}`}
+            {...props}
+        />
+    );
 }

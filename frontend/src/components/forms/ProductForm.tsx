@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -25,7 +25,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
 
     const { accessToken } = useAuth();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData();
@@ -38,7 +38,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         const url = initialData?.id ? `/products/${initialData.id}` : "/products";
         const method = initialData?.id ? "PUT" : "POST";
 
-        const res = await fetch(`http://localhost:3001${url}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
             method,
             body: formData,
             headers: {
@@ -47,7 +47,8 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         });
 
         if (res.ok) {
-            onSuccess ? onSuccess() : router.push("/admin/products");
+            if (onSuccess) onSuccess();
+            else router.push("/admin/products");
         } else {
             alert("Erro ao salvar produto");
         }
@@ -58,14 +59,14 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
                 placeholder="Título"
                 className="w-full p-2 border rounded"
                 required
             />
             <textarea
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
                 placeholder="Descrição"
                 className="w-full p-2 border rounded"
                 required
@@ -73,7 +74,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             <input
                 type="number"
                 value={price}
-                onChange={(e) => setPrice(parseFloat(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(Number(e.target.value))}
                 placeholder="Preço"
                 className="w-full p-2 border rounded"
                 required
@@ -81,7 +82,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             <input
                 type="number"
                 value={stock}
-                onChange={(e) => setStock(parseInt(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setStock(Number(e.target.value))}
                 placeholder="Estoque"
                 className="w-full p-2 border rounded"
                 required
@@ -89,7 +90,9 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             <input
                 type="file"
                 name="image"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setImage(e.target.files?.[0] || null)
+                }
                 className="w-full border-b border-gray-300 bg-gray-100 p-2 rounded-lg cursor-pointer"
                 accept="image/*"
             />

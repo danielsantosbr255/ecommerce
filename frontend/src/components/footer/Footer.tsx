@@ -1,4 +1,4 @@
-import { User, Github, Linkedin } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import React from "react";
 
 export default function Footer() {
