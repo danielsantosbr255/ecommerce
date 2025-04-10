@@ -19,7 +19,7 @@ const signUp = async (name, email, password, userAgent, ipAddress) => {
     return { user, accessToken, refreshToken };
 };
 
-const signIn = async (res, email, password, userAgent, ipAddress) => {
+const signIn = async (email, password, userAgent, ipAddress) => {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user || !(await tools.verifyPassword(password, user.password))) {
@@ -36,8 +36,7 @@ const signIn = async (res, email, password, userAgent, ipAddress) => {
     const refreshToken = tokenUtil.generateRefreshToken();
 
     await tokenUtil.saveRefreshTokenToDatabase(user.id, refreshToken, userAgent, ipAddress);
-    tokenUtil.saveRefreshTokenToCookies(res, refreshToken);
-
+    
     return { accessToken, refreshToken };
 };
 

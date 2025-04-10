@@ -21,7 +21,8 @@ const signIn = async (req, res) => {
     const userAgent = req.headers["user-agent"] || "Desconhecido";
     const ipAddress = req.ip;
 
-    const result = await service.signIn(res, email, password, userAgent, ipAddress);
+    const result = await service.signIn(email, password, userAgent, ipAddress);
+    tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
 
     res.json({ accessToken: result.accessToken });
 };
