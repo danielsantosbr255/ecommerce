@@ -1,11 +1,27 @@
+"use client";
+
 import Carousel from "@/components/carousel/Carousel";
 import Product from "@/components/products/Product";
 import { ProductType } from "@/types/ProductType";
 import ProductsUtil from "@/utils/products.util";
 import { Crown, ShoppingBag, CircleArrowDown } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
-export default async function Home() {
-    const products = await ProductsUtil.fetchProducts();
+export default function Home() {
+    const [products, setProducts] = useState<ProductType[]>([]);
+
+    const fetchProducts = useCallback(async () => {
+        try {
+            const fetchedProducts = await ProductsUtil.fetchProducts();
+            setProducts(fetchedProducts);
+        } catch (err) {
+            console.error("Erro ao carregar produtos:", err);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     if (products.length === 0)
         return (
