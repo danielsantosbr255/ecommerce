@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./database/sqlite.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // url      = "file:./database/sqlite.db"
 }
 
 enum ORDER_STATUS {

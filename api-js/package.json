@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "src/main.js",
   "scripts": {
+    "start": "node src/main.js",
     "dev": "node --watch src/main.js"
   },
   "keywords": [],
@@ -12,7 +13,7 @@
   "dependencies": {
     "@casl/ability": "^6.7.3",
     "@casl/prisma": "^1.5.1",
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.6.0",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -28,6 +29,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "prisma": "^6.5.0"
+    "prisma": "^6.6.0"
   }
 }
