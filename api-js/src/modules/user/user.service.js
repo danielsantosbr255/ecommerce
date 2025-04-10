@@ -1,6 +1,6 @@
 const CustomError = require("../../common/utils/CustomError");
 const { prisma } = require("../../common/database/prisma");
-const tools = require("../../common/utils/tools");
+const authUtil = require("../../common/utils/auth.util");
 
 module.exports = {
     async getUsers() {
@@ -32,8 +32,8 @@ module.exports = {
         }
 
         if (password && password.length === 0) password = undefined;
-        
-        if (password && (await tools.verifyPassword(password, user.password))) {
+
+        if (password && (await authUtil.verifyPassword(password, user.password))) {
             throw new CustomError("A senha não pode ser igual", 400);
         }
 
@@ -46,7 +46,7 @@ module.exports = {
             data: {
                 name: name || user.name,
                 email: email || user.email,
-                password: password ? await tools.hashPassword(password, 10) : user.password,
+                password: password ? await authUtil.hashPassword(password, 10) : user.password,
                 role: role || user.role,
             },
         });

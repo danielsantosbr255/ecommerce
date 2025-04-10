@@ -1,6 +1,6 @@
 const localhost: string = "http://localhost:3001";
 
-class User {
+class UserUtil {
     async fetchUser(token: string) {
         const res = await fetch(`${localhost}/account`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -10,6 +10,16 @@ class User {
         const data = await res.json();
         if (!res.ok) throw new Error("Falha ao obter usuário");
         return data.user;
+    }
+
+    async fetchUsers(token: string) {
+        const res = await fetch(`${localhost}/users`, {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error("Falha ao obter usuários");
+        return data;
     }
 
     async updateUser(token: string, name: string, email: string) {
@@ -77,16 +87,6 @@ class User {
     }
 }
 
-class Products {
-    async fetchProducts() {
-        const res = await fetch(`${localhost}/products`);
-        const data = await res.json();
-        if (!res.ok) throw new Error("Falha ao obter produtos");
-        return data.products;
-    }
-}
+const user = new UserUtil();
 
-const user = new User();
-const products = new Products();
-
-export default { user, products };
+export default user;

@@ -3,11 +3,9 @@ import Carousel from "@/components/carousel/Carousel";
 import Product from "@/components/products/Product";
 import { ProductType } from "@/types/ProductType";
 import { Crown, ShoppingBag, CircleArrowDown } from "lucide-react";
-import Link from "next/link";
 
 const getProducts = async () => {
     try {
-        // const products = await fetch("https://fakestoreapi.com/products");
         const products = await fetch("http://localhost:3001/products");
         return products.json();
     } catch (error) {
@@ -20,7 +18,7 @@ export default async function Home() {
 
     if (products.length === 0)
         return (
-            <main className="bg-gray-200 flex flex-col justify-center items-center gap-4 mx-auto pt-16 px-0 h-screen">
+            <main className="bg-gray-100 flex h-screen flex-1 justify-center items-center">
                 <h1 className="font-bold text-gray-600 text-2xl">Nenhum Produto Encontrado!</h1>
             </main>
         );
@@ -50,9 +48,7 @@ export default async function Home() {
                 </h2>
                 <div className="grid grid-cols-1 px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7 xl:px-0">
                     {products.map((product: ProductType) => (
-                        <Link key={product.id} href={`/product/${product.id}`}>
-                            <Product product={product} />
-                        </Link>
+                        <Product key={product.id} product={product} />
                     ))}
                 </div>
             </section>

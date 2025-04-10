@@ -60,15 +60,7 @@ export default function Navbar() {
                         {user?.role === "ADMIN" && <ShieldUser className="scale-120" />}
                     </Link>
                     <Link href={user ? "/account" : "/auth/signin"}>
-                        {!loading ? (
-                            user ? (
-                                <UserCircle className="h-6 w-6" />
-                            ) : (
-                                <LogIn />
-                            )
-                        ) : (
-                            <Loader2 className="animate-spin h-6 w-6" />
-                        )}
+                        {user ? <UserCircle className="scale-120" /> : <LogIn />}
                     </Link>
                     <Link className="" href="#">
                         <Bell />

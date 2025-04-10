@@ -23,12 +23,12 @@ export default function Profile() {
     useEffect(() => {
         if (!loading && !user) logout();
     }, [user, loading, router]);
-    
+
     if (!loading && !user) return null;
-    
+
     return (
-        <div className="bg-gray-200 flex justify-center items-center w-auto h-screen p-4">
-            <div className="bg-gray-50 flex flex-col justify-around items-center gap-10 p-5 rounded-sm shadow-sm w-5xl">
+        // <div className="bg-gray-200 my-auto flex justify-center items-center w-auto h-full p-4">
+            <div className="bg-gray-50 flex flex-col mx-auto mt-10 justify-center items-center gap-10 p-5 rounded-sm shadow-sm w-5xl">
                 <div className="text-2xl font-bold flex items-center gap-2">
                     <User className="text-amber-500" size={50} />
                     <h1 className="text-gray-600">Olá, {user?.name}!</h1>
@@ -65,6 +65,6 @@ export default function Profile() {
                     <LogOutIcon size={24} className="ml-2" />
                 </button>
             </div>
-        </div>
+        // </div>
     );
 }

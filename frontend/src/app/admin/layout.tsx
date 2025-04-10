@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AdminLayout from "@/components/admin/AdminLayout";
+import AdminLayout from "@/components/layouts/AdminLayout";
 
 export const metadata: Metadata = {
     title: "Fireforge Labs - Admin",

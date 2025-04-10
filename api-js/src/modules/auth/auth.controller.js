@@ -1,31 +1,64 @@
 const service = require("./auth.service");
 const userValidator = require("../../common/validators/user.validator");
+const CustomError = require("../../common/utils/CustomError");
+const tokenUtil = require("../../common/utils/token.util");
 
-const authController = {
-    async signUp(req, res) {
-        const validatedData = userValidator.signUp(req.body);
-        const { token, refreshToken } = await service.signUp(validatedData);
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.status(201).json({ token });
-    },
+const signUp = async (req, res) => {
+    // const validatedData = userValidator.signUp(req.body);
+    const { name, email, password } = req.body;
+    const userAgent = req.headers["user-agent"] || "Desconhecido";
+    const ipAddress = req.ip;
 
-    async signIn(req, res) {
-        const validatedData = userValidator.signIn(req.body);
-        const { token, refreshToken } = await service.signIn(validatedData);
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.json({ token });
-    },
+    const result = await service.signUp(name, email, password, userAgent, ipAddress);
+    tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
 
-    refreshToken(req, res) {
-        const { refreshToken } = req.cookies;
-        const newToken = service.refreshToken(refreshToken);
-        res.json({ token: newToken });
-    },
-
-    logout(req, res) {
-        res.clearCookie('refreshToken');
-        res.json({ message: 'Sessão encerrada com sucesso' });
-    },
+    res.status(201).json({ accessToken: result.accessToken });
 };
 
-module.exports = authController;
+const signIn = async (req, res) => {
+    // const validatedData = userValidator.signIn({ email, password });
+    const { email, password } = req.body;
+    const userAgent = req.headers["user-agent"] || "Desconhecido";
+    const ipAddress = req.ip;
+
+    const result = await service.signIn(res, email, password, userAgent, ipAddress);
+
+    res.json({ accessToken: result.accessToken });
+};
+
+const refreshToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    const userAgent = req.headers["user-agent"] || "Desconhecido";
+    const ipAddress = req.ip;
+
+    if (!refreshToken) throw new CustomError("Token inválido!", 401);
+
+    const newTokens = await service.refreshAccessToken(refreshToken, userAgent, ipAddress);
+    
+    if (!newTokens) {
+        tokenUtil.clearRefreshToken(res);
+        throw new CustomError("Token inválido", 401);
+    }
+
+    tokenUtil.saveRefreshTokenToCookies(res, newTokens.refreshToken);
+
+    res.json({ accessToken: newTokens.accessToken });
+};
+
+const logout = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) return res.sendStatus(204);
+
+    const success = await service.logout(refreshToken);
+
+    tokenUtil.clearRefreshToken(res);
+
+    if (success) {
+        return res.status(204).json("Logout bem-sucedido!"); // Logout bem-sucedido
+    } else {
+        return res.sendStatus(400); // Erro ao invalidar o token (pode não existir)
+    }
+};
+
+module.exports = { signUp, signIn, logout, refreshToken };

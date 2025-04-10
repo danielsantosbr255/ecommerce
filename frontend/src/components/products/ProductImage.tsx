@@ -1,49 +1,71 @@
 "use client";
-import { ProductType } from "@/types/ProductType";
-import Image from "next/image";
+
 import { useState } from "react";
+import Image from "next/image";
+import clsx from "clsx";
+import { ProductType } from "@/types/ProductType";
 
 type ProductImageProps = {
     product: ProductType;
     fill?: boolean;
+    className?: string;
 };
 
-const getValidImageUrl = (imagePath: string) => {
-    if (!imagePath) return "/placeholder.jpg"; // Caso a URL seja undefined ou vazia
+const PLACEHOLDER_IMAGE = "/placeholder.jpg";
+const BASE_URL = "http://localhost:3001";
 
-    const baseUrl = "http://localhost:3001";
-
-    return `${baseUrl}/${imagePath.replace(/^\/+/, "")}`;
+const getValidImageUrl = (imagePath?: string): string => {
+    if (!imagePath) return PLACEHOLDER_IMAGE;
+    return `${BASE_URL}/${imagePath.replace(/^\/+/, "")}`;
 };
 
-export default function ProductImage({ product, fill }: ProductImageProps) {
+export default function ProductImage({ product, fill = false, className }: ProductImageProps) {
     const [loading, setLoading] = useState(true);
-    
+    const [error, setError] = useState(false);
+
+    const imageUrl = error ? PLACEHOLDER_IMAGE : getValidImageUrl(product.image);
+    const altText = product.title;
+
+    const imageClasses = clsx(
+        "object-cover transition-all duration-500 ease-in-out",
+        loading ? "scale-100 blur-3xl grayscale" : "scale-95 blur-0 grayscale-0",
+        className
+    );
+
+    const handleError = () => {
+        setError(true);
+        setLoading(false);
+    };
+
+    const handleLoad = () => {
+        setLoading(false);
+    };
+
     if (fill) {
         return (
             <Image
-                src={getValidImageUrl(product.image)}
+                src={imageUrl}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                alt={product.title}
-                className={`object-cover ${
-                    loading ? "scale-110 blur-3xl grayscale" : "scale-95 blur-0 grayscale-0"
-                }`}
-                onLoad={() => setLoading(false)}
+                alt={altText}
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className={imageClasses}
+                onLoad={handleLoad}
+                onError={handleError}
             />
         );
     }
 
     return (
         <Image
-            src={getValidImageUrl(product.image)}
+            src={imageUrl}
             width={400}
-            height={700}
-            alt={product.title}
-            className={`object-cover ${
-                loading ? "scale-110 blur-3xl grayscale" : "scale-100 blur-0 grayscale-0"
-            }`}
-            onLoad={() => setLoading(false)}
+            height={400}
+            alt={altText}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+            className={imageClasses}
+            onLoad={handleLoad}
+            onError={handleError}
         />
     );
 }

@@ -1,97 +1,137 @@
 "use client";
-
-import Link from "next/link";
+import React, { useEffect, useState, useCallback } from "react";
+import ProductsUtil from "@/utils/products.util";
+import { ProductType } from "@/types/ProductType";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AdminProductList from "@/components/admin/AdminProductList";
+import AdminProductFilters from "@/components/admin/AdminProductFilters";
+import AdminProductForm from "@/components/admin/AdminProductForm";
 import { useAuth } from "@/contexts/AuthContext";
-import useSWR from "swr";
 
-type Product = {
-    id: string;
-    title: string;
-    price: number;
-    stock: number;
-    imageUrl?: string;
-};
-
-const fetcher = (url: string, token: string) =>
-    fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
-        credentials: "include",
-    }).then((res) => res.json());
-
-export default function ProductsPage() {
+const AdminProductsPage = () => {
+    const [products, setProducts] = useState<ProductType[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterCategory, setFilterCategory] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(8);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const { accessToken } = useAuth();
-    console.log(accessToken);
 
-    const {
-        data: products,
-        mutate,
-        isLoading,
-    } = useSWR(
-        accessToken ? ["http://localhost:3001/products", accessToken] : null,
-        ([url, token]) => fetcher(url, token),
-        {
-            refreshInterval: 10000, // Revalida a cada 10s
-            revalidateOnFocus: true,
+    const fetchProducts = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const fetchedProducts = await ProductsUtil.fetchProducts();
+            setProducts(fetchedProducts);
+        } catch (err: any) {
+            setError("Erro ao carregar os produtos.");
+            toast.error("Erro ao carregar os produtos.");
+            console.error("Erro ao carregar produtos:", err);
+        } finally {
+            setLoading(false);
         }
-    );
+    }, []);
 
-    const handleDelete = async (id: string) => {
-        const confirmed = confirm("Tem certeza que deseja excluir?");
-        if (!confirmed) return;
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
-        const res = await fetch(`http://localhost:3001/products/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        if (res.ok) mutate(); // atualiza lista após exclusão
-        else alert("Erro ao deletar o produto");
+    const handleSearchChange = (term: string) => {
+        setSearchTerm(term);
+        setCurrentPage(1);
     };
 
-    if (isLoading) return <p>Carregando produtos...</p>;
+    const handleFilterChange = (category: string) => {
+        setFilterCategory(category);
+        setCurrentPage(1);
+    };
+
+    const handleDeleteProduct = async (id: string) => {
+        if (confirm("Tem certeza que deseja excluir este produto?")) {
+            try {
+                await ProductsUtil.deleteProduct(accessToken, id);
+                setProducts((prev) => prev.filter((product) => product.id !== id));
+                toast.success("Produto excluído com sucesso!");
+            } catch (err: any) {
+                toast.error(err.message || "Erro ao excluir o produto.");
+                console.error("Erro ao excluir produto:", err);
+            }
+        }
+    };
+
+    const handleAddProduct = async (
+        productData: Omit<ProductType, "id" | "image">,
+        imageFile: File | null
+    ) => {
+        try {
+            const formData = new FormData();
+            formData.append("title", productData.title);
+            formData.append("price", String(productData.price));
+            formData.append("category", productData.category);
+            formData.append("description", productData.description);
+            formData.append("stock", String(productData.stock));
+            if (imageFile) formData.append("image", imageFile);
+
+            const addedProduct = (await ProductsUtil.createProduct(
+                accessToken,
+                formData
+            )) as ProductType;
+
+            setProducts((prev) => [...prev, addedProduct]);
+            toast.success("Produto adicionado com sucesso!");
+        } catch (err: any) {
+            toast.error(err.message || "Erro ao adicionar o produto.");
+            console.error("Erro ao adicionar produto:", err);
+        }
+    };
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+    const filteredProducts = products.filter(
+        (product) =>
+            product.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (filterCategory === "" || product.category === filterCategory)
+    );
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
     return (
-        <>
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold">Produtos</h2>
-                <Link
-                    href="/admin/products/create"
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer"
-                >
-                    + Novo Produto
-                </Link>
+        <div>
+            <div className="bg-white shadow-md rounded-md p-6 mb-6">
+                <div className="flex flex-col md:flex-row items-center justify-between mb-4">
+                    <AdminProductFilters
+                        searchTerm={searchTerm}
+                        onSearchChange={handleSearchChange}
+                        filterCategory={filterCategory}
+                        onFilterChange={handleFilterChange}
+                    />
+                </div>
+
+                {loading ? (
+                    <p>Carregando produtos...</p>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    <AdminProductList
+                        products={currentProducts}
+                        onDelete={handleDeleteProduct}
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        onPageChange={paginate}
+                    />
+                )}
             </div>
 
-            <div className="grid gap-4">
-                {products?.map((product: Product) => (
-                    <div
-                        key={product.id}
-                        className="bg-white p-4 rounded shadow flex justify-between items-center"
-                    >
-                        <div>
-                            <h3 className="text-lg font-bold">{product.title}</h3>
-                            <p>R$ {product.price}</p>
-                            <p>Estoque: {product.stock}</p>
-                        </div>
-                        <div className="flex gap-2">
-                            <Link
-                                href={`/admin/products/edit/${product.id}`}
-                                className="text-blue-600 hover:underline"
-                            >
-                                Editar
-                            </Link>
-                            <button
-                                onClick={() => handleDelete(product.id)}
-                                className="text-red-600 hover:underline cursor-pointer"
-                            >
-                                Excluir
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </>
+            <AdminProductForm onAddProduct={handleAddProduct} />
+
+            <ToastContainer />
+        </div>
     );
-}
+};
+
+export default AdminProductsPage;

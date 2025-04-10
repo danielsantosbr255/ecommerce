@@ -30,8 +30,7 @@ module.exports = {
         if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
         const validatedData = validator.create(bodyData(req));
-        console.log(validatedData)
-
+        
         if (validatedData.stock < 0) throw new CustomError("Quantidade de estoque inválida!", 400);
 
         return prisma.product.create({ data: validatedData });

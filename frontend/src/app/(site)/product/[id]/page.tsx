@@ -1,18 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import ProductsUtil from "@/utils/products.util";
+import ProductImage from "@/components/products/ProductImage";
+import { ProductType } from "@/types/ProductType";
+import CurrencyUtil from "@/utils/currency.util";
+import Product from "@/components/products/Product";
 
 // Tipagens
-type Product = {
-    id: string;
-    title: string;
-    price: number;
-    stock: number;
-    description?: string;
-    image?: string;
-    specs?: { key: string; value: string }[];
-};
-
 type Review = {
     name: string;
     rating: number;
@@ -29,44 +24,46 @@ const getValidImageUrl = (imagePath: string | null = null) => {
 
 export default function ProductPage() {
     const { id } = useParams();
-    const [product, setProduct] = useState<Product | null>(null);
+    const [product, setProduct] = useState<ProductType | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [newReview, setNewReview] = useState<Review>({
         name: "",
         rating: 5,
         comment: "",
     });
+    const [products, setProducts] = useState<ProductType[]>([]);
+
+    const relatedProducts = products
+        .filter((p) => p.category === product?.category && p.id !== product?.id)
+        .sort(() => Math.random() - 0.5) // embaralha os produtos
+        .slice(0, 4); // pega os 4 primeiros do novo "shuffle"
 
     useEffect(() => {
         async function fetchProduct() {
-            const res = await fetch(`http://localhost:3001/products/${id}`, {
-                cache: "no-store",
-            });
-            const data = await res.json();
-            setProduct(data);
+            const product = await ProductsUtil.fetchProduct(id as string);
+            setProduct(product);
+        }
+
+        async function fetchProducts() {
+            const products = await ProductsUtil.fetchProducts();
+            setProducts(products);
         }
 
         async function fetchReviews() {
-            const res = await fetch(`http://localhost:3001/products/${id}/reviews`, {
-                cache: "no-store",
-            });
-            const data = await res.json();
+            const data = await ProductsUtil.fetchReviews(id);
             setReviews(data);
         }
 
         if (id) {
             fetchProduct();
-            fetchReviews();
+            fetchProducts();
+            // fetchReviews();
         }
     }, [id]);
 
     const handleReviewSubmit = async () => {
         if (!newReview.name || !newReview.comment) return alert("Preencha todos os campos.");
-        const res = await fetch(`http://localhost:3001/products/${id}/reviews`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newReview),
-        });
+        const res = await ProductsUtil.createReview(id, newReview);
         if (res.ok) {
             setReviews([...reviews, newReview]);
             setNewReview({ name: "", rating: 5, comment: "" });
@@ -82,15 +79,16 @@ export default function ProductPage() {
             {/* Produto */}
             <div className="grid md:grid-cols-2 gap-10">
                 <div className="bg-white rounded shadow p-4">
-                    <img
-                        src={getValidImageUrl(product.image)}
-                        alt={product.title}
+                    <ProductImage
+                        product={product}
                         className="w-full h-auto object-contain rounded"
                     />
                 </div>
                 <div className="space-y-4">
                     <h1 className="text-3xl font-bold">{product.title}</h1>
-                    <p className="text-xl text-amber-500 font-semibold">R$ {product.price}</p>
+                    <p className="text-xl text-amber-500 font-semibold">
+                        {CurrencyUtil.formatCurrency(product.price)}
+                    </p>
                     <p className="text-gray-600">Estoque: {product.stock}</p>
                     <p className="text-gray-700">{product.description || "Sem descrição."}</p>
 
@@ -192,18 +190,8 @@ export default function ProductPage() {
             <div>
                 <h2 className="text-2xl font-bold mb-4">Produtos Relacionados</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[1, 2, 3, 4].map((n) => (
-                        <div
-                            key={n}
-                            className="bg-white p-4 rounded shadow text-center hover:shadow-lg transition"
-                        >
-                            <img
-                                src={getValidImageUrl()}
-                                className="w-full h-32 object-contain mb-2"
-                            />
-                            <p className="font-semibold">Produto {n}</p>
-                            <p className="text-sm text-gray-500">R$ 99,90</p>
-                        </div>
+                    {relatedProducts.map((product) => (
+                        <Product key={product.id} product={product} />
                     ))}
                 </div>
             </div>

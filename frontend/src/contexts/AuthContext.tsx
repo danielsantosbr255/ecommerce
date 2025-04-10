@@ -1,18 +1,12 @@
 "use client";
 
-import apiManager from "@/utils/apiManager";
+import userUtil from "@/utils/user.util";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-}
+import { UserType } from "@/types/UserType";
 
 interface AuthContextType {
-    user: User | null;
+    user: UserType | null;
     loading: boolean;
     error: string | null;
     accessToken: string | null;
@@ -24,14 +18,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const router = useRouter();
 
     const fetchUser = async (token: string) => {
-        const user = await apiManager.user.fetchUser(token);
+        const user = await userUtil.fetchUser(token);
         setUser(user);
         setAccessToken(token);
         setLoading(false);
@@ -39,24 +33,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const signUp = async (name: string, email: string, password: string) => {
         setError(null);
-        const { token } = await apiManager.user.signUp(name, email, password);
-        if (!token) return setError("Falha ao cadastrar-se");
+        const { accessToken } = await userUtil.signUp(name, email, password);
+        if (!accessToken) return setError("Falha ao cadastrar-se");
 
-        fetchUser(token);
+        fetchUser(accessToken);
         router.push("/account");
     };
 
     const login = async (email: string, password: string) => {
         setError(null);
-        const { token } = await apiManager.user.signin(email, password);
-        if (!token) return setError("Falha ao efetuar o login");
+        const { accessToken } = await userUtil.signin(email, password);
+        if (!accessToken) return setError("Falha ao efetuar o login");
 
-        await fetchUser(token);
+        await fetchUser(accessToken);
         router.push("/account");
     };
 
     const refreshToken = async () => {
-        const token = await apiManager.user.refreshToken();
+        const token = await userUtil.refreshToken();
+
         if (token) return await fetchUser(token);
 
         setUser(null);
@@ -66,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
-        apiManager.user.logout();
+        await userUtil.logout();
         setUser(null);
         setAccessToken(null);
         router.push("/auth/signin");
