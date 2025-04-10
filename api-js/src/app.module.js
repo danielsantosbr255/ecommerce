@@ -13,9 +13,11 @@ const ProductsModule = require("./modules/products/products.module");
 
 const app = express();
 
+const allowedOrigins = ["https://fireforgelabs.vercel.app", "http://localhost:3000"];
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "https://fireforgelabs.vercel.app/", credentials: true }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule);
