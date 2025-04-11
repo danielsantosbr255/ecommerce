@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { verifyToken } = require("../../common/middlewares/auth.middleware");
 
 const controller = require("./products.controller");
-const multer = require("../../common/utils/multer");
+const multer = require("../../common/utils/multer.util");
 
 router.get("/products", controller.getProducts);
 router.get("/products/:id", controller.getProductById);

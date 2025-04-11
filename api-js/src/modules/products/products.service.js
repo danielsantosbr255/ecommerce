@@ -1,72 +1,75 @@
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
 const validator = require("../../common/validators/product.validator");
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require("../../common/utils/cloudinary.util");
+const { Readable } = require("stream");
+// const path = require("path");
+// const fs = require("fs");
 
-const bodyData = (req) => {
-    const { title, description, price, stock, category } = req.body;
+const bodyData = (data) => {
+  const { title, description, price, stock, category, image } = data;
 
-    return {
-        ...(title !== undefined && { title }),
-        ...(category !== undefined && { category }),
-        ...(description !== undefined && { description }),
-        ...(price !== undefined && { price: Number(price) }),
-        ...(stock !== undefined && { stock: Number(stock) }),
-        ...(req.file && { image: `/uploads/${req.file.filename}` }),
-    };
+  return {
+    ...(title !== undefined && { title }),
+    ...(category !== undefined && { category }),
+    ...(description !== undefined && { description }),
+    ...(price !== undefined && { price: Number(price) }),
+    ...(stock !== undefined && { stock: Number(stock) }),
+    ...(image !== undefined && { image: image.originalname }),
+  };
 };
 
 module.exports = {
-    getProducts() {
-        return prisma.product.findMany();
-    },
+  getProducts() {
+    return prisma.product.findMany();
+  },
 
-    getProductById(id) {
-        return prisma.product.findUnique({ where: { id } });
-    },
+  getProductById(id) {
+    return prisma.product.findUnique({ where: { id } });
+  },
 
-    createProduct(req) {
-        if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+  async createProduct(title, description, price, stock, category, image) {
+    const validatedData = validator.create(bodyData({ title, description, price, stock, category, image }));
 
-        const validatedData = validator.create(bodyData(req));
-        
-        if (validatedData.stock < 0) throw new CustomError("Quantidade de estoque inválida!", 400);
+    if (validatedData.stock <= 0) throw new CustomError("Quantidade de estoque inválida!", 400);
 
-        return prisma.product.create({ data: validatedData });
-    },
+    const imageUrl = await new Promise((resolve, reject) => {
+      const bufferStream = new Readable();
+      bufferStream.push(image.buffer);
+      bufferStream.push(null);
 
-    async updateProduct(req) {
-        if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+      const stream = cloudinary.uploader.upload_stream({ folder: "ecommerce-images" }, (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      });
 
-        const existingProduct = await prisma.product.findUnique({ where: { id: req.params.id } });
-        if (!existingProduct) throw new CustomError("Produto não encontrado!", 404);
+      bufferStream.pipe(stream);
+    });
 
-        const validatedData = validator.update(bodyData(req));
+    validatedData.image = imageUrl;
+    console.log(validatedData.image);
 
-        if (req.file && existingProduct.image) {
-            const oldImagePath = path.join(__dirname, "../../..", existingProduct.image);
-            fs.unlink(oldImagePath, (err) => {
-                if (err) console.error("Erro ao deletar imagem antiga:", err);
-            });
-        }
-        return prisma.product.update({ where: { id: req.params.id }, data: validatedData });
-    },
+    return prisma.product.create({ data: validatedData });
+  },
 
-    async deleteProduct(req) {
-        const { id } = req.params;
-        if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+  async updateProduct(id, title, description, price, stock, category, image) {
+    const existingProduct = await prisma.product.findUnique({ where: { id } });
+    if (!existingProduct) throw new CustomError("Produto não encontrado!", 404);
 
-        const product = await prisma.product.findUnique({ where: { id } });
-        if (!product) throw new CustomError("Produto não encontrado!", 404);
+    const validatedData = validator.update(bodyData({ title, description, price, stock, category, image }));
+    return prisma.product.update({ where: { id }, data: validatedData });
+  },
 
-        if (product.image) {
-            const oldImagePath = path.join(__dirname, "../../..", product.image);
-            fs.unlink(oldImagePath, (err) => {
-                if (err) console.error("Erro ao deletar imagem antiga:", err);
-            });
-        }
+  async deleteProduct(id) {
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-        return prisma.product.delete({ where: { id } });
-    },
+    // if (product.image) {
+    //     const oldImagePath = path.join(__dirname, "../../..", product.image);
+    //     fs.unlink(oldImagePath, (err) => {
+    //         if (err) console.error("Erro ao deletar imagem antiga:", err);
+    //     });
+    // }
+    return prisma.product.delete({ where: { id } });
+  },
 };

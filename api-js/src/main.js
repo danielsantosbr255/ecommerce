@@ -7,7 +7,7 @@ const { connectDB } = require("./common/database/prisma");
 const PORT = process.env.PORT || 3001;
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`🔥 Servidor rodando em http://localhost:${PORT}`);
-    });
+  app.listen(PORT, () => {
+    console.log(`🔥 Servidor rodando em http://localhost:${PORT}`);
+  });
 });
