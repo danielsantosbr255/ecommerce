@@ -30,16 +30,16 @@ export default function Home() {
 
   if (loading)
     return (
-      <div className="bg-gray-200 flex flex-col justify-center items-center h-screen">
+      <div className="flex flex-col h-screen justify-center items-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-500 flex justify-center items-center"></div>
       </div>
     );
 
   if (products.length === 0)
     return (
-      <main className="bg-gray-100 flex h-screen flex-1 justify-center items-center">
+      <div className="w-full flex justify-center items-center">
         <h1 className="font-bold text-gray-600 text-2xl">Nenhum Produto Encontrado!</h1>
-      </main>
+      </div>
     );
 
   return (
