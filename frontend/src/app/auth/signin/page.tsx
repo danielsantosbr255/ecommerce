@@ -3,8 +3,8 @@
 import Link from "next/link";
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import Form from "@/components/forms/Form";
-import Input from "@/components/inputs/Input";
-import Button from "@/components/buttons/Button";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogIn } from "lucide-react";
 

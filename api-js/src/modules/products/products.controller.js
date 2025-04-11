@@ -23,6 +23,11 @@ const getProductById = async (req, res) => {
   return res.json(product);
 };
 
+const getProductsByQuery = async (req, res) => {
+  const products = await services.getProductsByQuery(req.params.query);
+  return res.json(products);
+};
+
 const updateProduct = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
@@ -41,4 +46,11 @@ const deleteProduct = async (req, res) => {
   return res.json(product);
 };
 
-module.exports = { getProducts, createProduct, getProductById, updateProduct, deleteProduct };
+module.exports = {
+  getProducts,
+  createProduct,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+  getProductsByQuery,
+};

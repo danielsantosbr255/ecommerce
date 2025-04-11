@@ -1,42 +1,38 @@
 "use client";
-import "react-toastify/dist/ReactToastify.css";
-import React, { useEffect, useState, useCallback } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import { ProductType } from "@/types/ProductType";
-import ProductsUtil from "@/utils/products.util";
-import AdminProductList from "@/components/admin/AdminProductList";
-import AdminProductFilters from "@/components/admin/AdminProductFilters";
-import AdminProductForm from "@/components/admin/AdminProductForm";
-import { useAuth } from "@/contexts/AuthContext";
 
-const AdminProductsPage: React.FC = () => {
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import ProductsUtil from "@/utils/products.util";
+import { ProductType } from "@/types/ProductType";
+import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext";
+
+interface AuthContextType {
+  products: ProductType[];
+  searchTerm: string;
+  filterCategory: string;
+  currentPage: number;
+  itemsPerPage: number;
+  handleSearchChange: (term: string) => void;
+  handleFilterChange: (category: string) => void;
+  handleDeleteProduct: (id: string) => Promise<void>;
+  handleAddProduct: (productData: Omit<ProductType, "id" | "image">, imageFile: File | null) => Promise<void>;
+  paginate: (pageNumber: number) => void;
+  loading: boolean;
+  error: string | null;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [products, setProducts] = useState<ProductType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
-  const [loading, setLoading] = useState(true);
+
   const { accessToken } = useAuth();
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterCategory === "" || product.category === filterCategory)
-  );
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
-  const filterOptions = [
-    { value: "", label: "Todas as Categorias" },
-    { value: "Roupas", label: "Roupas" },
-    { value: "Calçados", label: "Calçados" },
-    { value: "Eletrônicos", label: "Eletrônicos" },
-    { value: "Livros", label: "Livros" },
-    { value: "Acessórios", label: "Acessórios" },
-  ];
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -57,6 +53,7 @@ const AdminProductsPage: React.FC = () => {
 
   const handleDeleteProduct = async (id: string) => {
     if (!accessToken) {
+      setError("Token de acesso não disponível.");
       toast.error("Token de acesso não disponível.");
       return;
     }
@@ -106,34 +103,32 @@ const AdminProductsPage: React.FC = () => {
   }, [fetchProducts]);
 
   return (
-    <div>
-      <div className="bg-white shadow-md rounded-md p-6 mb-6">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4">
-          <AdminProductFilters
-            onSearchChange={handleSearchChange}
-            onFilterChange={handleFilterChange}
-            searchInputPlaceholder="Buscar produtos..."
-            filterOptions={filterOptions}
-          />
-        </div>
-
-        {loading ? (
-          <p>Carregando produtos...</p>
-        ) : (
-          <AdminProductList
-            products={currentProducts}
-            onDelete={handleDeleteProduct}
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onPageChange={paginate}
-          />
-        )}
-      </div>
-
-      <AdminProductForm onAddProduct={handleAddProduct} />
-      <ToastContainer />
-    </div>
+    <AuthContext.Provider
+      value={{
+        products,
+        searchTerm,
+        filterCategory,
+        currentPage,
+        itemsPerPage,
+        handleSearchChange,
+        handleFilterChange,
+        handleDeleteProduct,
+        handleAddProduct,
+        paginate,
+        loading,
+        error,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
-};
+}
 
-export default AdminProductsPage;
+// Hook para usar o contexto
+export function useProduct() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useProduct deve ser usado dentro de um AuthProvider.");
+  }
+  return context;
+}

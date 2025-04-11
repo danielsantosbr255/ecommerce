@@ -48,6 +48,13 @@ class ProductsUtil {
         return data;
     }
 
+    static async fetchProductByQuery(query: string) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/search/${query}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error("Falha ao obter produto");
+        return data;
+    }
+
     static async fetchProductsByCategory(category: string) {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/category/${category}`);
         const data = await res.json();

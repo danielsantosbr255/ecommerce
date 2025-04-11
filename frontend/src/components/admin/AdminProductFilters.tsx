@@ -1,38 +1,88 @@
-import React from "react";
+"use client";
+import React, { useCallback, useState } from "react";
 
-interface Props {
-    searchTerm: string;
-    onSearchChange: (term: string) => void;
-    filterCategory: string;
-    onFilterChange: (category: string) => void;
+interface FilterOption {
+  value: string;
+  label: string;
 }
 
-const AdminProductFilters: React.FC<Props> = ({ searchTerm, onSearchChange, filterCategory, onFilterChange }) => {
-    return (
-        <div className="flex items-center space-x-2">
-            <input
-                type="text"
-                placeholder="Buscar produtos..."
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
-                name="searchTerm"
-            />
-            <select
-                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                value={filterCategory}
-                onChange={(e) => onFilterChange(e.target.value)}
-                name="filterCategory"
-            >
-                <option value="">Todas as Categorias</option>
-                <option value="Roupas">Roupas</option>
-                <option value="Calçados">Calçados</option>
-                <option value="Eletrônicos">Eletrônicos</option>
-                <option value="Livros">Livros</option>
-                <option value="Acessórios">Acessórios</option>
-            </select>
-        </div>
-    );
+interface Props {
+  onSearchChange: (term: string) => void;
+  onFilterChange: (category: string) => void;
+  searchInputPlaceholder?: string;
+  filterOptions?: FilterOption[];
+  defaultFilterValue?: string;
+  searchInputClassName?: string;
+  selectClassName?: string;
+  selectLabel?: string;
+}
+
+const AdminProductFilters: React.FC<Props> = ({
+  onSearchChange,
+  onFilterChange,
+  searchInputPlaceholder = "Buscar produtos...",
+  filterOptions = [
+    { value: "", label: "Todas as Categorias" },
+    { value: "Roupas", label: "Roupas" },
+    { value: "Calçados", label: "Calçados" },
+    { value: "Eletrônicos", label: "Eletrônicos" },
+    { value: "Livros", label: "Livros" },
+    { value: "Acessórios", label: "Acessórios" },
+  ],
+  defaultFilterValue = "",
+  searchInputClassName = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+  selectClassName = "shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+  selectLabel,
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState(defaultFilterValue);
+
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSearchTerm(value);
+      onSearchChange(value);
+    },
+    [onSearchChange]
+  );
+
+  const handleCategoryChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = event.target.value;
+      setFilterCategory(value);
+      onFilterChange(value);
+    },
+    [onFilterChange]
+  );
+
+  return (
+    <div className="flex items-center space-x-2">
+      <input
+        type="text"
+        placeholder={searchInputPlaceholder}
+        className={searchInputClassName}
+        value={searchTerm}
+        onChange={handleInputChange}
+        name="searchTerm"
+      />
+      <div>
+        {selectLabel && <label htmlFor="filterCategory">{selectLabel}</label>}
+        <select
+          id="filterCategory"
+          className={selectClassName}
+          value={filterCategory}
+          onChange={handleCategoryChange}
+          name="filterCategory"
+        >
+          {filterOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
 };
 
 export default AdminProductFilters;

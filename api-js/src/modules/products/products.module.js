@@ -6,6 +6,7 @@ const multer = require("../../common/utils/multer.util");
 
 router.get("/products", controller.getProducts);
 router.get("/products/:id", controller.getProductById);
+router.get("/products/search/:query", controller.getProductsByQuery);
 router.post("/products", verifyToken, multer.single("image"), controller.createProduct);
 router.put("/products/:id", verifyToken, multer.single("image"), controller.updateProduct);
 router.delete("/products/:id", verifyToken, controller.deleteProduct);

@@ -1,17 +1,15 @@
-// components/admin/AdminProductList.tsx
 import React from "react";
 import { ProductType } from "@/types/ProductType";
-import AdminProductCard from "./AdminProductCard";
+import Product from "../products/Product";
 
 interface Props {
   products: ProductType[];
-  onDelete: (id: string) => void;
   totalPages: number;
   currentPage: number;
   onPageChange: (pageNumber: number) => void;
 }
 
-const AdminProductList: React.FC<Props> = ({ products, onDelete, totalPages, currentPage, onPageChange }) => {
+const ProductsListLayout: React.FC<Props> = ({ products, totalPages, currentPage, onPageChange }) => {
   if (products.length === 0) {
     return <p className="text-gray-600 col-span-full">Nenhum produto encontrado.</p>;
   }
@@ -20,9 +18,10 @@ const AdminProductList: React.FC<Props> = ({ products, onDelete, totalPages, cur
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products.map((product) => (
-          <AdminProductCard key={product.id} product={product} onDelete={onDelete} />
+          <Product key={product.id} product={product} />
         ))}
       </div>
+
       {totalPages > 1 && (
         <div className="mt-4 flex justify-center space-x-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
@@ -44,4 +43,4 @@ const AdminProductList: React.FC<Props> = ({ products, onDelete, totalPages, cur
   );
 };
 
-export default AdminProductList;
+export default ProductsListLayout;
