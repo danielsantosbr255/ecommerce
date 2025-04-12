@@ -1,143 +1,179 @@
 "use client";
 
+import { useState, useEffect, ReactNode, JSX } from "react";
 import Link from "next/link";
-import SearchBar from "../search/SearchBar";
-import { Menu, ShoppingCart, LogIn, Bell, FlameKindling, UserCircle, ShieldUser } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState } from "react";
-import { FaTimes } from "react-icons/fa"; // Importe o ícone de fechar
+import SearchBar from "../search/SearchBar";
+import {
+  Bell,
+  FlameKindling,
+  Info,
+  LogIn,
+  Menu,
+  Phone,
+  ShieldUser,
+  ShoppingCart,
+  UserCircle,
+} from "lucide-react";
+import { FaTimes } from "react-icons/fa";
 
-export default function Navbar() {
+interface NavItemProps {
+  href: string;
+  label: string;
+  icon: ReactNode;
+  onClick?: () => void;
+}
+
+const NavItem = ({ href, label, icon, onClick }: NavItemProps): JSX.Element => (
+  <Link
+    href={href}
+    onClick={onClick}
+    className="flex items-center gap-2 py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300"
+  >
+    {icon} {label}
+  </Link>
+);
+
+const MobileMenu = ({ onClose }: { onClose: () => void }): JSX.Element => (
+  <div className="fixed top-20 left-0 right-0 bg-white shadow-md rounded-b-md overflow-hidden z-40 transition-all duration-300">
+    <div className="py-4 px-6 flex flex-col">
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={onClose}
+          className="focus:outline-none text-gray-700 hover:text-amber-500 transition duration-300"
+          aria-label="Fechar menu"
+        >
+          <FaTimes className="h-6 w-6" />
+        </button>
+      </div>
+
+      <nav className="flex flex-col space-y-3">
+        <NavItem href="/about" label="Sobre" icon={<Info size={20} />} />
+        <NavItem href="/" label="Contato" icon={<Phone size={20} />} />
+        <NavItem href="/cart" label="Carrinho" icon={<ShoppingCart size={20} />} onClick={onClose} />
+        <NavItem href="#" label="Notificações" icon={<Bell size={20} />} onClick={onClose} />
+      </nav>
+    </div>
+  </div>
+);
+
+export default function Navbar(): JSX.Element | null {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const auth = useAuth();
+
+  const [notifications, setNotifications] = useState([
+    { id: 1, message: "Nova promoção disponível!", read: false },
+    { id: 2, message: "Seu pedido foi enviado.", read: false },
+  ]);
+
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+  const toggleNotifications = () => {
+    setIsNotifOpen((prev) => !prev);
+    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+  };
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (!auth) return null;
 
   const { user } = auth;
+  const isAdmin = user?.role === "ADMIN";
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const mobileMenuItems = [
-    { label: "Início", href: "/" },
-    { label: "Sobre", href: "/about" },
-    { label: "Contato", href: "/" },
-    // Adicione outros itens do menu mobile aqui, se necessário
-  ];
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
-    <nav className="fixed bg-white w-full top-0 z-50 shadow-md h-20">
-      <div className="flex mx-auto lg:max-w-10/12 py-3 px-2 items-center justify-between z-50 text-gray-500">
-        {/* Logo para Desktop */}
-        <Link
-          href="/"
-          className="font-bold text-sm h-12 items-center text-amber-500 mr-5 focus:outline-none hidden md:flex"
-        >
-          <FlameKindling className="size-8" />
-          Fireforge Labs
-        </Link>
-
-        {/* Campo de pesquisa (Desktop) */}
-        <div className="hidden gap-8 md:flex items-center">
-          <SearchBar />
-          <Link className="text-yellow-400 animate-pulse" href="/admin">
-            {user?.role === "ADMIN" && <ShieldUser className="scale-120" />}
+    <nav className="fixed top-0 z-50 w-full h-20 bg-white shadow-md">
+      <div className="flex justify-between items-center h-full px-2 py-3 mx-auto text-gray-500 lg:max-w-10/12">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-8 font-semibold">
+          <Link href="/" className="hidden md:flex items-center text-amber-500 font-bold text-md">
+            <FlameKindling size={30} /> Fireforge Labs
           </Link>
+          <NavItem href="/about" label="Sobre" icon={<Info size={20} />} />
+          <NavItem href="/" label="Contato" icon={<Phone size={20} />} />
+        </div>
+
+        {/* Desktop Right Actions */}
+        <div className="hidden md:flex items-center gap-8">
+          <SearchBar />
+          {isAdmin && (
+            <Link href="/admin" className="text-yellow-400 animate-pulse">
+              <ShieldUser className="scale-120" />
+            </Link>
+          )}
           <Link href={user ? "/account" : "/auth/signin"}>
             {user ? <UserCircle className="scale-120" /> : <LogIn />}
           </Link>
           <Link href="#">
-            <Bell />
+            <div className="relative">
+              <button onClick={toggleNotifications} className="relative focus:outline-none">
+                <Bell />
+                {unreadCount > 0 && (
+                  <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full"></span>
+                )}
+              </button>
+
+              {isNotifOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md border border-gray-200 z-50">
+                  <div className="p-4">
+                    {notifications.length === 0 ? (
+                      <p className="text-sm text-gray-500">Sem notificações</p>
+                    ) : (
+                      notifications.map((notif) => (
+                        <div key={notif.id} className="text-sm text-gray-700 py-1 border-b last:border-b-0">
+                          {notif.message}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </Link>
           <Link href="/cart">
             <ShoppingCart />
           </Link>
         </div>
 
-        {/* Menu Hamburguer para Mobile */}
-        <div className="md:hidden flex items-center">
-          {/* Botão Hamburguer */}
-          <button onClick={toggleMobileMenu} className="focus:outline-none text-amber-500">
+        {/* Mobile Navigation Header */}
+        <div className="flex justify-between items-center w-full md:hidden">
+          <button
+            onClick={toggleMobileMenu}
+            className="text-amber-500 focus:outline-none"
+            aria-label="Abrir menu"
+          >
             <Menu className="size-8" />
           </button>
-          {/* Logo para Mobile (pode ser duplicada ou diferente) */}
-          <Link
-            href="/"
-            className="font-bold text-sm h-12 flex items-center text-amber-500 ml-3 focus:outline-none"
-          >
-            <FlameKindling className="size-6" />
-            <span className="ml-1">Fireforge Labs</span>
+
+          <Link href="/" className="flex items-center text-amber-500 font-bold text-sm">
+            <FlameKindling /> <span>Fireforge Labs</span>
           </Link>
+
+          <div className="flex gap-4">
+            {isAdmin && (
+              <Link href="/admin" className="text-yellow-400 animate-pulse">
+                <ShieldUser className="scale-120" />
+              </Link>
+            )}
+            <Link href={user ? "/account" : "/auth/signin"}>
+              {user ? <UserCircle className="scale-120" /> : <LogIn />}
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Menu Mobile (Dropdown) */}
-      {isMobileMenuOpen && (
-        <div className="fixed top-20 left-0 right-0 bg-white shadow-md rounded-b-md overflow-hidden z-40 transition-all duration-300">
-          <div className="py-4 px-6 flex flex-col">
-            {/* Botão de Fechar */}
-            <div className="flex justify-end mb-4">
-              <button
-                onClick={toggleMobileMenu}
-                className="focus:outline-none text-gray-700 hover:text-amber-500 transition duration-300"
-              >
-                <FaTimes className="h-6 w-6" />
-              </button>
-            </div>
-            {/* Itens do Menu Mobile */}
-            <nav className="flex flex-col space-y-3">
-              {mobileMenuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={toggleMobileMenu}
-                  className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              {/* Outros ícones/links que aparecem na versão desktop podem ser adicionados aqui */}
-              <Link
-                href={user ? "/account" : "/auth/signin"}
-                className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300"
-              >
-                {user ? (
-                  <div className="flex items-center">
-                    <UserCircle className="size-5 mr-2" /> Conta
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <LogIn className="size-5 mr-2" /> Entrar
-                  </div>
-                )}
-              </Link>
-              <Link
-                href="/cart"
-                onClick={toggleMobileMenu}
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center"
-              >
-                <ShoppingCart className="size-5 mr-2" /> Carrinho
-              </Link>
-              <Link
-                href="#"
-                onClick={toggleMobileMenu}
-                className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center"
-              >
-                <Bell className="size-5 mr-2" /> Notificações
-              </Link>
-              {user?.role === "ADMIN" && (
-                <Link
-                  href="/admin"
-                  onClick={toggleMobileMenu}
-                  className="py-2 px-4 text-yellow-400 hover:bg-gray-100 rounded-md transition duration-300 flex items-center"
-                >
-                  <ShieldUser className="size-5 mr-2" /> Admin
-                </Link>
-              )}
-            </nav>
-          </div>
-        </div>
-      )}
+      {/* Mobile Dropdown Menu */}
+      {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} />}
     </nav>
   );
 }
