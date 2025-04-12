@@ -4,7 +4,7 @@ import Carousel from "@/components/carousel/Carousel";
 import Product from "@/components/products/Product";
 import { ProductType } from "@/types/ProductType";
 import ProductsUtil from "@/utils/products.util";
-import { Crown, ShoppingBag, CircleArrowDown, Grid2x2Plus } from "lucide-react";
+import { Crown, Grid2x2Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import CarouselBanner from "@/components/carousel/CarouselBanner";
 

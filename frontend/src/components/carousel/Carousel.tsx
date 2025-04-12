@@ -20,8 +20,6 @@ export default function Carousel({ products, containerId }: ProductsCarouselProp
   const nextButtonClass = `swiper-button-next-${containerId}`;
   const paginationClass = `swiper-pagination-${containerId}`;
 
-  const handleAddToCart = () => {};
-
   return (
     <div className="relative w-full">
       <Swiper
