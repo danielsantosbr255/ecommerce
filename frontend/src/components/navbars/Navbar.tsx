@@ -8,20 +8,20 @@ import { useState } from "react";
 import { FaTimes } from "react-icons/fa"; // Importe o ícone de fechar
 
 export default function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const auth = useAuth();
   if (!auth) return null;
 
   const { user } = auth;
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const mobileMenuItems = [
-    { label: 'Início', href: '/' },
-    { label: 'Sobre', href: '/about' },
-    { label: 'Contato', href: '/' },
+    { label: "Início", href: "/" },
+    { label: "Sobre", href: "/about" },
+    { label: "Contato", href: "/" },
     // Adicione outros itens do menu mobile aqui, se necessário
   ];
 
@@ -77,29 +77,60 @@ export default function Navbar() {
           <div className="py-4 px-6 flex flex-col">
             {/* Botão de Fechar */}
             <div className="flex justify-end mb-4">
-              <button onClick={toggleMobileMenu} className="focus:outline-none text-gray-700 hover:text-amber-500 transition duration-300">
+              <button
+                onClick={toggleMobileMenu}
+                className="focus:outline-none text-gray-700 hover:text-amber-500 transition duration-300"
+              >
                 <FaTimes className="h-6 w-6" />
               </button>
             </div>
             {/* Itens do Menu Mobile */}
             <nav className="flex flex-col space-y-3">
               {mobileMenuItems.map((item) => (
-                <Link key={item.href} href={item.href} onClick={toggleMobileMenu} className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300">
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={toggleMobileMenu}
+                  className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300"
+                >
                   {item.label}
                 </Link>
               ))}
               {/* Outros ícones/links que aparecem na versão desktop podem ser adicionados aqui */}
-              <Link href={user ? "/account" : "/auth/signin"} className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300">
-                {user ? <div className="flex items-center"><UserCircle className="size-5 mr-2" /> Conta</div> : <div className="flex items-center"><LogIn className="size-5 mr-2" /> Entrar</div>}
+              <Link
+                href={user ? "/account" : "/auth/signin"}
+                className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300"
+              >
+                {user ? (
+                  <div className="flex items-center">
+                    <UserCircle className="size-5 mr-2" /> Conta
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <LogIn className="size-5 mr-2" /> Entrar
+                  </div>
+                )}
               </Link>
-              <Link href="/cart" onClick={toggleMobileMenu} className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center">
+              <Link
+                href="/cart"
+                onClick={toggleMobileMenu}
+                className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center"
+              >
                 <ShoppingCart className="size-5 mr-2" /> Carrinho
               </Link>
-              <Link href="#" onClick={toggleMobileMenu} className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center">
+              <Link
+                href="#"
+                onClick={toggleMobileMenu}
+                className="py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-amber-500 rounded-md transition duration-300 flex items-center"
+              >
                 <Bell className="size-5 mr-2" /> Notificações
               </Link>
               {user?.role === "ADMIN" && (
-                <Link href="/admin" onClick={toggleMobileMenu} className="py-2 px-4 text-yellow-400 hover:bg-gray-100 rounded-md transition duration-300 flex items-center">
+                <Link
+                  href="/admin"
+                  onClick={toggleMobileMenu}
+                  className="py-2 px-4 text-yellow-400 hover:bg-gray-100 rounded-md transition duration-300 flex items-center"
+                >
                   <ShieldUser className="size-5 mr-2" /> Admin
                 </Link>
               )}
