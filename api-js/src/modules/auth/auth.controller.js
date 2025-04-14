@@ -4,8 +4,9 @@ const CustomError = require("../../common/utils/CustomError");
 const tokenUtil = require("../../common/utils/token.util");
 
 const signUp = async (req, res) => {
-    // const validatedData = userValidator.signUp(req.body);
-    const { name, email, password } = req.body;
+    const validatedData = userValidator.signUp(req.body);
+
+    const { name, email, password } = validatedData;
     const userAgent = req.headers["user-agent"] || "Desconhecido";
     const ipAddress = req.ip;
 
@@ -16,8 +17,9 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-    // const validatedData = userValidator.signIn({ email, password });
-    const { email, password } = req.body;
+    const validatedData = userValidator.signIn(req.body);
+    
+    const { email, password } = validatedData;
     const userAgent = req.headers["user-agent"] || "Desconhecido";
     const ipAddress = req.ip;
 

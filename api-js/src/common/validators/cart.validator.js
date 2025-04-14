@@ -14,7 +14,11 @@ module.exports = {
         return z.object({ productId, quantity }).parse(data);
     },
 
-    delete(data) {
+    update(data) {
         return z.object({ quantity }).parse(data);
+    },
+
+    delete(data) {
+        return z.object({ productId }).parse(data);
     },
 };

@@ -1,91 +1,91 @@
-const tools = require("../../common/utils/Tools");
+const authUtil = require("../../common/utils/auth.util");
 const tokenUtil = require("../../common/utils/token.util");
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
 
 const signUp = async (name, email, password, userAgent, ipAddress) => {
-    const userExists = await prisma.user.findUnique({ where: { email } });
+  const userExists = await prisma.user.findUnique({ where: { email } });
 
-    if (userExists) throw new CustomError("Este usuário já existe!", 500);
+  if (userExists) throw new CustomError("Este usuário já existe!", 500);
 
-    password = await tools.hashPassword(password);
-    const user = await prisma.user.create({ data: { name, email, password } });
+  password = await authUtil.hashPassword(password);
+  const user = await prisma.user.create({ data: { name, email, password } });
 
-    const accessToken = tokenUtil.generateAccessToken({ id: user.id, role: user.role });
-    const refreshToken = tokenUtil.generateRefreshToken();
+  const accessToken = tokenUtil.generateAccessToken({ id: user.id, role: user.role });
+  const refreshToken = tokenUtil.generateRefreshToken();
 
-    await tokenUtil.saveRefreshTokenToDatabase(user.id, refreshToken, userAgent, ipAddress);
+  await tokenUtil.saveRefreshTokenToDatabase(user.id, refreshToken, userAgent, ipAddress);
 
-    return { user, accessToken, refreshToken };
+  return { user, accessToken, refreshToken };
 };
 
 const signIn = async (email, password, userAgent, ipAddress) => {
-    const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user || !(await tools.verifyPassword(password, user.password))) {
-        throw new CustomError("Credenciais inválidas", 401);
-    }
+  if (!user || !(await authUtil.verifyPassword(password, user.password))) {
+    throw new CustomError("Credenciais inválidas", 401);
+  }
 
-    const existingSession = await prisma.session.findFirst({
-        where: { userId: user.id, userAgent, ipAddress },
-    });
+  const existingSession = await prisma.session.findFirst({
+    where: { userId: user.id, userAgent, ipAddress },
+  });
 
-    if (existingSession) await tokenUtil.deleteSession(existingSession.id);
+  if (existingSession) await tokenUtil.deleteSession(existingSession.id);
 
-    const accessToken = tokenUtil.generateAccessToken({ id: user.id, role: user.role });
-    const refreshToken = tokenUtil.generateRefreshToken();
+  const accessToken = tokenUtil.generateAccessToken({ id: user.id, role: user.role });
+  const refreshToken = tokenUtil.generateRefreshToken();
 
-    await tokenUtil.saveRefreshTokenToDatabase(user.id, refreshToken, userAgent, ipAddress);
-    
-    return { accessToken, refreshToken };
+  await tokenUtil.saveRefreshTokenToDatabase(user.id, refreshToken, userAgent, ipAddress);
+
+  return { accessToken, refreshToken };
 };
 
 const refreshAccessToken = async (refreshToken, userAgent, ipAddress) => {
-    if (!refreshToken) {
-        throw new CustomError("Token de atualização não fornecido", 401);
-    }
-    
-    const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
+  if (!refreshToken) {
+    throw new CustomError("Token de atualização não fornecido", 401);
+  }
 
-    if (!session || session.expiresAt < new Date()) {
-        if (session) await tokenUtil.deleteSession(session.id);
-        return null;
-    }
+  const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
 
-    const payload = { id: session.user.id, role: session.user.role };
-    const newAccessToken = tokenUtil.generateAccessToken(payload);
-    const newRefreshToken = tokenUtil.generateRefreshToken();
+  if (!session || session.expiresAt < new Date()) {
+    if (session) await tokenUtil.deleteSession(session.id);
+    return null;
+  }
 
-    if (!newAccessToken || !newRefreshToken) {
-        console.error("Erro ao gerar novos accessToken ou refreshToken");
-        return null;
-    }
+  const payload = { id: session.user.id, role: session.user.role };
+  const newAccessToken = tokenUtil.generateAccessToken(payload);
+  const newRefreshToken = tokenUtil.generateRefreshToken();
 
-    const updatedSession = await tokenUtil.saveRefreshTokenToDatabase(
-        session.user.id,
-        newRefreshToken,
-        userAgent,
-        ipAddress
-    );
+  if (!newAccessToken || !newRefreshToken) {
+    console.error("Erro ao gerar novos accessToken ou refreshToken");
+    return null;
+  }
 
-    if (!updatedSession) {
-        console.error("Erro ao atualizar refreshToken no banco de dados");
-        return null;
-    }
+  const updatedSession = await tokenUtil.saveRefreshTokenToDatabase(
+    session.user.id,
+    newRefreshToken,
+    userAgent,
+    ipAddress
+  );
 
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+  if (!updatedSession) {
+    console.error("Erro ao atualizar refreshToken no banco de dados");
+    return null;
+  }
+
+  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 };
 
 const logout = async (refreshToken) => {
-    if (!refreshToken) throw new CustomError("Token de logout não fornecido", 401);
+  if (!refreshToken) throw new CustomError("Token de logout não fornecido", 401);
 
-    const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
-    console.log(session);
-    if (session) {
-        await tokenUtil.deleteSession(session.id);
-        return true;
-    }
-    return false;
+  const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
+  console.log(session);
+  if (session) {
+    await tokenUtil.deleteSession(session.id);
+    return true;
+  }
+  return false;
 };
 
 module.exports = { signUp, signIn, logout, refreshAccessToken };

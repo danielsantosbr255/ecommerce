@@ -1,6 +1,5 @@
-const express = require("express");
 const cors = require("cors");
-const path = require("path");
+const express = require("express");
 const cookieParser = require("cookie-parser");
 
 const errorHandler = require("./common/middlewares/error.handler");
@@ -13,12 +12,11 @@ const ProductsModule = require("./modules/products/products.module");
 
 const app = express();
 
-const allowedOrigins = ["https://fireforgelabs.vercel.app", "http://localhost:3000"];
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",") || ["http://localhost:3000"];
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule);
 
