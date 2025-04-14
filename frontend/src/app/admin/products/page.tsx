@@ -8,6 +8,7 @@ import AdminProductList from "@/components/admin/AdminProductList";
 import AdminProductFilters from "@/components/admin/AdminProductFilters";
 import AdminProductForm from "@/components/admin/AdminProductForm";
 import { useAuth } from "@/contexts/AuthContext";
+import LoadingState from "@/components/LoadingState";
 
 const AdminProductsPage: React.FC = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -105,9 +106,13 @@ const AdminProductsPage: React.FC = () => {
     fetchProducts();
   }, [fetchProducts]);
 
+  if (loading) {
+    return <LoadingState />;
+  }
+
   return (
     <div>
-      <div className="bg-white shadow-md rounded-md p-6 mb-6">
+      <div className="bg-white shadow-md rounded-md p-2 lg:p-6 mb-6">
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           <AdminProductFilters
             onSearchChange={handleSearchChange}

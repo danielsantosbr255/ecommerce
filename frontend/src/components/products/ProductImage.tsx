@@ -9,6 +9,7 @@ type ProductImageProps = {
   product: ProductType;
   fill?: boolean;
   className?: string;
+  alt?: string;
 };
 
 const PLACEHOLDER_IMAGE = "/placeholder.jpg";
@@ -16,7 +17,6 @@ const PLACEHOLDER_IMAGE = "/placeholder.jpg";
 const getValidImageUrl = (imagePath?: string): string => {
   if (imagePath?.startsWith("http")) return imagePath;
   if (!imagePath) return PLACEHOLDER_IMAGE;
-//   return imagePath;
   return `/${imagePath.replace(/^\/+/, "")}`;
 };
 

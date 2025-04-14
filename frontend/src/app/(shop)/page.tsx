@@ -76,7 +76,7 @@ export default function Home() {
           <Grid2x2Plus size={20} />
           Produtos
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-7 xl:px-0">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 xl:px-0">
           {products.map((product: ProductType) => (
             <Product key={product.id} product={product} />
           ))}

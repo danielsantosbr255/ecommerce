@@ -3,7 +3,7 @@
 import { useState, useEffect, ReactNode, JSX } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import SearchBar from "../search/SearchBar";
+import SearchBar from "../ui/Searchbar";
 import {
   Bell,
   FlameKindling,
@@ -15,7 +15,7 @@ import {
   ShoppingCart,
   UserCircle,
 } from "lucide-react";
-import { FaTimes } from "react-icons/fa";
+import MobileMenu from "./MobileMenu";
 
 interface NavItemProps {
   href: string;
@@ -33,30 +33,6 @@ const NavItem = ({ href, label, icon, onClick }: NavItemProps): JSX.Element => (
     {icon} {label}
   </Link>
 );
-
-const MobileMenu = ({ onClose }: { onClose: () => void }): JSX.Element => (
-  <div className="fixed top-20 left-0 right-0 bg-white shadow-md rounded-b-md overflow-hidden z-40 transition-all duration-300">
-    <div className="py-4 px-6 flex flex-col">
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={onClose}
-          className="focus:outline-none text-gray-700 hover:text-amber-500 transition duration-300"
-          aria-label="Fechar menu"
-        >
-          <FaTimes className="h-6 w-6" />
-        </button>
-      </div>
-
-      <nav className="flex flex-col space-y-3">
-        <NavItem href="/about" label="Sobre" icon={<Info size={20} />} />
-        <NavItem href="/" label="Contato" icon={<Phone size={20} />} />
-        <NavItem href="/cart" label="Carrinho" icon={<ShoppingCart size={20} />} onClick={onClose} />
-        <NavItem href="#" label="Notificações" icon={<Bell size={20} />} onClick={onClose} />
-      </nav>
-    </div>
-  </div>
-);
-
 export default function Navbar(): JSX.Element | null {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const auth = useAuth();
@@ -92,11 +68,11 @@ export default function Navbar(): JSX.Element | null {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
-    <nav className="fixed top-0 z-50 w-full h-20 bg-white shadow-md">
+    <nav className="fixed top-0 z-50 w-full h-auto lg:h-20 bg-white shadow-md">
       <div className="flex justify-between items-center h-full px-2 py-3 mx-auto text-gray-500 lg:max-w-10/12">
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8 font-semibold">
-          <Link href="/" className="hidden md:flex items-center text-amber-500 font-bold text-md">
+        <div className="hidden lg:flex items-center gap-8 font-semibold">
+          <Link href="/" className="hidden whitespace-nowrap lg:flex items-center text-amber-500 font-bold text-md">
             <FlameKindling size={30} /> Fireforge Labs
           </Link>
           <NavItem href="/about" label="Sobre" icon={<Info size={20} />} />
@@ -104,7 +80,7 @@ export default function Navbar(): JSX.Element | null {
         </div>
 
         {/* Desktop Right Actions */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           <SearchBar />
           {isAdmin && (
             <Link href="/admin" className="text-yellow-400 animate-pulse">
@@ -119,7 +95,10 @@ export default function Navbar(): JSX.Element | null {
               <button onClick={toggleNotifications} className="relative focus:outline-none">
                 <Bell />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full"></span>
+                  <>
+                    <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full"></span>
+                    <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
+                  </>
                 )}
               </button>
 
@@ -146,7 +125,7 @@ export default function Navbar(): JSX.Element | null {
         </div>
 
         {/* Mobile Navigation Header */}
-        <div className="flex justify-between items-center w-full md:hidden">
+        <div className="flex justify-between items-center w-full lg:hidden">
           <button
             onClick={toggleMobileMenu}
             className="text-amber-500 focus:outline-none"
@@ -160,16 +139,23 @@ export default function Navbar(): JSX.Element | null {
           </Link>
 
           <div className="flex gap-4">
+            {/* <Link href="/cart">
+              <ShoppingCart />
+            </Link> */}
             {isAdmin && (
               <Link href="/admin" className="text-yellow-400 animate-pulse">
-                <ShieldUser className="scale-120" />
+                <ShieldUser size={30} />
               </Link>
             )}
             <Link href={user ? "/account" : "/auth/signin"}>
-              {user ? <UserCircle className="scale-120" /> : <LogIn />}
+              {user ? <UserCircle size={30} /> : <LogIn />}
             </Link>
           </div>
         </div>
+      </div>
+
+      <div className="lg:hidden px-2">
+        <SearchBar className="!pt-1 !mb-2" />
       </div>
 
       {/* Mobile Dropdown Menu */}

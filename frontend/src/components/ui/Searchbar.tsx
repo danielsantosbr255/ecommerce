@@ -1,12 +1,14 @@
 import { useState, ChangeEvent } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 type SearchBarProps = {
   onSearch?: (query: string) => void;
+  className?: string;
 };
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+export default function SearchBar({ onSearch, className }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
@@ -28,7 +30,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div className="hidden md:flex relative w-sm">
+    <div className="flex relative">
       <input
         type="text"
         value={query}
@@ -37,7 +39,10 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className="w-full p-2 pl-10 pr-30 text-gray-900 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
+        className={clsx(
+          className,
+          "bg-white border border-gray-200 w-full shadow p-2 pl-10 pr-30 text-gray-900 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+        )}
       />
       <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-500" />
       {query && (

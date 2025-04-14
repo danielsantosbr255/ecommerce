@@ -18,7 +18,7 @@ const AdminProductList: React.FC<Props> = ({ products, onDelete, totalPages, cur
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-0 xl:px-0">
         {products.map((product) => (
           <AdminProductCard key={product.id} product={product} onDelete={onDelete} />
         ))}
