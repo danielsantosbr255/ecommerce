@@ -1,11 +1,6 @@
 const CustomError = require("../../common/utils/CustomError");
 const services = require("./products.service");
 
-const getProducts = async (req, res) => {
-  const products = await services.getProducts();
-  return res.json(products);
-};
-
 const createProduct = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
@@ -18,13 +13,28 @@ const createProduct = async (req, res) => {
   return res.status(201).json(product);
 };
 
-const getProductById = async (req, res) => {
-  const product = await services.getProductById(req.params.id);
-  return res.json(product);
+const getProductBySlug = async (req, res) => {
+  const { product, relatedProducts } = await services.getProductBySlug(req.params.slug);
+  return res.json({ product, relatedProducts });
+};
+
+const getProducts = async (req, res) => {
+  const products = await services.getProducts();
+  return res.json(products);
 };
 
 const getProductsByQuery = async (req, res) => {
   const products = await services.getProductsByQuery(req.params.query);
+  return res.json(products);
+};
+
+const getProductsByBrand = async (req, res) => {
+  const products = await services.getProductsByBrand(req.params.brand);
+  return res.json(products);
+};
+
+const getProductsByCategory = async (req, res) => {
+  const products = await services.getProductsByCategory(req.params.slug);
   return res.json(products);
 };
 
@@ -49,8 +59,10 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   getProducts,
   createProduct,
-  getProductById,
   updateProduct,
   deleteProduct,
+  getProductBySlug,
   getProductsByQuery,
+  getProductsByBrand,
+  getProductsByCategory,
 };

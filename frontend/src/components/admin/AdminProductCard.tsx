@@ -12,14 +12,14 @@ interface Props {
 const AdminProductCard: React.FC<Props> = ({ product, onDelete }) => {
   return (
     <div className="bg-gray-50 border border-gray-200 flex flex-col text-black gap-1 p-2 rounded-xl cursor-pointer scale-95 hover:scale-98 hover:shadow transition-all w-full h-full">
-      <div className="relative w-full aspect-square bg-gray-50 rounded-xl hover:border border-amber-500 shadow-md transition-all">
+      <div className="relative w-full aspect-square bg-gray-50 rounded-xl hover:border border-highlight-n shadow-md transition-all">
         <ProductImage product={product} fill={true} className="w-full h-auto object-contain rounded-xl" />
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800 mb-2 truncate">{product.title}</h3>
         <p className="text-gray-600 mb-2">Categoria: {product.category}</p>
         <p className="text-gray-600 mb-2">Estoque: {product.stock}</p>
-        <p className="text-amber-500 font-bold">{CurrencyUtil.formatCurrency(product.price)}</p>
+        <p className="text-highlight-n font-bold">{CurrencyUtil.formatCurrency(product.price)}</p>
         <div className="mt-4 flex justify-end space-x-2">
           <button
             onClick={() => alert(`Implementar edição do produto ${product.id}`)}
@@ -42,7 +42,7 @@ const AdminProductCard: React.FC<Props> = ({ product, onDelete }) => {
         )}
       >
         <Link href={`/product/${product.id}`}>
-          <div className="relative w-full aspect-square bg-gray-50 rounded-xl hover:border border-amber-500 shadow-md transition-all">
+          <div className="relative w-full aspect-square bg-gray-50 rounded-xl hover:border border-highlight-n shadow-md transition-all">
             <ProductImage product={product} fill={true} className="w-full h-auto object-contain rounded-xl" />
           </div>
 
@@ -51,7 +51,7 @@ const AdminProductCard: React.FC<Props> = ({ product, onDelete }) => {
           </div>
 
           <div className="flex flex-col font-bold my-1">
-            <p className="text-lg text-amber-500">{CurrencyUtil.formatCurrency(product.price)}</p>
+            <p className="text-lg text-highlight-n">{CurrencyUtil.formatCurrency(product.price)}</p>
           </div>
         </Link>
       </div> */}

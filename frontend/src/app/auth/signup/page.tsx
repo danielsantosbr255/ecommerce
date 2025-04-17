@@ -62,7 +62,7 @@ export default function SignIn() {
                         <p className="text-red-500 text-center">{error}</p>
                     )} */}
 
-          <Link href="/auth/signin" className="text-sm text-gray-400 hover:text-gray-500 text-center">
+          <Link href="/auth/signin" className="text-sm text-gray-400 hover:text-secondary text-center">
             Já possui uma conta?
           </Link>
         </form>

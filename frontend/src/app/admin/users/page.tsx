@@ -129,7 +129,7 @@ const AdminUsersPage = () => {
                         <button
                             type="button"
                             onClick={handleAddUser}
-                            className="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className="bg-highlight-n hover:bg-highlight-h text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
                             Adicionar Usuário
                         </button>

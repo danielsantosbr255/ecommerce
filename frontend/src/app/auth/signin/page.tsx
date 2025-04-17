@@ -47,10 +47,10 @@ export default function SignIn() {
           {/* <p className="text-red-500 text-center">{error}</p> */}
 
           <div className="flex justify-between">
-            <Link href="/auth/signup" className="text-sm text-gray-400 hover:text-gray-500">
+            <Link href="/auth/signup" className="text-sm text-gray-400 hover:text-secondary">
               Não possui uma conta?
             </Link>
-            <Link href="#" className="text-sm text-gray-400 hover:text-gray-500">
+            <Link href="#" className="text-sm text-gray-400 hover:text-secondary">
               Esqueceu a senha?
             </Link>
           </div>

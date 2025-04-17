@@ -77,7 +77,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onRemove, onQuantityC
       </div>
 
       <div className="flex items-center justify-between gap-2">
-        <span className="font-bold text-amber-500 text-lg">
+        <span className="font-bold text-highlight-n text-lg">
           {CurrencyUtil.formatCurrency(item.product.price * quantity)}
         </span>
         <button

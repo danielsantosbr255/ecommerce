@@ -32,11 +32,17 @@ const updateItem = (id, quantity) => {
 };
 
 const getCart = async (userId) => {
-  const items = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { cart: { select: { id: true, quantity: true, product: true } } },
+  const cart = await prisma.cart.findUnique({
+    where: { userId },
+    include: { items: { include: { product: true } } },
   });
-  return items.cart;
+
+  if (!cart) {
+    await prisma.cart.create({ data: { userId } });
+    return []; // carrinho vazio, sem items
+  }
+
+  return cart.items;
 };
 
 module.exports = { addItem, removeItem, updateItem, getCart };

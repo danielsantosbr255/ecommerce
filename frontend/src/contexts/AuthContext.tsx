@@ -50,7 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshToken = useCallback(async () => {
     const accessToken = await userUtil.refreshToken();
-    console.log(accessToken)
 
     if (accessToken) return await fetchUser(accessToken);
 

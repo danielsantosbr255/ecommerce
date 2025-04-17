@@ -6,7 +6,7 @@ const EmptyCart: React.FC = () => (
   <div className="text-gray-600 text-center">
     Seu carrinho está vazio.
     <br />
-    <Link href="/" className="text-amber-500 hover:underline">
+    <Link href="/" className="text-highlight-n hover:underline">
       Voltar à loja
     </Link>
   </div>

@@ -30,7 +30,7 @@ export default function SearchBar({ onSearch, className }: SearchBarProps) {
   };
 
   return (
-    <div className="flex relative">
+    <div className={clsx(className, "flex flex-1 relative")}>
       <input
         type="text"
         value={query}
@@ -39,15 +39,12 @@ export default function SearchBar({ onSearch, className }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className={clsx(
-          className,
-          "bg-white border border-gray-200 w-full shadow p-2 pl-10 pr-30 text-gray-900 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
-        )}
+        className="bg-white flex flex-1 border border-gray-200 shadow p-1 pl-8 lg:pl-10 lg:shadow-none lg:p-2 text-gray-900 rounded-lg focus:ring-2 focus:ring-highlight-n focus:outline-none"
       />
-      <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-500" />
+      <Search className="absolute left-3 top-2.5 h-4 w-4 lg:h-5 lg:w-5 text-secondary" />
       {query && (
         <button onClick={clearSearch} className="absolute right-3 top-2.5">
-          <X className="h-5 w-5 text-gray-500" />
+          <X className="h-5 w-5 text-secondary" />
         </button>
       )}
     </div>

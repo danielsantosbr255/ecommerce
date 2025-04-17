@@ -31,7 +31,7 @@ const AdminProductList: React.FC<Props> = ({ products, onDelete, totalPages, cur
               onClick={() => onPageChange(number)}
               className={`px-3 py-1 rounded-md ${
                 currentPage === number
-                  ? "bg-amber-500 text-white"
+                  ? "bg-highlight-n text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >

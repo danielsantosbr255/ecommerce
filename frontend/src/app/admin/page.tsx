@@ -68,7 +68,7 @@ const AdminDashboardContent = () => {
         <ul>
           <li className="py-2 border-b border-gray-200 last:border-b-0 flex items-center justify-between">
             <span>Novo usuário registrado: João Silva</span>
-            <span className="text-sm text-gray-500">Há 5 minutos</span>
+            <span className="text-sm text-secondary">Há 5 minutos</span>
           </li>
           {/* Adicione mais itens de atividade recente */}
         </ul>

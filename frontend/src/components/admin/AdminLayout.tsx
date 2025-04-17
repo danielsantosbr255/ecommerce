@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </Link>
           <div className="flex items-center space-x-4">
             <button className="relative">
-              <Bell size={20} className="text-gray-500 hover:text-gray-700" />
+              <Bell size={20} className="text-secondary hover:text-gray-700" />
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <Image src={user.image} alt={user.name || "Admin"} width={32} height={32} />
               </div>
             ) : (
-              <ShieldUser className="text-amber-500" size={32} />
+              <ShieldUser className="text-highlight-n" size={32} />
             )}
             <span className="text-gray-700">{user?.name}</span>
           </div>

@@ -6,7 +6,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <div className="flex flex-col bg-gray-100 h-screen p-4">
       <Link
         href="/"
-        className="inline-flex items-center text-gray-700 hover:text-amber-500 transition duration-300 mt-10 ml-5 group"
+        className="inline-flex items-center text-gray-700 hover:text-highlight-n transition duration-300 mt-10 ml-5 group"
       >
         <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
         <span className="font-medium">Voltar para a Loja</span>

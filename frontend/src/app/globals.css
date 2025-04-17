@@ -2,8 +2,17 @@
 
 * {
   box-sizing: border-box;
-  /* padding: 0; */
-  /* margin: 0; */
+}
+
+@theme {
+  --color-highlight-n: var(--color-amber-500);
+  --color-highlight-h: var(--color-amber-800);
+  --color-highlight-c: var(--color-amber-900);
+  --color-background: var(--color-gray-50);
+  --color-navbar: var(--color-gray-50);
+
+  --color-primary: var(--color-gray-900);
+  --color-secondary: var(--color-gray-500);
 }
 
 html,
@@ -11,4 +20,7 @@ body {
   overflow-x: hidden;
   max-width: 100vw;
   min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para mudanças de tema */
 }

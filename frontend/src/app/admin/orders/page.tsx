@@ -62,7 +62,7 @@ export default function OrdersPage() {
                             </p>
                             <p>Total: R$ {order.totalPrice}</p>
                             <p>Status: {order.status}</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-secondary">
                                 Criado em: {new Date(order.createdAt).toLocaleString()}
                             </p>
                         </div>

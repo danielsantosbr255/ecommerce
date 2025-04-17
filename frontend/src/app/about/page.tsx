@@ -24,7 +24,7 @@ const AboutPage = () => {
         {/* Botão de Voltar Elegante */}
         <Link
           href="/"
-          className="inline-flex items-center text-gray-700 hover:text-amber-500 transition duration-300 mb-12 group"
+          className="inline-flex items-center text-gray-700 hover:text-highlight-n transition duration-300 mb-12 group"
         >
           <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
           <span className="font-medium">Voltar para a Loja</span>
@@ -41,7 +41,7 @@ const AboutPage = () => {
                   layout="fill"
                   objectFit="cover"
                 />
-                <div className="absolute inset-0 rounded-full bg-amber-500 opacity-20 animate-ping"></div>
+                <div className="absolute inset-0 rounded-full bg-highlight-n opacity-20 animate-ping"></div>
               </div>
               <h2 className="text-xl font-semibold text-gray-800 mt-4">Olá! Eu sou o Desenvolvedor Aqui.</h2>
               <p className="text-gray-600 text-sm">
@@ -62,16 +62,16 @@ const AboutPage = () => {
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaCode className="mr-2 text-gray-500" /> Fullstack
+                  <FaCode className="mr-2 text-secondary" /> Fullstack
                 </span>
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaTerminal className="mr-2 text-gray-500" /> Backend
+                  <FaTerminal className="mr-2 text-secondary" /> Backend
                 </span>
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaGamepad className="mr-2 text-gray-500" /> Desenvolvimento de Jogos
+                  <FaGamepad className="mr-2 text-secondary" /> Desenvolvimento de Jogos
                 </span>
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaBrain className="mr-2 text-gray-500" /> Lógica de Programação
+                  <FaBrain className="mr-2 text-secondary" /> Lógica de Programação
                 </span>
               </div>
             </div>
@@ -81,13 +81,13 @@ const AboutPage = () => {
         {/* Seção Detalhada Sobre Minhas Habilidades */}
         <section className="bg-white shadow-xl rounded-xl p-8 mb-12">
           <div className="flex items-center mb-6">
-            <FaCode className="text-amber-500 text-3xl mr-4" />
+            <FaCode className="text-highlight-n text-3xl mr-4" />
             <h2 className="text-xl font-semibold text-gray-800">Minhas Habilidades e Ferramentas</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaLayerGroup className="text-amber-500 text-xl mr-3" />
+                <FaLayerGroup className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Frontend</h3>
               </div>
               <p className="text-gray-600 text-sm">
@@ -96,35 +96,35 @@ const AboutPage = () => {
             </div>
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaTerminal className="text-amber-500 text-xl mr-3" />
+                <FaTerminal className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Backend</h3>
               </div>
               <p className="text-gray-600 text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
             </div>
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaDatabase className="text-amber-500 text-xl mr-3" />
+                <FaDatabase className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Bancos de Dados</h3>
               </div>
               <p className="text-gray-600 text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
             </div>
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaPuzzlePiece className="text-amber-500 text-xl mr-3" />
+                <FaPuzzlePiece className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Autenticação & Segurança</h3>
               </div>
               <p className="text-gray-600 text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
             </div>
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaDocker className="text-amber-500 text-xl mr-3" />
+                <FaDocker className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Infraestrutura & DevOps</h3>
               </div>
               <p className="text-gray-600 text-sm">Docker, Git, GitHub</p>
             </div>
             <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
               <div className="flex items-center mb-3">
-                <FaBrain className="text-amber-500 text-xl mr-3" />
+                <FaBrain className="text-highlight-n text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-gray-700">Habilidades Essenciais</h3>
               </div>
               <p className="text-gray-600 text-sm">
@@ -137,7 +137,7 @@ const AboutPage = () => {
         {/* Seção Dedicada ao Projeto de E-commerce */}
         <section className="bg-white shadow-xl rounded-xl p-8 mb-12">
           <div className="flex items-center mb-6">
-            <FaShoppingCart className="text-amber-500 text-3xl mr-4" />
+            <FaShoppingCart className="text-highlight-n text-3xl mr-4" />
             <h2 className="text-xl font-semibold text-gray-800">Sobre o Meu Projeto de E-commerce</h2>
           </div>
           <p className="text-gray-700 leading-relaxed mb-4">
@@ -165,9 +165,9 @@ const AboutPage = () => {
         </section>
 
         {/* Rodapé Sofisticado */}
-        <footer className="text-center text-gray-500 mt-16 py-8 border-t border-gray-300">
+        <footer className="text-center text-secondary mt-16 py-8 border-t border-gray-300">
           <p className="mb-2">
-            Feito com <span className="text-amber-500 font-semibold">Next.js 15</span>,{" "}
+            Feito com <span className="text-highlight-n font-semibold">Next.js 15</span>,{" "}
             <span className="font-semibold">TypeScript</span> e muita paixão <FaCode className="inline" />
           </p>
           <p className="text-sm flex gap-1 justify-center">
@@ -176,7 +176,7 @@ const AboutPage = () => {
               href="https://github.com/danielsantosbr255"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-500 hover:underline flex items-center gap-1"
+              className="text-highlight-n hover:underline flex items-center gap-1"
             >
               GitHub<FaGithub/>
             </Link>

@@ -22,7 +22,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, discount, discountP
         </p>
       )}
       <p className="text-xl font-semibold">
-        Total: <span className="text-amber-500">{CurrencyUtil.formatCurrency(total)}</span>
+        Total: <span className="text-highlight-n">{CurrencyUtil.formatCurrency(total)}</span>
       </p>
     </div>
   );

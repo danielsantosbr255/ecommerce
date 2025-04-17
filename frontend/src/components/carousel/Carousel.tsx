@@ -6,7 +6,7 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Product from "../products/Product";
+import ProductCard from "../products/ProdutctCard";
 import React from "react";
 
 interface ProductsCarouselProps {
@@ -15,59 +15,59 @@ interface ProductsCarouselProps {
 }
 
 export default function Carousel({ products, containerId }: ProductsCarouselProps) {
-  const slidesPerView = products.length < 5 ? products.length : 5;
+  const slidesPerView = products.length < 5 ? products.length + 0.1 : 5.1;
   const prevButtonClass = `swiper-button-prev-${containerId}`;
   const nextButtonClass = `swiper-button-next-${containerId}`;
   const paginationClass = `swiper-pagination-${containerId}`;
 
+  const swiper_params = {
+    modules: [Navigation, Pagination, Autoplay],
+    spaceBetween: 1,
+    slidesPerView: slidesPerView,
+    navigation: {
+      nextEl: `.${nextButtonClass}`,
+      prevEl: `.${prevButtonClass}`,
+    },
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: true,
+    },
+    pagination: {
+      el: `.${paginationClass}`,
+      clickable: true,
+    },
+    loop: slidesPerView === 5 ? true : false,
+    breakpoints: {
+      320: { slidesPerView: 1.1 },
+      640: { slidesPerView: 2.1 },
+      768: { slidesPerView: 3.1 },
+      1024: { slidesPerView: 4.1 },
+      1300: { slidesPerView: slidesPerView },
+    },
+  };
+
   return (
-    <div className="relative w-full">
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={20}
-        slidesPerView={slidesPerView}
-        navigation={{
-          nextEl: `.${nextButtonClass}`,
-          prevEl: `.${prevButtonClass}`,
-        }}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          el: `.${paginationClass}`,
-          clickable: true,
-        }}
-        loop
-        breakpoints={{
-          320: { slidesPerView: 2 },
-          640: { slidesPerView: 2 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: slidesPerView },
-        }}
-        className="h-auto pb-10"
-      >
+    <div className="relative w-full h-full shrink-0">
+      <Swiper {...swiper_params} className="relative h-full w-full rounded-lg">
         {products.map((product) => (
-          <SwiperSlide key={product.id} className="!h-auto flex justify-center items-stretch">
-            <div className="w-full h-full max-w-sm">
-              <Product product={product} className="h-full bg-gray-50 shadow" description={false} />
-            </div>
+          <SwiperSlide key={product.id}>
+            <ProductCard product={product} className="h-full" description={true} />
           </SwiperSlide>
         ))}
       </Swiper>
 
       {/* Botões personalizados */}
       <div
-        className={`swiper-button-prev ${prevButtonClass} !text-amber-500 !left-0 -translate-x-10 z-10 !hidden md:!flex`}
+        className={`swiper-button-prev ${prevButtonClass} !text-highlight-n !left-0 -translate-x-10 z-10 !hidden md:!flex`}
       />
       <div
-        className={`swiper-button-next ${nextButtonClass} !text-amber-500 !right-0 translate-x-10 !z-20 !hidden md:!flex`}
+        className={`swiper-button-next ${nextButtonClass} !text-highlight-n !right-0 translate-x-10 !z-20 !hidden md:!flex`}
       />
 
       {/* Paginação personalizada */}
-      <div
+      {/* <div
         className={`swiper-pagination ${paginationClass} !-bottom-5 mt-4 flex justify-center items-center`}
-      />
+      /> */}
     </div>
   );
 }

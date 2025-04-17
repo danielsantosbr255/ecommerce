@@ -8,14 +8,14 @@ export default function Footer() {
         <a
           href="https://github.com/danielsantosbr255"
           target="_blank"
-          className="bg-amber-500 shadow-xl p-2 rounded-xl hover:scale-110 transition-transform duration-300"
+          className="bg-highlight-n shadow-xl p-2 rounded-xl hover:scale-110 transition-transform duration-300"
         >
           <Github />
         </a>
         <a
           href="https://www.linkedin.com/in/daniel-santos-7826051b4/"
           target="_blank"
-          className="bg-amber-500 shadow-xl p-2 rounded-lg hover:scale-110 transition-transform duration-300"
+          className="bg-highlight-n shadow-xl p-2 rounded-lg hover:scale-110 transition-transform duration-300"
         >
           <Linkedin />
         </a>
@@ -23,7 +23,7 @@ export default function Footer() {
 
       <p>©2024 Fireforge Labs. All rights reserved.</p>
       <p>Privacy Policy | Terms of Service</p>
-      <p className="text-sm text-gray-500 flex gap-2">
+      <p className="text-sm text-secondary flex gap-2">
         <a className="flex gap-2" href="https://github.com/danielsantosbr255" target="_blank">
           <Github /> Created by Daniel Santos
         </a>

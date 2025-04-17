@@ -97,7 +97,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             />
             <button
                 type="submit"
-                className="bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600"
+                className="bg-highlight-n text-white px-4 py-2 rounded-lg hover:bg-highlight-n"
             >
                 {initialData ? "Atualizar Usuário" : "Criar Usuário"}
             </button>

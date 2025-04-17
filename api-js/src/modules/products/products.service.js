@@ -18,22 +18,53 @@ const bodyData = (data) => {
 };
 
 const getProducts = () => {
-  return prisma.product.findMany();
+  return prisma.product.findMany({
+    include: { images: true, specifications: true, category: true },
+  });
 };
 
-const getProductById = (id) => {
-  return prisma.product.findUnique({ where: { id } });
+const getProductBySlug = async (slug) => {
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: { images: true, specifications: true, category: true },
+  });
+
+  if (!product) throw new CustomError("Produto não encontrado!", 404);
+
+  const relatedProducts = await prisma.product.findMany({
+    where: { categoryId: product.categoryId, NOT: { slug: product.slug } },
+    include: { images: true, specifications: true, category: true },
+    take: 5,
+  });
+
+  return { product, relatedProducts };
+};
+
+const getProductsByCategory = (slug) => {
+  return prisma.product.findMany({
+    where: { category: { slug } },
+    include: { images: true, specifications: true, category: true },
+  });
+};
+
+const getProductsByBrand = (brand) => {
+  return prisma.product.findMany({
+    where: { brand: { name: brand } },
+    include: { images: true, specifications: true, category: true },
+  });
 };
 
 const getProductsByQuery = (query) => {
   return prisma.product.findMany({
+    take: 10,
     where: {
       OR: [
         { title: { contains: query, mode: "insensitive" } },
         { description: { contains: query, mode: "insensitive" } },
-        { category: { contains: query, mode: "insensitive" } },
+        // { category: { contains: query, mode: "insensitive" } },
       ],
     },
+    include: { images: true, specifications: true, category: true },
   });
 };
 
@@ -84,8 +115,10 @@ const deleteProduct = async (id) => {
 
 module.exports = {
   getProducts,
-  getProductById,
   getProductsByQuery,
+  getProductsByCategory,
+  getProductsByBrand,
+  getProductBySlug,
   createProduct,
   updateProduct,
   deleteProduct,
