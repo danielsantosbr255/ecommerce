@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { ProductType } from "@/types/ProductType";
+import { LoaderCircle } from "lucide-react";
+import LoadingState from "../LoadingState";
 
 type ProductImageProps = {
   product: ProductType;
@@ -16,31 +18,49 @@ type ProductImageProps = {
 const PLACEHOLDER_IMAGE = "/placeholder.jpg";
 
 const getValidImageUrl = (imagePath?: string): string => {
-  if (imagePath?.startsWith("http")) return imagePath;
   if (!imagePath) return PLACEHOLDER_IMAGE;
+  if (imagePath.startsWith("http")) return imagePath;
   return `/${imagePath.replace(/^\/+/, "")}`;
 };
 
-export default function ProductImage({ product, className }: ProductImageProps) {
+export default function ProductImage({ product, alt, className, parentClassName }: ProductImageProps) {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const imageUrl = error ? PLACEHOLDER_IMAGE : getValidImageUrl(product.images[0].url);
-  const altText = product.title;
+  const mainImageUrl = getValidImageUrl(product.images?.[0]?.url);
+  const imageUrl = error ? PLACEHOLDER_IMAGE : mainImageUrl;
+  const altText = alt || product.title || "Imagem do produto";
 
   const handleError = () => {
     setError(true);
+    setLoading(false);
+  };
+
+  const handleLoad = () => {
+    setLoading(false);
   };
 
   return (
-    <Image
-      src={imageUrl}
-      fill
-      alt={altText}
-      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
-      className={clsx("object-contain transition-all duration-500 ease-in-out", className)}
-      onError={handleError}
-      placeholder="blur"
-      blurDataURL={PLACEHOLDER_IMAGE}
-    />
+    <div className={clsx("relative w-full h-full", parentClassName)}>
+      {loading && (
+        <div className="absolute text-highlight-n inset-0 flex items-center animate-spin justify-center">
+          <LoadingState />
+        </div>
+      )}
+
+      <Image
+        src={imageUrl}
+        alt={altText}
+        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+        onError={handleError}
+        onLoad={handleLoad}
+        className={clsx(
+          "object-contain transition-all duration-500 ease-in-out",
+          loading && "opacity-0",
+          className
+        )}
+        fill
+      />
+    </div>
   );
 }

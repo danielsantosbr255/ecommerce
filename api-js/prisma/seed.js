@@ -77,7 +77,6 @@ async function main() {
   await prisma.session.deleteMany();
   await prisma.address.deleteMany();
   await prisma.user.deleteMany();
-  await prisma.productPromotion.deleteMany();
   await prisma.productSpecification.deleteMany();
   await prisma.productImage.deleteMany();
   await prisma.productVariant.deleteMany();
@@ -95,17 +94,20 @@ async function main() {
       id: uuid(),
       name: "Admin",
       email: "admin@email.com",
-      password: await authUtil.hashPassword("admin"),
+      password: await authUtil.hashPassword("gGCxU34aueNKwK"),
       role: "ADMIN",
     },
   });
 
-  const brand = await prisma.brand.create({
-    data: {
-      id: uuid(),
-      name: "Acme",
-    },
-  });
+  const samsung = await prisma.brand.create({ data: { id: uuid(), name: "Samsung" } });
+  const motorola = await prisma.brand.create({ data: { id: uuid(), name: "Motorola" } });
+  const dell = await prisma.brand.create({ data: { id: uuid(), name: "Dell" } });
+  const nike = await prisma.brand.create({ data: { id: uuid(), name: "Nike" } });
+  const apple = await prisma.brand.create({ data: { id: uuid(), name: "Apple" } });
+  const philco = await prisma.brand.create({ data: { id: uuid(), name: "Philco" } });
+  const asus = await prisma.brand.create({ data: { id: uuid(), name: "Asus" } });
+  const lg = await prisma.brand.create({ data: { id: uuid(), name: "LG" } });
+  const lacost = await prisma.brand.create({ data: { id: uuid(), name: "Lacost" } });
 
   const eletronics = await prisma.category.create({
     data: {
@@ -153,17 +155,17 @@ async function main() {
     },
   });
 
-  await createProduct("Smartphone Samsung S10 Plus 128GB", 2150.0, brand, eletronics, promotion, samsung_I);
-  await createProduct("Smartphone Motorola Moto G20 64GB", 3500.0, brand, eletronics, promotion, motorola_I);
-  await createProduct("Notebook Dell Inspiron 15 3000", 5600.0, brand, computing, promotion, notebook_I);
-  await createProduct("Camiseta Estampada", 80.0, brand, fashion, promotion, shirt_I);
-  await createProduct("Tênis Nike Air Max", 500.0, brand, sports, promotion, tennis_I);
-  await createProduct("Relógio Inteligente", 322.99, brand, fashion, promotion, watch_I);
-  await createProduct("Fone de Ouvido Bluetooth", 324.99, brand, eletronics, promotion, earphones_I);
-  await createProduct("Cafeteira Elétrica", 310.0, brand, home, promotion, coffee_maker_I);
-  await createProduct("Mesa de Escritório", 235.0, brand, home, promotion, desk_I);
-  await createProduct("Monitor LG 24", 846.0, brand, computing, promotion, monitor_I);
-  await createProduct("Cadeira Gamer Thunder X3", 3000.0, brand, home, promotion, chair_I);
+  await createProduct("Smartphone Samsung S10 Plus 128GB", 2150.0, samsung, eletronics, promotion, samsung_I);
+  await createProduct("Smartphone Motorola Moto G20 64GB", 3500, motorola, eletronics, promotion, motorola_I);
+  await createProduct("Notebook Dell Inspiron 15 3000", 5600.0, dell, computing, promotion, notebook_I);
+  await createProduct("Camiseta Estampada", 80.0, lacost, fashion, promotion, shirt_I);
+  await createProduct("Tênis Nike Air Max", 500.0, nike, sports, promotion, tennis_I);
+  await createProduct("Relógio Inteligente", 322.99, apple, fashion, promotion, watch_I);
+  await createProduct("Fone de Ouvido Bluetooth", 324.99, apple, eletronics, promotion, earphones_I);
+  await createProduct("Cafeteira Elétrica", 310.0, philco, home, promotion, coffee_maker_I);
+  await createProduct("Mesa de Escritório", 235.0, philco, home, promotion, desk_I);
+  await createProduct("Monitor LG 24", 846.0, lg, computing, promotion, monitor_I);
+  await createProduct("Cadeira Gamer Thunder X3", 3000.0, asus, home, promotion, chair_I);
 
   console.log("Seed concluído com sucesso!");
 }

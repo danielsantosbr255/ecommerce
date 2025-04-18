@@ -158,7 +158,7 @@ CREATE TABLE "reviews" (
 );
 
 -- CreateTable
-CREATE TABLE "Promotion" (
+CREATE TABLE "promotions" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -166,17 +166,10 @@ CREATE TABLE "Promotion" (
     "startsAt" TIMESTAMP(3) NOT NULL,
     "endsAt" TIMESTAMP(3) NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Promotion_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "product_promotions" (
-    "id" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
-    "promotionId" TEXT NOT NULL,
-
-    CONSTRAINT "product_promotions_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "promotions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -207,11 +200,11 @@ CREATE TABLE "product_specifications" (
 );
 
 -- CreateTable
-CREATE TABLE "_ProductPromotions" (
+CREATE TABLE "_ProductToPromotion" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
 
-    CONSTRAINT "_ProductPromotions_AB_pkey" PRIMARY KEY ("A","B")
+    CONSTRAINT "_ProductToPromotion_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -222,6 +215,9 @@ CREATE UNIQUE INDEX "Session_refreshToken_key" ON "Session"("refreshToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_userId_userAgent_ipAddress_key" ON "Session"("userId", "userAgent", "ipAddress");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "carts_userId_key" ON "carts"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "products_slug_key" ON "products"("slug");
@@ -239,7 +235,7 @@ CREATE INDEX "productId_index" ON "product_specifications"("productId");
 CREATE UNIQUE INDEX "product_specifications_productId_name_key" ON "product_specifications"("productId", "name");
 
 -- CreateIndex
-CREATE INDEX "_ProductPromotions_B_index" ON "_ProductPromotions"("B");
+CREATE INDEX "_ProductToPromotion_B_index" ON "_ProductToPromotion"("B");
 
 -- AddForeignKey
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -281,19 +277,13 @@ ALTER TABLE "reviews" ADD CONSTRAINT "reviews_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "product_promotions" ADD CONSTRAINT "product_promotions_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "product_promotions" ADD CONSTRAINT "product_promotions_promotionId_fkey" FOREIGN KEY ("promotionId") REFERENCES "Promotion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "product_variants" ADD CONSTRAINT "product_variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "product_specifications" ADD CONSTRAINT "product_specifications_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ProductPromotions" ADD CONSTRAINT "_ProductPromotions_A_fkey" FOREIGN KEY ("A") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ProductToPromotion" ADD CONSTRAINT "_ProductToPromotion_A_fkey" FOREIGN KEY ("A") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ProductPromotions" ADD CONSTRAINT "_ProductPromotions_B_fkey" FOREIGN KEY ("B") REFERENCES "Promotion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ProductToPromotion" ADD CONSTRAINT "_ProductToPromotion_B_fkey" FOREIGN KEY ("B") REFERENCES "promotions"("id") ON DELETE CASCADE ON UPDATE CASCADE;

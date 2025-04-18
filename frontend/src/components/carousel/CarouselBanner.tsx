@@ -9,21 +9,22 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import Image from "next/image";
 
-interface ProductImage {
+interface BannerImage {
+  id: number;
   url: string;
   alt?: string;
 }
 
-interface SimpleImageCarouselProps {
-  images: ProductImage[];
-  containerId: string;
-  className?: string;
-}
+const images: BannerImage[] = [
+  { id: 0, url: "/images/banner1.jpg", alt: "Banner Promocional 1" },
+  { id: 1, url: "/images/banner2.jpg", alt: "Banner Promocional 2" },
+  { id: 2, url: "/images/banner3.jpg", alt: "Banner Promocional 3" },
+  { id: 3, url: "/images/banner4.jpg", alt: "Banner Promocional 4" },
+  { id: 4, url: "/images/banner5.jpg", alt: "Banner Promocional 5" },
+];
 
-const CarouselBanner: React.FC<SimpleImageCarouselProps> = ({ images, containerId, className }) => {
-  if (!images || images.length === 0) {
-    return <p>Nenhuma imagem para exibir.</p>;
-  }
+const CarouselBanner = () => {
+  const containerId = "banner-carousel";
 
   const prevButtonClass = `swiper-button-prev-${containerId}`;
   const nextButtonClass = `swiper-button-next-${containerId}`;
@@ -46,23 +47,22 @@ const CarouselBanner: React.FC<SimpleImageCarouselProps> = ({ images, containerI
   };
 
   return (
-    <div className="relative w-full h-full rounded-2xl object-cover">
+    <div className="w-full h-full object-cover overflow-hidden rounded-xl relative">
       <Swiper {...swiper_params}>
-        {images.map((image, index) => (
-          <SwiperSlide key={index}>
+        {images.map((image) => (
+          <SwiperSlide key={image.id}>
             <Image
               src={image.url}
               alt={image.alt || "Imagem do Banner"}
-              // layout="responsive"
               width={1920}
               height={600}
               className="w-full h-auto"
+              priority
             />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Botões de navegação personalizados para este carrossel */}
       <div
         className={`swiper-button-prev ${prevButtonClass} !text-highlight-n !left-2 z-10 !hidden md:flex`}
       />

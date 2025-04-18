@@ -1,79 +1,132 @@
 "use client";
 import userUtil from "@/utils/user.util";
 import { useRouter } from "next/navigation";
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { UserType } from "@/types/UserType";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import useErrorHandler from "@/utils/error.util";
+import ProductsUtil from "@/utils/products.util";
+import { ProductType } from "@/types/ProductType";
 
 interface AuthContextType {
   user: UserType | null;
   loading: boolean;
-  error: string | null;
+  error: unknown;
   accessToken: string | null;
   signUp: (name: string, email: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  fetchProducts: () => void;
+  products: ProductType[] | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<unknown>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const router = useRouter();
+  const [products, setProducts] = useState<ProductType[] | null>(null);
 
-  const fetchUser = useCallback(async (token: string) => {
-    const user = await userUtil.fetchUser(token);
-    setUser(user);
-    setAccessToken(token);
-    setLoading(false);
+  const router = useRouter();
+  const { handleError } = useErrorHandler();
+
+  // useEffect(() => {
+  //   if (error) handleError(error);
+  // }, [error, handleError]);
+
+  const fetchUser = useCallback(async (token: string | null) => {
+    setError(null);
+    if (!token) return;
+    try {
+      const user = await userUtil.fetchUser(token);
+      setUser(user);
+      setAccessToken(token);
+    } catch (error) {
+      return setError(error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const signUp = async (name: string, email: string, password: string) => {
     setError(null);
-    const { accessToken } = await userUtil.signUp(name, email, password);
-    if (!accessToken) return setError("Falha ao cadastrar-se");
-
-    fetchUser(accessToken);
-    router.push("/account");
+    try {
+      const { accessToken } = await userUtil.signUp(name, email, password);
+      setAccessToken(accessToken);
+      router.push("/account");
+    } catch (error) {
+      return setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const login = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     setError(null);
-    const { accessToken } = await userUtil.signin(email, password);
-    if (!accessToken) return setError("Falha ao efetuar o login");
-
-    await fetchUser(accessToken);
-    router.push("/account");
+    try {
+      const { accessToken } = await userUtil.signin(email, password);
+      setAccessToken(accessToken);
+      router.push("/account");
+    } catch (error) {
+      return setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const refreshToken = useCallback(async () => {
-    const accessToken = await userUtil.refreshToken();
-
-    if (accessToken) return await fetchUser(accessToken);
-
-    setUser(null);
-    setLoading(false);
-    setAccessToken(null);
-    setError("Falha ao atualizar o token");
-  }, [fetchUser]);
+    setError(null);
+    try {
+      const accessToken = await userUtil.refreshToken();
+      setAccessToken(accessToken);
+      fetchUser(accessToken);
+    } catch (error) {
+      setError(error);
+      setUser(null);
+      setAccessToken(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const logout = async () => {
-    await userUtil.logout();
-    setUser(null);
-    setAccessToken(null);
-    router.push("/auth/signin");
+    setError(null);
+    try {
+      await userUtil.logout();
+    } catch (error) {
+      setError(error);
+    } finally {
+      setUser(null);
+      setLoading(false);
+      setAccessToken(null);
+      router.push("/auth/signin");
+    }
+  };
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const products = await ProductsUtil.fetchProducts();
+      setProducts(products);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     refreshToken();
     const interval = setInterval(refreshToken, 14 * 60 * 1000); // 14 minutos
     return () => clearInterval(interval);
-  }, [refreshToken]);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, accessToken, signUp, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, error, accessToken, products, signUp, signIn, logout, fetchProducts }}
+    >
       {children}
     </AuthContext.Provider>
   );

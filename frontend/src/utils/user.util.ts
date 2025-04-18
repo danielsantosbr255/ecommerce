@@ -6,9 +6,12 @@ class UserUtil {
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include",
     });
-
+    // console.log(res, "USER DATA");
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao obter usuário");
+    }
     const data = await res.json();
-    if (!res.ok) throw new Error("Falha ao obter usuário");
     return data.user;
   }
 
@@ -17,13 +20,15 @@ class UserUtil {
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include",
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error("Falha ao obter usuários");
-    return data;
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao obter usuários");
+    }
+    return await res.json();
   }
 
   async updateUser(token: string, name: string, email: string) {
-    const response = await fetch(`${localhost}/account`, {
+    const res = await fetch(`${localhost}/account`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,50 +37,50 @@ class UserUtil {
       body: JSON.stringify({ name, email }),
       credentials: "include",
     });
-    const data = await response.json();
-    if (!response.ok) throw new Error("Falha ao atualizar usuário");
+    const data = await res.json();
+    if (!res.ok) throw new Error("Falha ao atualizar usuário");
     return data.token;
   }
 
   async signUp(name: string, email: string, password: string) {
-    const response = await fetch(`${localhost}/auth/signup`, {
+    const res = await fetch(`${localhost}/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
       credentials: "include",
     });
-    const data = await response.json();
-    if (!response.ok) return null;
-    return data;
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao cadastrar-se");
+    }
+    return await res.json();
   }
 
   async signin(email: string, password: string) {
-    const response = await fetch(`${localhost}/auth/signin`, {
+    const res = await fetch(`${localhost}/auth/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
       credentials: "include",
     });
-    const data = await response.json();
-
-    if (!response.ok) return null;
-    return data;
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao efetuar o login");
+    }
+    return await res.json();
   }
 
   async refreshToken() {
-    try {
-      const res = await fetch(`${localhost}/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-      const data = await res.json();
-
-      if (!res.ok) return null;
-      return data.accessToken;
-    } catch (error) {
-      console.error("Erro ao atualizar o token:", error);
-      return null;
+    const res = await fetch(`${localhost}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao atualizar o token");
     }
+    const data = await res.json();    
+    return data.accessToken;
   }
 
   async logout() {
@@ -83,7 +88,11 @@ class UserUtil {
       method: "POST",
       credentials: "include",
     });
-    if (!res.ok) throw new Error("Falha ao fazer logout");
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Falha ao efetuar o logout");
+    }
+    return await res.json();
   }
 }
 

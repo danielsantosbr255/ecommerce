@@ -13,6 +13,34 @@
 
   --color-primary: var(--color-gray-900);
   --color-secondary: var(--color-gray-500);
+
+  /* ANIMATIONS */
+  --animate-material-spin: material-spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  --animate-skeleton: skeleton 1.2s ease-in-out infinite;
+
+  @keyframes material-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    100% {
+      transform: rotate(720deg);
+    }
+  }
+
+  @keyframes skeleton {
+    0% {
+      background-color: #e5e7eb;
+    }
+    50% {
+      background-color: #f3f4f6;
+    }
+    100% {
+      background-color: #e5e7eb;
+    }
+  }
 }
 
 html,
@@ -23,4 +51,21 @@ body {
   background-color: var(--color-background);
   color: var(--color-text);
   transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para mudanças de tema */
+}
+
+/* ANIMATIONS */
+@keyframes skeleton {
+  0% {
+    background-color: #e5e7eb;
+  }
+  50% {
+    background-color: #f3f4f6;
+  }
+  100% {
+    background-color: #e5e7eb;
+  }
+}
+
+.animate-skeleton {
+  animation: skeleton 1.2s ease-in-out infinite;
 }

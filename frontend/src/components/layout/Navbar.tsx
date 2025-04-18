@@ -144,7 +144,7 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
         </button>
 
         <Link href="/" className="flex justify-center items-center text-highlight-n font-bold text-[12px]">
-          <FlameKindling size={22}/> <span>Fireforge Labs</span>
+          <FlameKindling size={22} /> <span>Fireforge Labs</span>
         </Link>
 
         <div className="flex gap-4 justify-end items-center">
@@ -171,7 +171,6 @@ export default function Navbar(): JSX.Element | null {
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

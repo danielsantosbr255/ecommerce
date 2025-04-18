@@ -1,12 +1,24 @@
-import React from "react";
-import { LoaderCircle } from "lucide-react";
+import clsx from "clsx";
 
-export default function LoadingState() {
+type LoadingSpinnerProps = {
+  className?: string;
+  size?: number;
+  color?: string;
+};
+
+export default function LoadingState({
+  className,
+  size = 60,
+  color = "border-highlight-n",
+}: LoadingSpinnerProps) {
+  const spinnerSize = `${size}px`;
+
   return (
-    <div className="bg-gray-200/20 flex flex-col justify-center items-center h-screen">
-      <div className="animate-spin flex justify-center items-center">
-        <LoaderCircle size={150} className="text-highlight-n" />
-      </div>
+    <div className="flex items-center justify-center w-full h-full">
+      <div
+        className={clsx("animate-material-spin rounded-full border-4 border-t-transparent", color, className)}
+        style={{ width: spinnerSize, height: spinnerSize }}
+      />
     </div>
   );
 }

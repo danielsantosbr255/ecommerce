@@ -136,7 +136,6 @@ const AdminProductsPage: React.FC = () => {
       </div>
 
       <AdminProductForm onAddProduct={handleAddProduct} />
-      <ToastContainer />
     </div>
   );
 };

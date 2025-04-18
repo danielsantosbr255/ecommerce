@@ -26,9 +26,9 @@ export default function Profile() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && !user) logout();
-  }, [user, loading, router, logout]);
+  // useEffect(() => {
+  //   if (!loading && !user) logout();
+  // }, [user, loading, router, logout]);
 
   if (!loading && !user) return null;
 

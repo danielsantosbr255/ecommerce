@@ -25,10 +25,28 @@ const variants = [
   },
 ];
 
+const randomDescriptions = [
+  "Um produto essencial para o seu dia a dia.",
+  "A solução perfeita para seus problemas.",
+  "Descubra uma nova maneira de fazer as coisas.",
+  "Inovação e praticidade em um só lugar.",
+  "Experimente a diferença agora mesmo.",
+  "Simplifique sua vida com este produto incrível.",
+  "Resultados garantidos e satisfação total.",
+  "A melhor escolha para você e sua família.",
+  "Não deixe essa oportunidade passar!",
+  "Comece a transformar hoje mesmo.",
+];
+
+function randomDescription() {
+  const indice = Math.floor(Math.random() * randomDescriptions.length);
+  return randomDescriptions[indice];
+}
+
 const createProduct = async (title, price, brand, category, promotion, images) => {
   const product = {
     title: title,
-    description: "lorem ipsulum dolor sit amet, consectetur adipiscing elit",
+    description: randomDescription(),
     price: price,
     stock: 50,
     slug: slugify(title, { lower: true }),
@@ -38,8 +56,11 @@ const createProduct = async (title, price, brand, category, promotion, images) =
     promotions: promotion && { connect: [{ id: promotion.id }] },
     specifications: {
       create: [
-        { name: "Cor", value: "Preto" },
-        { name: "Tamanho da Tela", value: '6.5"' },
+        { name: "Cor", value: "Desconhecido" },
+        { name: "Tamanho", value: '6.5"' },
+        { name: "Garantia", value: "1 ano" },
+        { name: "Peso", value: "200g" },
+        { name: "Material", value: "Generico" },
       ],
     },
     // variants: { create: variants },

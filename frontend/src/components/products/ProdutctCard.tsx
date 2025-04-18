@@ -1,7 +1,6 @@
 import { ProductType } from "@/types/ProductType";
 import ProductImage from "./ProductImage";
 import { ShoppingCart } from "lucide-react";
-import clsx from "clsx";
 import Link from "next/link";
 import CurrencyUtil from "@/utils/currency.util";
 
@@ -52,31 +51,6 @@ export default function ProductCard({ product, className, description = true, ad
           Adicionar ao Carrinho
         </button>
       </main>
-      {/* <div className="flex justify-between items-center mb-2">
-      </div>
-
-      <Link href={`/product/${product.id}`}>
-        <div className="relative flex aspect-[4/3] bg-gray-50 items-center rounded-xl hover:border border-highlight-n transition-all">
-          <ProductImage product={product} className="rounded-lg" />
-        </div>
-
-        <div className="flex justify-between items-center font-semibold mt-2">
-          <p className="text-md text-neutral-700 truncate">{product.title}</p>
-        </div>
-        {description && <p className="text-sm text-neutral-600 truncate">{product.description}</p>}
-
-        <div className="flex flex-col font-bold my-1">
-          <p className="text-lg text-highlight-n">{CurrencyUtil.formatCurrency(product.price)}</p>
-        </div>
-      </Link>
-
-      <button
-        onClick={addToCart}
-        className="bg-white hover:bg-highlight-n flex justify-center items-center py-2 px-3 rounded-md text-highlight-n hover:text-white border border-highlight-n font-bold text-center cursor-pointer transition-all gap-2 max-w-full"
-      >
-        <ShoppingCart size={20} className="shrink-0" />
-        <p className="truncate text-[clamp(0.75rem,2vw,1rem)] whitespace-nowrap">Adicionar ao Carrinho</p>
-      </button> */}
     </article>
   );
 }
