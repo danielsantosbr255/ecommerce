@@ -7,7 +7,7 @@ interface ProductCardSkeletonProps {
 export default function ProductCardSkeleton({ className }: ProductCardSkeletonProps) {
   return (
     <article
-      className={`flex flex-col gap-2 p-2 rounded-lg border border-gray-200 scale-97 h-full ${className}`}
+      className={`bg-gray-300 flex flex-col gap-2 p-2 rounded-lg border border-gray-200 scale-97 h-full ${className}`}
     >
       <main className="flex flex-col justify-between h-full">
         <Skeleton className="w-1/7 h-6 mb-2" />

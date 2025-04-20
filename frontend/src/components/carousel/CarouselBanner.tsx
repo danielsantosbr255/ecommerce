@@ -47,18 +47,13 @@ const CarouselBanner = () => {
   };
 
   return (
-    <div className="w-full h-full object-cover overflow-hidden rounded-xl relative">
+    <div className="w-full h-auto bg-red-500 object-cover overflow-hidden rounded-xl relative">
       <Swiper {...swiper_params}>
         {images.map((image) => (
           <SwiperSlide key={image.id}>
-            <Image
-              src={image.url}
-              alt={image.alt || "Imagem do Banner"}
-              width={1920}
-              height={600}
-              className="w-full h-auto"
-              priority
-            />
+            <div className="w-full h-full bg-blue-500 justify-center items-center flex object-contain">
+              <Image src={image.url} alt={image.alt || ""} width={500} height={500} />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

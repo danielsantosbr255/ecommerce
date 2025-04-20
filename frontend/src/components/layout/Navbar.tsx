@@ -100,17 +100,17 @@ const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
 
   return (
-    <main className="hidden lg:grid grid-cols-3 w-full items-center justify-between px-2 py-0 text-secondary font-semibold">
+    <main className="hidden lg:grid grid-cols-3 w-full items-center justify-between px-2 py-0">
       <div className="items-center font-semibold">
         <Link
           href="/"
           className="hidden whitespace-nowrap lg:flex w-1/3 items-center text-highlight-n font-bold text-md"
         >
-          <FlameKindling size={30} /> Fireforge Labs
+          <FlameKindling size={30} className="shrink-0"/> Fireforge Labs
         </Link>
       </div>
 
-      <SearchBar className="hidden lg:flex" />
+      <SearchBar className="hidden" />
 
       <div className="flex items-center justify-end gap-2">
         {isAdmin && (
@@ -156,8 +156,9 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
           <Link href={user ? "/account" : "/auth/signin"}>{user ? <UserCircle size={22} /> : <LogIn />}</Link>
         </div>
       </main>
-      <div className="lg:hidden px-2">
-        <SearchBar className="!pb-2" />
+
+      <div className="lg:hidden">
+        <SearchBar />
       </div>
     </section>
   );

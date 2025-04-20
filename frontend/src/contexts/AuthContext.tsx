@@ -16,7 +16,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => void;
   fetchProducts: () => void;
-  products: ProductType[] | null;
+  products: ProductType[];
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<unknown>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [products, setProducts] = useState<ProductType[] | null>(null);
+  const [products, setProducts] = useState<ProductType[]>([]);
 
   const router = useRouter();
   const { handleError } = useErrorHandler();

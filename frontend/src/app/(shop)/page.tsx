@@ -1,10 +1,11 @@
 import ProductList from "@/components/layout/ProductList";
-import CarouselBanner from "@/components/carousel/CarouselBanner";
+// import CarouselBanner from "@/components/carousel/CarouselBanner";
+import { ImageCarousel } from "@/components/carousel/ImageCarousel";
 
 export default function Home() {
   return (
-    <main className="flex flex-col my-6 mx-auto w-full px-4 lg:max-w-10/12 h-full gap-6 items-center shrink-0">
-      <CarouselBanner />
+    <main className="flex flex-col my-6 mx-auto w-full px-4 lg:max-w-10/12 h-full gap-6 items-center">
+      <ImageCarousel />
       <ProductList />
     </main>
   );

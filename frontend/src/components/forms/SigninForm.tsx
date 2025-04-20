@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import Form from "./Form";
 import Input from "../ui/Input";
 import { useRouter } from "next/navigation";

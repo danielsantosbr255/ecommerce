@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import Form from "@/components/forms/Form";
 import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
