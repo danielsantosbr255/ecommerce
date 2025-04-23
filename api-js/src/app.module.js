@@ -10,6 +10,7 @@ const CartModule = require("./modules/cart/cart.module");
 const OrdersModule = require("./modules/orders/orders.module");
 const ReviewsModule = require("./modules/reviews/reviews.module");
 const ProductsModule = require("./modules/products/products.module");
+const PromotionsModule = require("./modules/promotions/promotions.module");
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule, ReviewsModule);
+app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule, ReviewsModule, PromotionsModule);
 
 app.use(errorHandler);
 

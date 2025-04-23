@@ -54,6 +54,7 @@ export default function ProductImage({ product, alt, className, parentClassName 
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
         onError={handleError}
         onLoad={handleLoad}
+        priority
         className={clsx(
           "object-contain transition-all duration-500 ease-in-out",
           loading && "opacity-0",

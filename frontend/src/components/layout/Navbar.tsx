@@ -4,20 +4,11 @@ import { useState, useEffect, ReactNode, JSX } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "../ui/Searchbar";
-import {
-  Bell,
-  FlameKindling,
-  Info,
-  LogIn,
-  Menu,
-  Phone,
-  ShieldUser,
-  ShoppingCart,
-  UserCircle,
-} from "lucide-react";
+import { Bell, Info, LogIn, Menu, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import { UserType } from "@/types/UserType";
 import clsx from "clsx";
+import Logo from "../ui/Logo";
 
 interface NavItemProps {
   href: string;
@@ -106,7 +97,7 @@ const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
           href="/"
           className="hidden whitespace-nowrap lg:flex w-1/3 items-center text-highlight-n font-bold text-md"
         >
-          <FlameKindling size={30} className="shrink-0"/> Fireforge Labs
+          <Logo size={30} className="shrink-0" /> Fireforge Labs
         </Link>
       </div>
 
@@ -144,7 +135,7 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
         </button>
 
         <Link href="/" className="flex justify-center items-center text-highlight-n font-bold text-[12px]">
-          <FlameKindling size={22} /> <span>Fireforge Labs</span>
+          <Logo size={22} /> <span>Fireforge Labs</span>
         </Link>
 
         <div className="flex gap-4 justify-end items-center">

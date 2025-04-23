@@ -5,7 +5,7 @@ type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEle
 export default function Input({ className = "", ...props }: InputProps) {
   return (
     <input
-      className={`bg-gray-100 p-3 h-auto w-auto rounded-lg border border-gray-200 focus:outline-highlight-n ${className}`}
+      className={`bg-gray-100 text-sm p-2 rounded-lg border border-gray-200 focus:outline-highlight-n ${className}`}
       {...props}
     />
   );

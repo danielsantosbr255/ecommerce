@@ -6,7 +6,7 @@ module.exports = (error, req, res, next) => {
     if (error instanceof z.ZodError) {
         return res
             .status(400)
-            .json({ message: error.errors.map((e) => `Campo "${e.path[0]}" ${e.message}`) });
+            .json({ message: error.errors.map((e) => `Campo '${e.path[0]}' ${e.message}`) });
     }
 
     if (error instanceof CustomError) {

@@ -3,15 +3,8 @@ import { FaArrowLeft } from "react-icons/fa";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex flex-col bg-gray-100 h-screen p-4">
-      <Link
-        href="/"
-        className="inline-flex items-center text-gray-700 hover:text-highlight-n transition duration-300 mt-10 ml-5 group"
-      >
-        <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
-        <span className="font-medium">Voltar para a Loja</span>
-      </Link>
-      <main className="pt-20 flex-1">{children}</main>
+    <div className="bg-neutral-100 flex flex-col h-screen w-full items-center">
+      <main className="flex flex-1 w-full items-center justify-center">{children}</main>
     </div>
   );
 }

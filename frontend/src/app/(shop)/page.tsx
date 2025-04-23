@@ -1,6 +1,5 @@
 import ProductList from "@/components/layout/ProductList";
-// import CarouselBanner from "@/components/carousel/CarouselBanner";
-import { ImageCarousel } from "@/components/carousel/ImageCarousel";
+import { ImageCarousel } from "@/components/products/ImageCarousel";
 
 export default function Home() {
   return (

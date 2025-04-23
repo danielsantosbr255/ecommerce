@@ -1,6 +1,6 @@
 "use client";
 
-import { Carousel, CarouselItem } from "@/components/Carrosel/Carousel";
+import { Carousel, CarouselItem } from "@/components/tests/carousel/Carousel";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import React from "react";
 

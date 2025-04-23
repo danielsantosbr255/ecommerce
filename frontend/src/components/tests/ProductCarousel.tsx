@@ -5,7 +5,7 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-} from "@/components/ui/carousel";
+} from "@/components/ui/carousel/carousel";
 import { ProductType } from "@/types/ProductType";
 import ProductCard from "../products/ProdutctCard";
 import ProductCardSkeleton from "../products/ProductCardSkeleton";

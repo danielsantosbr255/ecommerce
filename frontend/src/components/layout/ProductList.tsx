@@ -13,7 +13,7 @@ export default function ProductList() {
   }, []);
 
   return (
-    <section className="w-full h-full">
+    <section className="w-full h-full gap-10 flex flex-col">
       <ProductSession products={products} label="Destaque" icon={<Crown size={20} />} />
       <ProductSession products={products} label="Novidades" icon={<Grid2x2Plus size={20} />} />
       <ProductSession products={products} label="Mais Vendidos" icon={<Crown size={20} />} />

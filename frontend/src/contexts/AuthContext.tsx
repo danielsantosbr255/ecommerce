@@ -16,7 +16,9 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => void;
   fetchProducts: () => void;
+  fetchUser: (token: string | null) => Promise<void>;
   products: ProductType[];
+
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -63,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    setLoading(true);
     setError(null);
     try {
       const { accessToken } = await userUtil.signin(email, password);
@@ -125,7 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, accessToken, products, signUp, signIn, logout, fetchProducts }}
+      value={{ user, loading, error, accessToken, products, signUp, signIn, logout, fetchProducts, fetchUser }}
     >
       {children}
     </AuthContext.Provider>
