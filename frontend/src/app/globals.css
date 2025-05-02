@@ -1,20 +1,56 @@
 @import "tailwindcss";
 
-/* @custom-variant dark (&:is(.dark *)); */
-
 * {
   box-sizing: border-box;
 }
 
-@theme {
-  --color-highlight-n: var(--color-cyan-600);
-  --color-highlight-h: var(--color-amber-800);
-  --color-highlight-c: var(--color-amber-900);
-  --color-background: var(--color-gray-50);
-  --color-navbar: var(--color-gray-50);
+@import "tailwindcss";
 
+@theme {
+  /* --color-highlight-n: var(--color-cyan-700);
+  --color-highlight-h: var(--color-cyan-800);
+  --color-highlight-c: var(--color-cyan-900);
+  --color-background: var(--color-gray-50);
+  
   --color-primary: var(--color-gray-900);
-  --color-secondary: var(--color-gray-500);
+  --color-secondary: var(--color-gray-600);
+  */
+  
+  --color-navbar: var(--color-gray-700);
+  --color-primary: var(--color-gray-700); /* Sua cor atual */
+  --color-primary-hover: var(--color-cyan-800); /* Cor no hover */
+  --color-primary-active: var(--color-cyan-900); /* Cor no clique */
+
+  /* Cor de Destaque (Promoções, badges, alertas) */
+  --color-accent: var(--color-orange-500);
+  --color-accent-hover: var(--color-orange-600);
+
+  --color-bg-primary: var(--color-gray-50); /* Fundo principal (páginas) */
+  --color-bg-secondary: white; /* Fundo secundário (cards, seções) */
+  --color-bg-overlay: rgba(0, 0, 0, 0.5); /* Overlays (modais, menus) */
+
+  /* Cor Secundária (Complementar - ex: botões secundários) */
+  --color-secondary: var(--color-gray-600);
+  --color-secondary-hover: var(--color-gray-700);
+
+  --color-lines: var(--color-gray-300);
+  --color-success: var(--color-green-500); /* Confirmações, sucesso */
+  --color-warning: var(--color-yellow-500); /* Avisos */
+  --color-error: var(--color-red-500); /* Erros, alertas críticos */
+  --color-info: var(--color-blue-500); /* Informações neutras */
+
+  --color-tx-primary: var(--color-gray-900); /* Texto principal (títulos) */
+  --color-tx-secondary: var(--color-gray-600); /* Texto secundário (descrições) */
+  --color-tx-muted: var(--color-gray-400); /* Texto desativado/fracos */
+  --color-tx-on-primary: white; /* Texto sobre fundo primário (ex: botão) */
+  --color-tx-link: var(--color-blue-500); /* Links clicáveis */
+  --color-tx-error: var(--color-red-600); /* Mensagens de erro */
+
+  --color-sale: var(--color-red-600); /* Preço promocional */
+  --color-sale-bg: var(--color-red-50); /* Fundo de promoção */
+  --color-rating: var(--color-yellow-400); /* Estrelas de avaliação */
+  --color-in-stock: var(--color-green-500); /* Disponível em estoque */
+  --color-out-of-stock: var(--color-red-500); /* Esgotado */
 
   /* ANIMATIONS */
   --animate-material-spin: material-spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;

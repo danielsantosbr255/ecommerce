@@ -1,12 +1,12 @@
 // src/components/cart/CartItemCard.tsx
 import React, { useState, useCallback } from "react";
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 import ProductImage from "@/components/products/ProductImage";
 import CurrencyUtil from "@/utils/currency.util";
 
 type CartItem = {
   id: string;
-  product: ProductType;
+  product: Product;
   quantity: number;
 };
 
@@ -45,14 +45,14 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onRemove, onQuantityC
   );
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded shadow">
+    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded shadow-xs">
       <div className="relative w-24 h-24 flex-shrink-0">
         <ProductImage product={item.product} fill alt={item.product.title} />
       </div>
 
       <div className="flex-1 text-center sm:text-left">
         <h2 className="font-semibold text-lg">{item.product.title}</h2>
-        <p className="text-gray-600">{CurrencyUtil.formatCurrency(item.product.price)}</p>
+        <p className="text-tx-secondary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
         <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
           <button
             onClick={handleDecrement}
@@ -77,12 +77,12 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onRemove, onQuantityC
       </div>
 
       <div className="flex items-center justify-between gap-2">
-        <span className="font-bold text-highlight-n text-lg">
+        <span className="font-bold text-primary text-lg">
           {CurrencyUtil.formatCurrency(item.product.price * quantity)}
         </span>
         <button
           onClick={() => onRemove(item.id)}
-          className="ml-2 px-2 py-1 text-sm text-red-600 hover:underline"
+          className="ml-2 px-2 py-1 text-sm text-tx-error hover:underline"
         >
           Remover
         </button>

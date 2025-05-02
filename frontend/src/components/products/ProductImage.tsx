@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 import { LoaderCircle } from "lucide-react";
 import LoadingState from "../LoadingState";
 
 type ProductImageProps = {
-  product: ProductType;
+  product: Product;
   fill?: boolean;
   alt?: string;
   className?: string;
@@ -43,7 +43,7 @@ export default function ProductImage({ product, alt, className, parentClassName 
   return (
     <div className={clsx("relative w-full h-full", parentClassName)}>
       {loading && (
-        <div className="absolute text-highlight-n inset-0 flex items-center animate-spin justify-center">
+        <div className="absolute text-primary inset-0 flex items-center animate-spin justify-center">
           <LoadingState />
         </div>
       )}

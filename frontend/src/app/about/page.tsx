@@ -24,54 +24,54 @@ const AboutPage = () => {
         {/* Botão de Voltar Elegante */}
         <Link
           href="/"
-          className="inline-flex items-center text-gray-700 hover:text-highlight-n transition duration-300 mb-12 group"
+          className="inline-flex items-center text-tx-secondary hover:text-primary transition duration-300 mb-12 group"
         >
           <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
           <span className="font-medium">Voltar para a Loja</span>
         </Link>
 
         {/* Seção de Apresentação Pessoal com Imagem */}
-        <section className="bg-white shadow-xl rounded-xl p-8 mb-12 overflow-hidden">
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12 overflow-hidden">
           <div className="md:flex items-center -mx-8">
             <div className="md:w-1/3 px-8 mb-6 md:mb-0 text-center">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-md">
+              <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-xs">
                 <Image
                   src={profileImage} // Use a sua imagem aqui
                   alt="Minha Foto de Perfil"
                   layout="fill"
                   objectFit="cover"
                 />
-                <div className="absolute inset-0 rounded-full bg-highlight-n opacity-20 animate-ping"></div>
+                <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
-              <h2 className="text-xl font-semibold text-gray-800 mt-4">Olá! Eu sou o Desenvolvedor Aqui.</h2>
-              <p className="text-gray-600 text-sm">
+              <h2 className="text-xl font-semibold text-tx-primary mt-4">Olá! Eu sou o Desenvolvedor Aqui.</h2>
+              <p className="text-tx-secondary text-sm">
                 Estudante de Desenvolvimento Web & Criador deste Projeto
               </p>
             </div>
             <div className="md:w-2/3 px-8">
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-tx-secondary leading-relaxed mb-4">
                 Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos
                 jogos que desenvolvi com Python ao universo fascinante do desenvolvimento web. Durante mais de
                 8 anos, o código foi minha tela e os jogos, minhas criações. Agora, estou focado em construir
                 experiências interativas na web.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-tx-secondary leading-relaxed mb-4">
                 Este projeto de e-commerce é um passo crucial nessa transição, permitindo-me explorar a fundo
                 o desenvolvimento fullstack. Embora meu foco principal seja o backend, a visão completa do
                 ciclo de desenvolvimento é o que me motiva.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaCode className="mr-2 text-secondary" /> Fullstack
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
+                  <FaCode className="mr-2 text-tx-secondary" /> Fullstack
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaTerminal className="mr-2 text-secondary" /> Backend
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
+                  <FaTerminal className="mr-2 text-tx-secondary" /> Backend
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaGamepad className="mr-2 text-secondary" /> Desenvolvimento de Jogos
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
+                  <FaGamepad className="mr-2 text-tx-secondary" /> Desenvolvimento de Jogos
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
-                  <FaBrain className="mr-2 text-secondary" /> Lógica de Programação
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
+                  <FaBrain className="mr-2 text-tx-secondary" /> Lógica de Programação
                 </span>
               </div>
             </div>
@@ -79,55 +79,55 @@ const AboutPage = () => {
         </section>
 
         {/* Seção Detalhada Sobre Minhas Habilidades */}
-        <section className="bg-white shadow-xl rounded-xl p-8 mb-12">
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
           <div className="flex items-center mb-6">
-            <FaCode className="text-highlight-n text-3xl mr-4" />
-            <h2 className="text-xl font-semibold text-gray-800">Minhas Habilidades e Ferramentas</h2>
+            <FaCode className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Minhas Habilidades e Ferramentas</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaLayerGroup className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Frontend</h3>
+                <FaLayerGroup className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Frontend</h3>
               </div>
-              <p className="text-gray-600 text-sm">
+              <p className="text-tx-secondary text-sm">
                 JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS
               </p>
             </div>
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaTerminal className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Backend</h3>
+                <FaTerminal className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Backend</h3>
               </div>
-              <p className="text-gray-600 text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
+              <p className="text-tx-secondary text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
             </div>
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaDatabase className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Bancos de Dados</h3>
+                <FaDatabase className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Bancos de Dados</h3>
               </div>
-              <p className="text-gray-600 text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
+              <p className="text-tx-secondary text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
             </div>
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaPuzzlePiece className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Autenticação & Segurança</h3>
+                <FaPuzzlePiece className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Autenticação & Segurança</h3>
               </div>
-              <p className="text-gray-600 text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
+              <p className="text-tx-secondary text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
             </div>
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaDocker className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Infraestrutura & DevOps</h3>
+                <FaDocker className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Infraestrutura & DevOps</h3>
               </div>
-              <p className="text-gray-600 text-sm">Docker, Git, GitHub</p>
+              <p className="text-tx-secondary text-sm">Docker, Git, GitHub</p>
             </div>
-            <div className="rounded-md border border-gray-200 p-6 hover:shadow-md transition duration-300">
+            <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaBrain className="text-highlight-n text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-gray-700">Habilidades Essenciais</h3>
+                <FaBrain className="text-primary text-xl mr-3" />
+                <h3 className="text-lg font-semibold text-tx-secondary">Habilidades Essenciais</h3>
               </div>
-              <p className="text-gray-600 text-sm">
+              <p className="text-tx-secondary text-sm">
                 Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo
               </p>
             </div>
@@ -135,22 +135,22 @@ const AboutPage = () => {
         </section>
 
         {/* Seção Dedicada ao Projeto de E-commerce */}
-        <section className="bg-white shadow-xl rounded-xl p-8 mb-12">
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
           <div className="flex items-center mb-6">
-            <FaShoppingCart className="text-highlight-n text-3xl mr-4" />
-            <h2 className="text-xl font-semibold text-gray-800">Sobre o Meu Projeto de E-commerce</h2>
+            <FaShoppingCart className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Sobre o Meu Projeto de E-commerce</h2>
           </div>
-          <p className="text-gray-700 leading-relaxed mb-4">
+          <p className="text-tx-secondary leading-relaxed mb-4">
             Este projeto de e-commerce é mais do que um simples aprendizado; é a materialização da minha
             paixão pelo desenvolvimento web e uma forma de consolidar meus conhecimentos em um cenário prático
             e desafiador.
           </p>
-          <p className="text-gray-700 leading-relaxed mb-4">
+          <p className="text-tx-secondary leading-relaxed mb-4">
             Desde a arquitetura do backend até a experiência do usuário no frontend, cada detalhe foi
             cuidadosamente pensado e implementado. O objetivo principal foi explorar um amplo espectro de
             tecnologias e aplicar as melhores práticas de desenvolvimento.
           </p>
-          <ul className="list-disc list-inside text-gray-700 mb-4">
+          <ul className="list-disc list-inside text-tx-secondary mb-4">
             <li>Sistema de autenticação completo com JWT e cookies HTTP-only para segurança.</li>
             <li>Validação robusta de entrada de dados utilizando Zod.</li>
             <li>Utilização do Prisma como ORM para interação eficiente com o banco de dados PostgreSQL.</li>
@@ -158,16 +158,16 @@ const AboutPage = () => {
             <li>Implementação de conceitos de RESTful APIs para comunicação entre frontend e backend.</li>
             <li>Containerização com Docker para facilitar o desenvolvimento e a implantação.</li>
           </ul>
-          <p className="text-gray-700 leading-relaxed">
+          <p className="text-tx-secondary leading-relaxed">
             Este projeto serve como um portfólio dinâmico, demonstrando minhas habilidades e minha dedicação
             em criar soluções web completas e bem estruturadas.
           </p>
         </section>
 
         {/* Rodapé Sofisticado */}
-        <footer className="text-center text-secondary mt-16 py-8 border-t border-gray-300">
+        <footer className="text-center text-tx-secondary mt-16 py-8 border-t border-gray-300">
           <p className="mb-2">
-            Feito com <span className="text-highlight-n font-semibold">Next.js 15</span>,{" "}
+            Feito com <span className="text-primary font-semibold">Next.js 15</span>,{" "}
             <span className="font-semibold">TypeScript</span> e muita paixão <FaCode className="inline" />
           </p>
           <p className="text-sm flex gap-1 justify-center">
@@ -176,7 +176,7 @@ const AboutPage = () => {
               href="https://github.com/danielsantosbr255"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-highlight-n hover:underline flex items-center gap-1"
+              className="text-primary hover:underline flex items-center gap-1"
             >
               GitHub<FaGithub/>
             </Link>

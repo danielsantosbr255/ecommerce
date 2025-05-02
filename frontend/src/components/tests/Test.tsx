@@ -156,7 +156,7 @@ export const CarouselPrevious = () => {
   return (
     <button
       onClick={prev}
-      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow z-10"
+      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-xs z-10"
     >
       ←
     </button>
@@ -172,7 +172,7 @@ export const CarouselNext = () => {
   return (
     <button
       onClick={next}
-      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow z-10"
+      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-xs z-10"
     >
       →
     </button>

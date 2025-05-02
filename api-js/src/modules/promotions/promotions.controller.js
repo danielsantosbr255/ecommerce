@@ -14,9 +14,9 @@ const getPromotions = async (req, res) => {
   res.json(promotions);
 };
 
-const getPromotionById = async (req, res) => {
-  const promotion = await service.getPromotionById(req.params.id);
+const getPromotionBySlug = async (req, res) => {
+  const promotion = await service.getPromotionBySlug(req.params.slug);
   res.json(promotion);
 };
 
-module.exports = { createPromotion, getPromotions, getPromotionById };
+module.exports = { createPromotion, getPromotions, getPromotionBySlug };

@@ -55,7 +55,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-xs">
             <input
                 type="text"
                 value={name}
@@ -97,7 +97,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             />
             <button
                 type="submit"
-                className="bg-highlight-n text-white px-4 py-2 rounded-lg hover:bg-highlight-n"
+                className="bg-primary text-tx-on-primary px-4 py-2 rounded-lg hover:bg-primary"
             >
                 {initialData ? "Atualizar Usuário" : "Criar Usuário"}
             </button>

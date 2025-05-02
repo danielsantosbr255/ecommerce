@@ -47,29 +47,26 @@ type ProductSpecification = {
 };
 
 // Adicione mais tipos conforme necessário
-export type ProductType = {
+export type Product = {
   // Campos básicos
-  id: string;
+  id?: string;
   title: string;
   description: string;
   price: number;
-  discount: number;
+  discount?: number;
   stock: number;
-  rating: number;
-  isActive: boolean;
+  rating?: number;
+  isActive?: boolean;
   slug: string;
 
   //: Relacionamentos
   brandId: string;
-  brand: Brand;
-
   categoryId: string;
-  category: Category;
 
   //: Relacionamentos
-  reviews: Review[];
+  reviews?: Review[];
   images: ProductImage[];
-  promotions: Promotion[];
-  variants: ProductVariant[];
-  specifications: ProductSpecification[];
+  promotions?: Promotion[];
+  variants?: ProductVariant[];
+  specifications?: ProductSpecification[];
 };

@@ -24,15 +24,15 @@ export default function SignUpForm() {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
-    await signUp(name, email, password);
+    await signUp({ name, email, password });
   };
 
   return (
-    <div className="flex w-full h-full max-w-8/12 max-h-8/12 text-secondary rounded-2xl overflow-hidden justify-center shadow border-t border-gray-200">
-      <div className="bg-gray-50 flex w-3/5 flex-col gap-10 justify-center items-center">
+    <div className="flex w-full h-full max-w-8/12 max-h-8/12 text-tx-secondary rounded-2xl overflow-hidden justify-center shadow-xs border-t border-lines">
+      <div className="bg-bg-secondary flex w-3/5 flex-col gap-10 justify-center items-center">
         <div className="flex flex-col items-center gap-2 justify-center">
           <UserPlus size={60} />
-          <h1 className="text-highlight-n font-bold text-5xl">Crie sua conta rapidinho</h1>
+          <h1 className="text-primary font-bold text-5xl">Crie sua conta rapidinho</h1>
           <p className="text-center">e comece a comprar agora mesmo!</p>
         </div>
 
@@ -44,8 +44,8 @@ export default function SignUpForm() {
           <Button
             type="submit"
             disabled={loading}
-            className={`text-white w-full gap-2 mt-2 ${
-              loading ? "cursor-not-allowed bg-highlight-n/50" : "bg-highlight-n"
+            className={`text-tx-on-primary w-full gap-2 mt-2 ${
+              loading ? "cursor-not-allowed bg-primary/50" : "bg-primary"
             }`}
           >
             <UserPlus /> Cadastrar
@@ -59,19 +59,16 @@ export default function SignUpForm() {
         </form>
       </div>
 
-      <div className="bg-highlight-n  text-white gap-8 flex flex-col w-2/5 px-2 justify-center items-center">
-        <Link href="/" className="relative w-20 h-20 flex items-center justify-center animate-bounce">
-          <Logo size={60} className="text-white mb-5 absolute z-1" />
-          <Logo size={60} className="mb-5 absolute animate-pulse !text-highlight-h/20 scale-120" />
-        </Link>
+      <div className="bg-primary  text-tx-on-primary gap-8 flex flex-col w-2/5 px-2 justify-center items-center">
+        <Logo variant="animated" size={60} />
 
         <h1 className="font-bold text-3xl">Bem-vindo de volta!</h1>
         <p className="text-center">
           Acesse sua conta para ver seus favoritos, <br /> histórico de compras e ofertas personalizadas.
         </p>
-        <Link href="/auth/signin" className="border px-5 py-2 rounded-lg shadow">
+        <Button variant="outline" href="/auth/sign-in">
           Sign In
-        </Link>
+        </Button>
       </div>
     </div>
   );

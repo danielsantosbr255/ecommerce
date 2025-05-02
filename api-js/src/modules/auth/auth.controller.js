@@ -31,6 +31,7 @@ const signIn = async (req, res) => {
 
 const refreshToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken)
     const userAgent = req.headers["user-agent"] || "Desconhecido";
     const ipAddress = req.ip;
 

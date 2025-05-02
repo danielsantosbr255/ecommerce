@@ -2,12 +2,12 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import ProductsUtil from "@/utils/products.util";
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext";
 
 interface AuthContextType {
-  products: ProductType[];
+  products: Product[];
   searchTerm: string;
   filterCategory: string;
   currentPage: number;
@@ -15,7 +15,7 @@ interface AuthContextType {
   handleSearchChange: (term: string) => void;
   handleFilterChange: (category: string) => void;
   handleDeleteProduct: (id: string) => Promise<void>;
-  handleAddProduct: (productData: Omit<ProductType, "id" | "image">, imageFile: File | null) => Promise<void>;
+  handleAddProduct: (productData: Omit<Product, "id" | "image">, imageFile: File | null) => Promise<void>;
   paginate: (pageNumber: number) => void;
   loading: boolean;
   error: string | null;
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const handleAddProduct = async (productData: Omit<ProductType, "id" | "image">, imageFile: File | null) => {
+  const handleAddProduct = async (productData: Omit<Product, "id" | "image">, imageFile: File | null) => {
     if (!accessToken) {
       toast.error("Token de acesso não disponível.");
       return;
@@ -81,12 +81,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const formData = new FormData();
       formData.append("title", productData.title);
       formData.append("price", String(productData.price));
-      formData.append("category", productData.category);
+      formData.append("category", productData.categoryId);
       formData.append("description", productData.description);
       formData.append("stock", String(productData.stock));
       if (imageFile) formData.append("image", imageFile);
 
-      const addedProduct = (await ProductsUtil.createProduct(accessToken, formData)) as ProductType;
+      const addedProduct = (await ProductsUtil.createProduct(accessToken, formData)) as Product;
       setProducts((prev) => [...prev, addedProduct]);
       toast.success("Produto adicionado com sucesso!");
     } catch (err) {

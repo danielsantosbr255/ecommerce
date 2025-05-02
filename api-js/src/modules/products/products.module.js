@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { verifyToken } = require("../../common/middlewares/auth.middleware");
 
 const controller = require("./products.controller");
-const multer = require("../../common/utils/multer.util");
+const multer = require("../../common/middlewares/multer.middleware");
 
 router.get("/products", controller.getProducts);
 router.get("/products/:slug", controller.getProductBySlug);
@@ -11,7 +11,7 @@ router.get("/products/search/:query", controller.getProductsByQuery);
 router.get("/products/category/:slug", controller.getProductsByCategory);
 
 router.delete("/products/:id", verifyToken, controller.deleteProduct);
-router.post("/products", verifyToken, multer.single("image"), controller.createProduct);
-router.put("/products/:id", verifyToken, multer.single("image"), controller.updateProduct);
+router.post("/products", verifyToken, multer.array("images", 5), controller.createProduct);
+router.put("/products/:id", verifyToken, multer.array("images", 5), controller.updateProduct);
 
 module.exports = router;

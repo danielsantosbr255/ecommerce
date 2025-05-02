@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const refreshToken = request.cookies.get("refreshToken")?.value;
     
     if (protectedRoutes.includes(request.nextUrl.pathname) && !refreshToken) {
-        return NextResponse.redirect(new URL("/auth/signin", request.url));
+        return NextResponse.redirect(new URL("/auth/sign-in", request.url));
     }
 
     return NextResponse.next();

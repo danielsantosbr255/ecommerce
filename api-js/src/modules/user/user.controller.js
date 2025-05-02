@@ -34,7 +34,7 @@ const deleteUser = async (req, res) => {
 // MY ACCOUNT
 const getMyProfile = async (req, res) => {
   const user = await service.getUserById(req.user.id);
-  return res.json({ user });
+  return res.json(user);
 };
 
 const updateMyProfile = async (req, res) => {

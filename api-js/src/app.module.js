@@ -7,10 +7,12 @@ const errorHandler = require("./common/middlewares/error.handler");
 const AuthModule = require("./modules/auth/auth.module");
 const UserModule = require("./modules/user/user.module");
 const CartModule = require("./modules/cart/cart.module");
+const BrandModule = require("./modules/brands/brands.module");
 const OrdersModule = require("./modules/orders/orders.module");
 const ReviewsModule = require("./modules/reviews/reviews.module");
 const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
+const CategoriesModule = require("./modules/categories/categories.module");
 
 const app = express();
 
@@ -21,7 +23,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-app.use(AuthModule, UserModule, ProductsModule, CartModule, OrdersModule, ReviewsModule, PromotionsModule);
+app.use(
+  AuthModule,
+  UserModule,
+  ProductsModule,
+  CartModule,
+  OrdersModule,
+  ReviewsModule,
+  PromotionsModule,
+  CategoriesModule,
+  BrandModule
+);
 
 app.use(errorHandler);
 

@@ -3,10 +3,12 @@ import Header from "@/components/layout/Header";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="bg-bg-primary flex flex-col min-h-screen p-0">
       <Header />
-      <main className="pt-22 lg:pt-20 flex-1">{children}</main>
-      <Footer />
+      <div className="flex flex-col">
+        <div className="flex flex-1 rounded-2xl ">{children}</div>
+        <Footer />
+      </div>
     </div>
   );
 }

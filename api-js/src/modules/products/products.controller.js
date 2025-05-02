@@ -1,15 +1,21 @@
-const CustomError = require("../../common/utils/CustomError");
+const slugify = require("slugify");
 const services = require("./products.service");
+const CustomError = require("../../common/utils/CustomError");
+const validator = require("../../common/validators/product.validator");
 
 const createProduct = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
-  const { title, description, price, stock, category } = req.body;
-  const image = req.file;
+  if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
+  if (req.body.price) req.body.price = Number(req.body.price);
+  if (req.body.stock) req.body.stock = Number(req.body.stock);
+  if (req.body.rating) req.body.rating = Number(req.body.rating);
+  if (req.body.discount) req.body.discount = Number(req.body.discount);
+  if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
+  if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
 
-  if (!image) throw new CustomError("Nenhum arquivo de imagem enviado.", 400);
-
-  const product = await services.createProduct(title, description, price, stock, category, image);
+  const validatedData = validator.create({ ...req.body, images: req.files });
+  const product = await services.createProduct(validatedData);
   return res.status(201).json(product);
 };
 

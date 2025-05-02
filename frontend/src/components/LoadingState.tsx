@@ -9,7 +9,7 @@ type LoadingSpinnerProps = {
 export default function LoadingState({
   className,
   size = 60,
-  color = "border-highlight-n",
+  color = "border-primary",
 }: LoadingSpinnerProps) {
   const spinnerSize = `${size}px`;
 

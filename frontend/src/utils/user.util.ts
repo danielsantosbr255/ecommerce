@@ -43,7 +43,7 @@ class UserUtil {
   }
 
   async signUp(name: string, email: string, password: string) {
-    const res = await fetch(`${localhost}/auth/signup`, {
+    const res = await fetch(`${localhost}/auth/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -57,7 +57,7 @@ class UserUtil {
   }
 
   async signin(email: string, password: string) {
-    const res = await fetch(`${localhost}/auth/signin`, {
+    const res = await fetch(`${localhost}/auth/sign-in`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

@@ -1,96 +1,147 @@
+"use client";
+
 import React from "react";
-import { Package, Users, Store, ClipboardList, LayoutDashboard, Settings, Power } from "lucide-react";
 import Link from "next/link";
+import Logo from "../ui/Logo";
+import { cn } from "@/lib/utils";
+import Button from "../ui/Button";
+import Skeleton from "../ui/Skeleton";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
 
-type SidebarProps = {
-  logout: () => void;
-};
+interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
+  icon: React.ReactNode;
+  text: string;
+  alert?: boolean;
+  href?: string;
+  children?: React.ReactNode;
+}
 
-const DesktopBar = ({ logout }: SidebarProps) => {
+interface SidebarProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const SidebarContext = React.createContext({ isOpen: true });
+
+export function Sidebar({ children, className }: SidebarProps) {
+  const [isOpen, setIsOpen] = React.useState(true);
+
   return (
-    <aside className="w-64 bg-white py-8 px-4 shadow-md hidden flex-col justify-between z-50 lg:flex">
-      <div>
-        <Link href="/admin" className="flex items-center space-x-2 mb-6">
-          <LayoutDashboard className="text-highlight-n" size={24} />
-          <span className="text-xl font-bold text-gray-800">Admin Panel</span>
-        </Link>
-        <nav className="space-y-3">
-          <Link
-            href="/admin/products"
-            className="flex items-center space-x-2 text-gray-700 hover:text-highlight-n"
-          >
-            <Package size={20} />
-            <span>Gerenciar Produtos</span>
-          </Link>
-          <Link
-            href="/admin/orders"
-            className="flex items-center space-x-2 text-gray-700 hover:text-highlight-n"
-          >
-            <ClipboardList size={20} />
-            <span>Gerenciar Pedidos</span>
-          </Link>
-          <Link
-            href="/admin/users"
-            className="flex items-center space-x-2 text-gray-700 hover:text-highlight-n"
-          >
-            <Users size={20} />
-            <span>Gerenciar Usuários</span>
-          </Link>
-          <Link href="/admin" className="flex items-center space-x-2 text-gray-700 hover:text-highlight-n">
-            <Settings size={20} />
-            <span>Configurações</span>
-          </Link>
-        </nav>
-      </div>
-
-      <div className="mt-6 flex justify-between">
-        <Link href="/" className="flex items-center space-x-2 text-gray-600 hover:text-highlight-n">
-          <Store size={20} />
-          <span>Voltar para Loja</span>
-        </Link>
-        <button onClick={logout} className="flex items-center space-x-2 text-gray-600 hover:text-red-500 ">
-          <Power size={20} />
-          <span>Sair</span>
+    <nav className={`bg-bg-secondary flex flex-col rounded-2xl shadow-xs border border-lines ${className}`}>
+      <div className="flex p-2 pb-4 items-center justify-between">
+        <Logo
+          size={30}
+          name
+          className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52" : "w-0"}`}
+        />
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 cursor-pointer"
+        >
+          {isOpen ? <ChevronFirst /> : <ChevronLast />}
         </button>
       </div>
-    </aside>
-  );
-};
 
-const MobileBar = () => {
-  return (
-    <div className="bg-white w-full flex fixed bottom-0 h-16 shadow-md items-center z-40 lg:hidden border-t border-gray-200">
-      <nav className="grid grid-cols-5 items-center text-sm justify-center h-full w-full text-gray-700">
-        <Link href="/admin" className="flex flex-col items-center hover:text-highlight-n">
-          <LayoutDashboard size={20} />
-          <span>Dashboard</span>
-        </Link>
-        <Link href="/admin/products" className="flex flex-col items-center hover:text-highlight-n">
-          <Package size={20} />
-          <span>Produtos</span>
-        </Link>
-        <Link href="/admin/orders" className="flex flex-col items-center hover:text-highlight-n">
-          <ClipboardList size={20} />
-          <span>Pedidos</span>
-        </Link>
-        <Link href="/admin/users" className="flex flex-col items-center hover:text-highlight-n">
-          <Users size={20} />
-          <span>Usuários</span>
-        </Link>
-        <Link href="/admin" className="flex flex-col items-center hover:text-highlight-n">
-          <Settings size={20} />
-          <span>Configurações</span>
-        </Link>
-      </nav>
-    </div>
-  );
-};
-
-export default function Sidebar({ logout }: SidebarProps) {
-  return (
-    <main className="flex">
-      <DesktopBar logout={logout} />
-      <MobileBar />
-    </main>
+      <SidebarContext.Provider value={{ isOpen }}>
+        <ul className="flex flex-col flex-1 p-2 gap-1">{children}</ul>
+        <SidebarFooter />
+      </SidebarContext.Provider>
+    </nav>
   );
 }
+
+export function SidebarItem({ icon, text, alert, href = "" }: SidebarItemProps) {
+  const { isOpen } = React.useContext(SidebarContext);
+  const usePath = usePathname();
+  const active = usePath === href;
+
+  const mainStyle = cn(
+    "flex items-center p-2",
+    "font-medium text-lg text-tx-secondary rounded-xl cursor-pointer",
+    "transition-colors group z-50",
+    active ? "bg-primary !text-tx-on-primary" : "hover:bg-gray-200"
+  );
+
+  return (
+    <Link href={href}>
+      <li className={mainStyle}>
+        {icon}
+        <span
+          className={`overflow-hidden transition-all ease-in-out duration-300 ${
+            isOpen ? "w-52 ml-2" : "w-0"
+          }`}
+        >
+          {text}
+        </span>
+      </li>
+    </Link>
+  );
+}
+
+export function SidebarFooter() {
+  const { isOpen } = React.useContext(SidebarContext);
+  const { user, signOut, loadUser } = useAuth();
+
+  React.useEffect(() => {
+    loadUser();
+  }, []);
+
+  return (
+    <div className="flex flex-col border-t border-lines p-2">
+      <div className="flex items-center">
+        <Skeleton className="w-10 h-10 !rounded-lg" />
+
+        <div
+          className={`flex justify-between overflow-hidden items-center transition-all ease-in-out duration-300 ${
+            isOpen ? "flex-1 ml-3" : "w-0"
+          }`}
+        >
+          <div>
+            <h1 className="font-semibold">{user?.name}</h1>
+            <p className="text-sm text-tx-secondary">{user?.email}</p>
+          </div>
+
+          <Button className="!p-2" onClick={signOut}>
+            <LogOut size={20} />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// export function SidebarItem({ children, icon, text, alert, href = "" }: SidebarItemProps) {
+//   const { isOpen } = React.useContext(SidebarContext);
+//   const usePath = usePathname();
+//   const active = usePath === href;
+
+//   return (
+//     <li
+//       className={`relative flex items-center justify-center py-2 my-1
+//     font-medium text-lg text-tx-secondary rounded-xl cursor-pointer
+//     transition-colors group z-50
+//     ${active ? "bg-primary !text-tx-on-primary" : "hover:bg-gray-200 "}
+//     `}
+//     >
+//       <Link href={href} className="flex items-center">
+//         {icon}
+//         <p className={`overflow-hidden transition-all ${isOpen ? "w-52 ml-2" : "w-0"}`}>{text}</p>
+
+//         {alert && <Alert active={active} onTop={isOpen} />}
+
+//         {!isOpen && (
+//           <div
+//             className={`
+//             bg-primary text-tx-on-primary absolute left-full rounded-lg px-2 py-1 ml-4
+//             invisible opacity-20 -translate-x-3 transition-all
+//             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+//           >
+//             {text}
+//           </div>
+//         )}
+//       </Link>
+//     </li>
+//   );
+// }

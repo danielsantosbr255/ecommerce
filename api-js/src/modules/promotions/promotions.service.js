@@ -20,15 +20,15 @@ const createPromotion = async (data) => {
 const getPromotions = async () => {
   return await prisma.promotion.findMany({
     where: { isActive: true },
-    include: { products: { include: { images: true } } },
+    include: { products: { include: { product: { include: { images: true } } } } },
   });
 };
 
-const getPromotionById = async (id) => {
+const getPromotionBySlug = async (slug) => {
   return await prisma.promotion.findUnique({
-    where: { id },
-    include: { products: { include: { images: true } } },
+    where: { slug },
+    include: { products: { include: { product: { include: { images: true } } } } },
   });
 };
 
-module.exports = { createPromotion, getPromotions, getPromotionById };
+module.exports = { createPromotion, getPromotions, getPromotionBySlug };

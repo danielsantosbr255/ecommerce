@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, ChangeEvent } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
 import Input from "./Input";
 
 type SearchBarProps = {
@@ -31,7 +32,7 @@ export default function SearchBar({ onSearch, className }: SearchBarProps) {
   };
 
   return (
-    <div className="p-1 flex flex-1 items-center justify-between relative text-secondary">
+    <div className="p-1 flex flex-1 items-center justify-between relative text-tx-secondary">
       <Input
         type="text"
         value={query}
@@ -40,9 +41,9 @@ export default function SearchBar({ onSearch, className }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className="bg-white flex flex-1 pl-8 !py-2 !text-sm"
+        className="bg-white flex flex-1 !py-2 !text-lg !rounded-xl"
       />
-      <Search className="absolute left-2 top-1/2 -translate-y-1/2 scale-90" />
+      <Search className="absolute right-4 top-1/2 -translate-y-1/2 scale-90" />
 
       {query && (
         <button onClick={clearSearch} className="absolute right-2">

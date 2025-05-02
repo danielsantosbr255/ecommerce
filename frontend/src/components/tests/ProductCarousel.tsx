@@ -6,23 +6,23 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel/carousel";
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 import ProductCard from "../products/ProdutctCard";
 import ProductCardSkeleton from "../products/ProductCardSkeleton";
 import Autoplay from "embla-carousel-autoplay";
 import { randomInt } from "crypto";
 
 interface Props {
-  products: ProductType[];
+  products: Product[];
 }
 
 export const ProductsCarousel = ({ products }: Props) => {
   const isLoading = !products || products.length === 0;
-  const placeholder = Array(6).fill({}) as ProductType[];
+  const placeholder = Array(6).fill({}) as Product[];
   const randomInt = Math.floor(Math.random() * 1000);
 
   const items = isLoading ? placeholder : products;
-  const renderItem = (product: ProductType, index: number) =>
+  const renderItem = (product: Product, index: number) =>
     isLoading ? <ProductCardSkeleton key={index} /> : <ProductCard product={product} key={index} />;
 
   return (
@@ -53,8 +53,8 @@ export const ProductsCarousel = ({ products }: Props) => {
         </CarouselContent>
 
         {/* Botões estilizados com animação de hover */}
-        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/80 hover:bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow-md" />
-        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/80 hover:bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow-md" />
+        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/80 hover:bg-white text-tx-primary rounded-full w-10 h-10 flex items-center justify-center shadow-xs" />
+        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/80 hover:bg-white text-tx-primary rounded-full w-10 h-10 flex items-center justify-center shadow-xs" />
       </Carousel>
     </div>
   );

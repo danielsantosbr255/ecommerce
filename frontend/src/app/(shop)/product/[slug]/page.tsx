@@ -1,13 +1,15 @@
 import ProductsUtil from "@/utils/products.util";
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 import ProductCard from "@/components/products/ProdutctCard";
 import ProductDetail from "@/components/products/ProductDetail";
 import ProductReviews from "@/components/products/ProductReviews";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
+import { productService } from "@/lib/api/admin/products";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { product, relatedProducts } = await ProductsUtil.fetchProduct(slug);
+  const { product, relatedProducts } = await productService.getProduct(slug);
+  
 
   if (!product) {
     return (
@@ -27,7 +29,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div>
         <h2 className="text-2xl font-bold mb-4">Produtos Relacionados</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {relatedProducts.map((product: ProductType) => (
+          {relatedProducts.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

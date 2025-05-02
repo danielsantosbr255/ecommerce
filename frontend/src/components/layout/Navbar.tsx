@@ -33,7 +33,7 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
     onClick={onClick}
     className={clsx(
       className,
-      "flex items-center gap-0 py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-highlight-n rounded-md transition duration-300"
+      "flex items-center gap-0 py-2 px-4 text-tx-on-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     )}
   >
     {icon} {label}
@@ -56,7 +56,7 @@ const Notification = () => {
 
   return (
     <Link href="#">
-      <div className="relative flex items-center gap-0 py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-highlight-n rounded-md transition duration-300">
+      <div className="relative flex items-center gap-0 py-2 px-4 text-tx-on-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300">
         <button onClick={toggleNotifications} className="relative focus:outline-none">
           <Bell size={20} />
           {unreadCount > 0 && (
@@ -68,13 +68,13 @@ const Notification = () => {
         </button>
 
         {isNotifOpen && (
-          <div className="absolute right-0 top-8 mt-2 w-64 bg-white shadow-lg rounded-md border border-gray-200 z-50">
+          <div className="absolute right-0 top-8 mt-2 w-64 bg-white shadow-xs rounded-md border border-lines z-50">
             <div className="p-4">
               {notifications.length === 0 ? (
-                <p className="text-sm text-secondary">Sem notificações</p>
+                <p className="text-sm text-tx-on-primary">Sem notificações</p>
               ) : (
                 notifications.map((notif) => (
-                  <div key={notif.id} className="text-sm text-gray-700 py-1 border-b last:border-b-0">
+                  <div key={notif.id} className="text-sm text-tx-on-primary py-1 border-b last:border-b-0">
                     {notif.message}
                   </div>
                 ))
@@ -89,31 +89,26 @@ const Notification = () => {
 
 const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
-
+ 
   return (
     <main className="hidden lg:grid grid-cols-3 w-full items-center justify-between px-2 py-0">
       <div className="items-center font-semibold">
-        <Link
-          href="/"
-          className="hidden whitespace-nowrap lg:flex w-1/3 items-center text-highlight-n font-bold text-md"
-        >
-          <Logo size={30} className="shrink-0" /> Fireforge Labs
-        </Link>
+        <Logo size={30} name className="!text-3xl !font-medium" />
       </div>
 
       <SearchBar className="hidden" />
 
       <div className="flex items-center justify-end gap-2">
         {isAdmin && (
-          <NavItem href="/admin" icon={<ShieldUser size={25} className="animate-pulse text-highlight-n" />} />
+          <NavItem href="/admin" icon={<ShieldUser size={25} className="animate-pulse text-primary" />} />
         )}
-        <NavItem href="/about" icon={<Info size={22} />} />
-        <NavItem href="/cart" icon={<ShoppingCart size={22} />} />
+        <NavItem href="/about" icon={<Info size={25} />} />
+        <NavItem href="/cart" icon={<ShoppingCart size={25} />} />
         <Notification />
         <NavItem
-          href={user ? "/account" : "/auth/signin"}
+          href={user ? "/account" : "/auth/sign-in"}
           label=""
-          icon={user ? <UserCircle size={22} /> : <LogIn size={22} />}
+          icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
         />
       </div>
     </main>
@@ -125,7 +120,7 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
 
   return (
     <section className="block lg:hidden w-full">
-      <main className="lg:hidden grid grid-cols-3 w-full p-1 justify-between text-highlight-n items-center">
+      <main className="lg:hidden grid grid-cols-3 w-full p-1 justify-between text-primary items-center">
         <button
           onClick={toggleMobileMenu}
           className="justify-start focus:outline-none"
@@ -134,17 +129,17 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
           <Menu size={22} />
         </button>
 
-        <Link href="/" className="flex justify-center items-center text-highlight-n font-bold text-[12px]">
-          <Logo size={22} /> <span>Fireforge Labs</span>
-        </Link>
+        <Logo size={20} name className="!text-lg !font-medium" />
 
         <div className="flex gap-4 justify-end items-center">
           {isAdmin && (
-            <Link href="/admin" className="text-highlight-n">
+            <Link href="/admin" className="text-primary">
               <ShieldUser size={22} className="animate-pulse" />
             </Link>
           )}
-          <Link href={user ? "/account" : "/auth/signin"}>{user ? <UserCircle size={22} /> : <LogIn />}</Link>
+          <Link href={user ? "/account" : "/auth/sign-in"}>
+            {user ? <UserCircle size={22} /> : <LogIn />}
+          </Link>
         </div>
       </main>
 
@@ -157,9 +152,10 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
 
 export default function Navbar(): JSX.Element | null {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const auth = useAuth();
+  const { user, loadUser, loading } = useAuth();
 
   useEffect(() => {
+    loadUser();
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
     };
@@ -167,13 +163,10 @@ export default function Navbar(): JSX.Element | null {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (!auth) return null;
-  const { user } = auth;
-
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
-    <nav className="flex flex-1 items-center w-full lg:mx-auto lg:max-w-10/12">
+    <nav className="flex flex-1 !text-tx-on-primary items-center w-full lg:mx-auto lg:max-w-10/12">
       <DesktopBar user={user} />
       <MobileBar user={user} toggleMobileMenu={toggleMobileMenu} />
 

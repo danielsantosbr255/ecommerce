@@ -1,55 +1,59 @@
-import { ProductType } from "@/types/ProductType";
+import Link from "next/link";
+import { Product } from "@/types";
 import ProductImage from "./ProductImage";
 import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
 import CurrencyUtil from "@/utils/currency.util";
+import Button from "../ui/Button";
 
 type ProductProps = {
-  product: ProductType;
-  className?: string; // <- permite passar estilos externos
-  description?: boolean;
+  product: Product;
   addToCart?: () => void;
 };
 
-export default function ProductCard({ product, className, description = true, addToCart }: ProductProps) {
-  const productDiscount = product.price - (product.price * product.discount) / 100;
-  const productPrice = product.discount > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
+export default function ProductCard({ product, addToCart }: ProductProps) {
+  const productDiscount = product.price - (product.price * product.discount!) / 100;
+  const productPrice = product.discount! > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
   const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
 
   return (
-    <article className="bg-white flex flex-col text-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-gray-200 cursor-pointer scale-97 hover:scale-98 hover:bg-gray-100 hover:shadow transition-all">
+    <article className="bg-bg-secondary flex flex-col text-tx-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-xs transition-all">
       <main className="flex flex-col justify-between h-full">
         <div className="flex gap-2 items-center pb-2">
-          {<span className="bg-green-500 text-white text-xs px-2 py-1 rounded-md truncate">Novo</span>}
-          {/* {<span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md truncate">Destaque</span>}
-          {<span className="bg-red-500 text-white text-xs px-2 py-1 rounded-md truncate">Promoção</span>} */}
+          {<span className="bg-green-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Novo</span>}
+          {/* {<span className="bg-blue-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Destaque</span>}
+          {<span className="bg-red-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Promoção</span>} */}
         </div>
 
         <Link href={`/product/${product.slug}`} className="flex-1">
-          <div className="relative flex aspect-[4/3] items-center rounded-lg hover:border border-highlight-n transition-all">
+          <div className="relative flex aspect-[4/3] items-center rounded-lg transition-all">
             <ProductImage product={product} className="rounded-lg" />
           </div>
 
           <div className="flex justify-between items-center font-bold mt-2">
-            <p className="text-xl text-neutral-700 truncate">{product.title}</p>
+            <p className="text-xl text-tx-secondary truncate">{product.title}</p>
           </div>
 
           <div>
-            <p className="text-sm text-neutral-600 truncate line-through">{productPrice}</p>
-            <p className="text-2xl text-highlight-n font-bold">{productDiscountPrice}</p>
-            <p className="text-sm text-neutral-600 truncate">
+            <p className="text-sm text-tx-secondary truncate line-through">{productPrice}</p>
+            <p className="text-2xl text-primary font-bold">{productDiscountPrice}</p>
+            <p className="text-sm text-tx-secondary truncate">
               À vista <br /> ou até 10x de {CurrencyUtil.formatCurrency(productDiscount / 10)}
             </p>
           </div>
         </Link>
 
-        <button
+        <Button onClick={addToCart} className="mt-10 !py-3 gap-2">
+          <ShoppingCart size={20} className="shrink-0" />
+          Adicionar ao Carrinho
+        </Button>
+
+        {/* <button
           onClick={addToCart}
-          className="bg-white truncate hover:bg-highlight-n flex flex-1 mt-10 justify-center items-center py-2 px-3 rounded-md text-highlight-n hover:text-white border border-highlight-n font-bold text-center cursor-pointer transition-all gap-2 max-w-full"
+          className="bg-white truncate hover:bg-primary flex flex-1 mt-10 justify-center items-center py-2 px-3 rounded-md text-primary hover:text-tx-on-primary border border-primary font-bold text-center cursor-pointer transition-all gap-2 max-w-full"
         >
           <ShoppingCart size={20} className="shrink-0" />
           Adicionar ao Carrinho
-        </button>
+        </button> */}
       </main>
     </article>
   );

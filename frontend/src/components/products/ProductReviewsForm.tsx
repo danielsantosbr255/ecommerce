@@ -1,34 +1,33 @@
 "use client";
-import { useAuth } from "@/contexts/AuthContext";
-import ReviewsUtil from "@/utils/reviews.util";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/AuthContext";
+import { reviewService } from "@/lib/api/admin/reviews";
 
 export default function ProductReviewsForm({ productSlug }: { productSlug: string }) {
-  const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
-  const { accessToken } = useAuth();
+  const { user } = useAuth();
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+
+  if (!user) return null;
 
   async function handleReviewSubmit() {
-    try {
-      const review = await ReviewsUtil.createReview({
-        accessToken,
-        productSlug,
-        rating: newReview.rating,
-        comment: newReview.comment,
-      });
-      alert("Avaliação enviada com sucesso!");
-    } catch (error) {
-      console.error("Erro ao enviar avaliação:", error);
-      alert("Erro ao enviar avaliação. Tente novamente mais tarde.");
+    if (!user) return null;
+    const success = await reviewService.create({ userId: user.id, productSlug, rating, comment });
+
+    if (success) {
+      return toast.success("Avaliação enviada com sucesso!");
     }
+    toast.error("Erro ao enviar avaliação. Tente novamente mais tarde.");
   }
 
   return (
-    <div className="mt-6 bg-white p-4 rounded-lg shadow space-y-4">
+    <div className="mt-6 bg-white p-4 rounded-lg shadow-xs space-y-4">
       <h3 className="text-xl font-bold">Deixe sua avaliação</h3>
 
       <select
-        value={newReview.rating}
-        onChange={(e) => setNewReview({ ...newReview, rating: +e.target.value })}
+        value={rating}
+        onChange={(e) => setRating(+e.target.value)}
         className="border rounded-lg px-4 py-2 w-full"
       >
         {[5, 4, 3, 2, 1].map((n) => (
@@ -40,13 +39,13 @@ export default function ProductReviewsForm({ productSlug }: { productSlug: strin
 
       <textarea
         placeholder="Comentário"
-        value={newReview.comment}
-        onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
         className="border rounded-lg px-4 py-2 w-full h-24"
       />
       <button
         onClick={handleReviewSubmit}
-        className="bg-highlight-n text-white px-6 py-2 rounded-lg hover:bg-highlight-n"
+        className="bg-primary text-tx-on-primary px-6 py-2 rounded-lg hover:bg-primary"
       >
         Enviar Avaliação
       </button>

@@ -78,7 +78,7 @@ export const CarouselItem = ({ className, ...props }: React.ComponentProps<"div"
 
 export const CarouselPrevious = () => {
   const { prev } = useCarousel();
-  const classes = "absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow z-10";
+  const classes = "absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-xs z-10";
 
   return (
     <button onClick={prev} className={classes} aria-label="Previous slide">
@@ -89,7 +89,7 @@ export const CarouselPrevious = () => {
 
 export const CarouselNext = () => {
   const { next } = useCarousel();
-  const classes = "absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow z-10";
+  const classes = "absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-xs z-10";
 
   return (
     <button onClick={next} className={classes} aria-label="Next slide">

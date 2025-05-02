@@ -22,14 +22,14 @@ export const Carousel = ({ children, options = {} }: React.ComponentProps<"div">
         <button
           onClick={api?.scrollPrev}
           disabled={!api?.canScrollPrev()}
-          className="bg-black/50 text-white px-2 py-1 rounded disabled:opacity-50"
+          className="bg-black/50 text-tx-on-primary px-2 py-1 rounded disabled:opacity-50"
         >
           <ChevronLeft />
         </button>
         <button
           onClick={api?.scrollNext}
           disabled={!api?.canScrollNext()}
-          className="bg-black/50 text-white px-2 py-1 rounded disabled:opacity-50"
+          className="bg-black/50 text-tx-on-primary px-2 py-1 rounded disabled:opacity-50"
         >
           <ChevronRight />
         </button>

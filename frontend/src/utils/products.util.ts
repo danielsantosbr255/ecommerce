@@ -1,8 +1,8 @@
-import { ProductType } from "@/types/ProductType";
+import { Product } from "@/types";
 
 type FetchProductResponse = {
-  product: ProductType;
-  relatedProducts: ProductType[];
+  product: Product;
+  relatedProducts: Product[];
 };
 
 type Review = {
