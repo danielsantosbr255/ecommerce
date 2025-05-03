@@ -1,24 +1,33 @@
 const { z } = require("zod");
 
 const msg = {
-    required: "Campo Obrigatório",
-    partial: "Dados Inválidos!",
-    minLength: (num) => `Deve ter pelo menos ${num} caracteres`,
+  required: "Campo Obrigatório",
+  partial: "Dados Inválidos!",
+  minLength: (num) => `Deve ter pelo menos ${num} caracteres`,
+  invalidId: "ID do produto inválido",
+  negative: "não pode ser negativo",
 };
 
-const quantity = z.number({ required_error: msg.required });
-const productId = z.string({ required_error: msg.required });
-
-module.exports = {
-    create(data) {
-        return z.object({ productId, quantity }).parse(data);
-    },
-
-    update(data) {
-        return z.object({ quantity }).parse(data);
-    },
-
-    delete(data) {
-        return z.object({ productId }).parse(data);
-    },
+const schema = {
+  id: z.string().uuid().optional(),
+  quantity: z.number({ required_error: msg.required }).int().nonnegative({ message: msg.negative }),
+  productId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
 };
+
+const create = (data) => {
+  return z.object(schema).parse(data);
+};
+
+const update = (data) => {
+  let result = z.object(schema).partial();
+  result = result.refine((data) => Object.keys(data).length > 0, { message: msg.partial });
+  return result.parse(data);
+};
+
+const remove = (data) => {
+  let result = z.object(schema).partial();
+  result = result.refine((data) => Object.keys(data).length > 0, { message: msg.partial });
+  return result.parse(data);
+};
+
+module.exports = { create, update, remove };

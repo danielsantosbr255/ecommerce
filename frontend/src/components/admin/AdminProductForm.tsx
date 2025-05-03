@@ -7,8 +7,6 @@ import Input from "../ui/Input";
 import Select from "../ui/inputs/Select";
 import Button from "../ui/Button";
 import ImageInput from "../ui/inputs/ImageInput";
-import ProductsUtil from "@/utils/products.util";
-import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 
 const productSchema = z.object({
@@ -22,7 +20,6 @@ const productSchema = z.object({
 type ProductFormData = z.infer<typeof productSchema>;
 
 const AdminProductForm = () => {
-  const { accessToken } = useAuth();
   const [images, setImages] = useState<File[]>([]);
 
   const {
@@ -42,7 +39,6 @@ const AdminProductForm = () => {
       formData.append(key, data[key as keyof ProductFormData].toString());
     }
 
-    await ProductsUtil.createProduct(accessToken, formData);
     reset();
     setImages([]);
   };

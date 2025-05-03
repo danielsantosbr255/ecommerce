@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "../ui/Searchbar";
 import { Bell, Info, LogIn, Menu, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import { UserType } from "@/types/UserType";
+import { User } from "@/types";
 import clsx from "clsx";
 import Logo from "../ui/Logo";
 
@@ -19,11 +19,11 @@ interface NavItemProps {
 }
 
 interface DesktopBarProps {
-  user: UserType | null;
+  user: User | null;
 }
 
 interface MobileBarProps {
-  user: UserType | null;
+  user: User | null;
   toggleMobileMenu: () => void;
 }
 
@@ -89,7 +89,7 @@ const Notification = () => {
 
 const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
- 
+
   return (
     <main className="hidden lg:grid grid-cols-3 w-full items-center justify-between px-2 py-0">
       <div className="items-center font-semibold">
@@ -100,7 +100,7 @@ const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
 
       <div className="flex items-center justify-end gap-2">
         {isAdmin && (
-          <NavItem href="/admin" icon={<ShieldUser size={25} className="animate-pulse text-primary" />} />
+          <NavItem href="/admin" icon={<ShieldUser size={26} className="animate-pulse text-accent" />} />
         )}
         <NavItem href="/about" icon={<Info size={25} />} />
         <NavItem href="/cart" icon={<ShoppingCart size={25} />} />
@@ -120,7 +120,7 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
 
   return (
     <section className="block lg:hidden w-full">
-      <main className="lg:hidden grid grid-cols-3 w-full p-1 justify-between text-primary items-center">
+      <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-tx-on-primary items-center">
         <button
           onClick={toggleMobileMenu}
           className="justify-start focus:outline-none"
@@ -129,11 +129,11 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
           <Menu size={22} />
         </button>
 
-        <Logo size={20} name className="!text-lg !font-medium" />
+        <Logo size={20} name className="!h-15" />
 
         <div className="flex gap-4 justify-end items-center">
           {isAdmin && (
-            <Link href="/admin" className="text-primary">
+            <Link href="/admin" className="text-accent">
               <ShieldUser size={22} className="animate-pulse" />
             </Link>
           )}
@@ -152,7 +152,7 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
 
 export default function Navbar(): JSX.Element | null {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, loadUser, loading } = useAuth();
+  const { user, loadUser } = useAuth();
 
   useEffect(() => {
     loadUser();

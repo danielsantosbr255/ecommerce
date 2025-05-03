@@ -22,7 +22,7 @@
   --color-primary-active: var(--color-cyan-900); /* Cor no clique */
 
   /* Cor de Destaque (Promoções, badges, alertas) */
-  --color-accent: var(--color-orange-500);
+  --color-accent: var(--color-cyan-500);
   --color-accent-hover: var(--color-orange-600);
 
   --color-bg-primary: var(--color-gray-50); /* Fundo principal (páginas) */

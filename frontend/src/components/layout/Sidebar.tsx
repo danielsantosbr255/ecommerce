@@ -52,7 +52,7 @@ export function Sidebar({ children, className }: SidebarProps) {
   );
 }
 
-export function SidebarItem({ icon, text, alert, href = "" }: SidebarItemProps) {
+export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
   const { isOpen } = React.useContext(SidebarContext);
   const usePath = usePathname();
   const active = usePath === href;

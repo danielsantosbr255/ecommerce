@@ -1,10 +1,17 @@
+"use client";
+
 import React from "react";
 import ProductImage from "./ProductImage";
 import CurrencyUtil from "@/utils/currency.util";
 import { Product } from "@/types";
 import Image from "next/image";
+import { useCarts } from "@/hooks/useCarts";
+import Button from "../ui/Button";
+import { ShoppingCart } from "lucide-react";
 
 export default function ProductDetail({ product }: { product: Product }) {
+  const { createCartItem } = useCarts();
+
   return (
     <>
       <div className="grid md:grid-cols-2 gap-10">
@@ -14,16 +21,16 @@ export default function ProductDetail({ product }: { product: Product }) {
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">{product.title}</h1>
           <p className="text-xl text-primary font-semibold">{CurrencyUtil.formatCurrency(product.price)}</p>
-          
+
           <p className="text-tx-secondary">
             <span className="font-bold">Estoque: </span> {product.stock}
           </p>
-          
+
           <p className="text-tx-secondary">
             <span className="font-bold">Categoria: </span>
             {product.category?.name}
           </p>
-          
+
           <p className="text-tx-secondary">{product.description}</p>
 
           <div className="flex items-center gap-2">
@@ -41,9 +48,10 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <button className="bg-primary text-tx-on-primary px-6 py-2 rounded-xl hover:bg-primary">
+            <Button onClick={() => createCartItem(product.id, 1)} className="!py-3 gap-2">
+              <ShoppingCart size={20} className="shrink-0" />
               Adicionar ao Carrinho
-            </button>
+            </Button>
             <button className="bg-gray-200 text-tx-primary px-6 py-2 rounded-xl hover:bg-gray-300">
               Compartilhar
             </button>

@@ -4,6 +4,19 @@ export interface ProductImage {
   alt?: string;
 }
 
+export interface CartItem {
+  id: string;
+  userId?: string;
+  product: Product;
+  productId: string;
+  quantity: number;
+}
+
+export interface Cart {
+  id: string;
+  items: CartItem[];
+}
+
 export interface Brand {
   id: string;
   name: string;
@@ -51,7 +64,7 @@ export interface ProductSpecification {
 
 export interface Product {
   // Campos básicos
-  id?: string;
+  id: string;
   title: string;
   description: string;
   price: number;

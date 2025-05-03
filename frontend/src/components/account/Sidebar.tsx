@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
 
 export default function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <aside className="bg-gray-200 p-6 md:border-r md:border-gray-300">
@@ -35,7 +35,7 @@ export default function Sidebar() {
           <FiLock className="text-lg mr-2" />
           Alterar Senha
         </Link>
-        <button onClick={logout} className="flex items-center text-tx-secondary hover:text-red-500">
+        <button onClick={signOut} className="flex items-center text-tx-secondary hover:text-red-500">
           <FiLogOut className="text-lg mr-2" />
           Sair
         </button>

@@ -11,12 +11,15 @@ import {
 } from "../ui/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Brand } from "@/types";
-import { ChartArea, Grid, Group, LayoutTemplate } from "lucide-react";
+import { Group } from "lucide-react";
 
 const BrandCard = ({ brand }: { brand: Brand }) => {
   return (
-    <section className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium" key={brand.slug}>
-      <div className="text-primary flex relative aspect-square border border-lines w-full h-full shadow-xs rounded-lg items-center justify-center">
+    <section
+      className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium"
+      key={brand.slug}
+    >
+      <div className="relative flex aspect-square border border-lines w-full h-full shadow-xs rounded-2xl items-center justify-center">
         <Image
           src={brand?.image || ""}
           alt={brand?.name || ""}
@@ -26,7 +29,7 @@ const BrandCard = ({ brand }: { brand: Brand }) => {
         />
       </div>
 
-      <h3 className="text-tx-primary text-lg leading-5">{brand.name}</h3>
+      <h3 className="text-tx-primary text-sm md:text-lg leading-5">{brand.name}</h3>
     </section>
   );
 };
@@ -39,8 +42,8 @@ export default function Brands() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full">
-      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-primary font-bold my-2 py-2">
+    <div className="flex flex-col w-full justify-center items-center">
+      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-secondary font-bold py-2">
         <Group /> Nossas Marcas
       </h2>
 
@@ -54,13 +57,13 @@ export default function Brands() {
             <CarouselItem
               key={index}
               className="
-                p-5
-                basis-[22%]        // mobile
+                p-2 md:p-5
+                basis-[26%]        // mobile
                 sm:basis-1/2   // tablet
                 md:basis-1/3
                 lg:basis-1/4
                 xl:basis-[16.6%]   // notebook                
-                2xl:basis-[10.6%]  // desktop 
+                2xl:basis-[11.6%]  // desktop 
               "
             >
               <BrandCard brand={brand} />

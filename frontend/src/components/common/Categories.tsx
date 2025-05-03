@@ -11,7 +11,7 @@ import {
 } from "../ui/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Category } from "@/types";
-import { ChartArea, Grid, Group, LayoutTemplate } from "lucide-react";
+import { LayoutTemplate } from "lucide-react";
 import Link from "next/link";
 
 const CategoryCard = ({ category }: { category: Category }) => {
@@ -20,7 +20,10 @@ const CategoryCard = ({ category }: { category: Category }) => {
       className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium"
       key={category.slug}
     >
-      <Link href={`/categories/${category.slug}`} className="text-primary flex relative aspect-square border border-lines w-full h-full shadow-xs rounded-lg items-center justify-center">
+      <Link
+        href={`/categories/${category.slug}`}
+        className="text-primary flex relative aspect-square border border-lines w-full h-full shadow-xs rounded-lg items-center justify-center"
+      >
         <Image
           src={category?.image || "/placeholder.jpg"}
           alt={category?.name || ""}
@@ -43,8 +46,8 @@ export default function Categories() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full">
-      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-primary font-bold my-2 py-2">
+    <div className="flex flex-col w-full justify-center items-center">
+      <h2 className="flex gap-2 items-center text-2xl text-tx-secondary font-bold my-2 py-2">
         <LayoutTemplate /> Nossos Departamentos
       </h2>
 
@@ -58,8 +61,8 @@ export default function Categories() {
             <CarouselItem
               key={index}
               className="
-                p-5
-                basis-[22%]        // mobile
+                p-2 md:p-5
+                basis-[26%]        // mobile
                 sm:basis-1/2   // tablet
                 md:basis-1/3
                 lg:basis-1/4

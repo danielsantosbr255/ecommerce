@@ -7,6 +7,7 @@ class CategoryService {
       const response = await api.post("/categories", categoryData);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -16,6 +17,7 @@ class CategoryService {
       const response = await api.get("/categories");
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -25,6 +27,7 @@ class CategoryService {
       const response = await api.get(`/categories/${slug}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -34,6 +37,7 @@ class CategoryService {
       const response = await api.put(`/categories/${slug}`, categoryData);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -43,6 +47,7 @@ class CategoryService {
       const response = await api.delete(`/categories/${slug}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

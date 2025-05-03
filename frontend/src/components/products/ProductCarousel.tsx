@@ -23,7 +23,7 @@ const ProductCarousel: React.FC<Props> = ({ products, label, icon }) => {
 
   const items = isLoading ? placeholder : products;
   const renderItem = (product: Product, index: number) =>
-    isLoading ? <ProductCardSkeleton /> : <ProductCard product={product} />;
+    isLoading ? <ProductCardSkeleton key={index} /> : <ProductCard product={product} />;
 
   return (
     <div className="flex flex-col w-full">

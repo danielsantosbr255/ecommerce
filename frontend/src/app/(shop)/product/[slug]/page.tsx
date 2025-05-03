@@ -1,15 +1,23 @@
-import ProductsUtil from "@/utils/products.util";
 import { Product } from "@/types";
+import { productService } from "@/services/products";
 import ProductCard from "@/components/products/ProdutctCard";
 import ProductDetail from "@/components/products/ProductDetail";
 import ProductReviews from "@/components/products/ProductReviews";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
-import { productService } from "@/lib/api/admin/products";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { product, relatedProducts } = await productService.getProduct(slug);
-  
+  const productResponse = await productService.getProduct(slug);
+
+  if (!productResponse) {
+    return (
+      <div className="flex flex-col h-screen justify-center items-center">
+        <h1>Produto nao encontrado</h1>
+      </div>
+    );
+  }
+
+  const { product, relatedProducts } = productResponse;
 
   if (!product) {
     return (

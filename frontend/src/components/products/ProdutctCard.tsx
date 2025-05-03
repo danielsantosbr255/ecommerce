@@ -1,25 +1,30 @@
+"use client"
+
 import Link from "next/link";
 import { Product } from "@/types";
 import ProductImage from "./ProductImage";
 import { ShoppingCart } from "lucide-react";
 import CurrencyUtil from "@/utils/currency.util";
 import Button from "../ui/Button";
+import { useCarts } from "@/hooks/useCarts";
 
 type ProductProps = {
   product: Product;
-  addToCart?: () => void;
 };
 
-export default function ProductCard({ product, addToCart }: ProductProps) {
+export default function ProductCard({ product }: ProductProps) {
   const productDiscount = product.price - (product.price * product.discount!) / 100;
   const productPrice = product.discount! > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
   const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
+
+  const { createCartItem } = useCarts();
 
   return (
     <article className="bg-bg-secondary flex flex-col text-tx-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-xs transition-all">
       <main className="flex flex-col justify-between h-full">
         <div className="flex gap-2 items-center pb-2">
-          {<span className="bg-green-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Novo</span>}
+          <span className="bg-green-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Novo</span>
+
           {/* {<span className="bg-blue-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Destaque</span>}
           {<span className="bg-red-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Promoção</span>} */}
         </div>
@@ -42,7 +47,7 @@ export default function ProductCard({ product, addToCart }: ProductProps) {
           </div>
         </Link>
 
-        <Button onClick={addToCart} className="mt-10 !py-3 gap-2">
+        <Button onClick={() => createCartItem(product.id, 1)} className="mt-10 !py-3 gap-2">
           <ShoppingCart size={20} className="shrink-0" />
           Adicionar ao Carrinho
         </Button>

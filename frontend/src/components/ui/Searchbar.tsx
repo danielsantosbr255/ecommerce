@@ -10,7 +10,7 @@ type SearchBarProps = {
   className?: string;
 };
 
-export default function SearchBar({ onSearch, className }: SearchBarProps) {
+export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const router = useRouter();
 

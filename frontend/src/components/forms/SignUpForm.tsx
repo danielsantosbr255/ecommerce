@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
+import { useRouter } from "next/navigation";
 import { FormEvent, useRef } from "react";
 import { Loader2, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,6 +10,7 @@ import Logo from "../ui/Logo";
 
 export default function SignUpForm() {
   const { signUp, loading } = useAuth();
+  const router = useRouter();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -24,7 +25,11 @@ export default function SignUpForm() {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
-    await signUp({ name, email, password });
+    const res = await signUp({ name, email, password });
+
+    if (res) {
+      router.push("/account");
+    }
   };
 
   return (

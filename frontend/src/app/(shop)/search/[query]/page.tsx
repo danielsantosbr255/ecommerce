@@ -1,5 +1,5 @@
 import { Product } from "@/types";
-import { productService } from "@/lib/api/admin/products";
+import { productService } from "@/services/products";
 import ProductCard from "@/components/products/ProdutctCard";
 
 const SearchResultsPage = async ({ params }: { params: Promise<{ query: string }> }) => {

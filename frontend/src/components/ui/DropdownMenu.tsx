@@ -47,7 +47,7 @@ export function DropdownMenu({ children, icon, text }: DropdownProps) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [dropdownRef, active]);
 
   const listStyle = cn(
     "p-2 group flex flex-col z-50 font-medium text-lg cursor-pointer",

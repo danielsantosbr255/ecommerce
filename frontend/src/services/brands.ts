@@ -7,6 +7,7 @@ class BrandService {
       const response = await api.post("/brands", brandData);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -14,9 +15,9 @@ class BrandService {
   public async getAll() {
     try {
       const response = await api.get("/brands");
-      console.log(response)
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -26,6 +27,7 @@ class BrandService {
       const response = await api.get(`/brands/${slug}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -35,6 +37,7 @@ class BrandService {
       const response = await api.put(`/brands/${slug}`, brandData);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -44,6 +47,7 @@ class BrandService {
       const response = await api.delete(`/brands/${slug}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

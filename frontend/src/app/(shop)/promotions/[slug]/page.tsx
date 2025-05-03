@@ -1,6 +1,6 @@
 import { Product } from "@/types";
 import ProductCard from "@/components/products/ProdutctCard";
-import { promotionService } from "@/lib/api/admin/promotions";
+import { promotionService } from "@/services/promotions";
 
 interface PromotionsResponse {
   id: number;

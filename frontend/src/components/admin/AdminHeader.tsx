@@ -17,7 +17,6 @@ export default function AdminHeader() {
         </button>
 
         <button className="flex items-center space-x-2">
-          <img src="/placeholder.jpg" alt="avatar" className="w-10 h-10 rounded-full" />
           <span>Admin</span>
         </button>
       </div>

@@ -34,8 +34,8 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     formData.append("stock", stock.toString());
     if (image) formData.append("image", image);
 
-    const url = initialData?.id ? `/products/${initialData.id}` : "/products";
-    const method = initialData?.id ? "PUT" : "POST";
+    // const url = initialData?.id ? `/products/${initialData.id}` : "/products";
+    // const method = initialData?.id ? "PUT" : "POST";
 
     let success: boolean;
 

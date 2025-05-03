@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { adminService } from "@/lib/admin";
 import { useEffect, useState } from "react";
 import LoadingState from "@/components/LoadingState";
+import { orderService } from "@/services/orders";
 
 type Order = {
   id: string;
@@ -24,7 +24,7 @@ export default function OrdersPage() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const orders = await adminService.getOrders();
+        const orders = await orderService.getOrders();
         setOrders(orders);
       } catch (error) {
         console.error("Erro ao buscar pedidos:", error);

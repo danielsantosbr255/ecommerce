@@ -2,7 +2,7 @@
 
 import { User } from "@/types";
 import { useState, useEffect } from "react";
-import { userService } from "@/lib/api/admin/users";
+import { userService } from "@/services/users";
 
 interface UseFetchUsersResult {
   users: User[] | null;
@@ -20,10 +20,10 @@ const useFetchUsers = (): UseFetchUsersResult => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await userService.getUsers();
+      const data = await userService.getAll();
       setUsers(data);
-    } catch (err: any) {
-      setError(err);
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err);
     } finally {
       setIsLoading(false);
     }

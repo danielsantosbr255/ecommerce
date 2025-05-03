@@ -1,5 +1,4 @@
-import api, { setAccessToken, getAccessToken, clearAuthTokens } from "@/lib/api/axios";
-import { redirect } from "next/navigation";
+import api, { setAccessToken, clearAuthTokens } from "@/lib/api/axios";
 
 class AuthService {
   public async signUp(credentials: { name: string; email: string; password: string }) {
@@ -8,6 +7,7 @@ class AuthService {
       setAccessToken(response.data.accessToken);
       return true;
     } catch (error) {
+      console.error(error);
       return false;
     }
   }
@@ -18,6 +18,7 @@ class AuthService {
       setAccessToken(response.data.accessToken);
       return true;
     } catch (error) {
+      console.error(error);
       return false;
     }
   }
@@ -35,6 +36,7 @@ class AuthService {
       const response = await api.get("/account");
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -45,6 +47,7 @@ class AuthService {
       setAccessToken(response.data.accessToken);
       return response.data.accessToken;
     } catch (error) {
+      console.error(error);
       clearAuthTokens();
       return null;
     }

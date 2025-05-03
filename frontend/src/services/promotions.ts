@@ -17,6 +17,7 @@ class PromotionService {
       const response = await api.get("/promotions");
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -26,6 +27,7 @@ class PromotionService {
       const response = await api.get(`/promotions/${slug}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -35,6 +37,7 @@ class PromotionService {
       const response = await api.put(`/promotions/${id}`, promotionData);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }
@@ -44,6 +47,7 @@ class PromotionService {
       const response = await api.delete(`/promotions/${id}`);
       return response.data;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

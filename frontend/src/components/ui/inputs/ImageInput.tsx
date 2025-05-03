@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
 type Props = {
@@ -14,11 +15,14 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLLabelElement | HTMLLabelElement>(null);
 
-  const updateFiles = (files: File[]) => {
-    setImages(files);
-    setPreviews(files.map((file) => URL.createObjectURL(file)));
-    onChange(files);
-  };
+  const updateFiles = useCallback(
+    (files: File[]) => {
+      setImages(files);
+      setPreviews(files.map((file) => URL.createObjectURL(file)));
+      onChange(files);
+    },
+    [onChange]
+  );
 
   const handleFiles = useCallback(
     (fileList: FileList | null) => {
@@ -31,7 +35,7 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
 
       updateFiles(incomingFiles);
     },
-    [maxFiles, maxSizeMB]
+    [maxFiles, maxSizeMB, updateFiles]
   );
 
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
@@ -73,8 +77,7 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
         accept="image/*"
         multiple
         className="hidden"
-        // @ts-ignore
-        ref={inputRef}
+        // ref={inputRef}
         onChange={(e) => handleFiles(e.target.files)}
       />
 
@@ -82,7 +85,7 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-4">
           {previews.map((src, index) => (
             <div key={index} className="relative group aspect-square rounded-lg overflow-hidden shadow-xs">
-              <img src={src} alt={`preview-${index}`} className="object-cover w-full h-full" />
+              <Image src={src} alt={`preview-${index}`} fill className="object-cover w-full h-full" />
 
               <button
                 type="button"

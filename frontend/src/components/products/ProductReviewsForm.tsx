@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
-import { reviewService } from "@/lib/api/admin/reviews";
+import { reviewService } from "@/services/reviews";
 
 export default function ProductReviewsForm({ productSlug }: { productSlug: string }) {
   const { user } = useAuth();

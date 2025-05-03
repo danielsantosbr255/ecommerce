@@ -1,12 +1,11 @@
 "use client";
-import { authService } from "@/lib/auth";
-import { UserType } from "@/types/UserType";
-import useErrorHandler from "@/utils/error.util";
+import { User } from "@/types";
+import { authService } from "@/services/auth";
 import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-  user: UserType | null;
+  user: User | null;
   loading: boolean;
   error: unknown;
   signUp: (credentials: { name: string; email: string; password: string }) => Promise<boolean>;
@@ -18,7 +17,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown>(null);
   const router = useRouter();
@@ -31,6 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(userData);
     } catch (error) {
       setUser(null);
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    loadUser;
+    loadUser();
   }, [pathname]);
 
   return (

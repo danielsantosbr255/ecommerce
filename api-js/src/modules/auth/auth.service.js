@@ -6,7 +6,7 @@ const CustomError = require("../../common/utils/CustomError");
 const signUp = async (name, email, password, userAgent, ipAddress) => {
   const userExists = await prisma.user.findUnique({ where: { email } });
 
-  if (userExists) throw new CustomError("Este usuário já existe!", 500);
+  if (userExists) throw new CustomError("Este usuário já existe!", 400);
 
   password = await authUtil.hashPassword(password);
   const user = await prisma.user.create({ data: { name, email, password } });

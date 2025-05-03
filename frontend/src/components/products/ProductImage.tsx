@@ -1,10 +1,9 @@
 "use client";
 
+import clsx from "clsx";
 import { useState } from "react";
 import Image from "next/image";
-import clsx from "clsx";
 import { Product } from "@/types";
-import { LoaderCircle } from "lucide-react";
 import LoadingState from "../LoadingState";
 
 type ProductImageProps = {
@@ -23,7 +22,7 @@ const getValidImageUrl = (imagePath?: string): string => {
   return `/${imagePath.replace(/^\/+/, "")}`;
 };
 
-export default function ProductImage({ product, alt, className, parentClassName }: ProductImageProps) {
+export default function ProductImage({ product, alt, className }: ProductImageProps) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +40,7 @@ export default function ProductImage({ product, alt, className, parentClassName 
   };
 
   return (
-    <div className={clsx("relative w-full h-full", parentClassName)}>
+    <div className={clsx("relative flex w-full h-full", className)}>
       {loading && (
         <div className="absolute text-primary inset-0 flex items-center animate-spin justify-center">
           <LoadingState />
@@ -55,12 +54,8 @@ export default function ProductImage({ product, alt, className, parentClassName 
         onError={handleError}
         onLoad={handleLoad}
         priority
-        className={clsx(
-          "object-contain transition-all duration-500 ease-in-out",
-          loading && "opacity-0",
-          className
-        )}
         fill
+        className={clsx("object-contain p-2 transition-all duration-500 ease-in-out", loading && "opacity-0")}
       />
     </div>
   );

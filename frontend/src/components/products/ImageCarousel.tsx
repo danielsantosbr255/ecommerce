@@ -11,7 +11,6 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { Product } from "@/types";
 import ProductImage from "./ProductImage";
-import Button from "../ui/Button";
 import Skeleton from "@/components/ui/Skeleton"; // Importe o componente Skeleton
 import Link from "next/link";
 
@@ -38,31 +37,24 @@ interface PromotionsCardProps {
 
 const PromotionCard = ({ promotion, currentProductIndex }: PromotionsCardProps) => {
   return (
-    <div className="p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full">
-      <div className="rounded-lg aspect-square w-full h-full max-h-96 p-2 m-auto max-w-96 items-center justify-center transition-opacity duration-500 ease-in-out">
-        {promotion.products && promotion.products.length > 0 ? (
-          <ProductImage
-            product={promotion.products[currentProductIndex]?.product}
-            key={promotion.products[currentProductIndex]?.product.id}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-            <p className="text-tx-secondary">Sem produtos</p>
-          </div>
-        )}
-      </div>
+    <Link
+      href={`/promotions/${promotion.slug}`}
+      className="p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full"
+    >
+      {promotion.products?.length && (
+        <ProductImage
+          product={promotion.products[currentProductIndex]?.product}
+          key={promotion.products[currentProductIndex]?.product.id}
+          alt={promotion.products[currentProductIndex]?.product.title}
+          className="overflow-hidden aspect-square !max-h-80 !max-w-80 m-auto"
+        />
+      )}
 
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        <div className="w-full h-full mx-auto">
+      <div className="flex flex-col items-center justify-center max-w-4/5 h-full ml-5">
+        <div className="w-full h-full justify-center flex flex-col">
           <h1 className="text-xl xl:text-6xl py-4 font-bold line-clamp-2">{promotion.title}</h1>
           <p className="text-primary text-sm xl:text-xl line-clamp-2">{promotion.description}</p>
         </div>
-        <Link
-          href={`/promotions/${promotion.slug}`}
-          className="bg-primary text-tx-on-primary text-sm px-2 py-1 mb-2 md:mb-0 md:text-xl md:px-10 md:py-3 rounded-full shadow-xs"
-        >
-          Saiba mais
-        </Link>
       </div>
 
       {promotion.discount > 0 && (
@@ -77,7 +69,7 @@ const PromotionCard = ({ promotion, currentProductIndex }: PromotionsCardProps) 
           </p>
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 
@@ -85,7 +77,7 @@ export const ImageCarousel = () => {
   const [promotions, setPromotions] = useState<PromotionsProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
-  const [currentPromotionIndex, setCurrentPromotionIndex] = useState(0);
+  const [currentPromotionIndex] = useState(0);
   const autoplayRef = useRef(Autoplay({ delay: 10000, stopOnInteraction: false }));
 
   useEffect(() => {
@@ -150,7 +142,7 @@ export const ImageCarousel = () => {
   return (
     <div className="bg-white flex border border-lines relative w-full h-auto rounded-2xl shadow-xs">
       <Carousel
-        className="w-full h-full"
+        className="flex w-full h-full"
         opts={{ align: "start", loop: true, startIndex: currentPromotionIndex }}
         plugins={[autoplayRef.current]}
         onSelect={handleCarouselChange}

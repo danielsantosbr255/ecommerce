@@ -21,7 +21,7 @@ const variants = {
   animated: `scale-120 animate-pulse text-primary-hover/20`,
 };
 
-export default function Logo({ className, size, name, variant = "default" }: LogoProps) {
+export default function Logo({ className, size, variant = "default" }: LogoProps) {
   if (variant === "animated") {
     return (
       <Link href="/">

@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from "axios";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 let memoryToken: string | null = null;
@@ -57,6 +56,7 @@ async function refreshToken(): Promise<string | null> {
     const response = await api.post("/auth/refresh");
     return response.data.accessToken;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }

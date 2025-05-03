@@ -21,7 +21,7 @@ export default async function ProductReviews({ productSlug }: { productSlug: str
 
                 <div>
                   <div className="flex items-center gap-2 font-semibold">
-                    <div>"Usuário Anônimo"</div>
+                    <div>Usuário Anônimo</div>
                     <div className="text-primary">
                       {"★".repeat(review.rating)}
                       {"☆".repeat(5 - review.rating)}

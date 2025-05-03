@@ -97,6 +97,7 @@ model CartItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([cartId, productId], name: "cartId_productId")
   @@map("cart_items")
 }
 
