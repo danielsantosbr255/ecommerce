@@ -33,13 +33,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (credentials: { name: string; email: string; password: string }) => {
     const success = await authService.signUp(credentials);
-    if (success) await loadUser();
+    if (success) {
+      await loadUser();
+      router.push("/account");
+    }
     return success;
   };
 
   const signIn = async (credentials: { email: string; password: string }) => {
     const success = await authService.signIn(credentials);
-    if (success) await loadUser();
+    if (success) {
+      await loadUser();
+      router.push("/account");
+    }
     return success;
   };
 
