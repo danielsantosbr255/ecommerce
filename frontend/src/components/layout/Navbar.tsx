@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, ReactNode, JSX } from "react";
-import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
-import SearchBar from "../ui/Searchbar";
-import { Bell, Info, LogIn, Menu, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
-import MobileMenu from "./MobileMenu";
-import { User } from "@/types";
 import clsx from "clsx";
 import Logo from "../ui/Logo";
+import Link from "next/link";
+import { User } from "@/types";
+import MobileMenu from "./MobileMenu";
+import SearchBar from "../ui/Searchbar";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect, ReactNode, JSX } from "react";
+import { Bell, Info, LogIn, Menu, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
 
 interface NavItemProps {
   href: string;

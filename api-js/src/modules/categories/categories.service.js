@@ -15,7 +15,7 @@ const getCategories = async () => {
 const getCategoryBySlug = async (slug) => {
   return await prisma.category.findUnique({
     where: { slug },
-    include: { products: true },
+    include: { products: { include: { images: true } } },
   });
 };
 

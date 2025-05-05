@@ -24,31 +24,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const loadUser = async () => {
-    try {
-      setLoading(true);
-      const userData = await authService.getCurrentUser();
-      setUser(userData);
-    } catch (error) {
-      setUser(null);
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    const userData = await authService.getCurrentUser();
+    if (userData) setUser(userData);
+    else setError(error);
+    setLoading(false);
   };
 
   const signUp = async (credentials: { name: string; email: string; password: string }) => {
     const success = await authService.signUp(credentials);
-    if (success) {
-      await loadUser();
-    }
+    if (success) await loadUser();
     return success;
   };
 
   const signIn = async (credentials: { email: string; password: string }) => {
     const success = await authService.signIn(credentials);
-    if (success) {
-      await loadUser();
-    }
+    if (success) await loadUser();
     return success;
   };
 

@@ -43,6 +43,8 @@ export default function Logo({ className, size, variant = "default" }: LogoProps
         <Image
           src="https://res.cloudinary.com/drhdpmlzh/image/upload/v1746193772/fireforge-labs-width-logo_vlqm3a.png"
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+          priority
           alt="Fireforge Labs"
           className="object-contain"
         />

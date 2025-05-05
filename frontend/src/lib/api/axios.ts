@@ -55,8 +55,7 @@ async function refreshToken(): Promise<string | null> {
   try {
     const response = await api.post("/auth/refresh");
     return response.data.accessToken;
-  } catch (error) {
-    console.error(error);
+  } catch {
     return null;
   }
 }

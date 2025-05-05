@@ -35,20 +35,8 @@ class AuthService {
     try {
       const response = await api.get("/account");
       return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  }
-
-  public async refreshToken() {
-    try {
-      const response = await api.post("/auth/refresh");
-      setAccessToken(response.data.accessToken);
-      return response.data.accessToken;
-    } catch (error) {
-      console.error(error);
-      clearAuthTokens();
+    } catch {
+      // console.error("Erro ao buscar dados do usuário:", error);
       return null;
     }
   }
