@@ -58,12 +58,12 @@ export default function Brands() {
               key={index}
               className="
                 p-2 md:p-5
-                basis-[26%]        // mobile
-                sm:basis-1/2   // tablet
-                md:basis-1/3
-                lg:basis-1/4
-                xl:basis-[16.6%]   // notebook                
-                2xl:basis-[11.6%]  // desktop 
+                basis-[28.57%]       // mobile (3.5 colunas)
+                sm:basis-[22.22%]    // tablet (4.5 colunas)
+                md:basis-[18.18%]    // desktop médio (5.5 colunas)
+                lg:basis-[15.38%]    // notebook (6.5 colunas)
+                xl:basis-[13.33%]    // laptop (7.5 colunas)
+                2xl:basis-[11.76%]   // desktop grande (8.5 colunas)
               "
             >
               <BrandCard brand={brand} />

@@ -1,8 +1,9 @@
 "use client";
 import { User } from "@/types";
 import { authService } from "@/services/auth";
-import { usePathname, useRouter } from "next/navigation";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { userService } from "@/services/users";
+import { useRouter } from "next/navigation";
+import React, { createContext, useContext, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
@@ -21,11 +22,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown>(null);
   const router = useRouter();
-  const pathname = usePathname();
 
   const loadUser = async () => {
     setLoading(true);
-    const userData = await authService.getCurrentUser();
+    const userData = await userService.getOwn();
     if (userData) setUser(userData);
     else setError(error);
     setLoading(false);
@@ -54,10 +54,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     router.push("/auth/sign-in");
   };
-
-  useEffect(() => {
-    loadUser();
-  }, [pathname]);
 
   return (
     <AuthContext.Provider value={{ user, loading, error, signUp, signIn, signOut, loadUser }}>

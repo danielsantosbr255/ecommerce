@@ -12,6 +12,15 @@ class UserService {
     }
   }
 
+  public async getOwn() {
+    try {
+      const response = await api.get("/account");
+      return response.data;
+    } catch {
+      return null;
+    }
+  }
+
   public async getAll() {
     try {
       const response = await api.get("/users");

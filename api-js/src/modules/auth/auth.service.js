@@ -42,13 +42,14 @@ const signIn = async (email, password, userAgent, ipAddress) => {
 
 const refreshAccessToken = async (refreshToken, userAgent, ipAddress) => {
   if (!refreshToken) {
-    throw new CustomError("Token de atualização não fornecido", 401);
+    throw new CustomError("Token de atualização não fornecido", 404);
   }
 
   const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
 
   if (!session || session.expiresAt < new Date()) {
     if (session) await tokenUtil.deleteSession(session.id);
+    console.log("Token de atualização inválido");
     return null;
   }
 

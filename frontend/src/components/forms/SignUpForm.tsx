@@ -1,16 +1,16 @@
 "use client";
 
+import Logo from "../ui/Logo";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useRouter } from "next/navigation";
-import { FormEvent, useRef } from "react";
+import { authService } from "@/services/auth";
 import { Loader2, UserPlus } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import Logo from "../ui/Logo";
+import { FormEvent, useRef, useState } from "react";
 
 export default function SignUpForm() {
-  const { signUp, loading } = useAuth();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -18,6 +18,7 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!emailRef.current?.value || !passwordRef.current?.value) return;
 
@@ -25,11 +26,10 @@ export default function SignUpForm() {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
-    const res = await signUp({ name, email, password });
+    const success = await authService.signUp({ name, email, password });
 
-    if (res) {
-      router.push("/account");
-    }
+    if (success) router.push("/account");
+    setLoading(false);
   };
 
   return (

@@ -2,11 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
+import { User } from "@/types";
+import { authService } from "@/services/auth";
 import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
 
-export default function Sidebar() {
-  const { user, signOut } = useAuth();
+export default function Sidebar({ user }: { user: User }) {
+  const signOut = async () => {
+    await authService.signOut();
+  };
 
   return (
     <aside className="bg-gray-200 p-6 md:border-r md:border-gray-300">

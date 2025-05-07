@@ -5,29 +5,29 @@ import Logo from "../ui/Logo";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useRouter } from "next/navigation";
-import { FormEvent, useRef } from "react";
+import { authService } from "@/services/auth";
+import { FormEvent, useRef, useState } from "react";
 import { Loader2, LogIn, User } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function SigninForm() {
-  const { signIn, loading } = useAuth();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!emailRef.current?.value || !passwordRef.current?.value) return;
 
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
-    const res = await signIn({ email, password });
+    const success = await authService.signIn({ email, password });
 
-    if (res) {
-      router.push("/account");
-    }
+    if (success) router.push("/account");
+    setLoading(false);
   };
 
   return (

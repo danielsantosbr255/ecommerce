@@ -1,23 +1,11 @@
-"use client";
-
-import { Product } from "@/types";
-import { useEffect, useState } from "react";
-import { Crown, Grid2x2Plus } from "lucide-react";
-import ProductCarousel from "../products/ProductCarousel";
 import Brands from "../common/Brands";
 import Categories from "../common/Categories";
+import { Crown, Grid2x2Plus } from "lucide-react";
 import { productService } from "@/services/products";
+import ProductCarousel from "../products/ProductCarousel";
 
-export default function ProductList() {
-  const [products, setProducts] = useState<Product[] | null>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await productService.getAll();
-      setProducts(products);
-    };
-    fetchProducts();
-  }, []);
+export default async function ProductList() {
+  const products = await productService.getAll();
 
   if (!products)
     return (

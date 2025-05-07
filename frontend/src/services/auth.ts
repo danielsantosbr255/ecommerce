@@ -30,16 +30,6 @@ class AuthService {
       clearAuthTokens();
     }
   }
-
-  public async getCurrentUser() {
-    try {
-      const response = await api.get("/account");
-      return response.data;
-    } catch {
-      // console.error("Erro ao buscar dados do usuário:", error);
-      return null;
-    }
-  }
 }
 
 export const authService = new AuthService();

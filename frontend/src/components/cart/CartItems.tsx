@@ -1,28 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CartItemCard from "./CartItemCard";
 import CouponInput from "./CouponInput";
 import CartSummary from "./CartSummary";
-import { useCarts } from "@/hooks/useCarts";
 import EmptyCart from "./EmptyCart";
-import LoadingState from "../LoadingState";
-import { useAuth } from "@/contexts/AuthContext";
+import { CartItem } from "@/types";
 
-export default function CartItems() {
+export default function CartItems({ cartItems }: { cartItems: CartItem[] | null }) {
   const [coupon, setCoupon] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
-  const { myCart, fetchOwnCart, loading, deleteCartItem } = useCarts();
-  const { user, loading: authLoading } = useAuth();
 
-  useEffect(() => {
-    fetchOwnCart();
-  }, []);
+  const deleteCartItem = (id: string) => {
+    console.log(id);
+  };
 
-  if (!user || authLoading || loading) return <LoadingState />;
+  if (!cartItems?.length) return <EmptyCart />;
 
-  if (!myCart?.length) return <EmptyCart />;
-
-  const subtotal = myCart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const discount = (subtotal * discountPercent) / 100;
   const total = subtotal - discount;
 
@@ -37,7 +31,7 @@ export default function CartItems() {
   return (
     <main className="grid w-full h-full grid-cols-[2fr_1fr] gap-4">
       <section className="rounded-lg space-y-6 flex flex-col w-full h-full">
-        {myCart.map((item) => (
+        {cartItems.map((item) => (
           <CartItemCard
             key={item.id}
             item={item}

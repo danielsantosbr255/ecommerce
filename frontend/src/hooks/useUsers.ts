@@ -1,5 +1,5 @@
 // src/hooks/api/useUsers.ts
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "@/types";
 import { userService } from "@/services/users";
 
@@ -25,6 +25,18 @@ export const useUsers = () => {
   const fetchUser = async (id: string) => {
     setLoading(true);
     const data = await userService.getOne(id);
+    if (data) {
+      setError(null);
+      setUser(data);
+    } else {
+      setError("Falha ao carregar usuário");
+    }
+    setLoading(false);
+  };
+
+  const fetchOwnUser = async () => {
+    setLoading(true);
+    const data = await userService.getOwn();
     if (data) {
       setError(null);
       setUser(data);
@@ -80,6 +92,7 @@ export const useUsers = () => {
     loading,
     error,
     fetchUsers,
+    fetchOwnUser,
     fetchUser,
     createUser,
     updateUser,

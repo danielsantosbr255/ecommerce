@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@/types";
 import ProductCard from "../products/ProdutctCard";
 import ProductCardSkeleton from "../products/ProductCardSkeleton";
@@ -42,12 +44,11 @@ const ProductCarousel: React.FC<Props> = ({ products, label, icon }) => {
               key={index}
               className="
               p-0
-              basis-[90%]        // mobile
-              sm:basis-1/2   // tablet
-              md:basis-1/3
-              lg:basis-1/4
-              xl:basis-[16.6%]   // notebook                
-              2xl:basis-[19.6%]  // desktop 
+              basis-[83.33%]       // mobile (1 coluna)              
+              sm:basis-[45.45%]    // médio (2.2 colunas)
+              lg:basis-[31.25%]    // notebook (3.2 colunas)
+              xl:basis-[23.81%]    // laptop (4.2 colunas)
+              2xl:basis-[19.23%]   // desktop grande (5.2 colunas)
             "
             >
               {renderItem(item, index)}

@@ -17,7 +17,7 @@ const CategoriesModule = require("./modules/categories/categories.module");
 const app = express();
 
 // TODO: Refactor verify if the env variable is set and if not, set a default value
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",") || ["http://localhost:3000"];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000"];
 
 app.use(express.json());
 app.use(cookieParser());

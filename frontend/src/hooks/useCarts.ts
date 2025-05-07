@@ -1,6 +1,6 @@
 // src/hooks/api/useCarts.ts
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cart, CartItem } from "@/types";
 import { cartService } from "@/services/carts";
 

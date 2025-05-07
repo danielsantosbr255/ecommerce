@@ -2,14 +2,22 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from "ax
 import { redirect } from "next/navigation";
 
 let memoryToken: string | null = null;
+let serverCookieHeader: string | null = null;
 
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
-// Interceptor para adicionar o token às requisições
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+export function setServerCookies(cookieHeader: string) {
+  serverCookieHeader = cookieHeader;
+}
+
+api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  if (typeof window === "undefined" && serverCookieHeader) {
+    config.headers = config.headers || {};
+    config.headers.Cookie = serverCookieHeader;
+  }
   if (memoryToken) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${memoryToken}`;
@@ -17,7 +25,6 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
-// Interceptor para lidar com respostas e refresh token
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -33,6 +40,7 @@ api.interceptors.response.use(
           memoryToken = newToken;
           originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          // console.log("memoryToken", memoryToken);
           return api(originalRequest);
         }
       } catch (refreshError) {
@@ -51,9 +59,11 @@ api.interceptors.response.use(
   }
 );
 
-async function refreshToken(): Promise<string | null> {
+export async function refreshToken(): Promise<string | null> {
   try {
     const response = await api.post("/auth/refresh");
+    if (response.status === 200) setAccessToken(response.data.accessToken);
+    // console.log("memoryToken", response.data.accessToken);
     return response.data.accessToken;
   } catch {
     return null;
