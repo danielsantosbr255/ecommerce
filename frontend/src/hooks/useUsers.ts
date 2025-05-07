@@ -1,5 +1,5 @@
 // src/hooks/api/useUsers.ts
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "@/types";
 import { userService } from "@/services/users";
 
