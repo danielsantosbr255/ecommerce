@@ -4,6 +4,7 @@ import Logo from "../ui/Logo";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
+import { redirect } from "next/navigation";
 import { Loader2, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -14,7 +15,9 @@ type FormData = {
 };
 
 export default function SignUpForm() {
-  const { signUp, loading } = useAuth();
+  const { user, signUp, loading } = useAuth();
+
+  if (user) redirect("/account");
 
   const {
     register,
@@ -46,7 +49,7 @@ export default function SignUpForm() {
               minLength: { value: 3, message: "O nome precisa ter pelo menos 3 caracteres" },
             })}
           />
-          {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+          {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
 
           <Input
             type="email"
@@ -60,7 +63,7 @@ export default function SignUpForm() {
               },
             })}
           />
-          {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+          {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
 
           <Input
             type="password"
@@ -71,7 +74,7 @@ export default function SignUpForm() {
               minLength: { value: 5, message: "A senha precisa ter pelo menos 5 caracteres" },
             })}
           />
-          {errors.password && <span className="text-red-500">{errors.password.message}</span>}
+          {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
 
           <Button
             type="submit"

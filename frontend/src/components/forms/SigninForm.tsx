@@ -5,8 +5,8 @@ import Logo from "../ui/Logo";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
-import { Loader2, LogIn, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loader2, LogIn, User } from "lucide-react";
 
 type FormData = {
   email: string;
@@ -59,14 +59,14 @@ export default function SignInForm() {
               pattern: { value: /^\S+@\S+$/i, message: "Email inválido" },
             })}
           />
-          {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+          {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
           <Input
             type="password"
             placeholder="Senha"
             className="w-full p-4"
             {...register("password", { required: "Senha é obrigatória" })}
           />
-          {errors.password && <span className="text-red-500">{errors.password.message}</span>}
+          {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
 
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">

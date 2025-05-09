@@ -54,7 +54,6 @@ const saveRefreshTokenToCookies = (res, refreshToken) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-    domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : "localhost",
     maxAge: duration.asMilliseconds(),
   });
 };

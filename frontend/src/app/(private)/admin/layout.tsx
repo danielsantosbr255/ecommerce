@@ -1,5 +1,9 @@
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { userService } from "@/services/users";
+import { setServerCookies } from "@/lib/api/axios";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Sidebar, SidebarItem } from "@/components/layout/Sidebar";
 import { DropdownMenu, DropdownItem } from "@/components/ui/DropdownMenu";
@@ -14,7 +18,14 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  setServerCookies((await cookies()).toString());
+  const user = await userService.getOwn();
+
+  if (user?.role !== "ADMIN") {
+    redirect("/");
+  }
+
   return (
     <div className="bg-bg-primary h-screen gap-2 p-2 grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
       <Sidebar className="row-span-2">

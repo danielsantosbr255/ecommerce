@@ -1,17 +1,12 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { User } from "@/types";
-import { authService } from "@/services/auth";
 import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
-import { redirect } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Sidebar({ user }: { user: User }) {
-  const signOut = async () => {
-    await authService.signOut();
-    redirect("/auth/sign-in");
-  };
+  const { signOut } = useAuth();
 
   return (
     <aside className="bg-gray-200 p-6 md:border-r md:border-gray-300">
