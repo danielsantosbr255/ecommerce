@@ -46,7 +46,7 @@ const saveRefreshTokenToDatabase = async (userId, refreshToken, userAgent, ipAdd
   }
 };
 
-const saveRefreshTokenToCookies = (res, refreshToken, accessToken) => {
+const saveRefreshTokenToCookies = (res, refreshToken) => {
   const [valueStr, unit] = REFRESH_TOKEN_EXPIRATION.split(" ");
   const duration = dayjs.duration(parseInt(valueStr), unit.toLowerCase());
 
@@ -54,6 +54,7 @@ const saveRefreshTokenToCookies = (res, refreshToken, accessToken) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
     maxAge: duration.asMilliseconds(),
   });
 };

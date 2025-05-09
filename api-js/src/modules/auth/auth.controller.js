@@ -11,7 +11,7 @@ const signUp = async (req, res) => {
   const ipAddress = req.ip;
 
   const result = await service.signUp(name, email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken, result.accessToken);
+  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
 
   res.status(201).json({ accessToken: result.accessToken });
 };
@@ -24,7 +24,7 @@ const signIn = async (req, res) => {
   const ipAddress = req.ip;
 
   const result = await service.signIn(email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken, result.accessToken);
+  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
 
   res.json({ accessToken: result.accessToken });
 };
