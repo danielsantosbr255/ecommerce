@@ -1,22 +1,22 @@
 "use client";
 
 import React from "react";
-import ProductImage from "./ProductImage";
-import CurrencyUtil from "@/utils/currency.util";
-import { Product } from "@/types";
 import Image from "next/image";
-import { useCarts } from "@/hooks/useCarts";
 import Button from "../ui/Button";
-import { ShoppingCart } from "lucide-react";
+import { Product } from "@/types";
+import ProductImage from "./ProductImage";
+import { useCarts } from "@/hooks/useCarts";
+import CurrencyUtil from "@/utils/currency.util";
+import { Settings2, ShoppingCart } from "lucide-react";
 
 export default function ProductDetail({ product }: { product: Product }) {
   const { createCartItem } = useCarts();
 
   return (
     <>
-      <div className="grid md:grid-cols-2 gap-10">
-        <div className="bg-white border border-lines relative aspect-video rounded-xl shadow-xs p-4">
-          <ProductImage product={product} className="w-full h-auto object-contain rounded" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="bg-white border-lines relative aspect-video rounded-xl shadow-xs p-4">
+          <ProductImage product={product} />
         </div>
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">{product.title}</h1>
@@ -52,22 +52,21 @@ export default function ProductDetail({ product }: { product: Product }) {
               <ShoppingCart size={20} className="shrink-0" />
               Adicionar ao Carrinho
             </Button>
-            <button className="bg-gray-200 text-tx-primary px-6 py-2 rounded-xl hover:bg-gray-300">
-              Compartilhar
-            </button>
           </div>
         </div>
       </div>
 
       {/* Especificações técnicas */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Especificações</h2>
+        <h2 className="text-2xl font-semibold mb-4 border-b border-lines py-2 flex items-center gap-2">
+          <Settings2 /> Especificações
+        </h2>
         <div className="bg-white rounded-xl shadow-xs p-4">
           <table className="w-full">
             <tbody>
               {product.specifications?.length ? (
                 product.specifications.map((spec, i) => (
-                  <tr key={i} className="border-b last:border-none">
+                  <tr key={i} className="border-b border-lines last:border-none">
                     <td className="py-2 font-medium">{spec.name}</td>
                     <td className="py-2 text-tx-secondary">{spec.value}</td>
                   </tr>

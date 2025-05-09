@@ -4,30 +4,27 @@ import Link from "next/link";
 import Logo from "../ui/Logo";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
-import { useRouter } from "next/navigation";
-import { authService } from "@/services/auth";
-import { FormEvent, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Loader2, LogIn, User } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
-export default function SigninForm() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+type FormData = {
+  email: string;
+  password: string;
+};
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+export default function SignInForm() {
+  const { signIn, loading } = useAuth();
 
-    if (!emailRef.current?.value || !passwordRef.current?.value) return;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ defaultValues: { email: "", password: "" } });
 
-    const email = emailRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-
-    const success = await authService.signIn({ email, password });
-
-    if (success) router.push("/account");
-    setLoading(false);
+  const onSubmit = async (data: FormData) => {
+    const { email, password } = data;
+    await signIn({ email, password });
   };
 
   return (
@@ -52,9 +49,24 @@ export default function SigninForm() {
           <p className="text-center">e comece a comprar com a gente</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-8/12 gap-2">
-          <Input type="email" placeholder="Email" ref={emailRef} className="w-full p-4" />
-          <Input type="password" placeholder="Senha" ref={passwordRef} className="w-full p-4" />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-8/12 gap-2">
+          <Input
+            type="email"
+            placeholder="Email"
+            className="w-full p-4"
+            {...register("email", {
+              required: "Email é obrigatório",
+              pattern: { value: /^\S+@\S+$/i, message: "Email inválido" },
+            })}
+          />
+          {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+          <Input
+            type="password"
+            placeholder="Senha"
+            className="w-full p-4"
+            {...register("password", { required: "Senha é obrigatória" })}
+          />
+          {errors.password && <span className="text-red-500">{errors.password.message}</span>}
 
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">

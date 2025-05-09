@@ -1,18 +1,16 @@
-"use client";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { userService } from "@/services/users";
+import { setServerCookies } from "@/lib/api/axios";
 import Dashboard from "@/components/admin/dashboard/Dashboard";
-import { useUsers } from "@/hooks/useUsers";
-import { useRouter } from "next/navigation";
 
-const AdminDashboardContent = () => {
-  const { user, loading } = useUsers();
-  const router = useRouter();
+export default async function AdminDashboard() {
+  setServerCookies((await cookies()).toString());
+  const user = await userService.getOwn();
 
-  if (!loading && user?.role !== "ADMIN") {
-    router.push("/");
-    return null;
+  if (user?.role !== "ADMIN") {
+    redirect("/");
   }
 
   return <Dashboard />;
-};
-
-export default AdminDashboardContent;
+}

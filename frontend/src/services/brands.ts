@@ -12,7 +12,7 @@ class BrandService {
     }
   }
 
-  public async getAll() {
+  public async getAll(): Promise<Brand[] | null> {
     try {
       const response = await api.get("/brands");
       return response.data;

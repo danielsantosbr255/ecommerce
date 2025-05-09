@@ -1,30 +1,30 @@
 const service = require("./auth.service");
-const userValidator = require("../../common/validators/user.validator");
-const CustomError = require("../../common/utils/CustomError");
 const tokenUtil = require("../../common/utils/token.util");
+const CustomError = require("../../common/utils/CustomError");
+const authValidator = require("../../common/validators/auth.validator");
 
 const signUp = async (req, res) => {
-  const validatedData = userValidator.signUp(req.body);
+  const validatedData = authValidator.signUp(req.body);
 
   const { name, email, password } = validatedData;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
 
   const result = await service.signUp(name, email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
+  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken, result.accessToken);
 
   res.status(201).json({ accessToken: result.accessToken });
 };
 
 const signIn = async (req, res) => {
-  const validatedData = userValidator.signIn(req.body);
+  const validatedData = authValidator.signIn(req.body);
 
   const { email, password } = validatedData;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
 
   const result = await service.signIn(email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
+  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken, result.accessToken);
 
   res.json({ accessToken: result.accessToken });
 };
@@ -33,8 +33,6 @@ const refreshToken = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
-
-  console.log("refreshToken", refreshToken);
 
   const newTokens = await service.refreshAccessToken(refreshToken, userAgent, ipAddress);
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Cart, CartItem } from "@/types";
 import { cartService } from "@/services/carts";
+import { toast } from "react-toastify";
 
 export const useCarts = () => {
   const [myCart, setMyCart] = useState<CartItem[] | null>(null);
@@ -55,6 +56,7 @@ export const useCarts = () => {
     if (newCartItem) {
       setError(null);
       fetchOwnCart();
+      toast.success("Produto adicionado ao carrinho");
       return newCartItem;
     } else {
       setError("Falha ao criar carrinho");

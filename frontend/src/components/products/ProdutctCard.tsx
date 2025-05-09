@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { Product } from "@/types";
@@ -51,14 +51,6 @@ export default function ProductCard({ product }: ProductProps) {
           <ShoppingCart size={20} className="shrink-0" />
           Adicionar ao Carrinho
         </Button>
-
-        {/* <button
-          onClick={addToCart}
-          className="bg-white truncate hover:bg-primary flex flex-1 mt-10 justify-center items-center py-2 px-3 rounded-md text-primary hover:text-tx-on-primary border border-primary font-bold text-center cursor-pointer transition-all gap-2 max-w-full"
-        >
-          <ShoppingCart size={20} className="shrink-0" />
-          Adicionar ao Carrinho
-        </button> */}
       </main>
     </article>
   );

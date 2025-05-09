@@ -1,8 +1,8 @@
-import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import React, { Suspense } from "react";
 import AdminProductList from "@/components/admin/AdminProductList";
 import AdminProductFilters from "@/components/admin/AdminProductFilters";
 import AdminProductForm from "@/components/admin/AdminProductForm";
+import LoadingState from "@/components/LoadingState";
 
 const AdminProductsPage: React.FC = () => {
   return (
@@ -11,7 +11,9 @@ const AdminProductsPage: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           <AdminProductFilters />
         </div>
-        <AdminProductList />
+        <Suspense fallback={<LoadingState />}>
+          <AdminProductList />
+        </Suspense>
       </div>
 
       <AdminProductForm />

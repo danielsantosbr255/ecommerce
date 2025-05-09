@@ -13,12 +13,10 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 
 interface Props {
-  products: Product[];
-  label: string;
-  icon: React.ReactNode;
+  products: Product[] | null;
 }
 
-const ProductCarousel: React.FC<Props> = ({ products, label, icon }) => {
+const ProductCarousel: React.FC<Props> = ({ products }) => {
   const isLoading = !products || products.length === 0;
   const placeholder = Array(11).fill({}) as Product[];
   const randomInt = Math.floor(Math.random() * 1000);
@@ -29,10 +27,6 @@ const ProductCarousel: React.FC<Props> = ({ products, label, icon }) => {
 
   return (
     <div className="flex flex-col w-full">
-      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-primary font-bold my-2 py-2">
-        {icon} {label}
-      </h2>
-
       <Carousel
         className="w-full"
         opts={{ align: "start", loop: true }}

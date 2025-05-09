@@ -1,8 +1,10 @@
-import { Product } from "@/types";
+import { Suspense } from "react";
+import { Grid2X2Check } from "lucide-react";
 import { productService } from "@/services/products";
-import ProductCard from "@/components/products/ProdutctCard";
+import LoadingState from "@/components/LoadingState";
 import ProductDetail from "@/components/products/ProductDetail";
 import ProductReviews from "@/components/products/ProductReviews";
+import ProductCarousel from "@/components/products/ProductCarousel";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -11,7 +13,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   if (!productResponse) {
     return (
-      <div className="flex flex-col h-screen justify-center items-center">
+      <div className="flex flex-col w-full h-full justify-center items-center">
         <h1>Produto nao encontrado</h1>
       </div>
     );
@@ -19,29 +21,22 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const { product, relatedProducts } = productResponse;
 
-  if (!product) {
-    return (
-      <div className="flex flex-col h-screen justify-center items-center">
-        <h1>Produto nao encontrado</h1>
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-10/12 mx-auto px-4 py-10 space-y-16">
+    <main className="flex flex-1 flex-col py-10 mx-auto w-full px-2 lg:px-4 lg:max-w-10/12 h-full gap-6">
       <ProductDetail product={product} />
-      <ProductReviews productSlug={product.slug} />
+
+      <Suspense fallback={<LoadingState />}>
+        <ProductReviews productSlug={product.slug} />
+      </Suspense>
+
       <ProductReviewsForm productSlug={product.slug} />
 
-      {/* Produtos relacionados */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Produtos Relacionados</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {relatedProducts.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+      <div className="flex flex-col w-full">
+        <h2 className="flex items-center gap-2 border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
+          <Grid2X2Check /> Produtos Relacionados
+        </h2>
+        {relatedProducts.length > 0 && <ProductCarousel key={product.id} products={relatedProducts} />}
       </div>
-    </div>
+    </main>
   );
 }

@@ -5,10 +5,12 @@ import Link from "next/link";
 import { User } from "@/types";
 import { authService } from "@/services/auth";
 import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
+import { redirect } from "next/navigation";
 
 export default function Sidebar({ user }: { user: User }) {
   const signOut = async () => {
     await authService.signOut();
+    redirect("/auth/sign-in");
   };
 
   return (
@@ -18,23 +20,23 @@ export default function Sidebar({ user }: { user: User }) {
         <h2 className="text-lg font-semibold text-tx-secondary">Olá, {user?.name}</h2>
       </div>
       <nav className="space-y-3">
-        <Link href="/minha-conta" className="flex items-center text-tx-secondary hover:text-tx-link">
+        <Link href="#" className="flex items-center text-tx-secondary hover:text-tx-link">
           <FiUser className="text-lg mr-2" />
           Minha Conta
         </Link>
-        <Link href="/meus-pedidos" className="flex items-center text-tx-secondary hover:text-tx-link">
+        <Link href="#" className="flex items-center text-tx-secondary hover:text-tx-link">
           <FiShoppingBag className="text-lg mr-2" />
           Meus Pedidos
         </Link>
-        <Link href="/meus-enderecos" className="flex items-center text-tx-secondary hover:text-tx-link">
+        <Link href="#" className="flex items-center text-tx-secondary hover:text-tx-link">
           <FiMapPin className="text-lg mr-2" />
           Meus Endereços
         </Link>
-        <Link href="/favoritos" className="flex items-center text-tx-secondary hover:text-tx-link">
+        <Link href="#" className="flex items-center text-tx-secondary hover:text-tx-link">
           <FiHeart className="text-lg mr-2" />
           Meus Favoritos
         </Link>
-        <Link href="/alterar-senha" className="flex items-center text-tx-secondary hover:text-tx-link">
+        <Link href="#" className="flex items-center text-tx-secondary hover:text-tx-link">
           <FiLock className="text-lg mr-2" />
           Alterar Senha
         </Link>

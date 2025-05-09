@@ -49,7 +49,7 @@ const refreshAccessToken = async (refreshToken, userAgent, ipAddress) => {
 
   if (!session || session.expiresAt < new Date()) {
     if (session) await tokenUtil.deleteSession(session.id);
-    console.log("Token de atualização inválido");
+    console.error("Token de atualização inválido");
     return null;
   }
 
@@ -81,7 +81,6 @@ const logout = async (refreshToken) => {
   if (!refreshToken) throw new CustomError("Token de logout não fornecido", 401);
 
   const session = await tokenUtil.findSessionByRefreshToken(refreshToken);
-  console.log(session);
   if (session) {
     await tokenUtil.deleteSession(session.id);
     return true;

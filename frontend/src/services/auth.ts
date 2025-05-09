@@ -1,10 +1,9 @@
-import api, { setAccessToken, clearAuthTokens } from "@/lib/api/axios";
+import api from "@/lib/api/axios";
 
 class AuthService {
   public async signUp(credentials: { name: string; email: string; password: string }) {
     try {
-      const response = await api.post("/auth/signup", credentials);
-      setAccessToken(response.data.accessToken);
+      await api.post("/auth/signup", credentials);
       return true;
     } catch (error) {
       console.error(error);
@@ -14,8 +13,7 @@ class AuthService {
 
   public async signIn(credentials: { email: string; password: string }) {
     try {
-      const response = await api.post("/auth/signin", credentials);
-      setAccessToken(response.data.accessToken);
+      await api.post("/auth/signin", credentials);
       return true;
     } catch (error) {
       console.error(error);
@@ -27,7 +25,7 @@ class AuthService {
     try {
       await api.post("/auth/logout");
     } finally {
-      clearAuthTokens();
+      return true;
     }
   }
 }

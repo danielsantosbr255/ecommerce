@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { cookies } from "next/headers";
 import { Roboto } from "next/font/google";
 import { ToastContainer } from "react-toastify";
-import { refreshToken, setServerCookies } from "@/lib/api/axios";
-import { cookies } from "next/headers";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { setServerCookies } from "@/lib/api/axios";
 
 export const metadata: Metadata = {
   title: "Fireforge Labs",
@@ -17,9 +17,8 @@ const roboto = Roboto({
 });
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies();  
   setServerCookies(cookieStore.toString());
-  await refreshToken();
 
   return (
     <html lang="pt-BR">

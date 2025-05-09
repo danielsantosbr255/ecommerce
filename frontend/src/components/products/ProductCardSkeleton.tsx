@@ -7,7 +7,7 @@ interface ProductCardSkeletonProps {
 export default function ProductCardSkeleton({ className }: ProductCardSkeletonProps) {
   return (
     <article
-      className={`bg-none flex flex-col gap-2 p-2 rounded-lg border border-lines scale-97 h-full ${className}`}
+      className={`bg-none flex flex-col gap-2 p-2 rounded-lg border border-lines/40 scale-97 h-full ${className}`}
     >
       <main className="flex flex-col justify-between h-full">
         <Skeleton className="w-1/7 h-6 mb-2" />
@@ -18,7 +18,7 @@ export default function ProductCardSkeleton({ className }: ProductCardSkeletonPr
           <Skeleton className="w-1/4 h-4 mt-1" />
           <Skeleton className="w-2/3 h-4 mt-1" />
         </div>
-        <Skeleton className="w-full h-10 mt-10 border" />
+        <Skeleton className="w-full h-10 mt-10" />
       </main>
     </article>
   );

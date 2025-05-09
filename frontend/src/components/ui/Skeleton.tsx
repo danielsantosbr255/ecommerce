@@ -4,5 +4,5 @@ type SkeletonProps = {
 };
 
 export default function Skeleton({ className = "" }: SkeletonProps) {
-  return <div className={`bg-gray-200 border border-neutral-200 rounded-sm animate-skeleton ${className}`} />;
+  return <div className={`bg-gray-200 border-lines rounded-sm animate-skeleton ${className}`} />;
 }

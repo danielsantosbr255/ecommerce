@@ -1,21 +1,10 @@
-"use client";
-
-import React, { useEffect } from "react";
 import AdminProductCard from "./AdminProductCard";
-import { useProducts } from "@/hooks/useProducts";
-import LoadingState from "../LoadingState";
+import { productService } from "@/services/products";
 
-const AdminProductList = () => {
-  const { products, loading, error, fetchProducts } = useProducts();
+const AdminProductList = async () => {
+  const products = await productService.getAll();
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  if (loading) return <LoadingState />;
-  if (error) return <div>Erro: {error}</div>;
-
-  if (!products.length) {
+  if (!products || !products.length) {
     return <p className="text-tx-secondary col-span-full">Nenhum produto encontrado.</p>;
   }
 

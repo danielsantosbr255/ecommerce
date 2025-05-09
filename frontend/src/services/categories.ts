@@ -12,7 +12,7 @@ class CategoryService {
     }
   }
 
-  public async getAll() {
+  public async getAll(): Promise<Category[] | null> {
     try {
       const response = await api.get("/categories");
       return response.data;

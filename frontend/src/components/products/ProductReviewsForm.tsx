@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/AuthContext";
 import { reviewService } from "@/services/reviews";
@@ -28,7 +29,7 @@ export default function ProductReviewsForm({ productSlug }: { productSlug: strin
       <select
         value={rating}
         onChange={(e) => setRating(+e.target.value)}
-        className="border rounded-lg px-4 py-2 w-full"
+        className="border border-lines rounded-lg px-4 py-2 w-full"
       >
         {[5, 4, 3, 2, 1].map((n) => (
           <option key={n} value={n}>
@@ -41,14 +42,14 @@ export default function ProductReviewsForm({ productSlug }: { productSlug: strin
         placeholder="Comentário"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        className="border rounded-lg px-4 py-2 w-full h-24"
+        className="border border-lines rounded-lg px-4 py-2 w-full h-24 focus:outline-primary-active"
       />
-      <button
+      <Button
         onClick={handleReviewSubmit}
         className="bg-primary text-tx-on-primary px-6 py-2 rounded-lg hover:bg-primary"
       >
         Enviar Avaliação
-      </button>
+      </Button>
     </div>
   );
 }

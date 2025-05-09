@@ -1,24 +1,24 @@
 const { defineAbilitiesFor } = require("../utils/abilities.util");
 const { prisma } = require("../database/prisma");
-const tokenUtil = require("../utils/token.util");
 const CustomError = require("../utils/CustomError");
 
 const verifyToken = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ");
+  const refreshToken = req.cookies.refreshToken;
+  // console.log("refreshToken", refreshToken);
 
-  if (!token || token[0] !== "Bearer" || !token[1]) {
-    throw new CustomError("Acesso negado!", 401);
-  }
+  if (!refreshToken) throw new CustomError("Acesso negado!", 401);
 
-  const decoded = tokenUtil.verifyAccessToken(token[1], process.env.ACCESS_TOKEN_SECRET);
-
-  const user = await prisma.user.findUnique({
-    where: { id: decoded.id },
+  const session = await prisma.session.findFirst({
+    where: { refreshToken },
+    include: { user: true },
   });
 
-  if (!user) {
-    throw new CustomError("Usuário não encontrado!", 404);
-  }
+  if (!session) throw new CustomError("Acesso negado!", 401);
+  if (session.expiresAt < new Date()) throw new CustomError("Acesso negado!", 401);
+
+  const user = session.user;
+
+  if (!user) throw new CustomError("Acesso negado!", 401);
 
   req.user = user;
   req.ability = defineAbilitiesFor(user);

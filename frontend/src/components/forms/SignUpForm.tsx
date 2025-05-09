@@ -1,35 +1,30 @@
 "use client";
 
 import Logo from "../ui/Logo";
-import Button from "../ui/Button";
 import Input from "../ui/Input";
-import { useRouter } from "next/navigation";
-import { authService } from "@/services/auth";
+import Button from "../ui/Button";
+import { useForm } from "react-hook-form";
 import { Loader2, UserPlus } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 export default function SignUpForm() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { signUp, loading } = useAuth();
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ mode: "onChange", defaultValues: { email: "", password: "" } });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    if (!emailRef.current?.value || !passwordRef.current?.value) return;
-
-    const name = nameRef.current?.value || "";
-    const email = emailRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-
-    const success = await authService.signUp({ name, email, password });
-
-    if (success) router.push("/account");
-    setLoading(false);
+  const onSubmit = async (data: FormData) => {
+    const { name, email, password } = data;
+    await signUp({ name, email, password });
   };
 
   return (
@@ -41,10 +36,42 @@ export default function SignUpForm() {
           <p className="text-center">e comece a comprar agora mesmo!</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-8/12 gap-2">
-          <Input type="text" placeholder="Nome" ref={nameRef} className="w-full p-4" />
-          <Input type="email" placeholder="Email" ref={emailRef} className="w-full p-4" />
-          <Input type="password" placeholder="Senha" ref={passwordRef} className="w-full p-4" />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-8/12 gap-2">
+          <Input
+            type="text"
+            placeholder="Nome"
+            className="w-full p-4"
+            {...register("name", {
+              required: "Nome é obrigatorio",
+              minLength: { value: 3, message: "O nome precisa ter pelo menos 3 caracteres" },
+            })}
+          />
+          {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+
+          <Input
+            type="email"
+            placeholder="Email"
+            className="w-full p-4"
+            {...register("email", {
+              required: "Email é obrigatorio",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Email inválido",
+              },
+            })}
+          />
+          {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+
+          <Input
+            type="password"
+            placeholder="Senha"
+            className="w-full p-4"
+            {...register("password", {
+              required: "Senha é obrigatorio",
+              minLength: { value: 5, message: "A senha precisa ter pelo menos 5 caracteres" },
+            })}
+          />
+          {errors.password && <span className="text-red-500">{errors.password.message}</span>}
 
           <Button
             type="submit"

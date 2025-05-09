@@ -1,8 +1,9 @@
 const dayjs = require("dayjs");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const { prisma } = require("../database/prisma");
 const CustomError = require("./CustomError");
+const { prisma } = require("../database/prisma");
+
 require("dayjs/plugin/duration");
 dayjs.extend(require("dayjs/plugin/duration"));
 
@@ -45,7 +46,7 @@ const saveRefreshTokenToDatabase = async (userId, refreshToken, userAgent, ipAdd
   }
 };
 
-const saveRefreshTokenToCookies = (res, refreshToken) => {
+const saveRefreshTokenToCookies = (res, refreshToken, accessToken) => {
   const [valueStr, unit] = REFRESH_TOKEN_EXPIRATION.split(" ");
   const duration = dayjs.duration(parseInt(valueStr), unit.toLowerCase());
 

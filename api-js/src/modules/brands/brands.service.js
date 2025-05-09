@@ -8,14 +8,14 @@ const createBrand = async (data) => {
 
 const getBrands = async () => {
   return await prisma.brand.findMany({
-    include: { products: true },
+    include: { products: { include: { images: true } } },
   });
 };
 
 const getBrandBySlug = async (slug) => {
   return await prisma.brand.findUnique({
     where: { slug },
-    include: { products: true },
+    include: { products: { include: { images: true } } },
   });
 };
 

@@ -1,11 +1,11 @@
-import Notification from "@/components/common/Notification";
+import Link from "next/link";
+import { User } from "@/types";
+import { cn } from "@/lib/utils";
+import { JSX, ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
 import SearchBar from "@/components/ui/Searchbar";
-import { cn } from "@/lib/utils";
-import { User } from "@/types";
-import { Info, LogIn, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
-import Link from "next/link";
-import { JSX, ReactNode } from "react";
+import Notification from "@/components/common/Notification";
+import { Info, Loader, LogIn, ShieldUser, ShoppingCart, UserCircle } from "lucide-react";
 
 interface NavItemProps {
   href: string;
@@ -17,6 +17,7 @@ interface NavItemProps {
 
 interface DesktopBarProps {
   user: User | null;
+  loading: boolean;
 }
 
 const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): JSX.Element => (
@@ -32,29 +33,35 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
   </Link>
 );
 
-const DesktopBar = ({ user }: DesktopBarProps): JSX.Element => {
+const DesktopBar = ({ user, loading }: DesktopBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
 
   return (
     <main className="hidden lg:grid grid-cols-3 w-full items-center justify-between px-2 py-0">
       <div className="items-center font-semibold">
-        <Logo size={30} name className="!text-3xl !font-medium" />
+        <Logo />
       </div>
 
-      <SearchBar className="hidden" />
+      <SearchBar />
 
       <div className="flex items-center justify-end gap-2">
         {isAdmin && (
           <NavItem href="/admin" icon={<ShieldUser size={26} className="animate-pulse text-accent" />} />
         )}
+
         <NavItem href="/about" icon={<Info size={25} />} />
         <NavItem href="/cart" icon={<ShoppingCart size={25} />} />
         <Notification />
-        <NavItem
-          href={user ? "/account" : "/auth/sign-in"}
-          label=""
-          icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
-        />
+
+        {loading ? (
+          <NavItem href="#" label="" icon={<Loader size={25} />} className="animate-spin" />
+        ) : (
+          <NavItem
+            href={user ? "/account" : "/auth/sign-in"}
+            label=""
+            icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
+          />
+        )}
       </div>
     </main>
   );

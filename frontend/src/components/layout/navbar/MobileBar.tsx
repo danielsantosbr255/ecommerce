@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { User } from "@/types";
 import { JSX } from "react";
-import { LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
+import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import SearchBar from "@/components/ui/Searchbar";
 
 interface MobileBarProps {
   user: User | null;
+  loading: boolean;
   toggleMobileMenu: () => void;
 }
 
-const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
+const MobileBar = ({ user, loading, toggleMobileMenu }: MobileBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
 
   return (
@@ -32,9 +33,14 @@ const MobileBar = ({ user, toggleMobileMenu }: MobileBarProps): JSX.Element => {
               <ShieldUser size={22} className="animate-pulse" />
             </Link>
           )}
-          <Link href={user ? "/account" : "/auth/sign-in"}>
-            {user ? <UserCircle size={22} /> : <LogIn />}
-          </Link>
+
+          {loading ? (
+            <Loader size={25} className="animate-spin" />
+          ) : (
+            <Link href={user ? "/account" : "/auth/sign-in"}>
+              {user ? <UserCircle size={22} /> : <LogIn />}
+            </Link>
+          )}
         </div>
       </main>
 
