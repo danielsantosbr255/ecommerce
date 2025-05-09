@@ -1,10 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-let serverCookieHeader: string | null = null;
-
-export function setServerCookies(cookies: string | null) {
-  serverCookieHeader = cookies;
-}
+const isServer = typeof window === "undefined";
 
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -12,9 +8,10 @@ const api: AxiosInstance = axios.create({
 });
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  if (typeof window === "undefined" && serverCookieHeader) {
+  if (isServer) {
+    const { cookies } = require("next/headers");
     config.headers = config.headers || {};
-    config.headers.Cookie = serverCookieHeader;
+    config.headers.Cookie = (await cookies()).toString();
   }
   return config;
 });

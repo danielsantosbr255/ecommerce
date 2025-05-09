@@ -4,7 +4,7 @@ const CustomError = require("../utils/CustomError");
 
 const verifyToken = async (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
-  // console.log("refreshToken", refreshToken);
+  console.log("refreshToken", refreshToken);
 
   if (!refreshToken) throw new CustomError("Acesso negado!", 401);
 

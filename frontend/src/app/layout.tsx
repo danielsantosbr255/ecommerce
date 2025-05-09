@@ -1,10 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { Roboto } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { setServerCookies } from "@/lib/api/axios";
 
 export const metadata: Metadata = {
   title: "Fireforge Labs",
@@ -17,9 +15,6 @@ const roboto = Roboto({
 });
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const cookieStore = await cookies();  
-  setServerCookies(cookieStore.toString());
-
   return (
     <html lang="pt-BR">
       <body className={roboto.className}>

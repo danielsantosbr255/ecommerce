@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
-import { userService } from "@/services/users";
-import { setServerCookies } from "@/lib/api/axios";
-import Profile from "@/app/(shop)/account/_components/Profile";
 import { redirect } from "next/navigation";
+import { userService } from "@/services/users";
+import Profile from "@/app/(shop)/account/_components/Profile";
 
 export default async function MyAccount() {
-  setServerCookies((await cookies()).toString());
+  const refreshToken = (await cookies()).get("refreshToken")?.value;
+  console.log(refreshToken);
+
   const user = await userService.getOwn();
 
   if (!user) {
