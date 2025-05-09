@@ -1,13 +1,9 @@
 import CartItems from "@/components/cart/CartItems";
-import { setServerCookies } from "@/lib/api/axios";
 import { cartService } from "@/services/carts";
 import { userService } from "@/services/users";
 import { ShoppingCart } from "lucide-react";
-import { cookies } from "next/headers";
 
 export default async function CartPage() {
-  setServerCookies((await cookies()).toString());
-
   const user = await userService.getOwn();
 
   if (!user) {
