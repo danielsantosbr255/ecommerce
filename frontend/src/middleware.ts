@@ -6,7 +6,11 @@ const protectedRoutes = ["/account", "/admin"];
 
 export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refreshToken")?.value;
-  console.log("refreshToken", refreshToken)
+
+  console.log("refreshToken", refreshToken);
+  console.log("All cookies:", request.cookies.getAll());
+  console.log("Request URL:", request.url);
+  console.log("NODE_ENV:", process.env.NODE_ENV);
 
   if (protectedRoutes.includes(request.nextUrl.pathname)) {
     if (!refreshToken) {
