@@ -1,19 +1,36 @@
 "use client";
-import { useState } from "react";
-import CartItemCard from "./CartItemCard";
+
+import { CartItem } from "@/types";
+import EmptyCart from "./EmptyCart";
 import CouponInput from "./CouponInput";
 import CartSummary from "./CartSummary";
-import EmptyCart from "./EmptyCart";
-import { CartItem } from "@/types";
+import CartItemCard from "./CartItemCard";
+import LoadingState from "../LoadingState";
+import { useEffect, useState } from "react";
+import { cartService } from "@/services/carts";
 
-export default function CartItems({ cartItems }: { cartItems: CartItem[] | null }) {
+export default function CartItems() {
   const [coupon, setCoupon] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[] | null>([]);
+
+  const getCartItems = async () => {
+    setLoading(true);
+    const cart = await cartService.getOwnCart();
+    setCartItems(cart);
+    setLoading(false);
+  };
 
   const deleteCartItem = (id: string) => {
     console.log(id);
   };
 
+  useEffect(() => {
+    getCartItems();
+  }, []);
+
+  if (loading) return <LoadingState />;
   if (!cartItems?.length) return <EmptyCart />;
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);

@@ -1,10 +1,11 @@
-import CartItems from "@/components/cart/CartItems";
-import { cartService } from "@/services/carts";
-import { userService } from "@/services/users";
-import { ShoppingCart } from "lucide-react";
+"use client";
 
-export default async function CartPage() {
-  const user = await userService.getOwn();
+import { ShoppingCart } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import CartItems from "@/components/cart/CartItems";
+
+export default function CartPage() {
+  const { user } = useAuth();
 
   if (!user) {
     return (
@@ -14,8 +15,6 @@ export default async function CartPage() {
     );
   }
 
-  const cart = await cartService.getOwnCart();
-
   return (
     <main className="flex flex-col w-full h-full gap-4 max-w-10/12 mx-auto items-center justify-center">
       <section className="flex flex-col gap-4 p-5 w-full h-full items-center">
@@ -24,7 +23,7 @@ export default async function CartPage() {
           Seu Carrinho
         </h1>
 
-        <CartItems cartItems={cart} />
+        <CartItems />
       </section>
     </main>
   );
