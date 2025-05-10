@@ -13,7 +13,10 @@ class AuthService {
 
   public async signIn(credentials: { email: string; password: string }) {
     try {
-      await api.post("/auth/signin", credentials);
+      const response = await api.post("/auth/signin", credentials);
+
+      document.cookie = `accessToken=${response.data.accessToken}; max-age=60`;
+
       return true;
     } catch (error) {
       console.error(error);

@@ -1,9 +1,12 @@
-const { defineAbilitiesFor } = require("../utils/abilities.util");
 const { prisma } = require("../database/prisma");
 const CustomError = require("../utils/CustomError");
+const { defineAbilitiesFor } = require("../utils/abilities.util");
 
 const verifyToken = async (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
+  const accessToken = req.cookies.accessToken;
+
+  console.log("accessToken", accessToken);
   console.log("refreshToken", refreshToken);
 
   if (!refreshToken) throw new CustomError("Acesso negado!", 401);

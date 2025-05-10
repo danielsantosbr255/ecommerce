@@ -4,8 +4,10 @@ import { userService } from "@/services/users";
 import Profile from "@/app/(shop)/account/_components/Profile";
 
 export default async function MyAccount() {
+  const accessToken = (await cookies()).get("accessToken")?.value;
   const refreshToken = (await cookies()).get("refreshToken")?.value;
-  console.log(refreshToken);
+  console.log("accessToken", accessToken);
+  console.log("refreshToken", refreshToken);
 
   const user = await userService.getOwn();
 

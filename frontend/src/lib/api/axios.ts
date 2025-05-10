@@ -10,7 +10,6 @@ const api: AxiosInstance = axios.create({
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   if (isServer) {
     const { cookies } = await import("next/headers");
-    // const { cookies } = require("next/headers");
     config.headers = config.headers || {};
     config.headers.Cookie = (await cookies()).toString();
   }
