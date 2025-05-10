@@ -3,7 +3,7 @@ import Link from "next/link";
 import { User } from "@/types";
 import Sidebar from "./Sidebar";
 
-const Profile = async ({ user }: { user: User }) => {
+const Profile = ({ user }: { user: User }) => {
   return (
     <div className="bg-bg-primary shadow-sm rounded-xl overflow-hidden w-full h-full grid grid-cols-1 md:grid-cols-4">
       <Sidebar user={user} />

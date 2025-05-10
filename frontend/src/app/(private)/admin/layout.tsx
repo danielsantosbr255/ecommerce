@@ -1,26 +1,28 @@
+"use client";
+
 import React from "react";
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { userService } from "@/services/users";
+import { useAuth } from "@/contexts/AuthContext";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Sidebar, SidebarItem } from "@/components/layout/Sidebar";
 import { DropdownMenu, DropdownItem } from "@/components/ui/DropdownMenu";
 import { LayoutDashboard, Package, ClipboardList, Users, Settings } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Fireforge Labs - Admin",
-  description: "Criado por Daniel Santos",
-};
+// export const metadata: Metadata = {
+//   title: "Fireforge Labs - Admin",
+//   description: "Criado por Daniel Santos",
+// };
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const user = await userService.getOwn();
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const { user } = useAuth();
 
-  if (user?.role !== "ADMIN") {
-    redirect("/");
+  if (!user) {
+    redirect("/auth/sign-in");
   }
 
   return (

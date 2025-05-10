@@ -1,15 +1,16 @@
-import { cookies } from "next/headers";
+"use client";
+
 import { redirect } from "next/navigation";
-import { userService } from "@/services/users";
+import { useAuth } from "@/contexts/AuthContext";
+import LoadingState from "@/components/LoadingState";
 import Profile from "@/app/(shop)/account/_components/Profile";
 
-export default async function MyAccount() {
-  const accessToken = (await cookies()).get("accessToken")?.value;
-  const refreshToken = (await cookies()).get("refreshToken")?.value;
-  console.log("accessToken", accessToken);
-  console.log("refreshToken", refreshToken);
+export default function MyAccount() {
+  const { user, userLoading } = useAuth();
 
-  const user = await userService.getOwn();
+  if (userLoading) {
+    return <LoadingState />;
+  }
 
   if (!user) {
     redirect("/auth/sign-in");
