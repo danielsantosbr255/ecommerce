@@ -3,11 +3,8 @@
 import Link from "next/link";
 import { User } from "@/types";
 import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
-import { useAuth } from "@/contexts/AuthContext";
 
-export default function Sidebar({ user }: { user: User }) {
-  const { signOut } = useAuth();
-
+export default function Sidebar({ user, signOut }: { user: User; signOut: () => void }) {
   return (
     <aside className="bg-gray-200 p-6 md:border-r md:border-gray-300">
       <div className="flex items-center mb-6">

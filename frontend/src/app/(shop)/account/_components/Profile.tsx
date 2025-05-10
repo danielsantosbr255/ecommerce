@@ -1,12 +1,24 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { User } from "@/types";
 import Sidebar from "./Sidebar";
+import { useAuth } from "@/contexts/AuthContext";
+import LoadingState from "@/components/LoadingState";
 
-const Profile = ({ user }: { user: User }) => {
+export default function Profile() {
+  const { user, userLoading, signOut } = useAuth();
+
+  if (userLoading) return <LoadingState />;
+
+  if (!user) {
+    window.location.href = "/auth/sign-in";
+    return null;
+  }
+
   return (
     <div className="bg-bg-primary shadow-sm rounded-xl overflow-hidden w-full h-full grid grid-cols-1 md:grid-cols-4">
-      <Sidebar user={user} />
+      <Sidebar user={user} signOut={signOut} />
       {/* Conteúdo Principal */}
       <main className="col-span-1 md:col-span-3 p-6">
         <h1 className="text-xl font-semibold mb-4 text-tx-primary">Visão Geral da Conta</h1>
@@ -68,6 +80,4 @@ const Profile = ({ user }: { user: User }) => {
       </main>
     </div>
   );
-};
-
-export default Profile;
+}
