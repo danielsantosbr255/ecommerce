@@ -4,7 +4,6 @@ import Logo from "../ui/Logo";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
-import { redirect } from "next/navigation";
 import { Loader2, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -15,9 +14,7 @@ type FormData = {
 };
 
 export default function SignUpForm() {
-  const { user, signUp, loading } = useAuth();
-
-  if (user) redirect("/account");
+  const { signUp, loading } = useAuth();
 
   const {
     register,
