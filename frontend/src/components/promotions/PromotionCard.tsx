@@ -27,7 +27,7 @@ export function PromotionCard({ promotion, currentProductIndex }: PromotionsCard
   return (
     <Link
       href={`/promotions/${promotion.slug}`}
-      className="p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full"
+      className="p-2 md:p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full"
     >
       {promotion.products?.length && (
         <ProductImage
@@ -38,23 +38,18 @@ export function PromotionCard({ promotion, currentProductIndex }: PromotionsCard
         />
       )}
 
-      <div className="flex flex-col items-center justify-center max-w-4/5 h-full ml-5">
+      <div className="flex flex-col items-center justify-center w-full md:max-w-4/5 h-full ml-5">
         <div className="w-full h-full justify-center flex flex-col">
-          <h1 className="text-xl xl:text-6xl py-4 font-bold line-clamp-2">{promotion.title}</h1>
+          <h1 className="text-lg xl:text-6xl py-4 font-bold line-clamp-2">{promotion.title}</h1>
           <p className="text-primary text-sm xl:text-xl line-clamp-2">{promotion.description}</p>
         </div>
       </div>
 
       {promotion.discount > 0 && (
-        <div className="absolute top-[2%] right-[2%] h-12 w-12 md:h-25 md:w-25 items-center justify-center flex text-4xl font-bold text-primary">
-          <p className="absolute font-bold w-full h-full items-center justify-center flex text-4xl border-5 rounded-full shadow-xs"></p>
+        <div className="flex absolute top-[2%] right-[2%] h-12 w-12 md:h-25 md:w-25 items-center justify-center text-4xl font-bold text-primary">
+          <p className="absolute font-bold w-full h-full items-center justify-center flex text-4xl border-2 md:border-5 rounded-full shadow-xs"></p>
           <p className="absolute animate-material-spin font-bold w-full h-full items-center justify-center flex border border-t-transparent border-b-transparent scale-105 rounded-full shadow-xs"></p>
-          <p className="absolute text-center text-xs md:text-2xl">
-            {promotion.discount}%
-            <span className="absolute text-xs md:text-sm translate-x-1/2 right-1/2 flex items-center justify-center">
-              OFF
-            </span>
-          </p>
+          <p className="absolute text-center text-xs md:text-2xl">{promotion.discount}%</p>
         </div>
       )}
     </Link>

@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="pt-BR">
       <body className={roboto.className}>
         <AuthProvider>{children}</AuthProvider>
-        <ToastContainer />
+        <ToastContainer autoClose={2000} position="bottom-right" />
       </body>
     </html>
   );

@@ -30,13 +30,13 @@ export default function Notification() {
         </button>
 
         {isNotifOpen && (
-          <div className="absolute right-0 top-8 mt-2 w-64 bg-white shadow-xs rounded-md border border-lines z-50">
+          <div className="absolute right-0 top-8 mt-2 w-64 bg-bg-primary shadow-xs rounded-md border border-lines z-50">
             <div className="p-4">
               {notifications.length === 0 ? (
                 <p className="text-sm text-tx-on-primary">Sem notificações</p>
               ) : (
                 notifications.map((notif) => (
-                  <div key={notif.id} className="text-sm text-tx-on-primary py-1 border-b last:border-b-0">
+                  <div key={notif.id} className="text-sm text-tx-primary py-1 border-b last:border-b-0">
                     {notif.message}
                   </div>
                 ))
