@@ -8,7 +8,7 @@ router.get("/products", controller.getProducts);
 router.get("/products/:slug", controller.getProductBySlug);
 router.get("/products/brand/:brand", controller.getProductsByBrand);
 router.get("/products/search/:query", controller.getProductsByQuery);
-router.get("/products/category/:slug", controller.getProductsByCategory);
+router.get("/products/:productId/related", controller.getProductsByCategory);
 
 router.delete("/products/:id", verifyToken, controller.deleteProduct);
 router.post("/products", verifyToken, multer.array("images", 5), controller.createProduct);

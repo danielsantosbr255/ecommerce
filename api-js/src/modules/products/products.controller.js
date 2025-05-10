@@ -20,8 +20,8 @@ const createProduct = async (req, res) => {
 };
 
 const getProductBySlug = async (req, res) => {
-  const { product, relatedProducts } = await services.getProductBySlug(req.params.slug);
-  return res.json({ product, relatedProducts });
+  const product = await services.getProductBySlug(req.params.slug);
+  return res.json(product);
 };
 
 const getProducts = async (req, res) => {
@@ -40,7 +40,7 @@ const getProductsByBrand = async (req, res) => {
 };
 
 const getProductsByCategory = async (req, res) => {
-  const products = await services.getProductsByCategory(req.params.slug);
+  const products = await services.getProductsByCategory(req.params.productId);
   return res.json(products);
 };
 

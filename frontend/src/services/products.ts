@@ -1,11 +1,6 @@
 import api from "@/lib/api/axios";
 import { Product } from "@/types";
 
-type ProductResponse = {
-  product: Product;
-  relatedProducts: Product[];
-};
-
 class ProductService {
   public async create(productData: Omit<Product, "id">) {
     try {
@@ -27,9 +22,19 @@ class ProductService {
     }
   }
 
-  public async getProduct(slug: string): Promise<ProductResponse | null> {
+  public async getProduct(slug: string): Promise<Product | null> {
     try {
       const response = await api.get(`/products/${slug}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  public async getProductsByCategory(productId: string): Promise<Product[] | null> {
+    try {
+      const response = await api.get(`/products/${productId}/related`);
       return response.data;
     } catch (error) {
       console.error(error);

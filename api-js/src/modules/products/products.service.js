@@ -42,25 +42,26 @@ const getProducts = () => {
 };
 
 const getProductBySlug = async (slug) => {
-  const product = await prisma.product.findUnique({
+  return await prisma.product.findUnique({
     where: { slug },
     include: { images: true, specifications: true, category: true, brand: true },
   });
-
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
-
-  const relatedProducts = await prisma.product.findMany({
-    where: { categoryId: product.categoryId, NOT: { slug: product.slug } },
-    include: { images: true, specifications: true, category: true },
-    take: 5,
-  });
-
-  return { product, relatedProducts };
 };
 
-const getProductsByCategory = (slug) => {
-  return prisma.product.findMany({
-    where: { category: { slug } },
+const getProductsByCategory = async (productId) => {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+
+  if (!product) {
+    return res.status(404).json({ error: "Produto não encontrado" });
+  }
+
+  return await prisma.product.findMany({
+    where: {
+      categoryId: product.categoryId,
+      NOT: { id: productId },
+    },
     include: { images: true, specifications: true, category: true },
   });
 };
