@@ -16,8 +16,8 @@
   --color-secondary: var(--color-gray-600);
   */
   
-  --color-navbar: var(--color-teal-700);
-  --color-primary: var(--color-teal-700); /* Sua cor atual */
+  --color-navbar: var(--color-slate-700);
+  --color-primary: var(--color-slate-700); /* Sua cor atual */
   --color-primary-hover: var(--color-cyan-800); /* Cor no hover */
   --color-primary-active: var(--color-cyan-900); /* Cor no clique */
 

@@ -1,9 +1,11 @@
 const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const paypal = require("./common/payment/paypal");
 
 const errorHandler = require("./common/middlewares/error.handler");
 
+// Modules
 const AuthModule = require("./modules/auth/auth.module");
 const UserModule = require("./modules/user/user.module");
 const CartModule = require("./modules/cart/cart.module");

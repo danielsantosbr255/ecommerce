@@ -1,8 +1,8 @@
 "use client";
 
-import MobileMenu from "./MobileMenu";
-import MobileBar from "./navbar/MobileBar";
-import DesktopBar from "./navbar/DesktopBar";
+import MobileMenu from "../MobileMenu";
+import MobileBar from "./MobileBar";
+import DesktopBar from "./DesktopBar";
 import { useState, useEffect, JSX } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 

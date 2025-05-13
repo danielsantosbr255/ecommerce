@@ -15,8 +15,6 @@ import {
 import Image from "next/image";
 
 // Importe uma imagem sua (opcional)
-import profileImage from "../../../public/placeholder.jpg"; // Substitua pelo caminho da sua imagem
-
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-16">
@@ -35,15 +33,13 @@ const AboutPage = () => {
           <div className="md:flex items-center -mx-8">
             <div className="md:w-1/3 px-8 mb-6 md:mb-0 text-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-xs">
-                <Image
-                  src={profileImage} // Use a sua imagem aqui
-                  alt="Minha Foto de Perfil"
-                  layout="fill"
-                  objectFit="cover"
-                />
+                <Image src="/placeholder.jpg" alt="Minha Foto de Perfil" layout="fill" objectFit="cover" />
+                
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
-              <h2 className="text-xl font-semibold text-tx-primary mt-4">Olá! Eu sou o Desenvolvedor Aqui.</h2>
+              <h2 className="text-xl font-semibold text-tx-primary mt-4">
+                Olá! Eu sou o Desenvolvedor Aqui.
+              </h2>
               <p className="text-tx-secondary text-sm">
                 Estudante de Desenvolvimento Web & Criador deste Projeto
               </p>
@@ -99,7 +95,9 @@ const AboutPage = () => {
                 <FaTerminal className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-secondary">Backend</h3>
               </div>
-              <p className="text-tx-secondary text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
+              <p className="text-tx-secondary text-sm">
+                Node.js, NestJS (conhecimento), Prisma, RESTful APIs
+              </p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
@@ -178,7 +176,8 @@ const AboutPage = () => {
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1"
             >
-              GitHub<FaGithub/>
+              GitHub
+              <FaGithub />
             </Link>
           </p>
           <p className="text-xs mt-2">
