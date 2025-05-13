@@ -7,7 +7,7 @@ import { productService } from "@/services/products";
 import ProductCarousel from "../products/ProductCarousel";
 import ProductSession from "../products/ProductSession";
 
-export default async function ProductList() {
+export default function ProductList() {
   const fetchProducts = async () => {
     const products = await productService.getAll();
     // await new Promise((resolve) => setTimeout(resolve, 5000));
