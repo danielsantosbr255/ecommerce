@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const isServer = typeof window === "undefined";
+// const isServer = typeof window === "undefined";
 
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
