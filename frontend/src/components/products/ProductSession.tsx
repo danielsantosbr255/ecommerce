@@ -10,6 +10,8 @@ interface Props {
 
 export default async function ProductSession({ callback, label, icon }: Props) {
   const products = await callback();
+  
+  if (!products || !products.length) return null;
 
   return (
     <div className="flex flex-col w-full">

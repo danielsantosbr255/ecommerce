@@ -1,11 +1,20 @@
 import { Bell } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import Alert from "../ui/Alert";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([
     { id: 1, message: "Nova promoção disponível!", read: false },
     { id: 2, message: "Seu pedido foi enviado.", read: false },
+    { id: 3, message: "Seu pedido foi entregue.", read: false },
+    { id: 4, message: "Novo comentário em seu post.", read: false },
+    { id: 5, message: "Você recebeu uma nova mensagem.", read: false },
+    { id: 6, message: "Seu perfil foi atualizado.", read: false },
+    { id: 7, message: "Nova atualização disponível.", read: false },
+    { id: 8, message: "Seu pagamento foi processado.", read: false },
+    { id: 9, message: "Novo seguidor!", read: false },
+    { id: 10, message: "Seu pedido foi cancelado.", read: false },
   ]);
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -18,15 +27,10 @@ export default function Notification() {
 
   return (
     <Link href="#">
-      <div className="relative flex items-center gap-0 py-2 px-4 text-tx-on-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300">
+      <div className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300">
         <button onClick={toggleNotifications} className="relative focus:outline-none">
-          <Bell size={20} />
-          {unreadCount > 0 && (
-            <>
-              <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full"></span>
-              <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
-            </>
-          )}
+          <Bell size={25} />
+          {unreadCount > 0 && <Alert onTop />}
         </button>
 
         {isNotifOpen && (

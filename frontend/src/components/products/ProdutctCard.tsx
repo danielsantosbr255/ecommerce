@@ -20,7 +20,7 @@ export default function ProductCard({ product }: ProductProps) {
   const { createCartItem } = useCarts();
 
   return (
-    <article className="bg-bg-secondary flex flex-col text-tx-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-xs transition-all">
+    <article className="bg-bg-secondary flex flex-col text-tx-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-sm hover:shadow-primary/50 transition-all">
       <main className="flex flex-col justify-between h-full">
         <div className="flex gap-2 items-center pb-2">
           <span className="bg-green-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Novo</span>

@@ -1,20 +1,23 @@
 "use client";
-import { User } from "@/types";
+import { CartItem, User } from "@/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth";
 import { userService } from "@/services/users";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { cartService } from "@/services/carts";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   userLoading: boolean;
+  cartLoading: boolean;
   error: unknown;
+  cartItems: CartItem[] | null;
   signUp: (credentials: { name: string; email: string; password: string }) => Promise<boolean>;
   signIn: (credentials: { email: string; password: string }) => Promise<boolean>;
   signOut: () => Promise<void>;
-  loadUser: () => Promise<User>;
+  loadUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,18 +27,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [userLoading, setUserLoading] = useState<boolean>(true);
+  const [cartLoading, setCartLoading] = useState<boolean>(true);
+  const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const router = useRouter();
 
-  const loadUser = async (): Promise<User> => {
+  const loadUser = useCallback(async () => {
     setLoading(true);
     setUserLoading(true);
+
     const userData = await userService.getOwn();
+
     if (userData) setUser(userData);
-    else setError(error);
+    else setUser(null);
+
     setLoading(false);
     setUserLoading(false);
-    return userData;
-  };
+  }, []);
+
+  const getCartItems = useCallback(async () => {
+    setCartLoading(true);
+    const cart = await cartService.getOwnCart();
+    if (cart) setCartItems(cart);
+    else setCartItems(null);
+    setCartLoading(false);
+  }, []);
 
   const signUp = async (credentials: { name: string; email: string; password: string }) => {
     setLoading(true);
@@ -44,6 +59,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await loadUser();
       toast.success("Conta criada com sucesso!");
       router.push("/account");
+    } else {
+      setError("Erro ao criar conta.");
+      toast.error("Erro ao criar conta.");
     }
     setLoading(false);
     return success;
@@ -57,6 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.success("Logado com sucesso!");
       router.push("/account");
     } else {
+      setError("Credenciais inválidas.");
       toast.error("Credenciais inválidas.");
     }
     setLoading(false);
@@ -69,12 +88,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/auth/sign-in");
   };
 
+  const initialize = useCallback(async () => {
+    await loadUser();
+    await getCartItems();
+  }, [loadUser, getCartItems]);
+
   useEffect(() => {
-    loadUser();
-  }, []);
+    initialize();
+  }, [initialize]);
 
   return (
-    <AuthContext.Provider value={{ user, userLoading, loading, error, signUp, signIn, signOut, loadUser }}>
+    <AuthContext.Provider
+      value={{ user, userLoading, loading, cartLoading, error, cartItems, signUp, signIn, signOut, loadUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

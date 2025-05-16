@@ -1,5 +1,5 @@
 // src/services/dashboardService.ts
-import api from "@/lib/api/axios";
+import api from "@/lib/axios";
 
 export const DashboardService = {
   async getSummary(): Promise<DashboardSummary> {

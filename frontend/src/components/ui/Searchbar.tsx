@@ -32,7 +32,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div className="p-1 flex flex-1 items-center justify-between relative text-tx-secondary">
+    <div className="bg-emerald-2500 p-1 flex flex-1 w-full h-full items-center justify-between relative text-tx-secondary">
       <Input
         type="text"
         value={query}
@@ -41,14 +41,15 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className="bg-white flex flex-1 !py-2 !text-sm !rounded-lg"
+        className="bg-white flex flex-1 !py-2 !pl-3 !text-lg !rounded-lg"
       />
-      <Search className="absolute right-4 top-1/2 -translate-y-1/2 scale-90" />
 
-      {query && (
-        <button onClick={clearSearch} className="absolute right-2">
+      {query ? (
+        <button onClick={clearSearch} className="absolute right-4 top-1/2 -translate-y-1/2 scale-90">
           <X className="" />
         </button>
+      ) : (
+        <Search className="absolute right-4 top-1/2 -translate-y-1/2 scale-90" />
       )}
     </div>
   );

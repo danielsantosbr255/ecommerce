@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Sidebar from "./Sidebar";
 import { useAuth } from "@/contexts/AuthContext";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function Profile() {
   const { user, userLoading, signOut } = useAuth();

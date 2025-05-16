@@ -1,6 +1,6 @@
 export default function Alert({ active, onTop }: { active?: boolean; onTop?: boolean }) {
   const variant = active ? "bg-white" : "bg-primary";
-  const topPosition = onTop ? "" : "top-2";
+  const topPosition = onTop ? "top-0" : "top-2";
 
   return (
     <>

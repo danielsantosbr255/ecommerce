@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { productService } from "@/services/products";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
 import ProductDetail from "@/components/products/ProductDetail";
 import ProductReviews from "@/components/products/ProductReviews";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";

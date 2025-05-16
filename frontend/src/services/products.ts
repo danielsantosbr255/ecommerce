@@ -1,4 +1,4 @@
-import api from "@/lib/api/axios";
+import api from "@/lib/axios";
 import { Product } from "@/types";
 
 class ProductService {

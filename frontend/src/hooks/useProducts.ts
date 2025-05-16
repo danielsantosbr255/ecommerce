@@ -1,5 +1,5 @@
 // src/hooks/api/useProducts.ts
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Product } from "@/types";
 import { productService } from "@/services/products";
 
@@ -9,7 +9,7 @@ export const useProducts = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
 
     const data = await productService.getAll();
@@ -20,9 +20,9 @@ export const useProducts = () => {
       setError("Falha ao carregar produtos");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const createProduct = async (productData: Product) => {
+  const createProduct = useCallback(async (productData: Product) => {
     setLoading(true);
 
     const newProduct = await productService.create(productData);
@@ -35,9 +35,9 @@ export const useProducts = () => {
       setError("Falha ao criar produto");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const updateProduct = async (id: string, productData: Partial<Product>) => {
+  const updateProduct = useCallback(async (id: string, productData: Partial<Product>) => {
     setLoading(true);
 
     const updatedProduct = await productService.update(id, productData);
@@ -49,9 +49,9 @@ export const useProducts = () => {
       setError("Falha ao atualizar produto");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const deleteProduct = async (id: string) => {
+  const deleteProduct = useCallback(async (id: string) => {
     setLoading(true);
     const deletedProduct = await productService.delete(id);
 
@@ -63,7 +63,7 @@ export const useProducts = () => {
       setError("Falha ao deletar produto");
     }
     setLoading(false);
-  };
+  }, []);
 
   return {
     product,

@@ -1,6 +1,6 @@
 import React from "react";
-import SearchBar from "../ui/Searchbar";
 import { Bell } from "lucide-react";
+import SearchBar from "@/components/ui/Searchbar";
 
 export default function AdminHeader() {
   return (

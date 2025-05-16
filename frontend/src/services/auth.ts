@@ -1,5 +1,4 @@
-import api from "@/lib/api/axios";
-// import axios from "axios";
+import api from "@/lib/axios";
 
 class AuthService {
   public async signUp(credentials: { name: string; email: string; password: string }) {
@@ -14,7 +13,6 @@ class AuthService {
 
   public async signIn(credentials: { email: string; password: string }) {
     try {
-      // await axios.post("http://localhost:3000/api/sign-in", credentials, { withCredentials: true });
       await api.post("/auth/signin", credentials);
       return true;
     } catch (error) {

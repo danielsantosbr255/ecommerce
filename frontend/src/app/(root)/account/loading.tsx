@@ -1,4 +1,4 @@
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
 import React from "react";
 
 export default function Loading() {

@@ -23,7 +23,7 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
     onClick={onClick}
     className={cn(
       className,
-      "flex items-center gap-0 py-2 px-4 text-tx-on-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+      "flex items-center gap-0 py-2 px-4 text-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     )}
   >
     {icon} {label}

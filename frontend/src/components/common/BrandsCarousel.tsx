@@ -9,7 +9,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../ui/carousel/carousel";
+} from "@/components/ui/carousel/carousel";
 import { Group } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
@@ -22,7 +22,7 @@ const BrandCard = ({ brand }: { brand: Brand }) => {
     >
       <Link
         href={`/brands/${brand.slug}`}
-        className="text-primary flex relative aspect-square border border-lines w-full h-full shadow-xs rounded-lg items-center justify-center"
+        className="text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
       >
         <Image
           src={brand?.image || ""}

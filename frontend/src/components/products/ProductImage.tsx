@@ -4,7 +4,8 @@ import clsx from "clsx";
 import { useState } from "react";
 import Image from "next/image";
 import { Product } from "@/types";
-import LoadingState from "../LoadingState";
+// import LoadingState from "../ui/LoadingState";
+import Skeleton from "../ui/Skeleton";
 
 type ProductImageProps = {
   product: Product;
@@ -42,8 +43,8 @@ export default function ProductImage({ product, alt, className }: ProductImagePr
   return (
     <div className={clsx("relative flex w-full h-full", className)}>
       {loading && (
-        <div className="absolute text-primary inset-0 flex items-center animate-spin justify-center">
-          <LoadingState />
+        <div className="absolute text-primary inset-0 flex items-center justify-center">
+          <Skeleton className="w-full h-full" />
         </div>
       )}
 

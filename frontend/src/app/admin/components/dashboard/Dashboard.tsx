@@ -1,22 +1,23 @@
 "use client";
 
 import MetricCard from "./MetricCard";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useUsers } from "@/hooks/useUsers";
 import { useProducts } from "@/hooks/useProducts";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
 import { Package, Users, ShoppingBag, ClipboardList } from "lucide-react";
 
 export default function Dashboard() {
   const { users, loading: usersLoading, error: usersError, fetchUsers } = useUsers();
   const { products, loading: productsLoading, error: productsError, fetchProducts } = useProducts();
 
+  const fectchDashboardData = useCallback(async () => {
+    await Promise.all([fetchUsers(), fetchProducts()]);
+  }, [fetchUsers, fetchProducts]);
+
   useEffect(() => {
-    const fectchDashboardData = async () => {
-      await Promise.all([fetchUsers(), fetchProducts()]);
-    };
     fectchDashboardData();
-  }, []);
+  }, [fectchDashboardData]);
 
   if (usersLoading || productsLoading) return <LoadingState />;
   if (usersError || productsError) return <div>Erro: {usersError || productsError}</div>;

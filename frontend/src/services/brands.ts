@@ -1,4 +1,4 @@
-import api from "@/lib/api/axios";
+import api from "@/lib/axios";
 import { Brand } from "@/types";
 
 class BrandService {

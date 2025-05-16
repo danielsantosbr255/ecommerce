@@ -1,11 +1,11 @@
 import ProductList from "@/components/layout/ProductList";
-import { PromotionCarousel } from "@/components/promotions/PromotionCarousel";
+import { PromotionBanner } from "@/components/promotions/PromotionBanner";
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full h-full">
       <main className="flex flex-1 flex-col my-5 mx-auto w-full px-2 lg:px-4 lg:max-w-10/12 h-full gap-6 items-center">
-        <PromotionCarousel />
+        <PromotionBanner />
         <ProductList />
       </main>
     </div>

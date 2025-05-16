@@ -22,11 +22,13 @@ export default function Navbar(): JSX.Element | null {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
-    <nav className="flex flex-1 !text-tx-on-primary items-center w-full lg:mx-auto lg:max-w-10/12">
-      <DesktopBar user={user} loading={userLoading} />
-      <MobileBar user={user} loading={userLoading} toggleMobileMenu={toggleMobileMenu} />
+    <nav className="bg-navbar flex flex-1 border-b border-lines/50 !text-primary items-center w-full">
+      <main className="flex w-full lg:mx-auto lg:max-w-10/12">
+        <DesktopBar user={user} loading={userLoading} />
+        <MobileBar user={user} loading={userLoading} toggleMobileMenu={toggleMobileMenu} />
 
-      {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} />}
+        {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} />}
+      </main>
     </nav>
   );
 }

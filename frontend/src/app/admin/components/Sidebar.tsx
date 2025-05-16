@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import Logo from "../ui/Logo";
 import { cn } from "@/lib/utils";
-import Button from "../ui/Button";
-import Skeleton from "../ui/Skeleton";
+import Link from "next/link";
+import React, { useContext } from "react";
 import { usePathname } from "next/navigation";
+import Logo from "../../../components/ui/Logo";
 import { useAuth } from "@/contexts/AuthContext";
+import Button from "../../../components/ui/Button";
+import Skeleton from "../../../components/ui/Skeleton";
 import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
 
 interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
@@ -58,10 +58,10 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
   const active = usePath === href;
 
   const mainStyle = cn(
-    "flex items-center p-2",
-    "font-medium text-lg text-tx-secondary rounded-xl cursor-pointer",
+    "flex items-center p-2 rounded-r-xl shadow-xs",
+    "font-medium text-lg text-tx-secondary cursor-pointer",
     "transition-colors group z-50",
-    active ? "bg-primary !text-tx-on-primary" : "hover:bg-gray-200"
+    active ? "bg-primary/5 border-l-3 border-accent text-accent" : "hover:bg-gray-200"
   );
 
   return (
@@ -81,12 +81,8 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
 }
 
 export function SidebarFooter() {
-  const { isOpen } = React.useContext(SidebarContext);
-  const { user, signOut, loadUser } = useAuth();
-
-  React.useEffect(() => {
-    loadUser();
-  }, []);
+  const { user, signOut } = useAuth();
+  const { isOpen } = useContext(SidebarContext);
 
   return (
     <div className="flex flex-col border-t border-lines p-2">
@@ -111,37 +107,3 @@ export function SidebarFooter() {
     </div>
   );
 }
-
-// export function SidebarItem({ children, icon, text, alert, href = "" }: SidebarItemProps) {
-//   const { isOpen } = React.useContext(SidebarContext);
-//   const usePath = usePathname();
-//   const active = usePath === href;
-
-//   return (
-//     <li
-//       className={`relative flex items-center justify-center py-2 my-1
-//     font-medium text-lg text-tx-secondary rounded-xl cursor-pointer
-//     transition-colors group z-50
-//     ${active ? "bg-primary !text-tx-on-primary" : "hover:bg-gray-200 "}
-//     `}
-//     >
-//       <Link href={href} className="flex items-center">
-//         {icon}
-//         <p className={`overflow-hidden transition-all ${isOpen ? "w-52 ml-2" : "w-0"}`}>{text}</p>
-
-//         {alert && <Alert active={active} onTop={isOpen} />}
-
-//         {!isOpen && (
-//           <div
-//             className={`
-//             bg-primary text-tx-on-primary absolute left-full rounded-lg px-2 py-1 ml-4
-//             invisible opacity-20 -translate-x-3 transition-all
-//             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
-//           >
-//             {text}
-//           </div>
-//         )}
-//       </Link>
-//     </li>
-//   );
-// }

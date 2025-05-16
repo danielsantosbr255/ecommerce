@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../ui/Logo";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
+import Logo from "@/components/ui/Logo";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, LogIn, User } from "lucide-react";

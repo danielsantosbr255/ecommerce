@@ -4,8 +4,8 @@ import React from "react";
 // import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import AdminHeader from "@/components/admin/AdminHeader";
-import { Sidebar, SidebarItem } from "@/components/layout/Sidebar";
+import AdminHeader from "./components/AdminHeader";
+import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
 import { DropdownMenu, DropdownItem } from "@/components/ui/DropdownMenu";
 import { LayoutDashboard, Package, ClipboardList, Users, Settings } from "lucide-react";
 
@@ -19,9 +19,9 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user } = useAuth();
+  const { user, userLoading } = useAuth();
 
-  if (!user) {
+  if (!userLoading && !user) {
     redirect("/auth/sign-in");
   }
 

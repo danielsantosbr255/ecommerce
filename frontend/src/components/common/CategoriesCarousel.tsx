@@ -9,10 +9,10 @@ import {
   CarouselPrevious,
 } from "../ui/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { LayoutTemplate } from "lucide-react";
+import { Box, LayoutTemplate } from "lucide-react";
 import { Category } from "@/types";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 
 const CategoryCard = ({ category }: { category: Category }) => {
   return (
@@ -22,15 +22,16 @@ const CategoryCard = ({ category }: { category: Category }) => {
     >
       <Link
         href={`/categories/${category.slug}`}
-        className="text-primary flex relative aspect-square border border-lines w-full h-full shadow-xs rounded-lg items-center justify-center"
+        className="text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
       >
-        <Image
+        {/* <Image
           src={category?.image || "/placeholder.jpg"}
           alt={category?.name || ""}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
           className="object-contain p-3"
-        />
+        /> */}
+        <Box size={50} />
       </Link>
 
       <h3 className="text-tx-primary text-lg leading-5">{category.name}</h3>

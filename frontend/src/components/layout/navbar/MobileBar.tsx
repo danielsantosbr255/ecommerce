@@ -16,7 +16,7 @@ const MobileBar = ({ user, loading, toggleMobileMenu }: MobileBarProps): JSX.Ele
 
   return (
     <section className="block lg:hidden w-full">
-      <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-tx-on-primary items-center">
+      <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
         <button
           onClick={toggleMobileMenu}
           className="justify-start focus:outline-none"

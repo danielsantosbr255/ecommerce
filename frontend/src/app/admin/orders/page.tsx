@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
 import { orderService } from "@/services/orders";
 
 type Order = {

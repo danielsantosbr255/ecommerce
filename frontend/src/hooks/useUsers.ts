@@ -1,5 +1,5 @@
 // src/hooks/api/useUsers.ts
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { User } from "@/types";
 import { userService } from "@/services/users";
 
@@ -9,7 +9,7 @@ export const useUsers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
 
     const data = await userService.getAll();
@@ -20,9 +20,9 @@ export const useUsers = () => {
       setError("Falha ao carregar usuários");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const fetchUser = async (id: string) => {
+  const fetchUser = useCallback(async (id: string) => {
     setLoading(true);
     const data = await userService.getOne(id);
     if (data) {
@@ -32,9 +32,9 @@ export const useUsers = () => {
       setError("Falha ao carregar usuário");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const fetchOwnUser = async () => {
+  const fetchOwnUser = useCallback(async () => {
     setLoading(true);
     const data = await userService.getOwn();
     if (data) {
@@ -44,9 +44,9 @@ export const useUsers = () => {
       setError("Falha ao carregar usuário");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const createUser = async (userData: User) => {
+  const createUser = useCallback(async (userData: User) => {
     setLoading(true);
 
     const newUser = await userService.create(userData);
@@ -58,9 +58,9 @@ export const useUsers = () => {
       setError("Falha ao criar usuário");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const updateUser = async (id: string, userData: Partial<User>) => {
+  const updateUser = useCallback(async (id: string, userData: Partial<User>) => {
     setLoading(true);
 
     const updatedUser = await userService.update(id, userData);
@@ -71,9 +71,9 @@ export const useUsers = () => {
       setError("Falha ao atualizar usuário");
     }
     setLoading(false);
-  };
+  }, []);
 
-  const deleteUser = async (id: string) => {
+  const deleteUser = useCallback(async (id: string) => {
     setLoading(true);
     const deletedUser = await userService.delete(id);
 
@@ -84,7 +84,7 @@ export const useUsers = () => {
       setError("Falha ao deletar usuário");
     }
     setLoading(false);
-  };
+  }, []);
 
   return {
     user,

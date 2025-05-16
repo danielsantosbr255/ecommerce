@@ -1,4 +1,4 @@
-import api from "@/lib/api/axios";
+import api from "@/lib/axios";
 import { User } from "@/types";
 
 class UserService {

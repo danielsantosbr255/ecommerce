@@ -20,7 +20,7 @@ const AdminProductCard: React.FC<Props> = ({ product }) => {
 
         <div className="flex flex-col flex-1 truncate">
           <h3 className="text-lg font-semibold text-tx-primary ">{product.title}</h3>
-          <p className="text-tx-secondary">Categoria: {product.categoryId}</p>
+          <p className="text-tx-secondary">Categoria: {product.category.name}</p>
           <p className="text-tx-secondary">Estoque: {product.stock}</p>
           <p className="text-primary font-bold">{CurrencyUtil.formatCurrency(product.price)}</p>
         </div>

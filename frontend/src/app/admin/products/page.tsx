@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
-import AdminProductList from "@/components/admin/AdminProductList";
-import AdminProductFilters from "@/components/admin/AdminProductFilters";
-import AdminProductForm from "@/components/admin/AdminProductForm";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/ui/LoadingState";
+import AdminProductList from "../components/AdminProductList";
+import AdminProductForm from "../components/AdminProductForm";
+import AdminProductFilters from "../components/AdminProductFilters";
 
 const AdminProductsPage: React.FC = () => {
   return (

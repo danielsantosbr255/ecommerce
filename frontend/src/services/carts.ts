@@ -1,4 +1,4 @@
-import api from "@/lib/api/axios";
+import api from "@/lib/axios";
 import { Cart, CartItem } from "@/types";
 
 class CartService {
@@ -55,6 +55,16 @@ class CartService {
   public async delete(id: string) {
     try {
       const response = await api.delete(`/carts/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  public async clearCart() {
+    try {
+      const response = await api.delete("/cart");
       return response.data;
     } catch (error) {
       console.error(error);

@@ -1,12 +1,12 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Input from "../ui/Input";
-import Select from "../ui/inputs/Select";
-import Button from "../ui/Button";
-import ImageInput from "../ui/inputs/ImageInput";
+import { useForm } from "react-hook-form";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import Select from "@/components/ui/inputs/Select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ImageInput from "@/components/ui/inputs/ImageInput";
 import { useState } from "react";
 
 const productSchema = z.object({

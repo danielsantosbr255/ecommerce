@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Dot } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { Children, useState, useContext, useEffect, useRef, useMemo } from "react";
-import { SidebarContext } from "../layout/Sidebar";
+import { SidebarContext } from "../../app/admin/components/Sidebar";
 
 interface DropdownProps {
   text: string;
@@ -52,7 +52,7 @@ export function DropdownMenu({ children, icon, text }: DropdownProps) {
   const listStyle = cn(
     "p-2 group flex flex-col z-50 font-medium text-lg cursor-pointer",
     "transition-all duration-300 ease-in-out rounded-2xl overflow-hidden",
-    isDroped ? "bg-gray-200/50 border-b border-dashed border-primary" : "bg-transparent",
+    isDroped ? "shadow border border-lines/10" : "bg-transparent",
     active ? "text-primary" : "hover:bg-gray-200/50"
   );
 
