@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
   console.log("🚨 [MD] accessToken: ", accessToken);
   console.log("🚨 [MD] refreshToken: ", refreshToken);
 
-  if (!accessToken || !refreshToken) {
+  if (!accessToken) {
     throw new CustomError("Token não fornecido!", 401);
   }
 
