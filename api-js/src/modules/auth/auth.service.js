@@ -64,7 +64,7 @@ const signOut = async ({ userId, refreshToken, userAgent, ipAddress }) => {
 
 const revalidateTokens = async ({ refreshToken, userAgent, ipAddress }) => {
   if (!refreshToken) {
-    throw new CustomError("Refresh token not found", 401);
+    throw new CustomError("Token de atualização nao fornecido", 401);
   }
 
   const decrypted = cryptoUtil.decryptData(refreshToken);

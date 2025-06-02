@@ -51,18 +51,14 @@ const refreshToken = async (req, res) => {
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const refreshToken = req.cookies.refreshToken; // || req.headers["authorization"]?.split(" ")[1];
 
-  console.log("🍪 [REFRESH TOKEN]: ", refreshToken);
+  console.log("🍪 [CONTROLLER] - REFRESH TOKEN: ", refreshToken);
 
-  try {
-    const session = await service.revalidateTokens({ refreshToken, userAgent, ipAddress });
-    console.log("⚙️ [CONTROLLER] - refresh session: ", session);
-    tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
+  const session = await service.revalidateTokens({ refreshToken, userAgent, ipAddress });
+  
+  console.log("⚙️ [CONTROLLER] - refresh session: ", session);
+  tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
-    res.json({ session });
-  } catch (error) {
-    tokenUtil.clearTokens(res);
-    throw new CustomError("Token inválido", 401);
-  }
+  res.json({ session });
 };
 
 const validate = async (req, res) => {
