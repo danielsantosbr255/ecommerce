@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { User } from "@/types";
 import { cn } from "@/lib/utils";
@@ -18,11 +19,6 @@ interface NavItemProps {
   className?: string;
 }
 
-interface DesktopBarProps {
-  user: User | null;
-  loading: boolean;
-}
-
 const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): JSX.Element => (
   <Link
     href={href}
@@ -36,28 +32,47 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
   </Link>
 );
 
-const CartItem = ({ href, label = "", count, icon, onClick, className }: NavItemProps): JSX.Element => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={cn(
-      className,
-      "relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
-    )}
-  >
-    {count && (
-      <span className="absolute bg-primary -top-0 -right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full">
-        {count}
-      </span>
-    )}
-    {icon} {label}
-  </Link>
-);
-
-const DesktopBar = ({ user, loading }: DesktopBarProps): JSX.Element => {
-  const isAdmin = user?.role === "ADMIN";
+const CartItem = () => {
   const { cartItems } = useAuth();
-  const cartItemCount = cartItems?.length;
+  const cartItemCount = cartItems?.length ? cartItems?.length : null;
+
+  return (
+    <Link
+      href="/cart"
+      className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+    >
+      {cartItemCount && (
+        <span className="absolute bg-primary -top-0 -right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full">
+          {cartItemCount}
+        </span>
+      )}
+      <ShoppingCart size={25} />
+    </Link>
+  );
+};
+
+const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) => {
+  const isAdmin = user?.role === "ADMIN";
+
+  if (loading) return <NavItem href="#" icon={<Loader size={25} className="animate-spin" />} />;
+
+  return (
+    <>
+      <NavItem
+        href={user ? "/account" : "/auth/sign-in"}
+        label=""
+        icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
+      />
+
+      {isAdmin && (
+        <NavItem href="/admin" icon={<ShieldUser size={26} className="animate-pulse text-accent" />} />
+      )}
+    </>
+  );
+};
+
+export default function DesktopBar(): JSX.Element {
+  const { user, userLoading } = useAuth();
 
   return (
     <main className="hidden lg:grid grid-cols-[1fr_2fr_1fr] w-full items-center justify-between px-2 py-0">
@@ -68,26 +83,11 @@ const DesktopBar = ({ user, loading }: DesktopBarProps): JSX.Element => {
       <SearchBar />
 
       <div className="bg-amber-30 flex w-full h-full items-center justify-end gap-2">
-        {isAdmin && (
-          <NavItem href="/admin" icon={<ShieldUser size={26} className="animate-pulse text-accent" />} />
-        )}
-
         <NavItem href="/about" icon={<Info size={25} />} />
-        <CartItem href="/cart" icon={<ShoppingCart size={25} />} count={cartItemCount} />
+        <CartItem />
         <Notification />
-
-        {loading ? (
-          <NavItem href="#" label="" icon={<Loader size={25} />} className="animate-spin" />
-        ) : (
-          <NavItem
-            href={user ? "/account" : "/auth/sign-in"}
-            label=""
-            icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
-          />
-        )}
+        <UserItem user={user} loading={userLoading} />
       </div>
     </main>
   );
-};
-
-export default DesktopBar;
+}

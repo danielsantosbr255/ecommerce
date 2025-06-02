@@ -6,8 +6,7 @@ class CartService {
     try {
       const response = await api.post("/carts", { productId, quantity });
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -16,8 +15,7 @@ class CartService {
     try {
       const response = await api.get("/carts");
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -26,8 +24,7 @@ class CartService {
     try {
       const response = await api.get("/cart");
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -36,18 +33,16 @@ class CartService {
     try {
       const response = await api.get(`/carts/${id}`);
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
 
-  public async update(id: string, cartData: Partial<CartItem>) {
+  public async update(id: string, quantity: number) {
     try {
-      const response = await api.put(`/carts/${id}`, cartData);
+      const response = await api.put(`/carts/${id}`, { quantity });
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -56,20 +51,14 @@ class CartService {
     try {
       const response = await api.delete(`/carts/${id}`);
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
 
   public async clearCart() {
-    try {
-      const response = await api.delete("/cart");
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.delete("/carts");
+    return response.data;
   }
 }
 

@@ -1,7 +1,9 @@
 "use client";
+
 import { useState } from "react";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { reviewService } from "@/services/reviews";
 
@@ -9,18 +11,22 @@ export default function ProductReviewsForm({ productSlug }: { productSlug: strin
   const { user } = useAuth();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const router = useRouter();
 
   if (!user) return null;
 
-  async function handleReviewSubmit() {
-    if (!user) return null;
+  const handleReviewSubmit = async () => {
     const success = await reviewService.create({ userId: user.id, productSlug, rating, comment });
 
     if (success) {
-      return toast.success("Avaliação enviada com sucesso!");
+      toast.success("Avaliação enviada com sucesso!");
+      router.refresh();
+      setRating(5);
+      setComment("");
+      return;
     }
     toast.error("Erro ao enviar avaliação. Tente novamente mais tarde.");
-  }
+  };
 
   return (
     <div className="mt-6 bg-white p-4 rounded-lg shadow-xs space-y-4">

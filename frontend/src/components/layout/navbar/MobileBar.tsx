@@ -1,24 +1,24 @@
+"use client";
+
 import Link from "next/link";
-import { User } from "@/types";
 import { JSX } from "react";
-import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
+import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
 
-interface MobileBarProps {
-  user: User | null;
-  loading: boolean;
-  toggleMobileMenu: () => void;
-}
+const MobileBar = (): JSX.Element => {
+  const { user, userLoading } = useAuth();
 
-const MobileBar = ({ user, loading, toggleMobileMenu }: MobileBarProps): JSX.Element => {
   const isAdmin = user?.role === "ADMIN";
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
     <section className="block lg:hidden w-full">
       <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
         <button
-          onClick={toggleMobileMenu}
+          // onClick={toggleMobileMenu}
           className="justify-start focus:outline-none"
           aria-label="Abrir menu"
         >
@@ -34,7 +34,7 @@ const MobileBar = ({ user, loading, toggleMobileMenu }: MobileBarProps): JSX.Ele
             </Link>
           )}
 
-          {loading ? (
+          {userLoading ? (
             <Loader size={25} className="animate-spin" />
           ) : (
             <Link href={user ? "/account" : "/auth/sign-in"}>

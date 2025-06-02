@@ -1,6 +1,8 @@
 import { ShoppingCart } from "lucide-react";
 import CartItems from "./components/CartItems";
 
+export const dynamic = "force-dynamic";
+
 export default function CartPage() {
   return (
     <main className="flex flex-col w-full h-full max-w-10/12 mx-auto py-5">

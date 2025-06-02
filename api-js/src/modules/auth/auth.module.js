@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const controller = require("./auth.controller");
+const { verifyToken } = require("../../common/middlewares/auth.middleware");
 
-router.post("/auth/signup", controller.signUp);
-router.post("/auth/signin", controller.signIn);
-router.post("/auth/logout", controller.logout);
+router.post("/auth/sign-up", controller.signUp);
+router.post("/auth/sign-in", controller.signIn);
+router.post("/auth/sign-out", verifyToken, controller.signOut);
 router.post("/auth/refresh", controller.refreshToken);
+router.post("/auth/validate", controller.validate);
 
 module.exports = router;

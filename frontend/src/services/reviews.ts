@@ -22,9 +22,9 @@ class ReviewService {
     }
   }
 
-  public async getReview(id: string) {
+  public async getReview(slug: string): Promise<Review[] | null> {
     try {
-      const response = await api.get(`/reviews/${id}`);
+      const response = await api.get(`/reviews/product/${slug}`);
       return response.data;
     } catch (error) {
       console.error(error);

@@ -1,32 +1,19 @@
 import api from "@/lib/axios";
+import { Session, SignInFormData, SignUpFormData } from "@/types";
 
 class AuthService {
-  public async signUp(credentials: { name: string; email: string; password: string }) {
-    try {
-      await api.post("/auth/signup", credentials);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+  public async signUp(credentials: SignUpFormData) {
+    const res = await api.post("/auth/sign-up", credentials);
+    return res.data as { session: Session };
   }
 
-  public async signIn(credentials: { email: string; password: string }) {
-    try {
-      await api.post("/auth/signin", credentials);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+  public async signIn(credentials: SignInFormData) {
+    const res = await api.post("/auth/sign-in", credentials);
+    return res.data as { session: Session };
   }
 
   public async signOut() {
-    try {
-      await api.post("/auth/logout");
-    } finally {
-      return true;
-    }
+    return await api.post("/auth/sign-out");
   }
 }
 

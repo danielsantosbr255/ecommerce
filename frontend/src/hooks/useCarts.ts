@@ -1,16 +1,16 @@
 // src/hooks/api/useCarts.ts
 "use client";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { Cart, CartItem } from "@/types";
 import { cartService } from "@/services/carts";
-import { toast } from "react-toastify";
 
 export const useCarts = () => {
-  const [myCart, setMyCart] = useState<CartItem[] | null>(null);
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [carts, setCarts] = useState<Cart[]>([]);
   const [loading, setLoading] = useState(false);
+  const [carts, setCarts] = useState<Cart[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [myCart, setMyCart] = useState<CartItem[] | null>(null);
 
   const fetchCarts = async () => {
     setLoading(true);

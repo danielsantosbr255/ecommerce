@@ -16,6 +16,8 @@ interface PromotionProductProps {
   product: Product;
 }
 
+export const revalidate = 60;
+
 const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
 
@@ -26,7 +28,7 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
     return (
       <div className="flex flex-col justify-center items-center mt-10">
         <h1 className="text-2xl text-tx-primary font-medium my-2 py-2">
-          Nenhum produto encontrado para: <span className="font-bold underline text-warning">{slug}</span>
+          Nenhum produto encontrado para: <span className="font-bold underline text-primary">{slug}</span>
         </h1>
       </div>
     );
@@ -36,7 +38,7 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
     <div>
       <section className="flex flex-col gap-4 lg:max-w-10/12 mx-auto px-2 lg:px-0 mb-10">
         <h2 className="border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
-          Você está em: <span className="font-bold underline text-warning">{slug}</span>
+          Você está em: <span className="font-bold underline text-primary">{slug}</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">

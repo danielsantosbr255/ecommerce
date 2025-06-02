@@ -3,17 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import Sidebar from "./Sidebar";
+import { redirect } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 
 export default function Profile() {
   const { user, userLoading, signOut } = useAuth();
 
-  if (userLoading) return <LoadingState />;
+  if (userLoading) {
+    return <LoadingState />;
+  }
 
   if (!user) {
-    window.location.href = "/auth/sign-in";
-    return null;
+    redirect("/auth/sign-in");
   }
 
   return (

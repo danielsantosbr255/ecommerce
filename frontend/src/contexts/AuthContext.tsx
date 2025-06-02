@@ -1,23 +1,25 @@
 "use client";
-import { CartItem, User } from "@/types";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+
+import { redirect, useRouter } from "next/navigation";
 import { authService } from "@/services/auth";
 import { userService } from "@/services/users";
 import { cartService } from "@/services/carts";
+import { CartItem, SignInFormData, SignUpFormData, User } from "@/types";
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface AuthContextType {
+  error: unknown;
   user: User | null;
   loading: boolean;
   userLoading: boolean;
   cartLoading: boolean;
-  error: unknown;
   cartItems: CartItem[] | null;
-  signUp: (credentials: { name: string; email: string; password: string }) => Promise<boolean>;
-  signIn: (credentials: { email: string; password: string }) => Promise<boolean>;
+  signUp: (data: SignUpFormData) => Promise<void>;
+  signIn: (data: SignInFormData) => Promise<void>;
   signOut: () => Promise<void>;
   loadUser: () => Promise<void>;
+  loadCart: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -29,77 +31,94 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userLoading, setUserLoading] = useState<boolean>(true);
   const [cartLoading, setCartLoading] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
-  const router = useRouter();
+  const route = useRouter();
+
+  const signUp = useCallback(async ({ name, email, password }: SignUpFormData) => {
+    setLoading(true);
+    try {
+      const { session } = await authService.signUp({ name, email, password });
+      sessionStorage.setItem("accessToken", session.accessToken);
+      await loadUser();
+      route.push("/account");
+      toast.success("Conta criada com sucesso!");
+    } catch (error) {
+      setError(error);
+      toast.error("Erro ao criar conta. Tente novamente mais tarde.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const signIn = useCallback(async ({ email, password }: SignInFormData) => {
+    setLoading(true);
+    try {
+      const { session } = await authService.signIn({ email, password });
+      sessionStorage.setItem("accessToken", session.accessToken);
+      await loadUser();
+      route.push("/account");
+      toast.success("Logado com sucesso!");
+    } catch (error) {
+      setError(error);
+      if (error instanceof Error) toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const signOut = useCallback(async () => {
+    setLoading(true);
+    try {
+      await authService.signOut();
+    } catch (error) {
+      setError(error);
+    } finally {
+      setUser(null);
+      setCartItems(null);
+      sessionStorage.removeItem("accessToken");
+      toast.success("Deslogado com sucesso!");
+      setLoading(false);
+      redirect("/");
+    }
+  }, []);
 
   const loadUser = useCallback(async () => {
-    setLoading(true);
     setUserLoading(true);
-
-    const userData = await userService.getOwn();
-
-    if (userData) setUser(userData);
-    else setUser(null);
-
-    setLoading(false);
+    const user = await userService.getOwn();
+    setUser(user);
     setUserLoading(false);
   }, []);
 
-  const getCartItems = useCallback(async () => {
+  const loadCart = useCallback(async () => {
     setCartLoading(true);
-    const cart = await cartService.getOwnCart();
-    if (cart) setCartItems(cart);
-    else setCartItems(null);
+    const cartItems = await cartService.getOwnCart();
+    setCartItems(cartItems);
     setCartLoading(false);
   }, []);
 
-  const signUp = async (credentials: { name: string; email: string; password: string }) => {
-    setLoading(true);
-    const success = await authService.signUp(credentials);
-    if (success) {
-      await loadUser();
-      toast.success("Conta criada com sucesso!");
-      router.push("/account");
-    } else {
-      setError("Erro ao criar conta.");
-      toast.error("Erro ao criar conta.");
-    }
-    setLoading(false);
-    return success;
-  };
-
-  const signIn = async (credentials: { email: string; password: string }) => {
-    setLoading(true);
-    const success = await authService.signIn(credentials);
-    if (success) {
-      await loadUser();
-      toast.success("Logado com sucesso!");
-      router.push("/account");
-    } else {
-      setError("Credenciais inválidas.");
-      toast.error("Credenciais inválidas.");
-    }
-    setLoading(false);
-    return success;
-  };
-
-  const signOut = async () => {
-    await authService.signOut();
-    setUser(null);
-    router.push("/auth/sign-in");
-  };
-
-  const initialize = useCallback(async () => {
-    await loadUser();
-    await getCartItems();
-  }, [loadUser, getCartItems]);
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    if (user) loadCart();
+    if (!user && !userLoading) setCartLoading(false);
+  }, [user, loadCart]);
 
   return (
     <AuthContext.Provider
-      value={{ user, userLoading, loading, cartLoading, error, cartItems, signUp, signIn, signOut, loadUser }}
+      value={{
+        user,
+        userLoading,
+        loading,
+        cartLoading,
+        error,
+        cartItems,
+        signUp,
+        signIn,
+        signOut,
+        loadCart,
+        loadUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

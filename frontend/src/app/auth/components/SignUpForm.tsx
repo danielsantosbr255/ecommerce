@@ -2,96 +2,95 @@
 
 import Logo from "@/components/ui/Logo";
 import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
+import { SignUpFormData } from "@/types";
 import { useForm } from "react-hook-form";
-import { Loader2, UserPlus } from "lucide-react";
+import Button from "@/components/ui/Button";
 import { useAuth } from "@/contexts/AuthContext";
+import { KeyRound, Loader2, LogIn, Mail, User } from "lucide-react";
 
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-export default function SignUpForm() {
+export default function SignInForm() {
+  const { register, handleSubmit, formState } = useForm<SignUpFormData>({ mode: "onChange" });
+  const { errors } = formState;
   const { signUp, loading } = useAuth();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ mode: "onChange", defaultValues: { email: "", password: "" } });
-
-  const onSubmit = async (data: FormData) => {
-    const { name, email, password } = data;
-    await signUp({ name, email, password });
+  const onSubmit = async (data: SignUpFormData) => {
+    await signUp(data);
   };
 
   return (
-    <div className="flex w-full h-full max-w-8/12 max-h-8/12 text-tx-secondary rounded-2xl overflow-hidden justify-center shadow-xs border-t border-lines">
-      <div className="bg-bg-secondary flex w-3/5 flex-col gap-10 justify-center items-center">
+    <div className="flex flex-col w-full h-full">
+      <div className="flex flex-1 w-full mx-auto px-2 sm:w-lg flex-col gap-10 justify-center items-center">
         <div className="flex flex-col items-center gap-2 justify-center">
-          <UserPlus size={60} />
-          <h1 className="text-primary font-bold text-5xl">Crie sua conta rapidinho</h1>
-          <p className="text-center">e comece a comprar agora mesmo!</p>
+          <User size={60} />
+          <h1 className="text-primary font-bold text-3xl sm:text-4xl">Crie sua conta rapidinho</h1>
+          <p className="text-center"> comece a comprar agora mesmo!</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-8/12 gap-2">
-          <Input
-            type="text"
-            placeholder="Nome"
-            className="w-full p-4"
-            {...register("name", {
-              required: "Nome é obrigatorio",
-              minLength: { value: 3, message: "O nome precisa ter pelo menos 3 caracteres" },
-            })}
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
+          <div className="relative">
+            <User size={20} className="absolute top-3 left-3 text-primary" />
+            <Input
+              type="text"
+              placeholder="Nome"
+              className="w-full p-3 pl-10"
+              {...register("name", {
+                required: "Nome é obrigatorio",
+                minLength: { value: 3, message: "O nome precisa ter pelo menos 3 caracteres" },
+              })}
+            />
+          </div>
           {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
 
-          <Input
-            type="email"
-            placeholder="Email"
-            className="w-full p-4"
-            {...register("email", {
-              required: "Email é obrigatorio",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Email inválido",
-              },
-            })}
-          />
+          <div className="relative">
+            <Mail size={20} className="absolute top-3 left-3 text-primary" />
+            <Input
+              type="email"
+              placeholder="Email"
+              className="w-full p-3 pl-10"
+              {...register("email", {
+                required: "Email é obrigatorio",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Email inválido",
+                },
+              })}
+            />
+          </div>
           {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
 
-          <Input
-            type="password"
-            placeholder="Senha"
-            className="w-full p-4"
-            {...register("password", {
-              required: "Senha é obrigatorio",
-              minLength: { value: 5, message: "A senha precisa ter pelo menos 5 caracteres" },
-            })}
-          />
+          <div className="relative">
+            <KeyRound size={20} className="absolute top-3 left-3 text-primary" />
+            <Input
+              type="password"
+              {...register("password", {
+                required: "Senha é obrigatorio",
+                minLength: { value: 5, message: "Senha deve ter pelo menos 5 caracteres" },
+              })}
+              placeholder="Senha"
+              className="w-full p-3 pl-10"
+            />
+          </div>
           {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
 
           <Button
-            type="submit"
             disabled={loading}
             className={`text-tx-on-primary w-full gap-2 mt-2 ${
               loading ? "cursor-not-allowed bg-primary/50" : "bg-primary"
             }`}
           >
-            <UserPlus /> Cadastrar
-            {loading && (
+            {loading ? (
               <div>
-                {" "}
                 <Loader2 className="animate-spin" />{" "}
               </div>
+            ) : (
+              <LogIn />
             )}
+            {loading ? "Cadastrando..." : "Cadastrar"}
           </Button>
         </form>
       </div>
 
-      <div className="bg-primary  text-tx-on-primary gap-8 flex flex-col w-2/5 px-2 justify-center items-center">
+      <div className="bg-primary flex flex-col w-full gap-4 p-8 text-tx-on-primary justify-center items-center">
         <Logo variant="animated" size={60} />
 
         <h1 className="font-bold text-3xl">Bem-vindo de volta!</h1>

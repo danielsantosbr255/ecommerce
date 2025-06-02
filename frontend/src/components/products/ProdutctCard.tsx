@@ -2,22 +2,34 @@
 
 import Link from "next/link";
 import { Product } from "@/types";
+import Button from "../ui/Button";
+import { toast } from "react-toastify";
 import ProductImage from "./ProductImage";
 import { ShoppingCart } from "lucide-react";
+import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
-import Button from "../ui/Button";
-import { useCarts } from "@/hooks/useCarts";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ProductProps = {
   product: Product;
 };
 
 export default function ProductCard({ product }: ProductProps) {
+  const { loadCart } = useAuth();
+
   const productDiscount = product.price - (product.price * product.discount!) / 100;
   const productPrice = product.discount! > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
   const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
 
-  const { createCartItem } = useCarts();
+  const onAddToCart = async () => {
+    const newCartItem = await cartService.create(product.id, 1);
+
+    if (newCartItem) {
+      toast.success("Produto adicionado ao carrinho");
+      await loadCart();
+      return newCartItem;
+    }
+  };
 
   return (
     <article className="bg-bg-secondary flex flex-col text-tx-primary w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-sm hover:shadow-primary/50 transition-all">
@@ -47,7 +59,7 @@ export default function ProductCard({ product }: ProductProps) {
           </div>
         </Link>
 
-        <Button onClick={() => createCartItem(product.id, 1)} className="mt-10 !py-3 gap-2">
+        <Button onClick={onAddToCart} className="mt-10 !py-3 gap-2">
           <ShoppingCart size={20} className="shrink-0" />
           Adicionar ao Carrinho
         </Button>

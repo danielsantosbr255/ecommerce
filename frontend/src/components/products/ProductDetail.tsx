@@ -4,13 +4,27 @@ import React from "react";
 import Image from "next/image";
 import Button from "../ui/Button";
 import { Product } from "@/types";
+import { toast } from "react-toastify";
 import ProductImage from "./ProductImage";
-import { useCarts } from "@/hooks/useCarts";
+import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
+import { useAuth } from "@/contexts/AuthContext";
 import { Settings2, ShoppingCart } from "lucide-react";
 
+export const revalidate = 60;
+
 export default function ProductDetail({ product }: { product: Product }) {
-  const { createCartItem } = useCarts();
+  const { loadCart } = useAuth();
+
+  const onAddToCart = async () => {
+    const newCartItem = await cartService.create(product.id, 1);
+
+    if (newCartItem) {
+      toast.success("Produto adicionado ao carrinho");
+      await loadCart();
+      return newCartItem;
+    }
+  };
 
   return (
     <>
@@ -48,7 +62,7 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <Button onClick={() => createCartItem(product.id, 1)} className="!py-3 gap-2">
+            <Button onClick={onAddToCart} className="!py-3 gap-2">
               <ShoppingCart size={20} className="shrink-0" />
               Adicionar ao Carrinho
             </Button>

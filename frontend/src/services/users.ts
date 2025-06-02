@@ -1,5 +1,16 @@
 import api from "@/lib/axios";
 import { User } from "@/types";
+import { cache } from "react";
+
+// Essa função é cacheada
+const fetchOwnUser = cache(async (): Promise<User | null> => {
+  try {
+    const response = await api.get("/account");
+    return response.data;
+  } catch {
+    return null;
+  }
+});
 
 class UserService {
   public async create(userData: Omit<User, "id">) {
@@ -12,13 +23,8 @@ class UserService {
     }
   }
 
-  public async getOwn() {
-    try {
-      const response = await api.get("/account");
-      return response.data;
-    } catch {
-      return null;
-    }
+  public async getOwn(): Promise<User | null> {
+    return fetchOwnUser();
   }
 
   public async getAll() {

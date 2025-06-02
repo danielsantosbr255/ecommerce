@@ -1,8 +1,14 @@
+import { Review } from "@/types";
 import { Pencil, User2 } from "lucide-react";
-import ProductsUtil from "@/utils/products.util";
 
-export default async function ProductReviews({ productSlug }: { productSlug: string }) {
-  const reviews = await ProductsUtil.fetchReviews(productSlug);
+interface Props {
+  fetchReviews: () => Promise<Review[] | null>;
+}
+
+export default async function ProductReviews({ fetchReviews }: Props) {
+  const reviews = await fetchReviews();
+
+  if (!reviews) return <div className="text-tx-secondary text-center">Nenhuma avaliação ainda.</div>;
 
   return (
     <div>

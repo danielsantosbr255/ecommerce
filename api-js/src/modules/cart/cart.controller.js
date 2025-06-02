@@ -23,10 +23,15 @@ const updateItem = async (req, res) => {
   res.json(item);
 };
 
+const removeCart = async (req, res) => {
+  const cart = await service.removeCart({ userId: req.user.id });
+  res.json({ message: "Carrinho removido!", cart });
+};
+
 const removeItem = async (req, res) => {
-  const validatedData = validator.remove({ productId: req.params.productId });
+  const validatedData = validator.remove({ id: req.params.id });
   const item = await service.removeItem({ userId: req.user.id, ...validatedData });
   res.json({ message: "Item removido do carrinho!", item });
 };
 
-module.exports = { addToCart, getOwnCart, getCart, updateItem, removeItem };
+module.exports = { addToCart, getOwnCart, getCart, updateItem, removeCart, removeItem };

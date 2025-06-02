@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { reviewService } from "@/services/reviews";
 import { productService } from "@/services/products";
 import LoadingState from "@/components/ui/LoadingState";
 import ProductDetail from "@/components/products/ProductDetail";
@@ -18,12 +19,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     );
   }
 
+  const fetchReviews = async () => {
+    return await reviewService.getReview(product.slug);
+  };
+
   return (
     <main className="flex flex-1 flex-col py-10 mx-auto w-full px-2 lg:px-4 lg:max-w-10/12 h-full gap-6">
       <ProductDetail product={product} />
 
       <Suspense fallback={<LoadingState />}>
-        <ProductReviews productSlug={product.slug} />
+        <ProductReviews fetchReviews={fetchReviews} />
       </Suspense>
 
       <ProductReviewsForm productSlug={product.slug} />

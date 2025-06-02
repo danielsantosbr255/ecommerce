@@ -14,7 +14,7 @@ export default function Input({ className, label, id, ...props }: InputProps) {
         {label}
       </label>
       <input
-        className={`bg-gray-100 w-full text-sm p-2 rounded-lg border border-lines focus:outline-primary ${className}`}
+        className={`bg-bg-secondary w-full text-sm p-2 rounded-lg border border-lines focus:outline-primary ${className}`}
         {...props}
       />
     </div>

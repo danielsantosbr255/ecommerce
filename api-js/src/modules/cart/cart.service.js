@@ -26,7 +26,12 @@ const addItem = async (data) => {
 const getOwnCart = async (userId) => {
   const cart = await prisma.cart.findUnique({
     where: { userId },
-    include: { items: { include: { product: { include: { images: true } } } } },
+    include: {
+      items: {
+        include: { product: { include: { images: true } } },
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
 
   if (!cart) {
@@ -60,9 +65,14 @@ const updateItem = (data) => {
   });
 };
 
-const removeItem = (data) => {
-  const { id } = data;
-  return prisma.cartItem.deleteMany({ where: { id } });
+const removeCart = (data) => {
+  const { userId } = data;
+  return prisma.cart.delete({ where: { userId } });
 };
 
-module.exports = { addItem, removeItem, updateItem, getOwnCart, getCart };
+const removeItem = (data) => {
+  const { id } = data;
+  return prisma.cartItem.delete({ where: { id } });
+};
+
+module.exports = { addItem, updateItem, getOwnCart, getCart, removeItem, removeCart };

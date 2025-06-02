@@ -34,11 +34,11 @@ const AboutPage = () => {
             <div className="md:w-1/3 px-8 mb-6 md:mb-0 text-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-xs">
                 <Image src="/placeholder.jpg" alt="Minha Foto de Perfil" layout="fill" objectFit="cover" />
-                
+
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
               <h2 className="text-xl font-semibold text-tx-primary mt-4">
-                Olá! Eu sou o Desenvolvedor Aqui.
+                Olá! Eu sou o Daniel.
               </h2>
               <p className="text-tx-secondary text-sm">
                 Estudante de Desenvolvimento Web & Criador deste Projeto
@@ -47,8 +47,8 @@ const AboutPage = () => {
             <div className="md:w-2/3 px-8">
               <p className="text-tx-secondary leading-relaxed mb-4">
                 Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos
-                jogos que desenvolvi com Python ao universo fascinante do desenvolvimento web. Durante mais de
-                8 anos, o código foi minha tela e os jogos, minhas criações. Agora, estou focado em construir
+                jogos que desenvolvi com Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de
+                8 anos</strong>, o código foi minha tela e os jogos, minhas criações. Agora, estou focado em construir
                 experiências interativas na web.
               </p>
               <p className="text-tx-secondary leading-relaxed mb-4">

@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-app.use(
+app.use("/api", [
   AuthModule,
   UserModule,
   ProductsModule,
@@ -34,8 +34,8 @@ app.use(
   ReviewsModule,
   PromotionsModule,
   CategoriesModule,
-  BrandModule
-);
+  BrandModule,
+]);
 
 app.use(errorHandler);
 

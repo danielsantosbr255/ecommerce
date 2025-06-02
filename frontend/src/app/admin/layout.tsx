@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-// import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import AdminHeader from "./components/AdminHeader";
@@ -9,25 +8,20 @@ import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
 import { DropdownMenu, DropdownItem } from "@/components/ui/DropdownMenu";
 import { LayoutDashboard, Package, ClipboardList, Users, Settings } from "lucide-react";
 
-// export const metadata: Metadata = {
-//   title: "Fireforge Labs - Admin",
-//   description: "Criado por Daniel Santos",
-// };
-
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, userLoading } = useAuth();
+  const { user, signOut } = useAuth();
 
-  if (!userLoading && !user) {
+  if (!user) {
     redirect("/auth/sign-in");
   }
 
   return (
     <div className="bg-bg-primary h-screen gap-2 p-2 grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-      <Sidebar className="row-span-2">
+      <Sidebar className="row-span-2" user={user} signOut={signOut}>
         <SidebarItem href="/admin" icon={<LayoutDashboard />} text="Dashboard" alert />
 
         <DropdownMenu icon={<Package />} text="Produtos">

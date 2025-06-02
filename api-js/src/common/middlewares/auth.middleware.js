@@ -1,26 +1,44 @@
 const { prisma } = require("../database/prisma");
+const tokenUtil = require("../utils/token.util");
+const cryptoUtil = require("../utils/crypto.util");
 const CustomError = require("../utils/CustomError");
 const { defineAbilitiesFor } = require("../utils/abilities.util");
 
 const verifyToken = async (req, res, next) => {
+  const ipAddress = req.ip;
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
+  const accessToken = req.headers["authorization"]?.split(" ")[1];
   const refreshToken = req.cookies.refreshToken;
 
-  if (!refreshToken) throw new CustomError("Acesso negado!", 401);
+  console.log("🚨 [MD] accessToken: ", accessToken);
+  console.log("🚨 [MD] refreshToken: ", refreshToken);
+
+  if (!accessToken || !refreshToken) {
+    throw new CustomError("Token não fornecido!", 401);
+  }
+
+  const decodedAccessToken = tokenUtil.verifyJWT(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const encryptedPayload = cryptoUtil.encryptPayload({ userAgent, ipAddress });
+
+  if (decodedAccessToken.ctx !== encryptedPayload) {
+    console.log("❌ context not match");
+    throw new CustomError("Acesso negado!", 401);
+  } else {
+    console.log("✅ matched context");
+  }
 
   const session = await prisma.session.findFirst({
-    where: { refreshToken },
+    where: { accessToken, userAgent, ipAddress },
     include: { user: true },
   });
 
-  if (!session) throw new CustomError("Acesso negado!", 401);
-  if (session.expiresAt < new Date()) throw new CustomError("Acesso negado!", 401);
+  if (!session || session.expiresAt < new Date()) {
+    throw new CustomError("Acesso negado!", 401);
+  }
 
-  const user = session.user;
+  req.user = session.user;
+  req.ability = defineAbilitiesFor(session.user);
 
-  if (!user) throw new CustomError("Acesso negado!", 401);
-
-  req.user = user;
-  req.ability = defineAbilitiesFor(user);
   next();
 };
 

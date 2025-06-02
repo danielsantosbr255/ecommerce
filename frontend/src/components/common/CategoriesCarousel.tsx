@@ -22,7 +22,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
     >
       <Link
         href={`/categories/${category.slug}`}
-        className="text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
+        className="bg-bg-secondary text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
       >
         {/* <Image
           src={category?.image || "/placeholder.jpg"}

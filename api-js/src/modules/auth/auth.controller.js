@@ -5,61 +5,78 @@ const authValidator = require("../../common/validators/auth.validator");
 
 const signUp = async (req, res) => {
   const validatedData = authValidator.signUp(req.body);
-
   const { name, email, password } = validatedData;
+
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
 
-  const result = await service.signUp(name, email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
+  const session = await service.signUp({ name, email, password, userAgent, ipAddress });
 
-  res.status(201).json({ accessToken: result.accessToken });
+  tokenUtil.setCookiesTokens(res, session.refreshToken);
+  res.status(201).json({ session });
 };
 
 const signIn = async (req, res) => {
-  const validatedData = authValidator.signIn(req.body);
+  const { email, password } = authValidator.signIn(req.body);
 
-  const { email, password } = validatedData;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
 
-  const result = await service.signIn(email, password, userAgent, ipAddress);
-  tokenUtil.saveRefreshTokenToCookies(res, result.refreshToken);
+  const session = await service.signIn({ email, password, userAgent, ipAddress });
+  tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
-  res.json({ accessToken: result.accessToken });
+  res.json({ session });
+};
+
+const signOut = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
+  const ipAddress = req.ip;
+  const userId = req.user.id;
+
+  try {
+    await service.signOut({ userId, refreshToken, userAgent, ipAddress });
+
+    tokenUtil.clearTokens(res);
+
+    return res.status(200).json({ message: "Deslogado com sucesso" });
+  } catch (error) {
+    tokenUtil.clearTokens(res);
+    throw new CustomError("Token inválido. Deslogado com sucesso", 401);
+  }
 };
 
 const refreshToken = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  const userAgent = req.headers["user-agent"] || "Desconhecido";
   const ipAddress = req.ip;
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
+  const refreshToken = req.cookies.refreshToken; // || req.headers["authorization"]?.split(" ")[1];
 
-  const newTokens = await service.refreshAccessToken(refreshToken, userAgent, ipAddress);
+  console.log("🍪 [REFRESH TOKEN]: ", refreshToken);
 
-  if (!newTokens) {
-    tokenUtil.clearRefreshToken(res);
+  try {
+    const session = await service.revalidateTokens({ refreshToken, userAgent, ipAddress });
+    console.log("⚙️ [CONTROLLER] - refresh session: ", session);
+    tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
+
+    res.json({ session });
+  } catch (error) {
+    tokenUtil.clearTokens(res);
     throw new CustomError("Token inválido", 401);
   }
-
-  tokenUtil.saveRefreshTokenToCookies(res, newTokens.refreshToken);
-
-  res.json({ accessToken: newTokens.accessToken });
 };
 
-const logout = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+const validate = async (req, res) => {
+  const [access, refresh] = req.headers.authorization?.split(",");
+  const accessToken = access?.split("=")[1];
+  const hasRefreshToken = refresh?.split("=")[1];
 
-  if (!refreshToken) return res.sendStatus(204);
-
-  const success = await service.logout(refreshToken);
-
-  tokenUtil.clearRefreshToken(res);
-
-  if (success) {
-    return res.status(204).json("Logout bem-sucedido!"); // Logout bem-sucedido
-  } else {
-    return res.sendStatus(400); // Erro ao invalidar o token (pode não existir)
+  try {
+    tokenUtil.verifyJWT(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    res.status(200).json({ message: "Token válido", user: req.user });
+  } catch (error) {
+    if (!hasRefreshToken) throw new CustomError("Token inválido", 401);
+    refreshToken(req, res);
   }
 };
 
-module.exports = { signUp, signIn, logout, refreshToken };
+module.exports = { signUp, signIn, signOut, refreshToken, validate };

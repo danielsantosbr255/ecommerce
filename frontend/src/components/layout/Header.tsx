@@ -1,13 +1,15 @@
-import { ChevronDown, Github, Instagram, Linkedin } from "lucide-react";
-import Navbar from "./navbar/Navbar";
+"use client";
+
 import Link from "next/link";
+import Navbar from "./navbar/Navbar";
 import StickyOnScroll from "./StickyOnScroll";
+import { FaChevronDown, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const HeaderItem = ({ label }: { label: string }) => {
   return (
     <div className="border border-lines/50 text-tx-secondary hover:text-tx-on-primary flex justify-between w-full items-center gap-2 p-1 px-2 rounded-md hover:bg-primary/80 transition duration-300 cursor-pointer">
       <span className="text-center flex items-center justify-center w-full font-medium">{label}</span>
-      <ChevronDown className="hidden md:flex" />
+      <FaChevronDown className="hidden md:flex" />
     </div>
   );
 };
@@ -23,21 +25,21 @@ export default function Header() {
               target="_blank"
               className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
             >
-              <Instagram size={20} />{" "}
+              <FaInstagram size={20} />{" "}
             </Link>
             <Link
               href="https://github.com/danielsantosbr255"
               target="_blank"
               className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
             >
-              <Github size={20} />
+              <FaGithub size={20} />
             </Link>
             <Link
               href="https://www.linkedin.com/in/daniel-santos-7826051b4/"
               target="_blank"
               className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
             >
-              <Linkedin size={20} />
+              <FaLinkedin size={20} />
             </Link>
           </div>
 

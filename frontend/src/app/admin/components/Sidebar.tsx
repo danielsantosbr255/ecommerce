@@ -1,11 +1,11 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { User } from "@/types";
+import { cn } from "@/lib/utils";
 import React, { useContext } from "react";
 import { usePathname } from "next/navigation";
 import Logo from "../../../components/ui/Logo";
-import { useAuth } from "@/contexts/AuthContext";
 import Button from "../../../components/ui/Button";
 import Skeleton from "../../../components/ui/Skeleton";
 import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
@@ -21,11 +21,13 @@ interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
 interface SidebarProps {
   children: React.ReactNode;
   className?: string;
+  user: User | null;
+  signOut: () => void;
 }
 
 export const SidebarContext = React.createContext({ isOpen: true });
 
-export function Sidebar({ children, className }: SidebarProps) {
+export function Sidebar({ children, className, user, signOut }: SidebarProps) {
   const [isOpen, setIsOpen] = React.useState(true);
 
   return (
@@ -46,7 +48,7 @@ export function Sidebar({ children, className }: SidebarProps) {
 
       <SidebarContext.Provider value={{ isOpen }}>
         <ul className="flex flex-col flex-1 p-2 gap-1">{children}</ul>
-        <SidebarFooter />
+        <SidebarFooter user={user} signOut={signOut} />
       </SidebarContext.Provider>
     </nav>
   );
@@ -80,8 +82,7 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
   );
 }
 
-export function SidebarFooter() {
-  const { user, signOut } = useAuth();
+export function SidebarFooter({ user, signOut }: { user: User | null; signOut: () => void }) {
   const { isOpen } = useContext(SidebarContext);
 
   return (

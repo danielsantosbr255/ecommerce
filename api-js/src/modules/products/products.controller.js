@@ -25,6 +25,9 @@ const getProductBySlug = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
+  console.log("🚨 MD - userAgent: ", userAgent);
+
   const products = await services.getProducts();
   return res.json(products);
 };

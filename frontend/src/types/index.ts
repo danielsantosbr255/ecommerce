@@ -100,10 +100,33 @@ export interface Order {
   // outros campos
 }
 
+// User
 export interface User {
   id: string;
   email: string;
   name: string;
   role: "USER" | "ADMIN";
   // outros campos
+}
+
+// Auth
+export interface SignInFormData {
+  email: string;
+  password: string;
+}
+
+export interface SignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface Session {
+  id: string;
+  userId: string;
+  expiresAt: string;
+  userAgent: string;
+  ipAddress: string;
+  accessToken: string;
+  refreshToken: string;
 }

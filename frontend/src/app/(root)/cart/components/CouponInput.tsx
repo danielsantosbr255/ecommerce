@@ -1,15 +1,16 @@
-// src/components/cart/CouponInput.tsx
+"use client";
+
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import React from "react";
+import React, { useState } from "react";
 
-interface CouponInputProps {
-  coupon: string;
-  setCoupon: (value: string) => void;
-  onApply: () => void;
-}
+const CouponInput = () => {
+  const [coupon, setCoupon] = useState("");
 
-const CouponInput: React.FC<CouponInputProps> = ({ coupon, setCoupon, onApply }) => {
+  const onApply = () => {
+    console.log(coupon);
+  };
+
   return (
     <div className="bg-bg-secondary w-full flex gap-4 shadow-xs py-5 px-6 rounded-lg">
       <Input
