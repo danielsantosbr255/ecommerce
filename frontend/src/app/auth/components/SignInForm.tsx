@@ -15,7 +15,7 @@ export default function SignInForm() {
   const { signIn, loading } = useAuth();
 
   const onSubmit = async (data: SignInFormData) => {
-    await signIn(data);
+    await signIn(data);    
   };
 
   return (

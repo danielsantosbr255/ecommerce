@@ -16,7 +16,7 @@ interface PromotionProductProps {
   product: Product;
 }
 
-export const revalidate = 60;
+export const revalidate = 1800;
 
 const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;

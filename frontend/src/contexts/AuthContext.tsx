@@ -53,7 +53,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       const { session } = await authService.signIn({ email, password });
+
+      if (!session) throw new Error("Erro ao fazer login. Verifique suas credenciais.");
+
+      // salva os tokens em cookies http only
       sessionStorage.setItem("accessToken", session.accessToken);
+      document.cookie = `accessToken=${session.accessToken}; HttpOnly; SameSite=None; Secure`;
+      document.cookie = `refreshToken=${session.refreshToken}; HttpOnly; SameSite=None; Secure`;
+
       await loadUser();
       route.push("/account");
       toast.success("Logado com sucesso!");

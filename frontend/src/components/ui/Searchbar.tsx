@@ -41,7 +41,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className="bg-white flex flex-1 !py-2 !pl-3 !text-lg !rounded-lg"
+        className="bg-white flex flex-1 !py-1 !pl-3 !text-lg !rounded-lg"
       />
 
       {query ? (

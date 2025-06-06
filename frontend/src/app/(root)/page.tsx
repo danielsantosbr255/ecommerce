@@ -1,7 +1,7 @@
 import ProductList from "@/components/layout/ProductList";
 import { PromotionBanner } from "@/components/promotions/PromotionBanner";
 
-export const revalidate = 60;
+export const revalidate = 1800;
 
 export default function Home() {
   return (

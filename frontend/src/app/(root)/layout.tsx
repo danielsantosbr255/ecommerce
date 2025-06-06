@@ -1,17 +1,15 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
-// import FixedNavbar from "@/components/layout/navbar/FixedNavbar";
 
 export default function ShopLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      {/* <FixedNavbar /> */}
-      <main className="bg-bg-primary grid grid-cols-1 grid-rows-[auto_1fr] min-h-screen p-0">
+      <main className="bg-bg-primary flex flex-col w-full h-full min-h-screen">
         <Header />
-        <section className="flex flex-col">
+        <section className="flex flex-col pt-30 md:pt-36">
           <div className="flex flex-1">{children}</div>
-          <Footer />
         </section>
+        <Footer />
       </main>
     </>
   );

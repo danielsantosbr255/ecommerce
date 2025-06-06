@@ -71,7 +71,7 @@ api.interceptors.response.use(
       try {
         // console.log("🔃 Tentando atualizar os tokens...");
 
-        const response = await api.post("/auth/refresh");
+        const response = await api.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/refresh`);
         const { session } = response.data as { session: Session };
 
         if (session) {

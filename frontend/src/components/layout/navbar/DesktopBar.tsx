@@ -71,11 +71,16 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
   );
 };
 
-export default function DesktopBar(): JSX.Element {
+export default function DesktopBar({ className }: { className?: string }): JSX.Element {
   const { user, userLoading } = useAuth();
 
   return (
-    <main className="hidden lg:grid grid-cols-[1fr_2fr_1fr] w-full items-center justify-between px-2 py-0">
+    <main
+      className={cn(
+        className,
+        "hidden w-full px-2 lg:grid grid-cols-[1fr_2fr_1fr] items-center justify-between"
+      )}
+    >
       <div className="flex w-full h-full items-center font-semibold">
         <Logo size={25} />
       </div>

@@ -1,24 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import Logo from "@/components/ui/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
+import MobileMenu from "../MobileMenu";
 
 const MobileBar = (): JSX.Element => {
   const { user, userLoading } = useAuth();
 
   const isAdmin = user?.role === "ADMIN";
-  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
     <section className="block lg:hidden w-full">
       <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
         <button
-          // onClick={toggleMobileMenu}
+          onClick={toggleMobileMenu}
           className="justify-start focus:outline-none"
           aria-label="Abrir menu"
         >
@@ -43,6 +44,8 @@ const MobileBar = (): JSX.Element => {
           )}
         </div>
       </main>
+
+      <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />
 
       <div className="lg:hidden">
         <SearchBar />

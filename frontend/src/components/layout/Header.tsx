@@ -1,80 +1,55 @@
 "use client";
 
-import Link from "next/link";
-import Navbar from "./navbar/Navbar";
-import StickyOnScroll from "./StickyOnScroll";
-import { FaChevronDown, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
-
-const HeaderItem = ({ label }: { label: string }) => {
-  return (
-    <div className="border border-lines/50 text-tx-secondary hover:text-tx-on-primary flex justify-between w-full items-center gap-2 p-1 px-2 rounded-md hover:bg-primary/80 transition duration-300 cursor-pointer">
-      <span className="text-center flex items-center justify-center w-full font-medium">{label}</span>
-      <FaChevronDown className="hidden md:flex" />
-    </div>
-  );
-};
+import { cn } from "@/lib/utils";
+import Topbar from "./navbar/Topbar";
+import { useEffect, useState } from "react";
+import DesktopBar from "./navbar/DesktopBar";
+import SectionsBar from "./navbar/SectionsBar";
+import MobileBar from "./navbar/MobileBar";
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const DELAY = 500;
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 0) setScrolled(true);
+      else setScrolled(false);
+    });
+  }, []);
+
   return (
-    <header className="flex flex-col w-full z-50 bg-navbar px-2 h-auto">
-      <section className="hidden lg:flex w-full justify-center border-b border-lines/20 items-center text-sm">
-        <div className="grid grid-cols-3 w-full max-w-10/12 py-1 px-2 gap-2 items-center">
-          <div className="flex text-tx-secondary justify-start items-center gap-2">
-            <Link
-              href="https://www.instagram.com/daniel_santosdev/"
-              target="_blank"
-              className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
-            >
-              <FaInstagram size={20} />{" "}
-            </Link>
-            <Link
-              href="https://github.com/danielsantosbr255"
-              target="_blank"
-              className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
-            >
-              <FaGithub size={20} />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/daniel-santos-7826051b4/"
-              target="_blank"
-              className="bg-gray-200 p-1 rounded-lg hover:text-primary transition duration-300"
-            >
-              <FaLinkedin size={20} />
-            </Link>
-          </div>
+    <header className="fixed top-0 left-0 right-0 z-50 flex p-1 justify-center transition-all duration-300 ease-in-out">
+      <main
+        className={cn(
+          `bg-bg-primary border backdrop-blur-lg border-lines/50 transition-all duration-${DELAY} ease-in-out`,
+          scrolled
+            ? "bg-bg-secondary/90 w-full lg:max-w-10/12 mx-auto shadow-xs rounded-lg"
+            : "w-full max-w-screen border-t-transparent border-x-transparent"
+        )}
+      >
+        <Topbar
+          className={cn(
+            `flex flex-col gap-2 mx-auto items-center justify-center overflow-hidden transition-all duration-${DELAY} ease-in-out`,
+            scrolled ? "max-h-0 w-0 opacity-0" : "max-h-32 w-full opacity-100"
+          )}
+        />
 
-          <div className="flex justify-center items-center">
-            <h1 className="text-tx-secondary font-medium">PROJETO DE ESTUDO [WIP]</h1>
-          </div>
+        <DesktopBar
+          className={cn(
+            `mx-auto text-primary flex items-center justify-center w-full transition-all duration-${DELAY} ease-in-out overflow-hidden`,
+            scrolled ? "max-w-full" : "max-w-10/12"
+          )}
+        />
 
-          <div className="flex text-tx-secondary justify-end items-center">
-            <select name="language" id="language">
-              <option value="pt">PT-BR</option>
-              <option value="en">EN-US</option>
-            </select>
+        <MobileBar />
 
-            <select name="currency" id="currency" className="ml-2">
-              <option value="brl">BRL R$</option>
-              <option value="usd">USD $</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <StickyOnScroll offset={0}>
-        <Navbar />
-      </StickyOnScroll>
-
-      <section className="flex w-full justify-center items-center">
-        <div className="flex w-full pt-2 gap-2 text-tx-on-primary text-xs md:text-[16px] justify-around items-center md:font-medium md:max-w-4/5 mx-auto">
-          <HeaderItem label="Categoria" />
-          <HeaderItem label="Produtos" />
-          <HeaderItem label="Frete Grátis" />
-          <HeaderItem label="Hardware" />
-          <HeaderItem label="Software" />
-          <HeaderItem label="Outros" />
-        </div>
-      </section>
+        <SectionsBar
+          className={`transition-all duration-${DELAY} ease-initial overflow-hidden ${
+            scrolled ? "max-h-0 opacity-0" : "max-h-[400px] opacity-100"
+          }`}
+        />
+      </main>
     </header>
   );
 }

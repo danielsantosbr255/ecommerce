@@ -28,7 +28,7 @@ export default async function page({ params }: { params: Promise<{ slug: string 
   }
 
   return (
-    <div className="max-w-10/12 mx-auto px-4 py-10 space-y-16">
+    <div className="lg:max-w-10/12 mx-auto px-4 py-10 space-y-16">
       <h2 className="border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
         Categoria: <span className="font-bold underline text-primary">{category.name}</span>
       </h2>

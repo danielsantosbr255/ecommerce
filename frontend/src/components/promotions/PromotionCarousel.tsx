@@ -57,7 +57,7 @@ export function PromotionCard({ promotion, currentProductIndex }: PromotionsCard
       </div>
 
       {promotion.discount > 0 && (
-        <div className="flex absolute top-[2%] right-[2%] h-12 w-12 md:h-25 md:w-25 items-center justify-center text-4xl font-bold text-primary">
+        <div className="hidden lg:flex absolute top-[2%] right-[2%] h-12 w-12 md:h-25 md:w-25 items-center justify-center text-4xl font-bold text-primary">
           <p className="absolute font-bold w-full h-full items-center justify-center flex text-4xl border-2 md:border-5 rounded-full shadow-xs"></p>
           <p className="absolute animate-material-spin font-bold w-full h-full items-center justify-center flex border border-t-transparent border-b-transparent scale-105 rounded-full shadow-xs"></p>
           <p className="absolute text-center text-xs md:text-2xl">{promotion.discount}%</p>
@@ -91,7 +91,7 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
   };
 
   return (
-    <div className="bg-white flex border border-lines relative w-full h-auto rounded-2xl shadow-xs">
+    <div className="bg-white flex border border-lines/80 relative w-full h-auto rounded-xl shadow-xs">
       <Carousel
         className="flex w-full h-full"
         opts={{ align: "start", loop: true, startIndex: currentPromotionIndex }}
