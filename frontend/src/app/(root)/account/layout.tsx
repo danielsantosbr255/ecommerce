@@ -11,16 +11,16 @@ function Layout({ children }: { children: React.ReactNode }) {
   const { user, userLoading, signOut } = useAuth();
 
   if (userLoading) return <LoadingState />;
-  if (!user) redirect("/auth/sign-in");
+  if (!user) redirect("/sign-in");
 
   return (
     <>
       <Sidebar>
         <SidebarItem href="/account" icon={<FiUser size={27} />} text="Minha Conta" />
-        <SidebarItem href="/account/orders" icon={<FiShoppingBag size={27} />} text="Meus Pedidos" />
-        <SidebarItem href="/account/addresses" icon={<FiMapPin size={27} />} text="Meus Endereços" />
-        <SidebarItem href="/account/favorites" icon={<FiHeart size={27} />} text="Meus Favoritos" />
-        <SidebarItem href="/account/password" icon={<FiLock size={27} />} text="Alterar Senha" />
+        <SidebarItem href="#" icon={<FiShoppingBag size={27} />} text="Meus Pedidos" />
+        <SidebarItem href="#" icon={<FiMapPin size={27} />} text="Meus Endereços" />
+        <SidebarItem href="#" icon={<FiHeart size={27} />} text="Meus Favoritos" />
+        <SidebarItem href="#" icon={<FiLock size={27} />} text="Alterar Senha" />
         <SidebarItem onClick={signOut} icon={<FiLogOut size={27} />} text="Sair" />
       </Sidebar>
 

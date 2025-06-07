@@ -38,7 +38,7 @@ const MobileBar = (): JSX.Element => {
           {userLoading ? (
             <Loader size={25} className="animate-spin" />
           ) : (
-            <Link href={user ? "/account" : "/auth/sign-in"}>
+            <Link href={user ? "/account" : "/sign-in"}>
               {user ? <UserCircle size={22} /> : <LogIn />}
             </Link>
           )}

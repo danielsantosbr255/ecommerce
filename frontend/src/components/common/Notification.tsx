@@ -1,9 +1,8 @@
 "use client";
 
-import { Bell } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
 import Alert from "../ui/Alert";
+import { useRef, useState, useEffect } from "react";
+import { Bell, DotSquare } from "lucide-react";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([
@@ -19,38 +18,74 @@ export default function Notification() {
     { id: 10, message: "Seu pedido foi cancelado.", read: false },
   ]);
 
+  const notifRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const toggleNotifications = () => {
     setIsNotifOpen((prev) => !prev);
-    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+    if (!isNotifOpen) {
+      setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+    }
   };
 
-  return (
-    <Link href="#">
-      <div className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300">
-        <button onClick={toggleNotifications} className="relative focus:outline-none">
-          <Bell size={25} />
-          {unreadCount > 0 && <Alert onTop />}
-        </button>
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      notifRef.current &&
+      !notifRef.current.contains(event.target as Node) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target as Node)
+    ) {
+      setIsNotifOpen(false);
+    }
+  };
 
-        {isNotifOpen && (
-          <div className="absolute right-0 top-8 mt-2 w-64 bg-bg-primary shadow-xs rounded-md border border-lines z-50">
-            <div className="p-4">
-              {notifications.length === 0 ? (
-                <p className="text-sm text-tx-on-primary">Sem notificações</p>
-              ) : (
-                notifications.map((notif) => (
-                  <div key={notif.id} className="text-sm text-tx-primary py-1 border-b last:border-b-0">
-                    {notif.message}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
+  useEffect(() => {
+    if (isNotifOpen) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isNotifOpen]);
+
+  return (
+    <button
+      ref={buttonRef}
+      className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary cursor-pointer rounded-md transition duration-300 focus:outline-none"
+      onClick={toggleNotifications}
+    >
+      <div className="relative">
+        <Bell size={25} />
+        {unreadCount > 0 && <Alert onTop />}
       </div>
-    </Link>
+
+      <div
+        ref={notifRef}
+        className={`absolute right-0 top-12 w-72 bg-bg-primary shadow-xs rounded-lg border border-t-0 border-lines/50 z-50 transition-opacity duration-300 ease-in-out ${
+          isNotifOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <ul className="flex flex-col gap-1 p-2">
+          {notifications.length === 0 ? (
+            <p className="text-sm text-tx-secondary">Sem notificações</p>
+          ) : (
+            notifications.map((notif) => (
+              <li
+                key={notif.id}
+                className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-tx-secondary py-4 px-4 text-sm cursor-pointer transition hover:bg-primary/10"
+              >
+                <DotSquare size={20} className="text-primary shrink-0" />
+                <span className="truncate">{notif.message}</span>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
+    </button>
   );
 }

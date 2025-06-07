@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import React, { useContext, useState } from "react";
 
 interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
+  props?: React.HTMLAttributes<HTMLLIElement>;
   icon: React.ReactNode;
   text: string;
   alert?: boolean;
@@ -29,9 +30,7 @@ export function Sidebar({ children, className }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav
-      className={`bg-bg-primary fixed h-full flex flex-col shadow-xs border border-lines/50 ${className}`}
-    >
+    <nav className={`bg-bg-primary/50 backdrop-blur-sm fixed h-full flex flex-col ${className}`}>
       <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
         <ul className="flex flex-col flex-1">{children}</ul>
       </SidebarContext.Provider>
@@ -45,7 +44,7 @@ const useSidebar = () => {
   return context;
 };
 
-export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
+export function SidebarItem({ icon, text, href = "", ...props }: SidebarItemProps) {
   const { isOpen, setIsOpen } = useSidebar();
   const usePath = usePathname();
   const active = usePath === href;
@@ -53,22 +52,24 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
   const mainStyle = cn(
     "flex items-center p-4",
     "text-tx-secondary cursor-pointer",
-    "transition-colors group z-50",
+    "transition-all group z-50",
     active ? "border-l-3 border-primary text-primary" : "hover:bg-primary/5"
   );
 
+  const handleClick = (value: boolean) => () => setIsOpen(value);
+
   return (
-    <Link href={href}>
-      <li className={mainStyle} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+    <li className={mainStyle} onMouseEnter={handleClick(true)} onMouseLeave={handleClick(false)} {...props}>
+      <Link href={href} className="flex">
         {icon}
         <span
-          className={`overflow-hidden transition-all ease-in-out duration-300 truncate ${
+          className={`flex items-center overflow-hidden transition-all ease-in-out duration-300 truncate ${
             isOpen ? "w-52 ml-4" : "w-0"
           }`}
         >
           {text}
         </span>
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 }

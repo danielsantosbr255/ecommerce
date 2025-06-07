@@ -97,7 +97,7 @@ export default function SignInForm() {
         <p className="text-center">
           Acesse sua conta para ver seus favoritos, <br /> histórico de compras e ofertas personalizadas.
         </p>
-        <Button variant="outline" href="/auth/sign-in">
+        <Button variant="outline" href="/sign-in">
           Sign In
         </Button>
       </div>

@@ -20,7 +20,7 @@ export default function CartItems() {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <h1 className="flex text-2xl text-tx-secondary font-semibold gap-2">
-          <Link href="/auth/sign-in" className="text-primary underline">
+          <Link href="/sign-in" className="text-primary underline">
             Faça login
           </Link>
           para ver seu carrinho

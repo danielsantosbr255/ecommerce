@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const { user, signOut } = useAuth();
 
   if (!user) {
-    redirect("/auth/sign-in");
+    redirect("/sign-in");
   }
 
   return (

@@ -19,12 +19,14 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex p-1 justify-center transition-all duration-300 ease-in-out">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 flex p-1 px-2 justify-center transition-all duration-${DELAY} ease-in-out`}
+    >
       <main
         className={cn(
-          `bg-bg-primary border backdrop-blur-lg border-lines/50 transition-all duration-${DELAY} ease-in-out`,
+          `bg-bg-primary border border-lines/50 transition-all duration-${DELAY} ease-in-out`,
           scrolled
-            ? "bg-bg-secondary/90 w-full lg:max-w-10/12 mx-auto shadow-xs rounded-lg"
+            ? "bg-bg-secondary/80 backdrop-blur-xl w-full lg:max-w-10/12 mx-auto shadow rounded-lg"
             : "w-full max-w-screen border-t-transparent border-x-transparent"
         )}
       >
@@ -37,7 +39,7 @@ export default function Header() {
 
         <DesktopBar
           className={cn(
-            `mx-auto text-primary flex items-center justify-center w-full transition-all duration-${DELAY} ease-in-out overflow-hidden`,
+            `mx-auto text-primary flex items-center justify-center w-full transition-all duration-${DELAY} ease-in-out`,
             scrolled ? "max-w-full" : "max-w-10/12"
           )}
         />

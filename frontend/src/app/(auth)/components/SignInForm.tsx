@@ -92,7 +92,7 @@ export default function SignInForm() {
           Ao se cadastrar, você poderá salvar seus itens preferidos, <br /> agilizar suas compras futuras e
           receber novidades em primeira mão.
         </p>
-        <Button variant="outline" href="/auth/sign-up">
+        <Button variant="outline" href="/sign-up">
           Sign Up
         </Button>
       </div>

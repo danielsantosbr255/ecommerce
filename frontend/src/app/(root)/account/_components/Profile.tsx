@@ -31,7 +31,7 @@ export default function Profile() {
   const { user, userLoading } = useAuth();
 
   if (userLoading) return <LoadingState />;
-  if (!user) redirect("/auth/sign-in");
+  if (!user) redirect("/sign-in");
 
   return (
     <main className="flex flex-col w-full h-full">

@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col w-full p-2 py-8 mt-auto justify-center items-center text-tx-secondary font-semibold">
+    <footer className="flex flex-col w-full p-2 py-8 z-5 mt-auto justify-center items-center text-tx-secondary font-semibold">
       <div className="flex w-full gap-2 p-4 border-t border-lines/50 justify-center items-center text-tx-on-primary">
         <Link
           href="https://github.com/danielsantosbr255"

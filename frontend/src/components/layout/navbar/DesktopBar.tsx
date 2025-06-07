@@ -59,7 +59,7 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
   return (
     <>
       <NavItem
-        href={user ? "/account" : "/auth/sign-in"}
+        href={user ? "/account" : "/sign-in"}
         label=""
         icon={user ? <UserCircle size={25} /> : <LogIn size={25} />}
       />
