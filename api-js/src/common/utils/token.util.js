@@ -1,10 +1,6 @@
-const dayjs = require("dayjs");
 const jwt = require("jsonwebtoken");
 const cryptoUtil = require("./crypto.util");
 const CustomError = require("./CustomError");
-
-require("dayjs/plugin/duration");
-dayjs.extend(require("dayjs/plugin/duration"));
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "seu_segredo_super_secreto_access";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "seu_segredo_super_secreto_refresh";
