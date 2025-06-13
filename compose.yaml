@@ -1,16 +1,4 @@
 services:
-  api:
-    build: ./api-js
-    restart: always
-    ports:
-      - "3001:3001"
-    env_file:
-      - ./api-js/.env
-    depends_on:
-      - db
-    networks:
-      - backend
-
   db:
     image: postgres
     restart: always
@@ -22,6 +10,19 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  api:
+    build: ./api-js
+    restart: always
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./api-js/.env
+    depends_on:
+      - db
+    command: sh -c "./wait-for-db.sh"
     networks:
       - backend
 

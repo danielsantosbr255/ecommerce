@@ -8,6 +8,13 @@ RUN npm install --production
 
 COPY . .
 
-EXPOSE 3001
+# Gera o Prisma Client
+RUN npx prisma generate
 
-CMD [ "npm", "start" ]
+# Dá permissão ao script de espera do banco
+RUN chmod +x ./wait-for-db.sh
+
+# Define o comando padrão via docker-compose
+CMD ["sh", "-c", "./wait-for-db.sh"]
+
+EXPOSE 3001
