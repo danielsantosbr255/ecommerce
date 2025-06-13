@@ -3,7 +3,6 @@
 *.yml
 *.env
 .git
-.next
 .dockerignore
 node_modules
 Dockerfile
