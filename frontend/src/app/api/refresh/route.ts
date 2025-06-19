@@ -1,10 +1,15 @@
 import api from "@/lib/axios";
-import { setCookiesFromResponse } from "@/lib/cookies";
-// import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { setCookiesFromResponse } from "@/lib/cookies";
 
 export async function POST() {
-  // const cookiesStore = await cookies();
+  const cookiesStore = await cookies();
+  const refreshToken = cookiesStore.get("refreshToken")?.value;
+
+  if (!refreshToken) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
 
   const response = await api.post("/auth/refresh");
 
@@ -12,12 +17,7 @@ export async function POST() {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
-  // const { accessToken, refreshToken } = response.data.session;
-
   setCookiesFromResponse(response);
-
-  // cookiesStore.set("accessToken", accessToken);
-  // cookiesStore.set("refreshToken", refreshToken);
 
   return NextResponse.json(response.data);
 }

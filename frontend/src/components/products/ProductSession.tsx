@@ -25,8 +25,8 @@ export default async function ProductSession({ callback, label, icon }: Props) {
 
   return (
     <div className="flex flex-col w-full">
-      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
-        {icon} {label}
+      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-secondary font-semibold my-2 py-2">
+        <span className="flex items-center justify-center text-primary">{icon}</span> {label}
       </h2>
 
       <ProductCarousel products={products} />

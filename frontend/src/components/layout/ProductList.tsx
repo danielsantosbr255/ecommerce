@@ -33,7 +33,7 @@ export default function ProductList() {
   return (
     <section className="w-full h-full gap-10 flex flex-col">
       <Suspense fallback={<ProductCarousel products={null} />}>
-        <ProductSession callback={fetchProducts} label="Destaques" icon={<Crown size={20} />} />
+        <ProductSession callback={fetchProducts} label="Destaques" icon={<Crown size={25} />} />
       </Suspense>
 
       <Suspense fallback={<LoadingState />}>
@@ -41,7 +41,7 @@ export default function ProductList() {
       </Suspense>
 
       <Suspense fallback={<ProductCarousel products={null} />}>
-        <ProductSession callback={fetchProducts} label="Novidades" icon={<Grid2x2Plus size={20} />} />
+        <ProductSession callback={fetchProducts} label="Novidades" icon={<Grid2x2Plus size={25} />} />
       </Suspense>
 
       <Suspense fallback={<LoadingState />}>
@@ -49,7 +49,7 @@ export default function ProductList() {
       </Suspense>
 
       <Suspense fallback={<ProductCarousel products={null} />}>
-        <ProductSession callback={fetchProducts} label="Mais Vendidos" icon={<Crown size={20} />} />
+        <ProductSession callback={fetchProducts} label="Mais Vendidos" icon={<Crown size={25} />} />
       </Suspense>
     </section>
   );

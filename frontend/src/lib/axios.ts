@@ -28,6 +28,7 @@ api.interceptors.request.use(
     // console.log("🫴 [AXIOS REQUEST] - Requisição do servidor: ", `(${config.url})`);
 
     if (isServer) {
+      console.log("🚀 [AXIOS REQUEST] - SERVER");
       const { cookies, headers } = await import("next/headers");
       const cookieStore = await cookies();
 
@@ -35,6 +36,9 @@ api.interceptors.request.use(
 
       config.headers = config.headers || {};
       config.headers.Cookie = cookieStore.toString();
+      
+      const realIp = (await headers()).get("x-forwarded-for") || (await headers()).get("x-real-ip") || "127.0.0.1";
+      config.headers["x-real-ip"] = realIp;
       config.headers["user-agent"] = (await headers()).get("user-agent") || "Next.js Server";
     } else {
       authManager.set(sessionStorage.getItem("accessToken") || "");
@@ -67,7 +71,9 @@ api.interceptors.response.use(
 
     const isNotRefreshEndpoint = originalRequest?.url && !originalRequest.url.includes("/refresh");
 
-    if (status === 401 && originalRequest && isNotRefreshEndpoint) {
+    if (status === 401 && originalRequest && isNotRefreshEndpoint && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
         // console.log("🔃 Tentando atualizar os tokens...");
 

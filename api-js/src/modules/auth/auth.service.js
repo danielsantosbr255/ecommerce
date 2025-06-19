@@ -11,6 +11,8 @@ const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
   hashedPassword = await authUtil.hashPassword(password);
   const user = await repository.createUser({ name, email, password: hashedPassword });
 
+  ipAddress = authUtil.normalizeIp(ipAddress);
+  
   const { accessToken, refreshToken } = tokenUtil.createTokens({
     userId: user.id,
     userAgent,
@@ -32,6 +34,11 @@ const signIn = async ({ email, password, userAgent, ipAddress }) => {
   if (!user || !(await authUtil.verifyPassword(password, user.password))) {
     throw new CustomError("Credenciais inválidas", 401);
   }
+
+  ipAddress = authUtil.normalizeIp(ipAddress);
+
+  console.log("👷[SERVICE] - userAgent: ", userAgent);
+  console.log("👷[SERVICE] - ipAddress: ", ipAddress);
 
   const existingSession = await repository.findSession({ userId: user.id, userAgent, ipAddress });
   if (existingSession) await repository.deleteSession(existingSession.id);
@@ -72,13 +79,7 @@ const revalidateTokens = async ({ refreshToken, userAgent, ipAddress }) => {
 
   const session = await repository.findSession({ userId, refreshToken, userAgent, ipAddress });
 
-  console.log(
-    "👷 [SERVICE] - session: ",
-    `UID: ${userId}`,
-    `RFT: ${refreshToken}`,
-    `UAG: ${userAgent}`,
-    `IP: ${ipAddress}`
-  );
+  console.log("👷 [SERVICE] - session: ", `UID: ${userId}`, `RFT: ${refreshToken}`, `UAG: ${userAgent}`, `IP: ${ipAddress}`);
 
   if (!session || session.expiresAt < new Date()) {
     if (session) await deleteSession(session.id);

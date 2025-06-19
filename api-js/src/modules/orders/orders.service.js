@@ -3,12 +3,16 @@ const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
 
 const createOrder = async (userId) => {
-  const cartItems = await prisma.cartItem.findMany({
+  const cart = await prisma.cart.findUnique({
     where: { userId },
-    include: { product: true },
+    include: { items: { include: { product: true } } },
   });
 
-  if (cartItems.length === 0) {
+  console.log("Cart:", cart);
+
+  const cartItems = cart.items;
+
+  if (!cartItems || cartItems.length === 0) {
     throw new CustomError("O carrinho está vazio", 400);
   }
 
@@ -37,7 +41,10 @@ const createOrder = async (userId) => {
   }
 
   // Apagar o carrinho após a compra
-  await prisma.cartItem.deleteMany({ where: { userId } });
+  await prisma.cart.update({
+    where: { userId },
+    data: { items: { deleteMany: {} } },
+  });
 
   return order;
 };

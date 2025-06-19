@@ -97,7 +97,9 @@ export interface Order {
     price: number;
   }>;
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  // outros campos
+  createdAt: Date;
+  updatedAt: Date;
+  totalPrice: number;
 }
 
 // User

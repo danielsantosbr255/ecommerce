@@ -1,17 +1,22 @@
 const { prisma } = require("../database/prisma");
+const authUtil = require("../utils/auth.util");
 const tokenUtil = require("../utils/token.util");
 const cryptoUtil = require("../utils/crypto.util");
 const CustomError = require("../utils/CustomError");
 const { defineAbilitiesFor } = require("../utils/abilities.util");
 
 const verifyToken = async (req, res, next) => {
-  const ipAddress = req.ip;
+  const realIp = req.headers["x-forwarded-for"] || req.ip;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const accessToken = req.headers["authorization"]?.split(" ")[1];
-  const refreshToken = req.cookies.refreshToken;
+  // const refreshToken = req.cookies.refreshToken;
 
-  console.log("🚨 [MD] accessToken: ", accessToken);
-  console.log("🚨 [MD] refreshToken: ", refreshToken);
+  const ipAddress = authUtil.normalizeIp(realIp);
+
+  // console.log("🚨 [MD] accessToken: ", accessToken);
+  // console.log("🚨 [MD] refreshToken: ", refreshToken);
+  console.log("🚨 [MD] userAgent: ", userAgent);
+  console.log("🚨 [MD] ipAddress: ", ipAddress);
 
   if (!accessToken) {
     throw new CustomError("Token não fornecido!", 401);
@@ -21,7 +26,7 @@ const verifyToken = async (req, res, next) => {
   const encryptedPayload = cryptoUtil.encryptPayload({ userAgent, ipAddress });
 
   if (decodedAccessToken.ctx !== encryptedPayload) {
-    console.log("❌ context not match");
+    console.error("❌ context not match");
     throw new CustomError("Acesso negado!", 401);
   } else {
     console.log("✅ matched context");

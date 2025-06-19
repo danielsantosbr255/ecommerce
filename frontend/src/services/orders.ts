@@ -13,13 +13,8 @@ class OrderService {
   }
 
   public async getOrders() {
-    try {
-      const response = await api.get("/orders");
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.get("/orders");
+    return response.data;
   }
 
   public async getOrder(id: string) {

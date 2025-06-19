@@ -8,7 +8,7 @@ const signUp = async (req, res) => {
   const { name, email, password } = validatedData;
 
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
 
   const session = await service.signUp({ name, email, password, userAgent, ipAddress });
 
@@ -20,7 +20,7 @@ const signIn = async (req, res) => {
   const { email, password } = authValidator.signIn(req.body);
 
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
 
   const session = await service.signIn({ email, password, userAgent, ipAddress });
   tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
@@ -54,7 +54,7 @@ const refreshToken = async (req, res) => {
   console.log("🍪 [CONTROLLER] - REFRESH TOKEN: ", refreshToken);
 
   const session = await service.revalidateTokens({ refreshToken, userAgent, ipAddress });
-  
+
   console.log("⚙️ [CONTROLLER] - refresh session: ", session);
   tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
