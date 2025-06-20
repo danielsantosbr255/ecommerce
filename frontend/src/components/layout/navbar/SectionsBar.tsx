@@ -1,5 +1,5 @@
-import React from "react";
-import { FaChevronDown, FaList, FaSalesforce } from "react-icons/fa";
+import { FaChevronDown, FaSalesforce } from "react-icons/fa";
+import CategoriesMenu from "./CategoriesMenu";
 
 const HeaderItem = ({ label }: { label: string }) => {
   return (
@@ -11,18 +11,14 @@ const HeaderItem = ({ label }: { label: string }) => {
 
 function SectionsBar({ className }: { className?: string }) {
   return (
-    <section className={`${className} hidden md:grid grid-cols-[20%_auto_20%] gap-2 overflow-hidden max-w-10/12 mx-auto`}>
-      <div className="flex items-center justify-between bg-bg-primary text-tx-secondary text-xs md:text-[16px] font-medium px-5 py-3 gap-2 rounded-lg w-full">
-        <div className="flex items-center gap-4 truncate">
-          <FaList />
-          <span className="hidden md:inline">Navegar por categorias</span>
-        </div>
-        <FaChevronDown size={12} />
-      </div>
+    <section className={`${className} hidden md:grid grid-cols-[20%_auto_20%] gap-2 max-w-10/12 mx-auto`}>
+      {/* <div className="flex items-center justify-between bg-bg-primary text-tx-secondary text-xs md:text-[16px] font-medium px-5 py-3 gap-2 rounded-lg w-full"> */}
+      <CategoriesMenu />
+      {/* </div> */}
 
       <div className="flex gap-2 text-tx-on-primary text-xs md:text-[16px] justify-around items-center md:font-medium w-full">
         <HeaderItem label="Home" />
-        <HeaderItem label="Atendimento" />                
+        <HeaderItem label="Atendimento" />
         <HeaderItem label="Frete Grátis" />
         <HeaderItem label="Hardware" />
         <HeaderItem label="Mais" />

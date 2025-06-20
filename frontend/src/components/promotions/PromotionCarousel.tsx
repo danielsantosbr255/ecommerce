@@ -1,45 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { Product } from "@/types";
-import ProductImage from "../products/ProductImage";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel/carousel";
-import { useEffect, useRef, useState } from "react";
+import { Promotion } from "@/types";
 import Autoplay from "embla-carousel-autoplay";
-
-interface PromotionsProductProps {
-  id: number;
-  productId: number;
-  product: Product;
-}
-
-interface PromotionsProps {
-  id: number;
-  title: string;
-  image: string;
-  slug: string;
-  description: string;
-  discount: number;
-  products: PromotionsProductProps[];
-}
+import ProductImage from "../products/ProductImage";
+import { useEffect, useRef, useState } from "react";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel/carousel";
 
 interface PromotionsCardProps {
-  promotion: PromotionsProps;
+  promotion: Promotion;
   currentProductIndex: number;
 }
 
 export function PromotionCard({ promotion, currentProductIndex }: PromotionsCardProps) {
   return (
-    <Link
-      href={`/promotions/${promotion.slug}`}
-      className="p-2 md:p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full"
-    >
+    <Link href={`/promotions/${promotion.slug}`} className="p-2 md:p-5 relative grid grid-cols-[30%_auto] gap-2 w-full h-full">
       {promotion.products?.length && (
         <ProductImage
           product={promotion.products[currentProductIndex]?.product}
@@ -67,7 +42,7 @@ export function PromotionCard({ promotion, currentProductIndex }: PromotionsCard
   );
 }
 
-export default function PromotionCarousel({ promotions }: { promotions: PromotionsProps[] }) {
+export default function PromotionCarousel({ promotions }: { promotions: Promotion[] }) {
   const [currentPromotionIndex] = useState(0);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const autoplayRef = useRef(Autoplay({ delay: 10000, stopOnInteraction: false }));
@@ -75,9 +50,7 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
   useEffect(() => {
     if (promotions.length > 0 && promotions[currentPromotionIndex]?.products?.length > 1) {
       const intervalId = setInterval(() => {
-        setCurrentProductIndex(
-          (prevIndex) => (prevIndex + 1) % promotions[currentPromotionIndex].products.length
-        );
+        setCurrentProductIndex((prevIndex) => (prevIndex + 1) % promotions[currentPromotionIndex].products.length);
       }, 3000);
 
       return () => clearInterval(intervalId);
@@ -106,8 +79,8 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
           ))}
         </CarouselContent>
 
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="!left-1 !hidden lg:!flex" />
+        <CarouselNext className="!right-1 !hidden lg:!flex" />
       </Carousel>
     </div>
   );

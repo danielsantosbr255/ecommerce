@@ -28,7 +28,7 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  image: string;
+  image?: string;
 }
 
 export interface Review {
@@ -41,10 +41,29 @@ export interface Review {
 
 export interface Promotion {
   id: string;
-  name: string;
+  title: string;
+  slug: string;
+  description: string;
   discount: number;
-  startDate: Date;
-  endDate: Date;
+  image: string;
+  startsAt: Date;
+  endsAt: Date;
+  isActive: boolean;
+
+  createdAt: Date;
+  updatedAt: Date;
+
+  products: PromotionProduct[];
+}
+
+export interface PromotionProduct {
+  id: string;
+  promotionId: string;
+  promotion: Promotion;
+  productId: string;
+  product: Product;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ProductVariant {
@@ -63,7 +82,6 @@ export interface ProductSpecification {
 }
 
 export interface Product {
-  // Campos básicos
   id: string;
   title: string;
   description: string;
@@ -74,13 +92,11 @@ export interface Product {
   isActive?: boolean;
   slug: string;
 
-  //: Relacionamentos
   brand: Brand;
   brandId: string;
   categoryId: string;
   category: Category;
 
-  //: Relacionamentos
   reviews?: Review[];
   images: ProductImage[];
   promotions?: Promotion[];
@@ -102,16 +118,32 @@ export interface Order {
   totalPrice: number;
 }
 
-// User
 export interface User {
   id: string;
   email: string;
   name: string;
   role: "USER" | "ADMIN";
-  // outros campos
 }
 
-// Auth
+export interface Address {
+  id: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood?: string;
+  city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+  isDefault: boolean;
+
+  userId: string;
+  user: User;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface SignInFormData {
   email: string;
   password: string;

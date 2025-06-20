@@ -47,7 +47,7 @@ export default function Header() {
         <MobileBar />
 
         <SectionsBar
-          className={`transition-all duration-${DELAY} ease-initial overflow-hidden ${
+          className={`transition-all duration-${DELAY} ease-initial ${
             scrolled ? "max-h-0 opacity-0" : "max-h-[400px] opacity-100"
           }`}
         />
