@@ -51,7 +51,7 @@ export function SidebarItem({ icon, text, href = "", ...props }: SidebarItemProp
 
   const mainStyle = cn(
     "flex items-center p-4",
-    "text-tx-secondary cursor-pointer",
+    "text-tx-primary cursor-pointer",
     "transition-all group z-50",
     active ? "border-l-3 border-primary text-primary" : "hover:bg-primary/5"
   );

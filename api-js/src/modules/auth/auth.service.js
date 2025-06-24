@@ -12,7 +12,7 @@ const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
   const user = await repository.createUser({ name, email, password: hashedPassword });
 
   ipAddress = authUtil.normalizeIp(ipAddress);
-  
+
   const { accessToken, refreshToken } = tokenUtil.createTokens({
     userId: user.id,
     userAgent,
@@ -97,4 +97,8 @@ const revalidateTokens = async ({ refreshToken, userAgent, ipAddress }) => {
   });
 };
 
-module.exports = { signUp, signIn, signOut, revalidateTokens };
+const getSessions = async (userId) => {
+  return await repository.getSessions(userId);
+};
+
+module.exports = { signUp, signIn, signOut, revalidateTokens, getSessions };

@@ -56,7 +56,7 @@ export default function Notification() {
   return (
     <button
       ref={buttonRef}
-      className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary cursor-pointer rounded-md transition duration-300 focus:outline-none"
+      className="relative flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary cursor-pointer rounded-md transition duration-300 focus:outline-none"
       onClick={toggleNotifications}
     >
       <div className="relative">
@@ -72,12 +72,12 @@ export default function Notification() {
       >
         <ul className="flex flex-col gap-1 p-2">
           {notifications.length === 0 ? (
-            <p className="text-sm text-tx-secondary">Sem notificações</p>
+            <p className="text-sm text-tx-primary">Sem notificações</p>
           ) : (
             notifications.map((notif) => (
               <li
                 key={notif.id}
-                className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-tx-secondary py-4 px-4 text-sm cursor-pointer transition hover:bg-primary/10"
+                className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-tx-primary py-4 px-4 text-sm cursor-pointer transition hover:bg-primary/10"
               >
                 <DotSquare size={20} className="text-primary shrink-0" />
                 <span className="truncate">{notif.message}</span>

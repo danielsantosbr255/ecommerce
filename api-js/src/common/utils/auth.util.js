@@ -9,8 +9,8 @@ exports.hashPassword = (password) => {
 };
 
 exports.normalizeIp = (ip) => {
-  if (ip === "::1" || ip === "::ffff:127.0.0.1") {
-    return "127.0.0.1";
-  }
+  // if (ip === "::1" || ip === "::ffff:127.0.0.1") {
+  //   return "127.0.0.1";
+  // }
   return ip;
 };

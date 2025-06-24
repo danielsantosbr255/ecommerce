@@ -8,6 +8,7 @@ const rolePermissionMap = {
   USER: (user, { can }) => {
     can("read", "Product");
     can("read", "Order", { userId: user.id });
+    can("manage", "Address", { userId: user.id });    
   },
 };
 

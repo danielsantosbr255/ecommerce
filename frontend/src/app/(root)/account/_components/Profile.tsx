@@ -33,7 +33,7 @@ const ProfileCard = ({ children, label, icon, href = "" }: ProfileCardProps) => 
     >
       <span className="flex items-center p-4 justify-center text-primary">{icon}</span>
 
-      <div className="flex flex-col justify-center items- w-full text-tx-secondary">
+      <div className="flex flex-col justify-center items- w-full text-tx-primary">
         <h2 className="text-lg font-semibold mb-1">{label}</h2>
         {children}
       </div>
@@ -55,8 +55,8 @@ export default function Profile() {
             <FaUserNinja className="text-primary" size={40} />
           </span>
           <div className="flex flex-col gap-1">
-            <h1 className="flex w-full text-lg font-bold text-tx-secondary">Bem-vindo, {user.name}</h1>
-            <p className="text-tx-secondary flex items-center gap-2">
+            <h1 className="flex w-full text-lg font-bold text-tx-primary">Bem-vindo, {user.name}</h1>
+            <p className="text-tx-primary flex items-center gap-2">
               <FaMailBulk className="text-primary" size={16} /> {user.email}
             </p>
           </div>
@@ -68,30 +68,30 @@ export default function Profile() {
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-        <ProfileCard label="Acesso e segurança" icon={<FaShieldAlt size={40} />}>
+        <ProfileCard href="/account/security" label="Acesso e segurança" icon={<FaShieldAlt size={40} />}>
           <p>Alterar o login, nome ou celular</p>
         </ProfileCard>
 
         {/* Cartão de Últimos Pedidos */}
-        <ProfileCard label="Meus Pedidos" icon={<FaShoppingBasket size={40} />} href="/account/my-orders">
+        <ProfileCard href="/account/orders" label="Meus Pedidos" icon={<FaShoppingBasket size={40} />}>
           <p>Rastrear, devolver, cancelar um pedido, baixar a nota fiscal ou comprar novamente</p>
         </ProfileCard>
 
-        <ProfileCard label="Seus endereços" icon={<FaAddressBook size={40} />}>
+        <ProfileCard href="/account/address" label="Meus endereços" icon={<FaAddressBook size={40} />}>
           <p>Alterar, remover ou definir o endereço padrão</p>
         </ProfileCard>
 
         {/* Cartão de Endereço Principal */}
-        <ProfileCard label="Avaliações" icon={<FaThumbsUp size={40} />}>
+        <ProfileCard href="/account/reviews" label="Avaliações" icon={<FaThumbsUp size={40} />}>
           <p>Avalie suas compras e visualize suas avaliações e comentários</p>
         </ProfileCard>
 
         {/* Cartão de Favoritos Recentes */}
-        <ProfileCard label="Favoritos" icon={<FaHeart size={40} />}>
+        <ProfileCard href="/account/favorites" label="Favoritos" icon={<FaHeart size={40} />}>
           <p>Consulte sua lista de produtos favoritados</p>
         </ProfileCard>
 
-        <ProfileCard label="Sessões" icon={<FaWindowClose size={40} />}>
+        <ProfileCard href="/account/sessions" label="Sessões" icon={<FaWindowClose size={40} />}>
           <p>Veja, encerre ou gerencie sessões em outros dispositivos.</p>
         </ProfileCard>
       </section>

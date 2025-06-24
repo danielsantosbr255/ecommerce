@@ -49,8 +49,8 @@ input[type="number"] {
   --color-error: var(--color-red-500); /* Erros, alertas críticos */
   --color-info: var(--color-blue-500); /* Informações neutras */
 
-  --color-tx-primary: var(--color-gray-900); /* Texto principal (títulos) */
-  --color-tx-secondary: var(--color-gray-600); /* Texto secundário (descrições) */
+  --color-tx-primary: var(--color-gray-600); /* Texto principal (títulos) */
+  --color-tx-secondary: var(--color-gray-500); /* Texto secundário (descrições) */
   --color-tx-muted: var(--color-gray-400); /* Texto desativado/fracos */
   --color-tx-on-primary: white; /* Texto sobre fundo primário (ex: botão) */
   --color-tx-link: var(--color-blue-500); /* Links clicáveis */

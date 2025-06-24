@@ -1,16 +1,18 @@
 const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const paypal = require("./common/payment/paypal");
+// const paypal = require("./common/payment/paypal");
 
 const errorHandler = require("./common/middlewares/error.handler");
 
 // Modules
 const AuthModule = require("./modules/auth/auth.module");
-const UserModule = require("./modules/user/user.module");
 const CartModule = require("./modules/cart/cart.module");
+const UsersModule = require("./modules/users/user.module");
 const BrandModule = require("./modules/brands/brands.module");
 const OrdersModule = require("./modules/orders/orders.module");
+const AccountModule = require("./modules/account/account.module");
+const AddressModule = require("./modules/address/address.module");
 const ReviewsModule = require("./modules/reviews/reviews.module");
 const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
@@ -26,12 +28,14 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use("/api", [
   AuthModule,
-  UserModule,
+  UsersModule,
   ProductsModule,
   CartModule,
   OrdersModule,
+  AccountModule,
   ReviewsModule,
   PromotionsModule,
+  AddressModule,
   CategoriesModule,
   BrandModule,
 ]);

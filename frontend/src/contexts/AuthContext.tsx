@@ -33,6 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const route = useRouter();
 
+  console.clear();
+
   const loadUser = useCallback(async () => {
     setUserLoading(true);
     const user = await userService.getOwn();

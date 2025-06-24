@@ -61,7 +61,7 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
 
   const mainStyle = cn(
     "flex items-center p-2 rounded-r-xl shadow-xs",
-    "font-medium text-lg text-tx-secondary cursor-pointer",
+    "font-medium text-lg text-tx-primary cursor-pointer",
     "transition-colors group z-50",
     active ? "bg-primary/5 border-l-3 border-accent text-accent" : "hover:bg-gray-200"
   );
@@ -97,7 +97,7 @@ export function SidebarFooter({ user, signOut }: { user: User | null; signOut: (
         >
           <div>
             <h1 className="font-semibold">{user?.name}</h1>
-            <p className="text-sm text-tx-secondary">{user?.email}</p>
+            <p className="text-sm text-tx-primary">{user?.email}</p>
           </div>
 
           <Button className="!p-2" onClick={signOut}>

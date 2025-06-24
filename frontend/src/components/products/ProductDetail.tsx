@@ -36,16 +36,16 @@ export default function ProductDetail({ product }: { product: Product }) {
           <h1 className="text-3xl font-bold">{product.title}</h1>
           <p className="text-xl text-primary font-semibold">{CurrencyUtil.formatCurrency(product.price)}</p>
 
-          <p className="text-tx-secondary">
+          <p className="text-tx-primary">
             <span className="font-bold">Estoque: </span> {product.stock}
           </p>
 
-          <p className="text-tx-secondary">
+          <p className="text-tx-primary">
             <span className="font-bold">Categoria: </span>
             {product.category?.name}
           </p>
 
-          <p className="text-tx-secondary">{product.description}</p>
+          <p className="text-tx-primary">{product.description}</p>
 
           <div className="flex items-center gap-2">
             <span className="bg-white rounded-full aspect-square w-10 shadow-sm border-lines p-1 flex items-center justify-center">
@@ -58,7 +58,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 className="object-contain rounded"
               />
             </span>
-            <p className="text-tx-secondary font-bold">{product.brand?.name}</p>
+            <p className="text-tx-primary font-bold">{product.brand?.name}</p>
           </div>
 
           <div className="flex gap-4 pt-4">
@@ -82,12 +82,12 @@ export default function ProductDetail({ product }: { product: Product }) {
                 product.specifications.map((spec, i) => (
                   <tr key={i} className="border-b border-lines last:border-none">
                     <td className="py-2 font-medium">{spec.name}</td>
-                    <td className="py-2 text-tx-secondary">{spec.value}</td>
+                    <td className="py-2 text-tx-primary">{spec.value}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="text-tx-secondary text-center py-4">
+                  <td colSpan={2} className="text-tx-primary text-center py-4">
                     Nenhuma especificação informada.
                   </td>
                 </tr>

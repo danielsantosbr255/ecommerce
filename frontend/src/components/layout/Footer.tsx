@@ -4,8 +4,8 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col w-full p-2 py-8 z-5 mt-auto justify-center items-center text-tx-secondary font-semibold">
-      <div className="flex w-full gap-2 p-4 border-t border-lines/50 justify-center items-center text-tx-on-primary">
+    <footer className="bg-bg-secondary flex flex-col w-full border-t border-lines/50 px-2 py-6 z-10 mt-auto justify-center items-center text-tx-primary font-semibold">
+      <div className="flex w-full gap-2 p-4  justify-center items-center text-tx-on-primary">
         <Link
           href="https://github.com/danielsantosbr255"
           target="_blank"
@@ -25,7 +25,7 @@ export default function Footer() {
       <p>©2024 Fireforge Labs. All rights reserved.</p>
 
       <p>Privacy Policy | Terms of Service</p>
-      <p className="text-sm text-tx-secondary flex gap-2">
+      <p className="text-sm text-tx-primary flex gap-2">
         <a className="flex gap-2" href="https://github.com/danielsantosbr255" target="_blank">
           <FaGithub size={20} /> Created by Daniel Santos
         </a>

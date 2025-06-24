@@ -24,6 +24,14 @@ const findSession = ({ userId, refreshToken, userAgent, ipAddress }) => {
   });
 };
 
+const getSessions = (userId) => {
+  return prisma.session.findMany({ where: { userId } });
+};
+
+const deleteSessions = (userId) => {
+  return prisma.session.deleteMany({ where: { userId } });
+};
+
 const deleteSession = (sessionId) => {
   try {
     return prisma.session.delete({ where: { id: sessionId } });
@@ -43,4 +51,4 @@ const findByEmail = (email) => {
   return prisma.user.findUnique({ where: { email } });
 };
 
-module.exports = { createSession, findSession, deleteSession, createUser, findByEmail };
+module.exports = { createSession, findSession, deleteSession, createUser, findByEmail, getSessions, deleteSessions };

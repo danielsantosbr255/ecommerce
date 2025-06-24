@@ -19,22 +19,22 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, discount, discountP
           <File className="text-primary" absoluteStrokeWidth /> RESUMO
         </h1>
 
-        <div className="flex w-full justify-between text-tx-secondary border-b border-lines p-2">
+        <div className="flex w-full justify-between text-tx-primary border-b border-lines p-2">
           Valor dos produtos: <span className="font-bold">{CurrencyUtil.formatCurrency(subtotal)}</span>
         </div>
 
-        <div className="flex w-full justify-between text-tx-secondary border-b border-lines p-2">
+        <div className="flex w-full justify-between text-tx-primary border-b border-lines p-2">
           Frete: <span className="font-bold">{CurrencyUtil.formatCurrency(0)}</span>
         </div>
 
         {discount > 0 && (
-          <div className="flex w-full justify-between text-tx-secondary border-b border-lines p-2">
+          <div className="flex w-full justify-between text-tx-primary border-b border-lines p-2">
             Desconto ({discountPercent}%):{" "}
             <span className="text-sale">- {CurrencyUtil.formatCurrency(discount)}</span>
           </div>
         )}
 
-        <div className="bg-gray-100 flex w-full rounded justify-between text-tx-secondary px-2 py-4">
+        <div className="bg-gray-100 flex w-full rounded justify-between text-tx-primary px-2 py-4">
           Total: <span className="text-primary">{CurrencyUtil.formatCurrency(total)}</span>
         </div>
       </section>

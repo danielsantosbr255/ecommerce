@@ -2,10 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import Topbar from "./navbar/Topbar";
+import MobileBar from "./navbar/MobileBar";
 import { useEffect, useState } from "react";
 import DesktopBar from "./navbar/DesktopBar";
 import SectionsBar from "./navbar/SectionsBar";
-import MobileBar from "./navbar/MobileBar";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);

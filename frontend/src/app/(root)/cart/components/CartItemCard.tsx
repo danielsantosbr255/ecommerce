@@ -76,12 +76,12 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
       <section className="w-full flex flex-col justify-center h-full gap-2">
         <Link href={`/product/${item.product.slug}`} className="flex-1 text-center sm:text-left">
           <h2 className="font-semibold text-lg">{item.product.title}</h2>
-          <p className="text-tx-secondary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
+          <p className="text-tx-primary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
         </Link>
       </section>
 
       {/* Seção de quantidade e remoção */}
-      <section className="flex h-full gap-2 text-tx-secondary items-end justify-center w-full">
+      <section className="flex h-full gap-2 text-tx-primary items-end justify-center w-full">
         <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
           <div className="flex items-center gap-1">
             <button

@@ -31,7 +31,7 @@ const BrandCard = ({ brand }: { brand: Brand }) => {
 export default function BrandsCarousel({ brands }: { brands: Brand[] }) {
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-secondary font-bold py-2">
+      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-primary font-bold py-2">
         <Group className="text-primary" size={24} /> Nossas Marcas
       </h2>
 

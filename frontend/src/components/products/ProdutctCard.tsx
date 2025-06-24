@@ -47,13 +47,13 @@ export default function ProductCard({ product }: ProductProps) {
           </div>
 
           <div className="flex justify-between items-center font-bold mt-2">
-            <p className="text-xl text-tx-secondary truncate">{product.title}</p>
+            <p className="text-xl text-tx-primary truncate">{product.title}</p>
           </div>
 
           <div>
-            <p className="text-sm text-tx-secondary truncate line-through">{productPrice}</p>
+            <p className="text-sm text-tx-primary truncate line-through">{productPrice}</p>
             <p className="text-2xl text-primary font-bold">{productDiscountPrice}</p>
-            <p className="text-sm text-tx-secondary truncate">
+            <p className="text-sm text-tx-primary truncate">
               À vista <br /> ou até 10x de {CurrencyUtil.formatCurrency(productDiscount / 10)}
             </p>
           </div>

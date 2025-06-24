@@ -19,13 +19,13 @@ const AdminProductFilters = () => {
       <input
         type="text"
         placeholder={searchInputPlaceholder}
-        className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-secondary leading-tight focus:outline-none focus:shadow-xs-outline"
+        className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-primary leading-tight focus:outline-none focus:shadow-xs-outline"
         name="searchTerm"
       />
       <div>
         <select
           id="filterCategory"
-          className="shadow-xs appearance-none border rounded py-2 px-3 text-tx-secondary leading-tight focus:outline-none focus:shadow-xs-outline"
+          className="shadow-xs appearance-none border rounded py-2 px-3 text-tx-primary leading-tight focus:outline-none focus:shadow-xs-outline"
           name="filterCategory"
         >
           {filterOptions.map((option) => (

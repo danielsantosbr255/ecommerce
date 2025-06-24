@@ -47,7 +47,7 @@ const signOut = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  const ipAddress = req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const refreshToken = req.cookies.refreshToken; // || req.headers["authorization"]?.split(" ")[1];
 
@@ -75,4 +75,10 @@ const validate = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn, signOut, refreshToken, validate };
+const getSessions = async (req, res) => {
+  const userId = req.user.id;
+  const sessions = await service.getSessions(userId);
+  res.json(sessions);
+};
+
+module.exports = { signUp, signIn, signOut, refreshToken, validate, getSessions };

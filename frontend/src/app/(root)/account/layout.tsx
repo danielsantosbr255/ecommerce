@@ -18,16 +18,16 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <Sidebar>
         <SidebarItem href="/account" icon={<FaUserNinja size={27} />} text="Minha Conta" />
-        <SidebarItem href="#" icon={<FaShieldAlt size={27} />} text="Acesso e segurança" />
-        <SidebarItem href="/account/my-orders" icon={<FaShoppingBasket size={27} />} text="Meus Pedidos" />
-        <SidebarItem href="#" icon={<FaAddressBook size={27} />} text="Meus Endereços" />
-        <SidebarItem href="#" icon={<FaThumbsUp size={27} />} text="Avaliações" />
-        <SidebarItem href="#" icon={<FaHeart size={27} />} text="Meus Favoritos" />
-        <SidebarItem href="#" icon={<FaWindowClose size={27} />} text="Sessões" />
+        <SidebarItem href="/account/security" icon={<FaShieldAlt size={27} />} text="Acesso e segurança" />
+        <SidebarItem href="/account/orders" icon={<FaShoppingBasket size={27} />} text="Meus Pedidos" />
+        <SidebarItem href="/account/address" icon={<FaAddressBook size={27} />} text="Meus Endereços" />
+        <SidebarItem href="/account/reviews" icon={<FaThumbsUp size={27} />} text="Avaliações" />
+        <SidebarItem href="/account/favorites" icon={<FaHeart size={27} />} text="Meus Favoritos" />
+        <SidebarItem href="/account/sessions" icon={<FaWindowClose size={27} />} text="Sessões" />
         <SidebarItem onClick={signOut} icon={<FiLogOut size={27} />} text="Sair" />
       </Sidebar>
 
-      <main className="flex flex-col flex-1">{children}</main>
+      <main className="grid grid-rows-1 grid-cols-1 w-full h-full">{children}</main>
     </>
   );
 }

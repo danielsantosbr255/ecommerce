@@ -66,7 +66,7 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
           isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 bg-white hover:bg-gray-100"
         }`}
       >
-        <span className="text-tx-secondary">
+        <span className="text-tx-primary">
           {isDragging ? "Solte as imagens aqui" : "Clique ou arraste imagens aqui"}
         </span>
       </label>

@@ -7,5 +7,6 @@ router.post("/auth/sign-in", controller.signIn);
 router.post("/auth/sign-out", verifyToken, controller.signOut);
 router.post("/auth/refresh", controller.refreshToken);
 router.post("/auth/validate", controller.validate);
+router.get("/auth/sessions", verifyToken, controller.getSessions);
 
 module.exports = router;

@@ -120,9 +120,21 @@ export interface Order {
 
 export interface User {
   id: string;
-  email: string;
   name: string;
+  email: string;
+
+  password: string;
+  phone?: string;
   role: "USER" | "ADMIN";
+
+  image: string;
+  createdAt: Date;
+
+  orders: Order[];
+  reviews: Review[];
+  sessions: Session[];
+  cart?: Cart;
+  addresses: Address[];
 }
 
 export interface Address {
@@ -163,4 +175,6 @@ export interface Session {
   ipAddress: string;
   accessToken: string;
   refreshToken: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -19,7 +19,7 @@ export default function CartItems() {
   if (!user) {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
-        <h1 className="flex text-2xl text-tx-secondary font-semibold gap-2">
+        <h1 className="flex text-2xl text-tx-primary font-semibold gap-2">
           <Link href="/sign-in" className="text-primary underline">
             Faça login
           </Link>

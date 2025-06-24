@@ -32,7 +32,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <section className="p-1 flex flex-1 w-full h-full items-center justify-between text-tx-secondary">
+    <section className="p-1 flex flex-1 w-full h-full items-center justify-between text-tx-primary">
       <div className="bg-white border border-lines flex flex-1 items-center px-3 text-lg rounded-xl">
         <Search />
         <Input

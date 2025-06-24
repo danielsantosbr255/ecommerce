@@ -1,22 +1,27 @@
+const UAParser = require("ua-parser-js");
 const { prisma } = require("../database/prisma");
-const authUtil = require("../utils/auth.util");
 const tokenUtil = require("../utils/token.util");
 const cryptoUtil = require("../utils/crypto.util");
 const CustomError = require("../utils/CustomError");
 const { defineAbilitiesFor } = require("../utils/abilities.util");
+// const { getLocationFromIP } = require("../utils/getLocationFromIP");
 
 const verifyToken = async (req, res, next) => {
-  const realIp = req.headers["x-forwarded-for"] || req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const accessToken = req.headers["authorization"]?.split(" ")[1];
-  // const refreshToken = req.cookies.refreshToken;
 
-  const ipAddress = authUtil.normalizeIp(realIp);
+  const ua = UAParser(userAgent);
 
-  // console.log("🚨 [MD] accessToken: ", accessToken);
-  // console.log("🚨 [MD] refreshToken: ", refreshToken);
-  console.log("🚨 [MD] userAgent: ", userAgent);
-  console.log("🚨 [MD] ipAddress: ", ipAddress);
+  const sessionData = {
+    ip: ipAddress,
+    device: `${ua.device.vendor || ""} ${ua.device.model || ""}`.trim(),
+    os: `${ua.os.name || ""} ${ua.os.version || ""}`.trim(),
+    browser: `${ua.browser.name || ""} ${ua.browser.version || ""}`.trim(),
+    // location: await getLocationFromIP(ipAddress),
+  };
+
+  console.log("💻[MD] sessionData: ", sessionData);
 
   if (!accessToken) {
     throw new CustomError("Token não fornecido!", 401);

@@ -59,7 +59,7 @@ export default function Dashboard() {
         <ul>
           <li className="py-2 border-b border-lines last:border-b-0 flex items-center justify-between">
             <span>Novo usuário registrado: João Silva</span>
-            <span className="text-sm text-tx-secondary">Há 5 minutos</span>
+            <span className="text-sm text-tx-primary">Há 5 minutos</span>
           </li>
         </ul>
       </section>

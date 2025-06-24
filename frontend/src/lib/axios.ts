@@ -36,9 +36,8 @@ api.interceptors.request.use(
 
       config.headers = config.headers || {};
       config.headers.Cookie = cookieStore.toString();
-      
-      const realIp = (await headers()).get("x-forwarded-for") || (await headers()).get("x-real-ip") || "127.0.0.1";
-      config.headers["x-real-ip"] = realIp;
+
+      config.headers["x-forwarded-for"] = (await headers()).get("x-forwarded-for") || "127.0.0.1";
       config.headers["user-agent"] = (await headers()).get("user-agent") || "Next.js Server";
     } else {
       authManager.set(sessionStorage.getItem("accessToken") || "");
