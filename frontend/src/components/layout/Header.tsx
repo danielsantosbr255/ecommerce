@@ -2,10 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import Topbar from "./navbar/Topbar";
+import MobileBar from "./navbar/MobileBar";
 import { useEffect, useState } from "react";
 import DesktopBar from "./navbar/DesktopBar";
 import SectionsBar from "./navbar/SectionsBar";
-import MobileBar from "./navbar/MobileBar";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -20,14 +20,14 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex p-1 px-2 justify-center transition-all duration-${DELAY} ease-in-out`}
+      className={`fixed top-0 left-0 right-0 z-50 pb-5 flex justify-center transition-all duration-${DELAY} ease-in-out`}
     >
       <main
         className={cn(
-          `bg-bg-primary border border-lines/50 transition-all duration-${DELAY} ease-in-out`,
+          `bg-bg-secondary border shadow-xs p-1 transition-all duration-${DELAY} ease-in-out`,
           scrolled
-            ? "bg-bg-secondary/80 backdrop-blur-xl w-full lg:max-w-10/12 mx-auto shadow rounded-lg"
-            : "w-full max-w-screen border-t-transparent border-x-transparent"
+            ? "bg-bg-secondary/80 backdrop-blur-xl w-full mt-2 lg:max-w-10/12 mx-auto  rounded-lg border-lines/50"
+            : "w-full max-w-screen border-t-transparent border-transparent"
         )}
       >
         <Topbar
@@ -47,7 +47,7 @@ export default function Header() {
         <MobileBar />
 
         <SectionsBar
-          className={`transition-all duration-${DELAY} ease-initial overflow-hidden ${
+          className={`transition-all duration-${DELAY} ease-initial ${
             scrolled ? "max-h-0 opacity-0" : "max-h-[400px] opacity-100"
           }`}
         />

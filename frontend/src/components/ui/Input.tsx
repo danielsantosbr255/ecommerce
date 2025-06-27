@@ -10,7 +10,7 @@ interface InputProps
 export default function Input({ className, label, id, ...props }: InputProps) {
   return (
     <div className="flex flex-1">
-      <label htmlFor={id} className="block text-tx-secondary text-sm font-bold mb-2">
+      <label htmlFor={id} className="block text-tx-primary text-sm font-bold mb-2">
         {label}
       </label>
       <input

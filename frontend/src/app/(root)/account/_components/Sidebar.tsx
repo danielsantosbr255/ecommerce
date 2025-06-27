@@ -50,8 +50,8 @@ export function SidebarItem({ icon, text, href = "", ...props }: SidebarItemProp
   const active = usePath === href;
 
   const mainStyle = cn(
-    "flex items-center p-4",
-    "text-tx-secondary cursor-pointer",
+    "flex items-center ",
+    "text-tx-primary cursor-pointer",
     "transition-all group z-50",
     active ? "border-l-3 border-primary text-primary" : "hover:bg-primary/5"
   );
@@ -60,7 +60,7 @@ export function SidebarItem({ icon, text, href = "", ...props }: SidebarItemProp
 
   return (
     <li className={mainStyle} onMouseEnter={handleClick(true)} onMouseLeave={handleClick(false)} {...props}>
-      <Link href={href} className="flex">
+      <Link href={href} className="flex w-full h-full p-4">
         {icon}
         <span
           className={`flex items-center overflow-hidden transition-all ease-in-out duration-300 truncate ${

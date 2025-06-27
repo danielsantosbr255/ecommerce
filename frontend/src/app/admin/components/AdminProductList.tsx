@@ -5,7 +5,7 @@ const AdminProductList = async () => {
   const products = await productService.getAll();
 
   if (!products || !products.length) {
-    return <p className="text-tx-secondary col-span-full">Nenhum produto encontrado.</p>;
+    return <p className="text-tx-primary col-span-full">Nenhum produto encontrado.</p>;
   }
 
   return (

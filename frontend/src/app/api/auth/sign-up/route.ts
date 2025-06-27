@@ -12,8 +12,7 @@ export async function POST(request: Request) {
     setCookiesFromResponse(response);
 
     return NextResponse.json(response.data);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  } catch {
+    return NextResponse.json({ message: "Erro ao criar conta" });
   }
 }

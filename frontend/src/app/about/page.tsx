@@ -22,7 +22,7 @@ const AboutPage = () => {
         {/* Botão de Voltar Elegante */}
         <Link
           href="/"
-          className="inline-flex items-center text-tx-secondary hover:text-primary transition duration-300 mb-12 group"
+          className="inline-flex items-center text-tx-primary hover:text-primary transition duration-300 mb-12 group"
         >
           <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
           <span className="font-medium">Voltar para a Loja</span>
@@ -40,34 +40,34 @@ const AboutPage = () => {
               <h2 className="text-xl font-semibold text-tx-primary mt-4">
                 Olá! Eu sou o Daniel.
               </h2>
-              <p className="text-tx-secondary text-sm">
+              <p className="text-tx-primary text-sm">
                 Estudante de Desenvolvimento Web & Criador deste Projeto
               </p>
             </div>
             <div className="md:w-2/3 px-8">
-              <p className="text-tx-secondary leading-relaxed mb-4">
+              <p className="text-tx-primary leading-relaxed mb-4">
                 Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos
                 jogos que desenvolvi com Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de
                 8 anos</strong>, o código foi minha tela e os jogos, minhas criações. Agora, estou focado em construir
                 experiências interativas na web.
               </p>
-              <p className="text-tx-secondary leading-relaxed mb-4">
+              <p className="text-tx-primary leading-relaxed mb-4">
                 Este projeto de e-commerce é um passo crucial nessa transição, permitindo-me explorar a fundo
                 o desenvolvimento fullstack. Embora meu foco principal seja o backend, a visão completa do
                 ciclo de desenvolvimento é o que me motiva.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
-                  <FaCode className="mr-2 text-tx-secondary" /> Fullstack
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
+                  <FaCode className="mr-2 text-tx-primary" /> Fullstack
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
-                  <FaTerminal className="mr-2 text-tx-secondary" /> Backend
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
+                  <FaTerminal className="mr-2 text-tx-primary" /> Backend
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
-                  <FaGamepad className="mr-2 text-tx-secondary" /> Desenvolvimento de Jogos
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
+                  <FaGamepad className="mr-2 text-tx-primary" /> Desenvolvimento de Jogos
                 </span>
-                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-secondary">
-                  <FaBrain className="mr-2 text-tx-secondary" /> Lógica de Programação
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
+                  <FaBrain className="mr-2 text-tx-primary" /> Lógica de Programação
                 </span>
               </div>
             </div>
@@ -84,48 +84,48 @@ const AboutPage = () => {
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaLayerGroup className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Frontend</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Frontend</h3>
               </div>
-              <p className="text-tx-secondary text-sm">
+              <p className="text-tx-primary text-sm">
                 JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS
               </p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaTerminal className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Backend</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Backend</h3>
               </div>
-              <p className="text-tx-secondary text-sm">
+              <p className="text-tx-primary text-sm">
                 Node.js, NestJS (conhecimento), Prisma, RESTful APIs
               </p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaDatabase className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Bancos de Dados</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Bancos de Dados</h3>
               </div>
-              <p className="text-tx-secondary text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
+              <p className="text-tx-primary text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaPuzzlePiece className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Autenticação & Segurança</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Autenticação & Segurança</h3>
               </div>
-              <p className="text-tx-secondary text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
+              <p className="text-tx-primary text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaDocker className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Infraestrutura & DevOps</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Infraestrutura & DevOps</h3>
               </div>
-              <p className="text-tx-secondary text-sm">Docker, Git, GitHub</p>
+              <p className="text-tx-primary text-sm">Docker, Git, GitHub</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaBrain className="text-primary text-xl mr-3" />
-                <h3 className="text-lg font-semibold text-tx-secondary">Habilidades Essenciais</h3>
+                <h3 className="text-lg font-semibold text-tx-primary">Habilidades Essenciais</h3>
               </div>
-              <p className="text-tx-secondary text-sm">
+              <p className="text-tx-primary text-sm">
                 Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo
               </p>
             </div>
@@ -138,17 +138,17 @@ const AboutPage = () => {
             <FaShoppingCart className="text-primary text-3xl mr-4" />
             <h2 className="text-xl font-semibold text-tx-primary">Sobre o Meu Projeto de E-commerce</h2>
           </div>
-          <p className="text-tx-secondary leading-relaxed mb-4">
+          <p className="text-tx-primary leading-relaxed mb-4">
             Este projeto de e-commerce é mais do que um simples aprendizado; é a materialização da minha
             paixão pelo desenvolvimento web e uma forma de consolidar meus conhecimentos em um cenário prático
             e desafiador.
           </p>
-          <p className="text-tx-secondary leading-relaxed mb-4">
+          <p className="text-tx-primary leading-relaxed mb-4">
             Desde a arquitetura do backend até a experiência do usuário no frontend, cada detalhe foi
             cuidadosamente pensado e implementado. O objetivo principal foi explorar um amplo espectro de
             tecnologias e aplicar as melhores práticas de desenvolvimento.
           </p>
-          <ul className="list-disc list-inside text-tx-secondary mb-4">
+          <ul className="list-disc list-inside text-tx-primary mb-4">
             <li>Sistema de autenticação completo com JWT e cookies HTTP-only para segurança.</li>
             <li>Validação robusta de entrada de dados utilizando Zod.</li>
             <li>Utilização do Prisma como ORM para interação eficiente com o banco de dados PostgreSQL.</li>
@@ -156,14 +156,14 @@ const AboutPage = () => {
             <li>Implementação de conceitos de RESTful APIs para comunicação entre frontend e backend.</li>
             <li>Containerização com Docker para facilitar o desenvolvimento e a implantação.</li>
           </ul>
-          <p className="text-tx-secondary leading-relaxed">
+          <p className="text-tx-primary leading-relaxed">
             Este projeto serve como um portfólio dinâmico, demonstrando minhas habilidades e minha dedicação
             em criar soluções web completas e bem estruturadas.
           </p>
         </section>
 
         {/* Rodapé Sofisticado */}
-        <footer className="text-center text-tx-secondary mt-16 py-8 border-t border-gray-300">
+        <footer className="text-center text-tx-primary mt-16 py-8 border-t border-gray-300">
           <p className="mb-2">
             Feito com <span className="text-primary font-semibold">Next.js 15</span>,{" "}
             <span className="font-semibold">TypeScript</span> e muita paixão <FaCode className="inline" />

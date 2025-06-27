@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import { Sidebar, SidebarItem } from "./_components/Sidebar";
-import { FiHeart, FiLock, FiLogOut, FiMapPin, FiShoppingBag, FiUser } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { FaAddressBook, FaHeart, FaShieldAlt, FaShoppingBasket, FaThumbsUp, FaUserNinja, FaWindowClose } from "react-icons/fa";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const { user, userLoading, signOut } = useAuth();
@@ -16,15 +17,17 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Sidebar>
-        <SidebarItem href="/account" icon={<FiUser size={27} />} text="Minha Conta" />
-        <SidebarItem href="#" icon={<FiShoppingBag size={27} />} text="Meus Pedidos" />
-        <SidebarItem href="#" icon={<FiMapPin size={27} />} text="Meus Endereços" />
-        <SidebarItem href="#" icon={<FiHeart size={27} />} text="Meus Favoritos" />
-        <SidebarItem href="#" icon={<FiLock size={27} />} text="Alterar Senha" />
+        <SidebarItem href="/account" icon={<FaUserNinja size={27} />} text="Minha Conta" />
+        <SidebarItem href="/account/security" icon={<FaShieldAlt size={27} />} text="Acesso e segurança" />
+        <SidebarItem href="/account/orders" icon={<FaShoppingBasket size={27} />} text="Meus Pedidos" />
+        <SidebarItem href="/account/address" icon={<FaAddressBook size={27} />} text="Meus Endereços" />
+        <SidebarItem href="/account/reviews" icon={<FaThumbsUp size={27} />} text="Avaliações" />
+        <SidebarItem href="/account/favorites" icon={<FaHeart size={27} />} text="Meus Favoritos" />
+        <SidebarItem href="/account/sessions" icon={<FaWindowClose size={27} />} text="Sessões" />
         <SidebarItem onClick={signOut} icon={<FiLogOut size={27} />} text="Sair" />
       </Sidebar>
 
-      <main className="flex flex-col flex-1">{children}</main>
+      <main className="grid grid-rows-1 grid-cols-1 w-full h-full">{children}</main>
     </>
   );
 }

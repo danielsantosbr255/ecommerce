@@ -32,7 +32,7 @@ export default function Button({ className, href, variant = "default", ...props 
           className={cn(
             className,
             variants[variant],
-            "rounded-lg flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
+            "rounded-md flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             "hover:opacity-90 transition-all truncate"
           )}
@@ -47,7 +47,7 @@ export default function Button({ className, href, variant = "default", ...props 
       className={cn(
         className,
         variants[variant],
-        "rounded-lg flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
+        "rounded-md flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         "hover:opacity-90"
       )}

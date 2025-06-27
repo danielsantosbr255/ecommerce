@@ -8,7 +8,7 @@ function Topbar({ className }: { className?: string }) {
       className={`${className} hidden lg:flex w-full justify-center border-b border-lines/20 items-center text-xs transition-all duration-300 ease-initial overflow-hidden`}
     >
       <div className="grid grid-cols-3 w-full max-w-10/12 py-1 px-2 gap-2 items-center">
-        <div className="flex text-tx-secondary justify-start items-center gap-2">
+        <div className="flex text-tx-primary justify-start items-center gap-2">
           <Link
             href="https://www.instagram.com/daniel_santosdev/"
             target="_blank"
@@ -33,10 +33,10 @@ function Topbar({ className }: { className?: string }) {
         </div>
 
         <div className="flex justify-center items-center">
-          <h1 className="text-tx-secondary font-medium">PROJETO DE ESTUDO [WIP]</h1>
+          <h1 className="text-tx-primary font-medium">PROJETO DE ESTUDO [WIP]</h1>
         </div>
 
-        <div className="flex text-tx-secondary justify-end items-center">
+        <div className="flex text-tx-primary justify-end items-center">
           <select name="language" id="language">
             <option value="pt">PT-BR</option>
             <option value="en">EN-US</option>

@@ -1,25 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { Brand } from "@/types";
 import Image from "next/image";
-import React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel/carousel";
 import { Group } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
-import Link from "next/link";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel/carousel";
 
 const BrandCard = ({ brand }: { brand: Brand }) => {
   return (
-    <section
-      className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium"
-      key={brand.slug}
-    >
+    <section className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium" key={brand.slug}>
       <Link
         href={`/brands/${brand.slug}`}
         className="bg-bg-secondary text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
@@ -41,15 +31,11 @@ const BrandCard = ({ brand }: { brand: Brand }) => {
 export default function BrandsCarousel({ brands }: { brands: Brand[] }) {
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-secondary font-bold py-2">
-        <Group /> Nossas Marcas
+      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-primary font-bold py-2">
+        <Group className="text-primary" size={24} /> Nossas Marcas
       </h2>
 
-      <Carousel
-        className="w-full"
-        opts={{ align: "start", loop: true }}
-        plugins={[Autoplay({ delay: 3000 })]}
-      >
+      <Carousel className="w-full" opts={{ align: "start", loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
         <CarouselContent className="ml-0">
           {brands.map((brand, index) => (
             <CarouselItem

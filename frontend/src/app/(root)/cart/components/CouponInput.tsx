@@ -12,7 +12,7 @@ const CouponInput = () => {
   };
 
   return (
-    <div className="bg-bg-secondary w-full flex gap-4 shadow-xs py-5 px-6 rounded-lg">
+    <div className="bg-bg-secondary hidden md:flex w-full gap-4 shadow-xs py-5 px-6 rounded-lg">
       <Input
         type="text"
         placeholder="Cupom de desconto"

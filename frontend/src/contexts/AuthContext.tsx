@@ -33,6 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const route = useRouter();
 
+  console.clear();
+
   const loadUser = useCallback(async () => {
     setUserLoading(true);
     const user = await userService.getOwn();
@@ -43,18 +45,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = useCallback(
     async ({ name, email, password }: SignUpFormData) => {
       setLoading(true);
-      try {
-        const { session } = await authService.signUp({ name, email, password });
-        sessionStorage.setItem("accessToken", session.accessToken);
-        await loadUser();
-        route.push("/account");
-        toast.success("Conta criada com sucesso!");
-      } catch (error) {
-        setError(error);
-        toast.error("Erro ao criar conta. Tente novamente mais tarde.");
-      } finally {
+      const { session } = await authService.signUp({ name, email, password });
+
+      if (!session) {
         setLoading(false);
+        toast.error("Erro ao criar conta. Tente novamente.");
+        return;
       }
+
+      sessionStorage.setItem("accessToken", session.accessToken);
+      await loadUser();
+      route.push("/account");
+      toast.success("Conta criada com sucesso!");
+      setLoading(false);
     },
     [route, loadUser]
   );
@@ -62,22 +65,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = useCallback(
     async ({ email, password }: SignInFormData) => {
       setLoading(true);
-      try {
-        const { session } = await authService.signIn({ email, password });
+      const { session } = await authService.signIn({ email, password });
 
-        if (!session) throw new Error("Erro ao fazer login. Verifique suas credenciais.");
-
-        sessionStorage.setItem("accessToken", session.accessToken);
-
-        await loadUser();
-        route.push("/account");
-        toast.success("Logado com sucesso!");
-      } catch (error) {
-        setError(error);
-        if (error instanceof Error) toast.error(error.message);
-      } finally {
+      if (!session) {
         setLoading(false);
+        toast.error("Credenciais inválidas.");
+        return;
       }
+
+      sessionStorage.setItem("accessToken", session.accessToken);
+
+      await loadUser();
+      route.push("/account");
+      toast.success("Logado com sucesso!");
+
+      setLoading(false);
     },
     [route, loadUser]
   );

@@ -7,7 +7,7 @@ import { SignInFormData } from "@/types";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/contexts/AuthContext";
-import { KeyRound, Loader2, LogIn, Mail, User } from "lucide-react";
+import { Loader2, LogIn, Mail, User, LockKeyhole } from "lucide-react";
 
 export default function SignInForm() {
   const { register, handleSubmit, formState } = useForm<SignInFormData>({ mode: "onChange" });
@@ -46,7 +46,7 @@ export default function SignInForm() {
           {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
 
           <div className="relative">
-            <KeyRound size={20} className="absolute top-3 left-3 text-primary" />
+            <LockKeyhole size={20} className="absolute top-3 left-3 text-primary" />
             <Input
               type="password"
               {...register("password", { required: "Senha é obrigatorio" })}

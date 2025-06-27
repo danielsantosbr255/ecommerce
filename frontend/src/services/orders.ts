@@ -2,9 +2,9 @@ import api from "@/lib/axios";
 import { Order } from "@/types";
 
 class OrderService {
-  public async create(orderData: Omit<Order, "id">) {
+  public async create() {
     try {
-      const response = await api.post("/orders", orderData);
+      const response = await api.post("/orders/checkout");
       return response.data;
     } catch (error) {
       console.error(error);
@@ -13,13 +13,8 @@ class OrderService {
   }
 
   public async getOrders() {
-    try {
-      const response = await api.get("/orders");
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.get("/orders");
+    return response.data;
   }
 
   public async getOrder(id: string) {

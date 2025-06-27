@@ -9,13 +9,13 @@ interface SelectProps {
 export default function Select({ label, id, name, options }: SelectProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-tx-secondary text-sm font-bold mb-2">
+      <label htmlFor={id} className="block text-tx-primary text-sm font-bold mb-2">
         {label}
       </label>
       <select
         id={id}
         name={name}
-        className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-secondary leading-tight focus:outline-none focus:shadow-xs-outline"
+        className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-primary leading-tight focus:outline-none focus:shadow-xs-outline"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

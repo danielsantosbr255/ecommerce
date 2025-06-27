@@ -1,43 +1,40 @@
 const service = require("./user.service");
 const dataValidator = require("../../common/validators/user.validator");
-const CustomError = require("../../common/utils/CustomError");
 
 const getUsers = async (req, res) => {
-  if (!req.ability.can("read", "User")) throw new CustomError("Acesso negado!", 403);
-
-  const users = await service.getUsers();
+  // if (!req.ability.can("read", "User")) throw new CustomError("Acesso negado!", 403);
+  const users = await service.getUsers(req);
   return res.json(users);
 };
 
 const getUserById = async (req, res) => {
-  if (!req.ability.can("read", "User")) throw new CustomError("Acesso negado!", 403);
-
-  const user = await service.getUserById(req.params.id);
+  const id = req.params.id === "me" ? req.user.id : req.params.id;
+  const user = await service.getUserById(req, id);
   return res.json(user);
 };
 
 const updateUser = async (req, res) => {
-  if (!req.ability.can("manage", "User")) throw new CustomError("Acesso negado!", 403);
-
+  const id = req.params.id === "me" ? req.user.id : req.params.id;
   const validateData = dataValidator.update(req.body);
-  const updatedUser = await service.updateUser(req.params.id, validateData);
+
+  const updatedUser = await service.updateUser(req, id, validateData);
   return res.json(updatedUser);
 };
 
 const deleteUser = async (req, res) => {
-  if (!req.ability.can("manage", "User")) throw new CustomError("Acesso negado!", 403);
-
-  const user = await service.deleteUser(req.params.id);
+  const id = req.params.id === "me" ? req.user.id : req.params.id;
+  // if (!req.ability.can("manage", "User")) throw new CustomError("Acesso negado!", 403);
+  const user = await service.deleteUser(req, id);
   return res.json({ message: "Usuário deletado com sucesso", user });
 };
 
 // MY ACCOUNT
-const getMyProfile = async (req, res) => {
+const getMyAccount = async (req, res) => {
   const user = await service.getUserById(req.user.id);
   return res.json(user);
 };
 
-const updateMyProfile = async (req, res) => {
+const updateMyAccount = async (req, res) => {
   const validatedData = dataValidator.updateProfile(req.body);
   const updatedUser = await service.updateUser(req.user.id, validatedData);
   return res.json(updatedUser);
@@ -53,7 +50,7 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  getMyProfile,
-  updateMyProfile,
+  getMyAccount,
+  updateMyAccount,
   deleteMyAccount,
 };

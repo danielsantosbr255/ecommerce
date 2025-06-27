@@ -10,16 +10,19 @@ import { useAuth } from "@/contexts/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import { cartService } from "@/services/carts";
 import { toast } from "react-toastify";
+import { orderService } from "@/services/orders";
+import { useRouter } from "next/navigation";
 
 export default function CartItems() {
   const { user, cartItems, cartLoading, loadCart } = useAuth();
+  const router = useRouter();
 
   if (cartLoading) return <LoadingState />;
 
   if (!user) {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
-        <h1 className="flex text-2xl text-tx-secondary font-semibold gap-2">
+        <h1 className="flex text-2xl text-tx-primary font-semibold gap-2">
           <Link href="/sign-in" className="text-primary underline">
             Faça login
           </Link>
@@ -56,19 +59,21 @@ export default function CartItems() {
   };
 
   const handleCheckout = async () => {
-    console.log("checkout");
+    try {
+      await orderService.create();
+      await loadCart();
+      router.push("/account/orders");
+      toast.success("Compra finalizada com sucesso");
+    } catch {
+      toast.error("Não foi possível finalizar a compra");
+    }
   };
 
   return (
-    <main className="grid w-full h-full grid-cols-[70%_auto] gap-6">
+    <main className="grid w-full h-full md:grid-cols-[70%_auto] gap-6">
       <section className="bg-bg-secondary p-4 shadow-xs rounded-lg space-y-3 flex flex-col w-full h-full">
         {cartItems.map((item) => (
-          <CartItemCard
-            key={item.id}
-            item={item}
-            onQuantityChange={onUpdateQuantity}
-            onRemove={onRemoveItem}
-          />
+          <CartItemCard key={item.id} item={item} onQuantityChange={onUpdateQuantity} onRemove={onRemoveItem} />
         ))}
       </section>
 

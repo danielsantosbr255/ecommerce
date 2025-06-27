@@ -5,7 +5,7 @@ import { cache } from "react";
 // Essa função é cacheada
 const fetchOwnUser = cache(async (): Promise<User | null> => {
   try {
-    const response = await api.get("/account");
+    const response = await api.get("/users/me");
     return response.data;
   } catch {
     return null;

@@ -8,7 +8,7 @@ interface Props {
 export default async function ProductReviews({ fetchReviews }: Props) {
   const reviews = await fetchReviews();
 
-  if (!reviews) return <div className="text-tx-secondary text-center">Nenhuma avaliação ainda.</div>;
+  if (!reviews) return <div className="text-tx-primary text-center">Nenhuma avaliação ainda.</div>;
 
   return (
     <div>
@@ -34,12 +34,12 @@ export default async function ProductReviews({ fetchReviews }: Props) {
                       {"☆".repeat(5 - review.rating)}
                     </div>
                   </div>
-                  <p className="text-tx-secondary line-clamp-3">{review.comment}</p>
+                  <p className="text-tx-primary line-clamp-3">{review.comment}</p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-tx-secondary text-center">Nenhuma avaliação ainda.</div>
+            <div className="text-tx-primary text-center">Nenhuma avaliação ainda.</div>
           )}
         </div>
       </div>

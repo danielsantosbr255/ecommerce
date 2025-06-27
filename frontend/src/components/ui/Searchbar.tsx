@@ -32,25 +32,26 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div className="bg-emerald-2500 p-1 flex flex-1 w-full h-full items-center justify-between relative text-tx-secondary">
-      <Input
-        type="text"
-        value={query}
-        onChange={handleChange}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleSearch();
-        }}
-        placeholder="Pesquisar..."
-        className="bg-white flex flex-1 !py-1 !pl-3 !text-lg !rounded-lg"
-      />
+    <section className="p-1 flex flex-1 w-full h-full items-center justify-between text-tx-primary">
+      <div className="bg-white border border-lines flex flex-1 items-center px-3 text-lg rounded-xl">
+        <Search />
+        <Input
+          type="text"
+          value={query}
+          onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSearch();
+          }}
+          placeholder="Pesquisar..."
+          className="!border-none !outline-none !py-3"
+        />
 
-      {query ? (
-        <button onClick={clearSearch} className="absolute right-4 top-1/2 -translate-y-1/2 scale-90">
-          <X className="" />
-        </button>
-      ) : (
-        <Search className="absolute right-4 top-1/2 -translate-y-1/2 scale-90" />
-      )}
-    </div>
+        {query && (
+          <button onClick={clearSearch}>
+            <X className="cursor-pointer" />
+          </button>
+        )}
+      </div>
+    </section>
   );
 }

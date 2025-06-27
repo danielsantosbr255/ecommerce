@@ -1,6 +1,6 @@
 FROM node:22.16.0-alpine
 
-WORKDIR /api
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -8,6 +8,10 @@ RUN npm install --production
 
 COPY . .
 
-EXPOSE 3001
+RUN npx prisma generate
 
-CMD [ "npm", "start" ]
+RUN chmod +x ./wait-for-db.sh
+
+CMD ["sh", "-c", "./wait-for-db.sh"]
+
+EXPOSE 3001

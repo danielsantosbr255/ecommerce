@@ -25,7 +25,7 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
     onClick={onClick}
     className={cn(
       className,
-      "flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+      "flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     )}
   >
     {icon} {label}
@@ -39,7 +39,7 @@ const CartItem = () => {
   return (
     <Link
       href="/cart"
-      className="relative flex items-center gap-0 py-2 px-4 text-tx-secondary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+      className="relative flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     >
       {cartItemCount && (
         <span className="absolute bg-primary -top-0 -right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full">

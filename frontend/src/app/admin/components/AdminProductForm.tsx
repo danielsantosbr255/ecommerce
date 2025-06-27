@@ -45,7 +45,7 @@ const AdminProductForm = () => {
 
   return (
     <div className="bg-white shadow-xs rounded-md p-6">
-      <h3 className="text-lg font-semibold text-tx-secondary mb-4">Adicionar Novo Produto</h3>
+      <h3 className="text-lg font-semibold text-tx-primary mb-4">Adicionar Novo Produto</h3>
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input className="bg-white" label="Nome:" id="title" {...register("title")} />
@@ -76,13 +76,13 @@ const AdminProductForm = () => {
         />
 
         <div className="col-span-full">
-          <label htmlFor="description" className="block text-tx-secondary text-sm font-bold mb-2">
+          <label htmlFor="description" className="block text-tx-primary text-sm font-bold mb-2">
             Descrição:
           </label>
           <textarea
             id="description"
             {...register("description")}
-            className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-secondary leading-tight focus:outline-none focus:shadow-xs-outline"
+            className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-primary leading-tight focus:outline-none focus:shadow-xs-outline"
           />
           {errors.description && <span className="text-sm text-red-500">{errors.description.message}</span>}
         </div>

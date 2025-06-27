@@ -15,6 +15,11 @@ class AuthService {
   public async signOut() {
     return await api.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/sign-out`);
   }
+
+  public async getSessions() {
+    const res = await api.get("/sessions");
+    return res.data as Session[];
+  }
 }
 
 export const authService = new AuthService();
