@@ -1,26 +1,39 @@
-// lib/api/FetchClient.ts
-
 import { HttpClient } from "./HttpClient";
 
 export class FetchClient implements HttpClient {
-  private baseUrl: string;
-
-  constructor(baseUrl: string = "") {
-    this.baseUrl = baseUrl;
-  }
+  constructor(private baseUrl: string = "") {}
 
   private async request<T>(url: string, options: RequestInit): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${url}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    });
+    const fullUrl = `${this.baseUrl}${url}`;
+    const method = options.method?.toUpperCase() || "GET";
+
+    const isFormData = options.body instanceof FormData;
+    const shouldHaveBody = ["POST", "PUT", "PATCH"].includes(method);
+
+    const headers = new Headers(options.headers || {});
+
+    // Authentication
+    const token = sessionStorage.getItem("accessToken");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+
+    if (shouldHaveBody && options.body && !isFormData) {
+      headers.set("Content-Type", "application/json");
+    }
+
+    const response = await fetch(fullUrl, { ...options, method, headers });
+
+    if (response.status === 204) return null as unknown as T;
+
+    const contentType = response.headers.get("Content-Type");
+    const contentLength = response.headers.get("Content-Length");
 
     if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(`HTTP error: ${response.status} - ${errorBody}`);
+      const errorText = await response.text();
+      throw new Error(`HTTP error: ${response.status} - ${errorText}`);
+    }
+
+    if (!contentType?.includes("application/json") || contentLength === "0") {
+      return null as unknown as T;
     }
 
     return response.json() as Promise<T>;
@@ -31,18 +44,20 @@ export class FetchClient implements HttpClient {
   }
 
   post<T, B = unknown>(url: string, body: B, config: RequestInit = {}) {
+    const isFormData = body instanceof FormData;
     return this.request<T>(url, {
       ...config,
       method: "POST",
-      body: JSON.stringify(body),
+      body: isFormData ? body : JSON.stringify(body),
     });
   }
 
   put<T, B = unknown>(url: string, body: B, config: RequestInit = {}) {
+    const isFormData = body instanceof FormData;
     return this.request<T>(url, {
       ...config,
       method: "PUT",
-      body: JSON.stringify(body),
+      body: isFormData ? body : JSON.stringify(body),
     });
   }
 

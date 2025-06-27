@@ -65,7 +65,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
   const currentQuantity = parseInt(quantityInput, 10);
 
   return (
-    <main className="bg-white w-full grid grid-cols-[auto_4fr_2fr] gap-4 px-4 py-2 items-center border-b border-lines">
+    <main className="bg-white w-full grid md:grid-cols-[auto_4fr_2fr] gap-4 px-4 py-2 items-center border-b last:border-b-0 border-lines">
       {/* Seções de imagem e descrição */}
       <section className="flex h-full items-center gap-4">
         <Link href={`/product/${item.product.slug}`} className="relative w-24 h-24 flex-shrink-0">
@@ -75,7 +75,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
 
       <section className="w-full flex flex-col justify-center h-full gap-2">
         <Link href={`/product/${item.product.slug}`} className="flex-1 text-center sm:text-left">
-          <h2 className="font-semibold text-lg">{item.product.title}</h2>
+          <h2 className="font-semibold text-lg hover:underline">{item.product.title}</h2>
           <p className="text-tx-primary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
         </Link>
       </section>
@@ -86,7 +86,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
           <div className="flex items-center gap-1">
             <button
               onClick={handleDecrement}
-              className={`cursor-pointer ${currentQuantity <= 1 ? "text-tx-muted" : "text-primary"}`}
+              className={`cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-primary`}
               disabled={currentQuantity <= 1}
             >
               <ChevronLeft size={15} absoluteStrokeWidth />
@@ -97,7 +97,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
               value={quantityInput}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               className="text-center text-lg font-bold !w-10 !p-1 border-none "
             />
 

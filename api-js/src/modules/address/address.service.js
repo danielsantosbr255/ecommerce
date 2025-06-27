@@ -3,19 +3,10 @@ const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
 
 const createAddress = async (data) => {
-  const existingAddress = await prisma.address.findFirst({
+  const address = await prisma.address.upsert({
     where: { userId: data.userId, isDefault: true },
-  });
-
-  if (existingAddress) {
-    await prisma.address.update({
-      where: { id: existingAddress.id },
-      data: { isDefault: false },
-    });
-  }
-
-  const address = await prisma.address.create({
-    data,
+    update: { ...data, isDefault: true },
+    create: { ...data, isDefault: true },
     include: { user: { omit: { password: true } } },
   });
 
@@ -61,7 +52,7 @@ const deleteAddress = async (req, id) => {
   const address = await prisma.address.delete({
     where: { id, AND: accessibleBy(req.ability, "delete").Address },
   });
-  
+
   if (!address) throw new CustomError("Endereço não encontrado", 404);
   return address;
 };

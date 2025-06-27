@@ -14,7 +14,7 @@ interface CartSummaryProps {
 const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, discount, discountPercent, total }) => {
   return (
     <StickyOnScroll offset={100}>
-      <section className="bg-bg-secondary w-full flex flex-col gap-4 shadow-xs py-5 px-6 rounded-lg">
+      <section className="bg-bg-secondary hidden md:flex flex-col w-full gap-4 shadow-xs py-5 px-6 rounded-lg">
         <h1 className="flex text-lg items-center gap-2 !font-bold text-primary mb-4">
           <File className="text-primary" absoluteStrokeWidth /> RESUMO
         </h1>

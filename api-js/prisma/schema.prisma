@@ -66,18 +66,20 @@ model Address {
 }
 
 model Session {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken  String   @unique
-  refreshToken String   @unique
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken  String  @unique
+  refreshToken String  @unique
   userAgent    String
   ipAddress    String
-  expiresAt    DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  isActive     Boolean @default(true)
 
-  @@unique([userId, userAgent, ipAddress], name: "userId_userAgent_ipAddress")
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, userAgent], name: "userId_userAgent")
   @@map("sessions")
 }
 

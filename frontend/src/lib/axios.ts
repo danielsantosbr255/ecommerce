@@ -1,5 +1,5 @@
-import { Session } from "@/types";
 import axios from "axios";
+import { Session } from "@/types";
 
 let accessToken: string | null = null;
 const isServer = typeof window === "undefined";
@@ -16,29 +16,29 @@ const authManager = {
   },
 };
 
-// Create an instance of axios with default settings
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
-// Add a request interceptor
 api.interceptors.request.use(
   async function (config) {
-    // console.log("🫴 [AXIOS REQUEST] - Requisição do servidor: ", `(${config.url})`);
+    console.clear();
 
     if (isServer) {
-      console.log("🚀 [AXIOS REQUEST] - SERVER");
       const { cookies, headers } = await import("next/headers");
       const cookieStore = await cookies();
+      const serverHeaders = await headers();
 
-      authManager.set(cookieStore.get("accessToken")?.value || "");
+      if (cookieStore.get("accessToken")?.value) {
+        authManager.set(cookieStore.get("accessToken")?.value || "");
+      }
 
       config.headers = config.headers || {};
       config.headers.Cookie = cookieStore.toString();
 
-      config.headers["x-forwarded-for"] = (await headers()).get("x-forwarded-for") || "127.0.0.1";
-      config.headers["user-agent"] = (await headers()).get("user-agent") || "Next.js Server";
+      config.headers["x-forwarded-for"] = serverHeaders.get("x-forwarded-for") || "127.0.0.1";
+      config.headers["user-agent"] = serverHeaders.get("user-agent") || "Next.js Server";
     } else {
       authManager.set(sessionStorage.getItem("accessToken") || "");
     }
@@ -54,10 +54,8 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor
 api.interceptors.response.use(
   async function (response) {
-    // console.log("🗣️ [AXIOS RESPONSE] - Resposta do servidor: ", response.config.url);
     return response;
   },
 
@@ -65,22 +63,16 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     const status = error.response?.status;
 
-    // console.error("❌ [AXIOS RESPONSE] - Erro ao fazer requisição: ", error.response);
-    // console.error("🔗 [AXIOS ERROR STATUS] - URL: ", originalRequest.url, "/Status: ", status);
-
     const isNotRefreshEndpoint = originalRequest?.url && !originalRequest.url.includes("/refresh");
 
     if (status === 401 && originalRequest && isNotRefreshEndpoint && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // console.log("🔃 Tentando atualizar os tokens...");
-
-        const response = await api.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/refresh`);
+        const response = await api.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/refresh`);
         const { session } = response.data as { session: Session };
 
         if (session) {
-          // console.log("🔃 Tokens atualizados com sucesso!");
           authManager.set(session.accessToken);
           originalRequest.headers.Authorization = `Bearer ${session.accessToken}`;
           if (!isServer) sessionStorage.setItem("accessToken", session.accessToken);
@@ -88,7 +80,6 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (error) {
-        // console.error("❌ Falha no refresh token:", error);
         return Promise.reject(error);
       }
     }

@@ -8,8 +8,6 @@ const createOrder = async (userId) => {
     include: { items: { include: { product: true } } },
   });
 
-  console.log("Cart:", cart);
-
   const cartItems = cart.items;
 
   if (!cartItems || cartItems.length === 0) {
@@ -18,7 +16,6 @@ const createOrder = async (userId) => {
 
   const total = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
-  // Criar o pedido
   const order = await prisma.order.create({
     data: {
       userId: userId,

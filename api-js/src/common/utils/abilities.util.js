@@ -5,10 +5,13 @@ const rolePermissionMap = {
   ADMIN: (user, { can }) => {
     can("manage", "all");
   },
+
   USER: (user, { can }) => {
     can("read", "Product");
     can("read", "Order", { userId: user.id });
-    can("manage", "Address", { userId: user.id });    
+    can("manage", "User", { id: user.id });
+    can("manage", "Address", { userId: user.id });
+    can("manage", "Session", { userId: user.id });
   },
 };
 

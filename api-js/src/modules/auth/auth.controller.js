@@ -8,19 +8,19 @@ const signUp = async (req, res) => {
   const { name, email, password } = validatedData;
 
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
   const session = await service.signUp({ name, email, password, userAgent, ipAddress });
 
-  tokenUtil.setCookiesTokens(res, session.refreshToken);
+  tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
   res.status(201).json({ session });
 };
 
 const signIn = async (req, res) => {
   const { email, password } = authValidator.signIn(req.body);
 
+  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
 
   const session = await service.signIn({ email, password, userAgent, ipAddress });
   tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
@@ -29,14 +29,11 @@ const signIn = async (req, res) => {
 };
 
 const signOut = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.ip;
   const userId = req.user.id;
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
 
   try {
-    await service.signOut({ userId, refreshToken, userAgent, ipAddress });
-
+    await service.signOut({ userId, userAgent });
     tokenUtil.clearTokens(res);
 
     return res.status(200).json({ message: "Deslogado com sucesso" });
@@ -47,38 +44,16 @@ const signOut = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  const ipAddress = req.headers["x-forwarded-for"] || req.ip;
+  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const refreshToken = req.cookies.refreshToken; // || req.headers["authorization"]?.split(" ")[1];
+  const refreshToken = req.cookies.refreshToken;
 
-  console.log("🍪 [CONTROLLER] - REFRESH TOKEN: ", refreshToken);
+  const session = await service.revalidateTokens({ req, refreshToken, userAgent, ipAddress });
 
-  const session = await service.revalidateTokens({ refreshToken, userAgent, ipAddress });
-
-  console.log("⚙️ [CONTROLLER] - refresh session: ", session);
+  // console.log("⚙️ [CONTROLLER] - refresh session: ", session);
   tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
   res.json({ session });
 };
 
-const validate = async (req, res) => {
-  const [access, refresh] = req.headers.authorization?.split(",");
-  const accessToken = access?.split("=")[1];
-  const hasRefreshToken = refresh?.split("=")[1];
-
-  try {
-    tokenUtil.verifyJWT(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    res.status(200).json({ message: "Token válido", user: req.user });
-  } catch (error) {
-    if (!hasRefreshToken) throw new CustomError("Token inválido", 401);
-    refreshToken(req, res);
-  }
-};
-
-const getSessions = async (req, res) => {
-  const userId = req.user.id;
-  const sessions = await service.getSessions(userId);
-  res.json(sessions);
-};
-
-module.exports = { signUp, signIn, signOut, refreshToken, validate, getSessions };
+module.exports = { signUp, signIn, signOut, refreshToken };

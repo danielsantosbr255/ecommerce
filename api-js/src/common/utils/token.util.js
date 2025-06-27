@@ -38,8 +38,8 @@ const decodeJWT = (token) => {
   return jwt.decode(token, { json: true });
 };
 
-const createTokens = ({ userId, userAgent, ipAddress }) => {
-  const ctx = cryptoUtil.encryptPayload({ userAgent, ipAddress });
+const createTokens = ({ userId, userAgent }) => {
+  const ctx = cryptoUtil.encryptPayload({ userAgent });
 
   const accessToken = generateAccessToken({ ctx });
   const refreshToken = generateRefreshToken({ userId });

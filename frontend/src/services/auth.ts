@@ -17,7 +17,7 @@ class AuthService {
   }
 
   public async getSessions() {
-    const res = await api.get("/auth/sessions");
+    const res = await api.get("/sessions");
     return res.data as Session[];
   }
 }

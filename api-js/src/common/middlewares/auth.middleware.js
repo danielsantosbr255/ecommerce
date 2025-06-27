@@ -10,7 +10,6 @@ const verifyToken = async (req, res, next) => {
   const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const accessToken = req.headers["authorization"]?.split(" ")[1];
-
   const ua = UAParser(userAgent);
 
   const sessionData = {
@@ -23,23 +22,19 @@ const verifyToken = async (req, res, next) => {
 
   console.log("💻[MD] sessionData: ", sessionData);
 
-  if (!accessToken) {
-    throw new CustomError("Token não fornecido!", 401);
-  }
+  if (!accessToken) throw new CustomError("Token não fornecido!", 401);
 
   const decodedAccessToken = tokenUtil.verifyJWT(accessToken, process.env.ACCESS_TOKEN_SECRET);
-  const encryptedPayload = cryptoUtil.encryptPayload({ userAgent, ipAddress });
+  const encryptedPayload = cryptoUtil.encryptPayload({ userAgent });
 
   if (decodedAccessToken.ctx !== encryptedPayload) {
     console.error("❌ context not match");
     throw new CustomError("Acesso negado!", 401);
-  } else {
-    console.log("✅ matched context");
   }
 
   const session = await prisma.session.findFirst({
-    where: { accessToken, userAgent, ipAddress },
-    include: { user: true },
+    where: { accessToken, userAgent },
+    include: { user: true, user: { omit: { password: true } } },
   });
 
   if (!session || session.expiresAt < new Date()) {

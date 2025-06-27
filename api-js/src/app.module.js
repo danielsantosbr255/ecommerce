@@ -14,6 +14,7 @@ const OrdersModule = require("./modules/orders/orders.module");
 const AccountModule = require("./modules/account/account.module");
 const AddressModule = require("./modules/address/address.module");
 const ReviewsModule = require("./modules/reviews/reviews.module");
+const SessionModule = require("./modules/sessions/session.module");
 const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
@@ -33,6 +34,7 @@ app.use("/api", [
   CartModule,
   OrdersModule,
   AccountModule,
+  SessionModule,
   ReviewsModule,
   PromotionsModule,
   AddressModule,
