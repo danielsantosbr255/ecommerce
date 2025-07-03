@@ -18,14 +18,14 @@ const variants = {
   secondary: "text-primary",
   light: "text-tx-on-primary",
   dark: "text-primary",
-  animated: `scale-120 animate-pulse text-gray-100`,
+  animated: `scale-120 animate-pulse text-primary`,
 };
 
 export default function Logo({ className, size, variant = "default" }: LogoProps) {
   if (variant === "animated") {
     return (
       <Link href="/">
-        <div className="relative flex items-center justify-center animate-bounce">
+        <div className={`${className} relative flex items-center justify-center animate-bounce`}>
           <BsFire className="absolute" size={size} />
           <BsFire className={variants[variant]} size={size} />
         </div>

@@ -59,9 +59,7 @@ const getOrdersByUserId = async (req) => {
 
 const findAllOrders = async (req) => {
   const orders = await prisma.order.findMany({
-    where: {
-      AND: [accessibleBy(req.ability, "read").Order],
-    },
+    where: accessibleBy(req.ability).Order,
     include: { user: true },
   });
   return orders;

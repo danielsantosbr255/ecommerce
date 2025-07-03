@@ -3,7 +3,6 @@
 import { useState, ChangeEvent } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Input from "./Input";
 
 type SearchBarProps = {
   onSearch?: (query: string) => void;
@@ -32,26 +31,24 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <section className="p-1 flex flex-1 w-full h-full items-center justify-between text-tx-primary">
-      <div className="bg-white border border-lines flex flex-1 items-center px-3 text-lg rounded-xl">
-        <Search />
-        <Input
-          type="text"
-          value={query}
-          onChange={handleChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSearch();
-          }}
-          placeholder="Pesquisar..."
-          className="!border-none !outline-none !py-3"
-        />
+    <section className="bg-bg-secondary border border-dashed shadow-xs border-lines flex flex-1 w-full items-center px-3 gap-1 text-md text-tx-secondary rounded-xl">
+      <Search />
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleSearch();
+        }}
+        placeholder="Pesquisar..."
+        className="border-none outline-none py-2.5"
+      />
 
-        {query && (
-          <button onClick={clearSearch}>
-            <X className="cursor-pointer" />
-          </button>
-        )}
-      </div>
+      {query && (
+        <button onClick={clearSearch}>
+          <X className="cursor-pointer" />
+        </button>
+      )}
     </section>
   );
 }

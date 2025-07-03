@@ -14,11 +14,13 @@ const CouponInput = () => {
   return (
     <div className="bg-bg-secondary hidden md:flex w-full gap-4 shadow-xs py-5 px-6 rounded-lg">
       <Input
+        id="coupon"
         type="text"
-        placeholder="Cupom de desconto"
+        label="Cupom de desconto"
+        placeholder="Insira o cupom"
         value={coupon}
         onChange={(e) => setCoupon(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-auto"
+        className="w-full"
       />
       <Button onClick={onApply} className="w-full font-semibold">
         Aplicar Cupom

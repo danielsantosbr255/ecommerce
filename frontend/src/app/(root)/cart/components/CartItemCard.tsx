@@ -5,8 +5,8 @@ import { Product } from "@/types";
 import React, { useState } from "react";
 import CurrencyUtil from "@/utils/currency.util";
 import ProductImage from "@/components/products/ProductImage";
-import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
-import Input from "@/components/ui/Input";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FaTrashAlt } from "react-icons/fa";
 
 type CartItem = {
   id: string;
@@ -75,8 +75,8 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
 
       <section className="w-full flex flex-col justify-center h-full gap-2">
         <Link href={`/product/${item.product.slug}`} className="flex-1 text-center sm:text-left">
-          <h2 className="font-semibold text-lg hover:underline">{item.product.title}</h2>
-          <p className="text-tx-primary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
+          <h2 className="font-semibold text-tx-primary text-lg hover:underline">{item.product.title}</h2>
+          <p className="text-tx-secondary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
         </Link>
       </section>
 
@@ -92,13 +92,14 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
               <ChevronLeft size={15} absoluteStrokeWidth />
             </button>
 
-            <Input
+            <input
+              id="quantity-input"
               type="number"
               value={quantityInput}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleKeyPress}
-              className="text-center text-lg font-bold !w-10 !p-1 border-none "
+              className="text-center font-bold w-10 text-tx-primary outline-none ring-0"
             />
 
             <button
@@ -112,9 +113,9 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
 
           <button
             onClick={onRemoveItem}
-            className="flex items-center justify-center gap-1 font-semibold text-sm text-tx-error hover:underline cursor-pointer"
+            className="flex justify-items-center gap-1 font-semibold text-sm text-tx-error hover:underline cursor-pointer"
           >
-            <Trash2 size={15} /> REMOVER
+            <FaTrashAlt size={15} /> REMOVER
           </button>
         </div>
 

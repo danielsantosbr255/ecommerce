@@ -1,6 +1,5 @@
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
-const validator = require("../../common/validators/product.validator");
 const { uploadToCloudinary } = require("../../common/utils/cloudinary.util");
 
 const createProduct = async (data) => {
@@ -53,9 +52,7 @@ const getProductsByCategory = async (productId) => {
     where: { id: productId },
   });
 
-  if (!product) {
-    return res.status(404).json({ error: "Produto não encontrado" });
-  }
+  if (!product) throw new CustomError("Produto nao encontrado", 404);
 
   return await prisma.product.findMany({
     where: {
@@ -87,12 +84,10 @@ const getProductsByQuery = (query) => {
   });
 };
 
-const updateProduct = async (id, title, description, price, stock, category, image) => {
+const updateProduct = async (id, data) => {
   const existingProduct = await prisma.product.findUnique({ where: { id } });
   if (!existingProduct) throw new CustomError("Produto não encontrado!", 404);
-
-  const validatedData = validator.update({ title, description, price, stock, category, image });
-  return prisma.product.update({ where: { id }, data: validatedData });
+  return prisma.product.update({ where: { id }, data });
 };
 
 const deleteProduct = async (id) => {

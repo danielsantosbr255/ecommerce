@@ -80,6 +80,8 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (error) {
+        if (!isServer) sessionStorage.removeItem("accessToken");
+        authManager.clear();
         return Promise.reject(error);
       }
     }

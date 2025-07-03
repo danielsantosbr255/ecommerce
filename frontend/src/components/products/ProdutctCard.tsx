@@ -5,10 +5,10 @@ import { Product } from "@/types";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import ProductImage from "./ProductImage";
-import { ShoppingCart } from "lucide-react";
 import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/contexts/AuthContext";
+import { FaCartPlus } from "react-icons/fa";
 
 type ProductProps = {
   product: Product;
@@ -60,7 +60,7 @@ export default function ProductCard({ product }: ProductProps) {
         </Link>
 
         <Button onClick={onAddToCart} className="mt-10 !py-3 gap-2">
-          <ShoppingCart size={20} className="shrink-0" />
+          <FaCartPlus size={20} className="shrink-0" />
           Adicionar ao Carrinho
         </Button>
       </main>

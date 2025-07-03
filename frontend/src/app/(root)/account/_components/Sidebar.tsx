@@ -30,7 +30,7 @@ export function Sidebar({ children, className }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className={`bg-bg-primary/50 backdrop-blur-sm fixed h-full flex flex-col ${className}`}>
+    <nav className={`bg-bg-primary/50 backdrop-blur-sm fixed h-full hidden md:flex flex-col ${className}`}>
       <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
         <ul className="flex flex-col flex-1">{children}</ul>
       </SidebarContext.Provider>

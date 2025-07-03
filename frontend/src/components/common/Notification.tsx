@@ -2,7 +2,8 @@
 
 import Alert from "../ui/Alert";
 import { useRef, useState, useEffect } from "react";
-import { Bell, DotSquare } from "lucide-react";
+import { DotSquare } from "lucide-react";
+import { FaBell } from "react-icons/fa";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([
@@ -60,7 +61,7 @@ export default function Notification() {
       onClick={toggleNotifications}
     >
       <div className="relative">
-        <Bell size={25} />
+        <FaBell size={24} />
         {unreadCount > 0 && <Alert onTop />}
       </div>
 

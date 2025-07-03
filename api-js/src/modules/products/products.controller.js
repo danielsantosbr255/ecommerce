@@ -50,11 +50,19 @@ const getProductsByCategory = async (req, res) => {
 const updateProduct = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
-  const { title, description, price, stock, category } = req.body;
-  const image = req.file;
-  const id = req.params.id;
+  if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
+  if (req.body.price) req.body.price = Number(req.body.price);
+  if (req.body.stock) req.body.stock = Number(req.body.stock);
+  if (req.body.rating) req.body.rating = Number(req.body.rating);
+  if (req.body.discount) req.body.discount = Number(req.body.discount);
+  if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
+  if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
+  if (req.files?.length) req.body.images = req.files;
 
-  const product = await services.updateProduct(id, title, description, price, stock, category, image);
+  const id = req.params.id;
+  const validatedData = validator.update({ ...req.body });
+
+  const product = await services.updateProduct(id, validatedData);
   return res.json(product);
 };
 

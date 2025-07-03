@@ -8,7 +8,7 @@ const createAddress = async (req, res) => {
 };
 
 const getAddresses = async (req, res) => {
-  const addresses = await service.getAddresses(req);
+  const addresses = await service.getAddresses(req.ability);
   return res.json(addresses);
 };
 

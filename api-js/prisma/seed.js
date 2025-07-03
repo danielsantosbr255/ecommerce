@@ -1,14 +1,12 @@
 // prisma/seed.ts
 const uuid = require("uuid").v4;
 const slugify = require("slugify");
-const authUtil = require("../src/common/utils/auth.util");
 const { prisma } = require("../src/common/database/prisma");
 
 async function main() {
   await prisma.cart.deleteMany();
   await prisma.session.deleteMany();
-  await prisma.address.deleteMany();
-  await prisma.user.deleteMany();
+  // await prisma.address.deleteMany();
   await prisma.productSpecification.deleteMany();
   await prisma.productImage.deleteMany();
   await prisma.productVariant.deleteMany();
@@ -20,16 +18,6 @@ async function main() {
   await prisma.category.deleteMany();
   await prisma.brand.deleteMany();
   await prisma.promotion.deleteMany();
-
-  const admin = await prisma.user.create({
-    data: {
-      id: uuid(),
-      name: "Admin",
-      email: "admin@email.com",
-      password: await authUtil.hashPassword("gGCxU34aueNKwK"),
-      role: "ADMIN",
-    },
-  });
 
   // #region | Brands
   const samsung = await prisma.brand.create({

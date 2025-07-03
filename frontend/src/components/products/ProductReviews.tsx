@@ -1,5 +1,6 @@
 import { Review } from "@/types";
-import { Pencil, User2 } from "lucide-react";
+import { User2 } from "lucide-react";
+import { MdRateReview } from "react-icons/md";
 
 interface Props {
   fetchReviews: () => Promise<Review[] | null>;
@@ -14,7 +15,7 @@ export default async function ProductReviews({ fetchReviews }: Props) {
     <div>
       <div>
         <h2 className="text-2xl font-semibold mb-4 border-b border-lines py-2 flex items-center gap-2">
-          <Pencil /> Avaliações
+          <MdRateReview className="text-primary" /> Avaliações
         </h2>
         <div className="space-y-4">
           {reviews.length > 0 ? (

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import Button from "../ui/Button";
 import { Product } from "@/types";
@@ -9,7 +8,8 @@ import ProductImage from "./ProductImage";
 import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/contexts/AuthContext";
-import { Settings2, ShoppingCart } from "lucide-react";
+import { IoMdOptions } from "react-icons/io";
+import { FaCartPlus } from "react-icons/fa";
 
 export const revalidate = 60;
 
@@ -28,7 +28,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="bg-white border-lines relative aspect-video rounded-xl shadow-xs p-4">
           <ProductImage product={product} />
         </div>
@@ -63,17 +63,17 @@ export default function ProductDetail({ product }: { product: Product }) {
 
           <div className="flex gap-4 pt-4">
             <Button onClick={onAddToCart} className="!py-3 gap-2">
-              <ShoppingCart size={20} className="shrink-0" />
+              <FaCartPlus size={20} className="shrink-0" />
               Adicionar ao Carrinho
             </Button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Especificações técnicas */}
       <div>
         <h2 className="text-2xl font-semibold mb-4 border-b border-lines py-2 flex items-center gap-2">
-          <Settings2 /> Especificações
+          <IoMdOptions className="text-primary" /> Especificações
         </h2>
         <div className="bg-white rounded-xl shadow-xs p-4">
           <table className="w-full">

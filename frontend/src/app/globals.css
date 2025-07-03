@@ -54,7 +54,7 @@ input[type="number"] {
   --color-tx-muted: var(--color-gray-400); /* Texto desativado/fracos */
   --color-tx-on-primary: white; /* Texto sobre fundo primário (ex: botão) */
   --color-tx-link: var(--color-blue-500); /* Links clicáveis */
-  --color-tx-error: var(--color-red-600); /* Mensagens de erro */
+  --color-tx-error: var(--color-red-500); /* Mensagens de erro */
 
   --color-sale: var(--color-red-600); /* Preço promocional */
   --color-sale-bg: var(--color-red-50); /* Fundo de promoção */

@@ -1,0 +1,25 @@
+GET http://localhost:3001/api/products
+
+### SIGN-UP
+POST http://localhost:3001/api/auth/sign-up
+content-type: application/json
+
+{
+    "name": "Daniel Santos",
+    "email": "daniel@email.com",
+    "password": "123123"
+}
+
+### SIGN-IN
+POST http://localhost:3001/api/auth/sign-in
+content-type: application/json
+
+{
+    "email": "seller@email.com",
+    "password": "123123"
+}
+
+### ADDRESS
+GET http://localhost:3001/api/addresses
+Content-Type: application/json
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdHgiOiJjZWQxODA1MmFjZGE5OTVjMTE5NzNiM2VlMmE1YTc4NWQwMTVlZDcxZGI3NDNhOThhMDY0MjJmMTgyMWJkOTdkIiwiaWF0IjoxNzUxNDA0NTkyLCJleHAiOjE3NTE0MDU0OTJ9.6V5IDKEhUOUdw4uXJRtjNbmwK7JuOeJq8bNRbP2PG-8"

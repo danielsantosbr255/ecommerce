@@ -24,9 +24,9 @@ export default function Header() {
     >
       <main
         className={cn(
-          `bg-bg-secondary border shadow-xs p-1 transition-all duration-${DELAY} ease-in-out`,
+          `bg-bg-secondary border-2 border-lines/50 shadow-xs p-1 transition-all duration-${DELAY} ease-in-out`,
           scrolled
-            ? "bg-bg-secondary/80 backdrop-blur-xl w-full mt-2 lg:max-w-10/12 mx-auto  rounded-lg border-lines/50"
+            ? "bg-bg-secondary/90 backdrop-blur-lg w-full mt-2 lg:max-w-10/12 mx-auto  rounded-lg"
             : "w-full max-w-screen border-t-transparent border-transparent"
         )}
       >

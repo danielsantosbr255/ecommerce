@@ -139,6 +139,7 @@ export interface User {
 
 export interface Address {
   id: string;
+  label: string;
   street: string;
   number: string;
   complement: string;
@@ -170,11 +171,19 @@ export interface SignUpFormData {
 export interface Session {
   id: string;
   userId: string;
-  expiresAt: string;
-  userAgent: string;
-  ipAddress: string;
+
   accessToken: string;
   refreshToken: string;
+
+  userAgent: string;
+  ipAddress: string;
+  os: string;
+  browser: string;
+  device: string;
+  location: string;
+  isActive: boolean;
+
+  expiresAt: string;
   createdAt: string;
   updatedAt: string;
 }

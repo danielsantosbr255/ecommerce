@@ -1,41 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import Button from "../ui/Button";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { reviewService } from "@/services/reviews";
 
-export default function ProductReviewsForm({ productSlug }: { productSlug: string }) {
+import Button from "../ui/Button";
+import ErrorMessage from "../ui/ErrorMessage";
+
+interface ReviewFormValues {
+  rating: number;
+  comment: string;
+}
+
+interface ProductReviewsFormProps {
+  productSlug: string;
+}
+
+export default function ProductReviewsForm({ productSlug }: ProductReviewsFormProps) {
   const { user } = useAuth();
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
   const router = useRouter();
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { isSubmitting, errors },
+  } = useForm<ReviewFormValues>({
+    defaultValues: { rating: 5, comment: "" },
+    
+  });
 
   if (!user) return null;
 
-  const handleReviewSubmit = async () => {
-    const success = await reviewService.create({ userId: user.id, productSlug, rating, comment });
+  const onSubmit = async (data: ReviewFormValues) => {
+    const success = await reviewService.create({ userId: user.id, productSlug, ...data });
 
     if (success) {
       toast.success("Avaliação enviada com sucesso!");
       router.refresh();
-      setRating(5);
-      setComment("");
+      reset();
       return;
     }
     toast.error("Erro ao enviar avaliação. Tente novamente mais tarde.");
   };
 
   return (
-    <div className="mt-6 bg-white p-4 rounded-lg shadow-xs space-y-4">
-      <h3 className="text-xl font-bold">Deixe sua avaliação</h3>
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-6 rounded-lg bg-white p-4 shadow-xs text-tx-primary">
+      <h3 className="text-xl font-bold mb-4">Deixe sua avaliação</h3>
 
       <select
-        value={rating}
-        onChange={(e) => setRating(+e.target.value)}
-        className="border border-lines rounded-lg px-4 py-2 w-full"
+        {...register("rating", { required: true, min: 1, max: 5, valueAsNumber: true })}
+        defaultValue={5}
+        className="w-full rounded-lg border border-lines p-2 mb-2 focus:outline-primary"
       >
         {[5, 4, 3, 2, 1].map((n) => (
           <option key={n} value={n}>
@@ -45,17 +64,23 @@ export default function ProductReviewsForm({ productSlug }: { productSlug: strin
       </select>
 
       <textarea
+        {...register("comment", {
+          required: "Comentário é obrigatorio",
+          minLength: { value: 10, message: "O comentário precisa ter pelo menos 10 caracteres" },
+        })}
         placeholder="Comentário"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        className="border border-lines rounded-lg px-4 py-2 w-full h-24 focus:outline-primary-active"
+        className="h-24 w-full rounded-lg border border-lines p-2 focus:outline-primary"
       />
+
+      <ErrorMessage message={errors.comment?.message} className="mb-2" />
+
       <Button
-        onClick={handleReviewSubmit}
-        className="bg-primary text-tx-on-primary px-6 py-2 rounded-lg hover:bg-primary"
+        type="submit"
+        disabled={isSubmitting}
+        className="rounded-lg bg-primary px-6 py-2 text-tx-on-primary hover:bg-primary disabled:opacity-60"
       >
-        Enviar Avaliação
+        {isSubmitting ? "Enviando..." : "Enviar Avaliação"}
       </Button>
-    </div>
+    </form>
   );
 }
