@@ -17,15 +17,6 @@ input[type="number"] {
 }
 
 @theme {
-  /* --color-highlight-n: var(--color-cyan-700);
-  --color-highlight-h: var(--color-cyan-800);
-  --color-highlight-c: var(--color-cyan-900);
-  --color-background: var(--color-gray-50);
-  
-  --color-primary: var(--color-gray-900);
-  --color-secondary: var(--color-gray-600);
-  */
-
   --color-navbar: var(--color-gray-50);
   --color-primary: var(--color-orange-500); /* Sua cor atual */
   --color-primary-hover: var(--color-cyan-800); /* Cor no hover */
@@ -49,7 +40,7 @@ input[type="number"] {
   --color-error: var(--color-red-500); /* Erros, alertas críticos */
   --color-info: var(--color-blue-500); /* Informações neutras */
 
-  --color-tx-primary: var(--color-gray-600); /* Texto principal (títulos) */
+  --color-tx-primary: var(--color-gray-700); /* Texto principal (títulos) */
   --color-tx-secondary: var(--color-gray-500); /* Texto secundário (descrições) */
   --color-tx-muted: var(--color-gray-400); /* Texto desativado/fracos */
   --color-tx-on-primary: white; /* Texto sobre fundo primário (ex: botão) */

@@ -20,21 +20,21 @@ services:
     networks:
       - backend
 
-  api:
-    image: danielsantos8/ecommerce-api:1.0.0
-    build:
-      context: ./api-js
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "3001:3001"
-    env_file:
-      - ./api-js/.env
-    depends_on:
-      - db
-    command: sh -c "./wait-for-db.sh"
-    networks:
-      - backend
+  # api:
+  #   image: danielsantos8/ecommerce-api:1.0.0
+  #   build:
+  #     context: ./api-js
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "3001:3001"
+  #   env_file:
+  #     - ./api-js/.env
+  #   depends_on:
+  #     - db
+  #   command: sh -c "./wait-for-db.sh"
+  #   networks:
+  #     - backend
 
   # nginx:
   #   image: nginx:latest

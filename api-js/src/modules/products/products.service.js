@@ -36,14 +36,14 @@ const createProduct = async (data) => {
 
 const getProducts = () => {
   return prisma.product.findMany({
-    include: { images: true, specifications: true, category: true },
+    include: { images: true, specifications: true, category: true, reviews: true },
   });
 };
 
 const getProductBySlug = async (slug) => {
   return await prisma.product.findUnique({
     where: { slug },
-    include: { images: true, specifications: true, category: true, brand: true },
+    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
   });
 };
 
@@ -66,7 +66,7 @@ const getProductsByCategory = async (productId) => {
 const getProductsByBrand = (brand) => {
   return prisma.product.findMany({
     where: { brand: { name: brand } },
-    include: { images: true, specifications: true, category: true },
+    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
   });
 };
 

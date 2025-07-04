@@ -30,7 +30,6 @@ export default function ProductReviewsForm({ productSlug }: ProductReviewsFormPr
     formState: { isSubmitting, errors },
   } = useForm<ReviewFormValues>({
     defaultValues: { rating: 5, comment: "" },
-    
   });
 
   if (!user) return null;
