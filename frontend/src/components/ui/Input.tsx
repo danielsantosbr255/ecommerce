@@ -31,7 +31,7 @@ const Input = ({ id, label, type = "text", icon, className, ...props }: InputPro
       />
       <label
         htmlFor={id}
-        className="bg-bg-secondary absolute text-sm text-tx-muted top-0 -translate-y-1/2 z-10 px-1 peer-focus:text-primary transition-all duration-300"
+        className="bg-bg-secondary absolute text-sm text-tx-muted top-0 -translate-y-1/2 z-5 px-1 peer-focus:text-primary transition-all duration-300"
       >
         {label}
       </label>

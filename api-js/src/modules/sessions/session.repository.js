@@ -2,7 +2,7 @@ const { accessibleBy } = require("@casl/prisma");
 const { prisma } = require("../../common/database/prisma");
 
 const getAll = (ability) => {
-  return prisma.session.findMany({ where: accessibleBy(ability, "read").Session });
+  return prisma.session.findMany({ where: accessibleBy(ability, "read").Session, orderBy: { createdAt: "desc" } });
 };
 
 const getById = (id, ability) => {

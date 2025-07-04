@@ -32,7 +32,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <section className="bg-bg-secondary border border-dashed shadow-xs border-lines flex flex-1 w-full items-center px-3 gap-1 text-md text-tx-secondary rounded-xl">
-      <Search />
+      <Search className="shrink-0" />
       <input
         type="text"
         value={query}
@@ -41,12 +41,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           if (e.key === "Enter") handleSearch();
         }}
         placeholder="Pesquisar..."
-        className="border-none outline-none py-2.5"
+        className="border-none outline-none py-2.5 w-full"
       />
 
       {query && (
         <button onClick={clearSearch}>
-          <X className="cursor-pointer" />
+          <X className="cursor-pointer hover:text-primary" />
         </button>
       )}
     </section>

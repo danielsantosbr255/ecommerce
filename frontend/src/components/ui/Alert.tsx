@@ -1,11 +1,14 @@
-export default function Alert({ active, onTop }: { active?: boolean; onTop?: boolean }) {
-  const variant = active ? "bg-white" : "bg-primary";
-  const topPosition = onTop ? "top-0" : "top-2";
+type Props = {
+  onTop?: boolean;
+  className?: string;
+};
 
+export default function Alert({ className }: Props) {
   return (
-    <>
-      <span className={`${variant} absolute right-1/12 w-2 h-2 rounded-full ${topPosition}`} />
-      <span className={`${variant} animate-ping absolute right-1/12 w-2 h-2 rounded-full ${topPosition}`} />
-    </>
+    <div className={`flex items-center justify-center ${className}`}>
+      <div className={`bg-primary relative flex rounded-full w-2 h-2`}>
+        <span className={`bg-primary absolute w-full h-full rounded-full animate-ping`} />
+      </div>
+    </div>
   );
 }

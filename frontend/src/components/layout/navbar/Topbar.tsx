@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaInstagram, FaLinkedin, FaMailBulk } from "react-icons/fa";
 
 function Topbar({ className }: { className?: string }) {
   return (
@@ -29,6 +29,12 @@ function Topbar({ className }: { className?: string }) {
             className="bg-gray-200 p-0.5 rounded-md hover:text-primary transition duration-300"
           >
             <FaLinkedin size={16} />
+          </Link>
+          <Link
+            href="mailto:asdanielsantos@gmail.com"
+            className="bg-gray-200 p-0.5 rounded-md hover:text-primary transition duration-300"
+          >
+            <FaMailBulk size={16} />
           </Link>
         </div>
 

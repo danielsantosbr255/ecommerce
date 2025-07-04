@@ -8,9 +8,9 @@ import Logo from "@/components/ui/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
-import { Loader, LogIn, ShieldUser } from "lucide-react";
-import { FaCartArrowDown, FaUserNinja } from "react-icons/fa";
 import { FaBuildingCircleExclamation } from "react-icons/fa6";
+import { FaCartArrowDown, FaSignInAlt, FaUserNinja, FaUserShield } from "react-icons/fa";
+import { Loader } from "lucide-react";
 
 interface NavItemProps {
   href: string;
@@ -54,15 +54,19 @@ const CartItem = () => {
 };
 
 const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) => {
-  const isAdmin = user?.role === "ADMIN";
-
+  const isAdmin = user?.roles?.find((role) => role.role.name.toUpperCase() === "ADMIN");
+  
   if (loading) return <NavItem href="#" icon={<Loader size={25} className="animate-spin" />} />;
 
   return (
     <>
-      <NavItem href={user ? "/account" : "/sign-in"} label="" icon={user ? <FaUserNinja size={25} /> : <LogIn size={25} />} />
+      <NavItem
+        href={user ? "/account" : "/sign-in"}
+        label=""
+        icon={user ? <FaUserNinja size={25} /> : <FaSignInAlt size={25} />}
+      />
 
-      {isAdmin && <NavItem href="/admin" icon={<ShieldUser size={26} className="animate-pulse text-accent" />} />}
+      {isAdmin && <NavItem href="/admin" icon={<FaUserShield size={26} className="animate-pulse text-accent" />} />}
     </>
   );
 };

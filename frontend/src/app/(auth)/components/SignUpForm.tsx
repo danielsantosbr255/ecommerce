@@ -29,7 +29,7 @@ export default function SignInForm() {
         <p className="text-center"> comece a comprar agora mesmo!</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-3">
         <Input
           id="text"
           label="Nome"

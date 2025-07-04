@@ -10,18 +10,23 @@ import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/contexts/AuthContext";
 import { IoMdOptions } from "react-icons/io";
 import { FaCartPlus } from "react-icons/fa";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export const revalidate = 60;
 
 export default function ProductDetail({ product }: { product: Product }) {
   const { loadCart } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const onAddToCart = async () => {
+    setLoading(true);
     const newCartItem = await cartService.create(product.id, 1);
 
     if (newCartItem) {
       toast.success("Produto adicionado ao carrinho");
       await loadCart();
+      setLoading(false);
       return newCartItem;
     }
   };
@@ -62,9 +67,8 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <Button onClick={onAddToCart} className="!py-3 gap-2">
-              <FaCartPlus size={20} className="shrink-0" />
-              Adicionar ao Carrinho
+            <Button onClick={onAddToCart} className="!py-3 gap-2" disabled={loading}>
+              {loading ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
             </Button>
           </div>
         </div>

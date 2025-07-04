@@ -1,3 +1,54 @@
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+
+  password: string;
+  phone?: string;
+  role: "USER" | "ADMIN";
+
+  image: string;
+  createdAt: Date;
+
+  orders: Order[];
+  reviews: Review[];
+  sessions: Session[];
+  cart?: Cart;
+  addresses: Address[];
+  roles: UserRole[];
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  description?: string;
+  permissions: RolePermission[];
+  users: UserRole[];
+}
+
+export interface Permission {
+  id: number;
+  action: string;
+  subject: string;
+  description?: string;
+  roles: RolePermission[];
+}
+
+export interface UserRole {
+  user: User;
+  userId: string;
+
+  role: Role;
+  roleId: number;
+}
+
+export interface RolePermission {
+  role: Role;
+  roleId: number;
+  permission: Permission;
+  permissionId: number;
+}
+
 export interface ProductImage {
   id: string;
   url: string;
@@ -116,25 +167,6 @@ export interface Order {
   createdAt: Date;
   updatedAt: Date;
   totalPrice: number;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-
-  password: string;
-  phone?: string;
-  role: "USER" | "ADMIN";
-
-  image: string;
-  createdAt: Date;
-
-  orders: Order[];
-  reviews: Review[];
-  sessions: Session[];
-  cart?: Cart;
-  addresses: Address[];
 }
 
 export interface Address {

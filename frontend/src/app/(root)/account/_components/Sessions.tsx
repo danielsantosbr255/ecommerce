@@ -3,6 +3,7 @@
 import { use } from "react";
 import { Session } from "@/types";
 import { MdMonitor, MdSmartphone } from "react-icons/md";
+import Alert from "@/components/ui/Alert";
 
 export default function Sessions({ sessionsPromise }: { sessionsPromise: Promise<Session[]> }) {
   const sessions = use(sessionsPromise);
@@ -20,9 +21,9 @@ export default function Sessions({ sessionsPromise }: { sessionsPromise: Promise
         >
           <div className="flex gap-4 items-center">
             {session.device === "Desktop" ? <MdMonitor size={40} /> : <MdSmartphone size={40} />}
-            <span>
-              <h2 className="text-lg font-semibold">
-                {session.os} {session.ipAddress}
+            <span className="flex flex-col">
+              <h2 className="flex text-lg font-semibold items-center gap-2">
+                {session.isActive && <Alert />} {session.os} {session.ipAddress}
               </h2>
               <p>Localização: {session.location}</p>
               <p>

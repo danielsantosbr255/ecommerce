@@ -3,18 +3,17 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import Button from "@/components/ui/Button";
-import { Edit } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import {
-  FaAddressBook,
-  FaHeart,
+  FaAddressBook, FaHeart,
   FaMailBulk,
   FaShieldAlt,
   FaShoppingBasket,
   FaThumbsUp,
+  FaUserEdit,
   FaUserNinja,
-  FaWindowClose,
+  FaWindowClose
 } from "react-icons/fa";
 import Link from "next/link";
 
@@ -63,7 +62,7 @@ export default function Profile() {
         </div>
 
         <Button>
-          <Edit className="mr-2" /> Editar Dados
+          <FaUserEdit className="mr-2" size={20} /> Editar Dados
         </Button>
       </section>
 

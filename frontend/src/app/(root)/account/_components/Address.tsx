@@ -22,7 +22,7 @@ export default function Addresses({ addressesPromise }: { addressesPromise: Prom
             className="bg-bg-secondary flex justify-between items-center shadow-xs p-4 border border-lines/20 rounded-lg text-tx-primary"
           >
             <span>
-              <h2 className="text-lg font-semibold">{address.label}</h2>
+              <h2 className="text-lg font-semibold">{address.label} {address.isDefault && " (Padrão)"}</h2>
               <p>
                 {address.street}, {address.number}, {address.neighborhood} {address.complement && `, ${address.complement}`}
               </p>

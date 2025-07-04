@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 pb-5 flex justify-center transition-all duration-${DELAY} ease-in-out`}
+      className={cn(`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-${DELAY} ease-in-out`}
     >
       <main
         className={cn(
