@@ -3,8 +3,8 @@ const authUtil = require("../../common/utils/auth.util");
 const tokenUtil = require("../../common/utils/token.util");
 const cryptoUtil = require("../../common/utils/crypto.util");
 const CustomError = require("../../common/utils/CustomError");
-const getLocationFromIP = require("../../common/utils/getLocationFromIP");
 const { getUserAgent } = require("../../common/utils/userAgent.util");
+const getLocationFromIP = require("../../common/utils/getLocationFromIP");
 
 const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
   const userExists = await repository.findByEmail(email);
@@ -92,14 +92,9 @@ const revalidateTokens = async ({ req, refreshToken, userAgent, ipAddress }) => 
   }
 
   const newTokens = tokenUtil.createTokens({ userId, userAgent });
-  const expiresAt = new Date(tokenUtil.decodeJWT(newTokens.refreshToken).exp * 1000);
-
   const ua = getUserAgent(userAgent);
-  const locationData = await getLocationFromIP(ipAddress);
-  const location = locationData ? `${locationData.city}, ${locationData.region}, ${locationData.country}` : "";
 
-  return await repository.createSession({
-    userId,
+  return await repository.updateSession(session.id, {
     accessToken: newTokens.accessToken,
     refreshToken: cryptoUtil.encryptData(newTokens.refreshToken),
     ipAddress,
@@ -107,8 +102,6 @@ const revalidateTokens = async ({ req, refreshToken, userAgent, ipAddress }) => 
     os: ua.os,
     browser: ua.browser,
     device: ua.device,
-    location,
-    expiresAt,
   });
 };
 

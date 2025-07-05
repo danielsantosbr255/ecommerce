@@ -4,7 +4,7 @@ const { prisma } = require("../../common/database/prisma");
 const createSession = ({ userId, accessToken, refreshToken, ipAddress, userAgent, os, browser, device, location, expiresAt }) => {
   return prisma.session.upsert({
     where: { userId_userAgent: { userId, userAgent } },
-    update: { accessToken, refreshToken },
+    update: { accessToken, refreshToken, ipAddress, userAgent, os, browser, device },
     create: { userId, accessToken, refreshToken, ipAddress, userAgent, os, browser, device, location, expiresAt },
     include: { user: true, user: { omit: { password: true } } },
   });
@@ -22,6 +22,10 @@ const getSessionById = (req, id) => {
   return prisma.session.findUnique({
     where: { id, AND: accessibleBy(req.ability, "read").Session },
   });
+};
+
+const updateSession = (id, data) => {
+  return prisma.session.update({ where: { id }, data });
 };
 
 const deleteSessionByAgent = ({ userId, userAgent }) => {
@@ -51,4 +55,5 @@ module.exports = {
   findByEmail,
   getSessions,
   getSessionById,
+  updateSession,
 };
