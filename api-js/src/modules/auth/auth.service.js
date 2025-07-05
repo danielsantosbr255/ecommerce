@@ -1,10 +1,10 @@
-const UAParser = require("ua-parser-js");
 const repository = require("./auth.repository");
 const authUtil = require("../../common/utils/auth.util");
 const tokenUtil = require("../../common/utils/token.util");
 const cryptoUtil = require("../../common/utils/crypto.util");
 const CustomError = require("../../common/utils/CustomError");
 const getLocationFromIP = require("../../common/utils/getLocationFromIP");
+const { getUserAgent } = require("../../common/utils/userAgent.util");
 
 const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
   const userExists = await repository.findByEmail(email);
@@ -19,7 +19,7 @@ const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
   const expiresAt = new Date(tokenUtil.decodeJWT(refreshToken).exp * 1000);
   refreshToken = cryptoUtil.encryptData(refreshToken);
 
-  const ua = UAParser(userAgent);
+  const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
   const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
 
@@ -29,9 +29,9 @@ const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
     refreshToken,
     ipAddress,
     userAgent,
-    os: `${ua.os.name} ${ua.os.version}`.trim(),
-    browser: `${ua.browser.name} ${ua.browser.version}`.trim(),
-    device: ua.device.model || ua.device.type || "Desktop",
+    os: ua.os,
+    browser: ua.browser,
+    device: ua.device,
     location,
     expiresAt,
   });
@@ -54,7 +54,7 @@ const signIn = async ({ email, password, userAgent, ipAddress }) => {
   const expiresAt = new Date(tokenUtil.decodeJWT(refreshToken).exp * 1000);
   refreshToken = cryptoUtil.encryptData(refreshToken);
 
-  const ua = UAParser(userAgent);
+  const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
   const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
 
@@ -64,9 +64,9 @@ const signIn = async ({ email, password, userAgent, ipAddress }) => {
     refreshToken,
     ipAddress,
     userAgent,
-    os: `${ua.os.name} ${ua.os.version}`.trim(),
-    browser: `${ua.browser.name} ${ua.browser.version}`.trim(),
-    device: ua.device.model || ua.device.type || "Desktop",
+    os: ua.os,
+    browser: ua.browser,
+    device: ua.device,
     location,
     expiresAt,
   });
@@ -94,7 +94,7 @@ const revalidateTokens = async ({ req, refreshToken, userAgent, ipAddress }) => 
   const newTokens = tokenUtil.createTokens({ userId, userAgent });
   const expiresAt = new Date(tokenUtil.decodeJWT(newTokens.refreshToken).exp * 1000);
 
-  const ua = UAParser(userAgent);
+  const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
   const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
 
@@ -104,9 +104,9 @@ const revalidateTokens = async ({ req, refreshToken, userAgent, ipAddress }) => 
     refreshToken: cryptoUtil.encryptData(newTokens.refreshToken),
     ipAddress,
     userAgent,
-    os: `${ua.os.name} ${ua.os.version}`.trim(),
-    browser: `${ua.browser.name} ${ua.browser.version}`.trim(),
-    device: ua.device.model || ua.device.type || "Desktop",
+    os: ua.os,
+    browser: ua.browser,
+    device: ua.device,
     location,
     expiresAt,
   });
