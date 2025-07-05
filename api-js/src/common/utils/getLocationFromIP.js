@@ -1,16 +1,20 @@
 async function getLocationFromIP(ip) {
   try {
-    const response = await fetch(`http://ip-api.com/json/${ip}`);
+    const token = process.env.IPINFO_TOKEN;
+    const response = await fetch(`https://ipinfo.io/${ip}?token=${token}`);
     const data = response.json();
 
     if (data.status === "success") {
       return {
-        country: data.country, // "Brazil"
-        region: data.regionName, // "Bahia"
-        city: data.city, // "Salvador"
-        lat: data.lat,
-        lon: data.lon,
-        org: data.org, // Operadora
+        ip: data.ip,
+        hostname: data.hostname,
+        city: data.city,
+        region: data.region,
+        country: data.country,
+        loc: data.loc,
+        org: data.org,
+        postal: data.postal,
+        timezone: data.timezone,
       };
     }
 
