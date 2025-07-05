@@ -21,7 +21,7 @@ const signUp = async ({ name, email, password, userAgent, ipAddress }) => {
 
   const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
-  const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
+  const location = locationData ? `${locationData.city}, ${locationData.region}, ${locationData.country}` : "";
 
   return await repository.createSession({
     userId,
@@ -56,7 +56,7 @@ const signIn = async ({ email, password, userAgent, ipAddress }) => {
 
   const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
-  const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
+  const location = locationData ? `${locationData.city}, ${locationData.region}, ${locationData.country}` : "";
 
   return await repository.createSession({
     userId,
@@ -96,7 +96,7 @@ const revalidateTokens = async ({ req, refreshToken, userAgent, ipAddress }) => 
 
   const ua = getUserAgent(userAgent);
   const locationData = await getLocationFromIP(ipAddress);
-  const location = `${locationData?.city}, ${locationData?.region}, ${locationData?.country}`;
+  const location = locationData ? `${locationData.city}, ${locationData.region}, ${locationData.country}` : "";
 
   return await repository.createSession({
     userId,
