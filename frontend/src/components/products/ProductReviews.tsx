@@ -1,12 +1,13 @@
-import { Review } from "@/types";
-import { Pencil, User2 } from "lucide-react";
+import { Product } from "@/types";
+import { FaUser } from "react-icons/fa";
+import { MdRateReview } from "react-icons/md";
 
 interface Props {
-  fetchReviews: () => Promise<Review[] | null>;
+  product: Product;
 }
 
-export default async function ProductReviews({ fetchReviews }: Props) {
-  const reviews = await fetchReviews();
+export default async function ProductReviews({ product }: Props) {
+  const reviews = product.reviews;
 
   if (!reviews) return <div className="text-tx-primary text-center">Nenhuma avaliação ainda.</div>;
 
@@ -14,7 +15,7 @@ export default async function ProductReviews({ fetchReviews }: Props) {
     <div>
       <div>
         <h2 className="text-2xl font-semibold mb-4 border-b border-lines py-2 flex items-center gap-2">
-          <Pencil /> Avaliações
+          <MdRateReview className="text-primary" /> Avaliações
         </h2>
         <div className="space-y-4">
           {reviews.length > 0 ? (
@@ -22,7 +23,7 @@ export default async function ProductReviews({ fetchReviews }: Props) {
               <div key={review.id} className="bg-bg-secondary flex shadow-xs gap-4 p-4 rounded-lg">
                 <div className="flex items-center">
                   <div className="bg-primary secondary flex items-center shadow-xs justify-center w-15 h-15 rounded-full">
-                    <User2 size={30} className="text-tx-on-primary" />
+                    <FaUser size={30} className="text-tx-on-primary" />
                   </div>
                 </div>
 

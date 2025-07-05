@@ -2,13 +2,14 @@ const service = require("./auth.service");
 const tokenUtil = require("../../common/utils/token.util");
 const CustomError = require("../../common/utils/CustomError");
 const authValidator = require("../../common/validators/auth.validator");
+const { getClientIp } = require("../../common/utils/getClientIp");
 
 const signUp = async (req, res) => {
   const validatedData = authValidator.signUp(req.body);
   const { name, email, password } = validatedData;
 
+  const ipAddress = getClientIp(req);
   const userAgent = req.headers["user-agent"] || "Desconhecido";
-  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
   const session = await service.signUp({ name, email, password, userAgent, ipAddress });
 
@@ -19,7 +20,7 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   const { email, password } = authValidator.signIn(req.body);
 
-  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const ipAddress = getClientIp(req);
   const userAgent = req.headers["user-agent"] || "Desconhecido";
 
   const session = await service.signIn({ email, password, userAgent, ipAddress });
@@ -44,7 +45,7 @@ const signOut = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const ipAddress = getClientIp(req);
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const refreshToken = req.cookies.refreshToken;
 

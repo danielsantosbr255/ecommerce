@@ -15,13 +15,13 @@ const rolePermissionMap = {
   },
 };
 
-const defineAbilitiesFor = (user) => {
-  const { can, cannot, build } = new AbilityBuilder(createPrismaAbility);
+const defineAbilityFor = (user) => {
+  const { can, build } = new AbilityBuilder(createPrismaAbility);
 
   if (rolePermissionMap[user.role]) {
-    rolePermissionMap[user.role](user, { can, cannot });
+    rolePermissionMap[user.role](user, { can });
   }
   return build();
 };
 
-module.exports = { defineAbilitiesFor, accessibleBy };
+module.exports = { defineAbilityFor, accessibleBy };

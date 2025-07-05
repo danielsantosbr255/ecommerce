@@ -1,26 +1,12 @@
-const UAParser = require("ua-parser-js");
 const { prisma } = require("../database/prisma");
 const tokenUtil = require("../utils/token.util");
 const cryptoUtil = require("../utils/crypto.util");
 const CustomError = require("../utils/CustomError");
-const { defineAbilitiesFor } = require("../utils/abilities.util");
-// const { getLocationFromIP } = require("../utils/getLocationFromIP");
+const { defineAbilityFor } = require("../utils/ability");
 
 const verifyToken = async (req, res, next) => {
-  const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   const userAgent = req.headers["user-agent"] || "Desconhecido";
   const accessToken = req.headers["authorization"]?.split(" ")[1];
-  const ua = UAParser(userAgent);
-
-  const sessionData = {
-    ip: ipAddress,
-    device: `${ua.device.vendor || ""} ${ua.device.model || ""}`.trim(),
-    os: `${ua.os.name || ""} ${ua.os.version || ""}`.trim(),
-    browser: `${ua.browser.name || ""} ${ua.browser.version || ""}`.trim(),
-    // location: await getLocationFromIP(ipAddress),
-  };
-
-  console.log("💻[MD] sessionData: ", sessionData);
 
   if (!accessToken) throw new CustomError("Token não fornecido!", 401);
 
@@ -34,7 +20,12 @@ const verifyToken = async (req, res, next) => {
 
   const session = await prisma.session.findFirst({
     where: { accessToken, userAgent },
-    include: { user: true, user: { omit: { password: true } } },
+    include: {
+      user: {
+        include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
+        omit: { password: true },
+      },
+    },
   });
 
   if (!session || session.expiresAt < new Date()) {
@@ -42,7 +33,7 @@ const verifyToken = async (req, res, next) => {
   }
 
   req.user = session.user;
-  req.ability = defineAbilitiesFor(session.user);
+  req.ability = defineAbilityFor(session.user);
 
   next();
 };

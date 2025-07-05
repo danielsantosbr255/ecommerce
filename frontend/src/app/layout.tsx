@@ -17,7 +17,7 @@ const roboto = Roboto({
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={roboto.className}>
+      <body className={roboto.className + " bg-bg-primary !text-tx-primary"}>
         <AuthProvider>{children}</AuthProvider>
         <ToastContainer autoClose={1300} position="top-center" transition={Flip} />
       </body>

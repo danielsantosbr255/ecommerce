@@ -1,8 +1,7 @@
-import React from "react";
 import { Product } from "@/types";
-import { Grid2X2Check } from "lucide-react";
 import ProductCarousel from "./ProductCarousel";
 import { productService } from "@/services/products";
+import { FaLink } from "react-icons/fa";
 
 export default async function RelatedProducts({ product }: { product: Product }) {
   if (!product.id) {
@@ -18,7 +17,7 @@ export default async function RelatedProducts({ product }: { product: Product })
   return (
     <div className="flex flex-col w-full">
       <h2 className="flex items-center gap-2 border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
-        <Grid2X2Check /> Produtos Relacionados
+        <FaLink className="text-primary" /> Produtos Relacionados
       </h2>
       {relatedProducts.length > 0 && <ProductCarousel key={product.id} products={relatedProducts} />}
     </div>

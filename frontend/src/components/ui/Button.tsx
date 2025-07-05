@@ -20,7 +20,7 @@ const variants = {
   warning: "bg-yellow-500 text-tx-on-primary",
   info: "bg-blue-500 text-tx-on-primary",
   muted: "bg-gray-500 text-tx-on-primary",
-  outline: "bg-transparent text-tx-on-primary border border-white hover:bg-white hover:text-primary",
+  outline: "bg-transparent text-primary border border-primary hover:bg-white hover:text-primary",
   link: "bg-transparent text-primary hover:bg-primary hover:text-tx-on-primary",
 };
 

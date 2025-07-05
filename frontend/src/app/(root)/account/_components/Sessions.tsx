@@ -2,6 +2,8 @@
 
 import { use } from "react";
 import { Session } from "@/types";
+import { MdMonitor, MdSmartphone } from "react-icons/md";
+import Alert from "@/components/ui/Alert";
 
 export default function Sessions({ sessionsPromise }: { sessionsPromise: Promise<Session[]> }) {
   const sessions = use(sessionsPromise);
@@ -17,12 +19,30 @@ export default function Sessions({ sessionsPromise }: { sessionsPromise: Promise
           key={session.id}
           className="bg-bg-secondary flex justify-between items-center shadow-xs p-4 border border-lines/20 rounded-lg text-tx-primary"
         >
-          <span>
-            <h2 className="text-lg font-semibold">Sessão Ativa</h2>
-            <p>Dispositivo: {session.userAgent}</p>
-            <p>Localização: {session.ipAddress}</p>
-            <p>Início: {new Date(session.createdAt).toLocaleString()}</p>
-          </span>
+          <div className="flex gap-4 items-center">
+            {session.device === "Desktop" ? <MdMonitor size={40} /> : <MdSmartphone size={40} />}
+            <span className="flex flex-col">
+              <h2 className="flex text-lg font-semibold items-center gap-2">
+                {session.isActive && <Alert />} {session.os} {session.ipAddress}
+              </h2>
+              <p>Localização: {session.location}</p>
+              <p>
+                Dispositivo: {session.browser} no {session.os}
+              </p>
+            </span>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="flex flex-col items-end">
+              <p className="font-semibold">Primeiro Acesso:</p>
+              <p className="underline">{new Date(session.createdAt).toLocaleString()}</p>
+            </span>
+
+            <span className="flex flex-col items-end">
+              <p className="font-semibold">Último Acesso:</p>
+              <p className="underline">{new Date(session.updatedAt).toLocaleString()}</p>
+            </span>
+          </div>
         </div>
       ))}
     </section>

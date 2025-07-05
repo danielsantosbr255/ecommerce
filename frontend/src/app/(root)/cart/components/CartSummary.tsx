@@ -1,8 +1,8 @@
 // src/components/cart/CartSummary.tsx
 import React from "react";
-import { File } from "lucide-react";
 import CurrencyUtil from "@/utils/currency.util";
 import StickyOnScroll from "@/components/layout/StickyOnScroll";
+import { FaFileAlt } from "react-icons/fa";
 
 interface CartSummaryProps {
   subtotal: number;
@@ -16,7 +16,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, discount, discountP
     <StickyOnScroll offset={100}>
       <section className="bg-bg-secondary hidden md:flex flex-col w-full gap-4 shadow-xs py-5 px-6 rounded-lg">
         <h1 className="flex text-lg items-center gap-2 !font-bold text-primary mb-4">
-          <File className="text-primary" absoluteStrokeWidth /> RESUMO
+          <FaFileAlt className="text-primary" /> RESUMO
         </h1>
 
         <div className="flex w-full justify-between text-tx-primary border-b border-lines p-2">
@@ -29,12 +29,11 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, discount, discountP
 
         {discount > 0 && (
           <div className="flex w-full justify-between text-tx-primary border-b border-lines p-2">
-            Desconto ({discountPercent}%):{" "}
-            <span className="text-sale">- {CurrencyUtil.formatCurrency(discount)}</span>
+            Desconto ({discountPercent}%): <span className="text-sale">- {CurrencyUtil.formatCurrency(discount)}</span>
           </div>
         )}
 
-        <div className="bg-gray-100 flex w-full rounded justify-between text-tx-primary px-2 py-4">
+        <div className="bg-gray-100 flex w-full rounded justify-between text-tx-primary px-3 py-4 font-semibold">
           Total: <span className="text-primary">{CurrencyUtil.formatCurrency(total)}</span>
         </div>
       </section>

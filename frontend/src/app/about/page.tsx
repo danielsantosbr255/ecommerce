@@ -8,9 +8,10 @@ import {
   FaDatabase,
   FaGamepad,
   FaBrain,
-  FaLayerGroup, // Para Fullstack
+  FaLayerGroup,
   FaTerminal,
-  FaDocker, // Para Backend/DevOps
+  FaDocker,
+  FaMailBulk,
 } from "react-icons/fa";
 import Image from "next/image";
 
@@ -37,24 +38,25 @@ const AboutPage = () => {
 
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
-              <h2 className="text-xl font-semibold text-tx-primary mt-4">
-                Olá! Eu sou o Daniel.
-              </h2>
-              <p className="text-tx-primary text-sm">
-                Estudante de Desenvolvimento Web & Criador deste Projeto
+              <h2 className="text-xl font-semibold text-tx-primary mt-4">Olá! Eu sou o Daniel.</h2>
+              <p className="text-tx-primary text-sm">Estudante de Desenvolvimento Web & Criador deste Projeto</p>
+              <p className="flex text-tx-primary mt-2 font-semibold items-center justify-center gap-1">
+                <FaMailBulk className="text-tx-primary" /> Contato:{" "}
+                <Link href="mailto:asdanielsantos@gmail.com" className="text-primary hover:underline">
+                  asdanielsantos@gmail.com
+                </Link>
               </p>
             </div>
             <div className="md:w-2/3 px-8">
               <p className="text-tx-primary leading-relaxed mb-4">
-                Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos
-                jogos que desenvolvi com Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de
-                8 anos</strong>, o código foi minha tela e os jogos, minhas criações. Agora, estou focado em construir
-                experiências interativas na web.
+                Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos jogos que desenvolvi com
+                Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de 8 anos</strong>, o código foi minha
+                tela e os jogos, minhas criações. Agora, estou focado em construir experiências interativas na web.
               </p>
               <p className="text-tx-primary leading-relaxed mb-4">
-                Este projeto de e-commerce é um passo crucial nessa transição, permitindo-me explorar a fundo
-                o desenvolvimento fullstack. Embora meu foco principal seja o backend, a visão completa do
-                ciclo de desenvolvimento é o que me motiva.
+                Este projeto de e-commerce é um passo crucial nessa transição, permitindo-me explorar a fundo o desenvolvimento
+                fullstack. Embora meu foco principal seja o backend, a visão completa do ciclo de desenvolvimento é o que me
+                motiva.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
@@ -86,18 +88,14 @@ const AboutPage = () => {
                 <FaLayerGroup className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Frontend</h3>
               </div>
-              <p className="text-tx-primary text-sm">
-                JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS
-              </p>
+              <p className="text-tx-primary text-sm">JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaTerminal className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Backend</h3>
               </div>
-              <p className="text-tx-primary text-sm">
-                Node.js, NestJS (conhecimento), Prisma, RESTful APIs
-              </p>
+              <p className="text-tx-primary text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
@@ -125,9 +123,7 @@ const AboutPage = () => {
                 <FaBrain className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Habilidades Essenciais</h3>
               </div>
-              <p className="text-tx-primary text-sm">
-                Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo
-              </p>
+              <p className="text-tx-primary text-sm">Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo</p>
             </div>
           </div>
         </section>
@@ -139,14 +135,13 @@ const AboutPage = () => {
             <h2 className="text-xl font-semibold text-tx-primary">Sobre o Meu Projeto de E-commerce</h2>
           </div>
           <p className="text-tx-primary leading-relaxed mb-4">
-            Este projeto de e-commerce é mais do que um simples aprendizado; é a materialização da minha
-            paixão pelo desenvolvimento web e uma forma de consolidar meus conhecimentos em um cenário prático
-            e desafiador.
+            Este projeto de e-commerce é mais do que um simples aprendizado; é a materialização da minha paixão pelo
+            desenvolvimento web e uma forma de consolidar meus conhecimentos em um cenário prático e desafiador.
           </p>
           <p className="text-tx-primary leading-relaxed mb-4">
-            Desde a arquitetura do backend até a experiência do usuário no frontend, cada detalhe foi
-            cuidadosamente pensado e implementado. O objetivo principal foi explorar um amplo espectro de
-            tecnologias e aplicar as melhores práticas de desenvolvimento.
+            Desde a arquitetura do backend até a experiência do usuário no frontend, cada detalhe foi cuidadosamente pensado e
+            implementado. O objetivo principal foi explorar um amplo espectro de tecnologias e aplicar as melhores práticas de
+            desenvolvimento.
           </p>
           <ul className="list-disc list-inside text-tx-primary mb-4">
             <li>Sistema de autenticação completo com JWT e cookies HTTP-only para segurança.</li>
@@ -157,8 +152,8 @@ const AboutPage = () => {
             <li>Containerização com Docker para facilitar o desenvolvimento e a implantação.</li>
           </ul>
           <p className="text-tx-primary leading-relaxed">
-            Este projeto serve como um portfólio dinâmico, demonstrando minhas habilidades e minha dedicação
-            em criar soluções web completas e bem estruturadas.
+            Este projeto serve como um portfólio dinâmico, demonstrando minhas habilidades e minha dedicação em criar soluções web
+            completas e bem estruturadas.
           </p>
         </section>
 

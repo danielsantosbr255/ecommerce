@@ -1,3 +1,54 @@
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+
+  password: string;
+  phone?: string;
+  role: "USER" | "ADMIN";
+
+  image: string;
+  createdAt: Date;
+
+  orders: Order[];
+  reviews: Review[];
+  sessions: Session[];
+  cart?: Cart;
+  addresses: Address[];
+  roles: UserRole[];
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  description?: string;
+  permissions: RolePermission[];
+  users: UserRole[];
+}
+
+export interface Permission {
+  id: number;
+  action: string;
+  subject: string;
+  description?: string;
+  roles: RolePermission[];
+}
+
+export interface UserRole {
+  user: User;
+  userId: string;
+
+  role: Role;
+  roleId: number;
+}
+
+export interface RolePermission {
+  role: Role;
+  roleId: number;
+  permission: Permission;
+  permissionId: number;
+}
+
 export interface ProductImage {
   id: string;
   url: string;
@@ -118,27 +169,9 @@ export interface Order {
   totalPrice: number;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-
-  password: string;
-  phone?: string;
-  role: "USER" | "ADMIN";
-
-  image: string;
-  createdAt: Date;
-
-  orders: Order[];
-  reviews: Review[];
-  sessions: Session[];
-  cart?: Cart;
-  addresses: Address[];
-}
-
 export interface Address {
   id: string;
+  label: string;
   street: string;
   number: string;
   complement: string;
@@ -170,11 +203,19 @@ export interface SignUpFormData {
 export interface Session {
   id: string;
   userId: string;
-  expiresAt: string;
-  userAgent: string;
-  ipAddress: string;
+
   accessToken: string;
   refreshToken: string;
+
+  userAgent: string;
+  ipAddress: string;
+  os: string;
+  browser: string;
+  device: string;
+  location: string;
+  isActive: boolean;
+
+  expiresAt: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -12,6 +12,7 @@ const getById = async (req, id) => {
   return await prisma.user.findUnique({
     where: { id, AND: accessibleBy(req.ability, "read").User },
     omit: { password: true },
+    include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
   });
 };
 
