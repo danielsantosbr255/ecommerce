@@ -10,7 +10,11 @@ export default function Addresses({ addressesPromise }: { addressesPromise: Prom
   const addresses = use(addressesPromise);
 
   if (!addresses || addresses.length === 0) {
-    return <p>Nenhum endereço encontrado.</p>;
+    return (
+      <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
+        <p className="text-tx-primary text-center font-semibold">Nenhum endereço encontrado.</p>
+      </div>
+    );
   }
 
   return (
@@ -22,7 +26,9 @@ export default function Addresses({ addressesPromise }: { addressesPromise: Prom
             className="bg-bg-secondary flex justify-between items-center shadow-xs p-4 border border-lines/20 rounded-lg text-tx-primary"
           >
             <span>
-              <h2 className="text-lg font-semibold">{address.label} {address.isDefault && " (Padrão)"}</h2>
+              <h2 className="text-lg font-semibold">
+                {address.label} {address.isDefault && " (Padrão)"}
+              </h2>
               <p>
                 {address.street}, {address.number}, {address.neighborhood} {address.complement && `, ${address.complement}`}
               </p>
