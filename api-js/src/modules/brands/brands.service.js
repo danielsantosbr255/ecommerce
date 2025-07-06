@@ -1,22 +1,22 @@
 const slugify = require("slugify");
 const { prisma } = require("../../common/database/prisma");
 
-const createBrand = async (data) => {
+const create = async (data) => {
   const { name, image } = data;
   return await prisma.brand.create({ data: { name, slug: slugify(name), image } });
 };
 
-const getBrands = async () => {
+const getAll = async () => {
   return await prisma.brand.findMany({
     include: { products: { include: { images: true } } },
   });
 };
 
-const getBrandBySlug = async (slug) => {
+const getBySlug = async (slug) => {
   return await prisma.brand.findUnique({
     where: { slug },
     include: { products: { include: { images: true } } },
   });
 };
 
-module.exports = { createBrand, getBrands, getBrandBySlug };
+module.exports = { create, getAll, getBySlug };

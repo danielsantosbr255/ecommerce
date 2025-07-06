@@ -1,22 +1,22 @@
 const service = require("./categories.service");
 const validator = require("../../common/validators/category.validator");
 
-const createCategory = async (req, res) => {
+const create = async (req, res) => {
   if (!req.ability.can("manage", "Category")) throw new CustomError("Acesso negado!", 403);
 
   const validatedData = validator.create(req.body);
-  const category = await service.createCategory(validatedData);
+  const category = await service.create(validatedData);
   res.json(category);
 };
 
-const getCategories = async (req, res) => {
-  const categories = await service.getCategories();
+const getAll = async (req, res) => {
+  const categories = await service.getAll();
   res.json(categories);
 };
 
-const getCategoryBySlug = async (req, res) => {
-  const category = await service.getCategoryBySlug(req.params.slug);
+const getBySlug = async (req, res) => {
+  const category = await service.getBySlug(req.params.slug);
   res.json(category);
 };
 
-module.exports = { createCategory, getCategories, getCategoryBySlug };
+module.exports = { create, getAll, getBySlug };

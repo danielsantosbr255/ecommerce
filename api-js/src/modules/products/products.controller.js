@@ -3,51 +3,7 @@ const services = require("./products.service");
 const CustomError = require("../../common/utils/CustomError");
 const validator = require("../../common/validators/product.validator");
 
-const createProduct = async (req, res) => {
-  if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
-
-  if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
-  if (req.body.price) req.body.price = Number(req.body.price);
-  if (req.body.stock) req.body.stock = Number(req.body.stock);
-  if (req.body.rating) req.body.rating = Number(req.body.rating);
-  if (req.body.discount) req.body.discount = Number(req.body.discount);
-  if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
-  if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
-
-  const validatedData = validator.create({ ...req.body, images: req.files });
-  const product = await services.createProduct(validatedData);
-  return res.status(201).json(product);
-};
-
-const getProductBySlug = async (req, res) => {
-  const product = await services.getProductBySlug(req.params.slug);
-  return res.json(product);
-};
-
-const getProducts = async (req, res) => {
-  const userAgent = req.headers["user-agent"] || "Desconhecido";
-  console.log("🚨 MD - userAgent: ", userAgent);
-
-  const products = await services.getProducts();
-  return res.json(products);
-};
-
-const getProductsByQuery = async (req, res) => {
-  const products = await services.getProductsByQuery(req.params.query);
-  return res.json(products);
-};
-
-const getProductsByBrand = async (req, res) => {
-  const products = await services.getProductsByBrand(req.params.brand);
-  return res.json(products);
-};
-
-const getProductsByCategory = async (req, res) => {
-  const products = await services.getProductsByCategory(req.params.productId);
-  return res.json(products);
-};
-
-const updateProduct = async (req, res) => {
+const create = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
   if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
@@ -59,27 +15,60 @@ const updateProduct = async (req, res) => {
   if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
   if (req.files?.length) req.body.images = req.files;
 
-  const id = req.params.id;
-  const validatedData = validator.update({ ...req.body });
+  const validatedData = validator.create(req.body);
+  const product = await services.create(validatedData);
 
-  const product = await services.updateProduct(id, validatedData);
+  return res.status(201).json(product);
+};
+
+const getAll = async (req, res) => {
+  const products = await services.getAll();
+  return res.json(products);
+};
+
+const getBySlug = async (req, res) => {
+  const product = await services.getBySlug(req.params.slug);
   return res.json(product);
 };
 
-const deleteProduct = async (req, res) => {
+const getByQuery = async (req, res) => {
+  const products = await services.getByQuery(req.params.query);
+  return res.json(products);
+};
+
+const getByBrand = async (req, res) => {
+  const products = await services.getByBrand(req.params.brand);
+  return res.json(products);
+};
+
+const getByCategory = async (req, res) => {
+  const products = await services.getByCategory(req.params.productId);
+  return res.json(products);
+};
+
+const update = async (req, res) => {
   if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
-  const product = await services.deleteProduct(req.params.id);
+  if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
+  if (req.body.price) req.body.price = Number(req.body.price);
+  if (req.body.stock) req.body.stock = Number(req.body.stock);
+  if (req.body.rating) req.body.rating = Number(req.body.rating);
+  if (req.body.discount) req.body.discount = Number(req.body.discount);
+  if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
+  if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
+  if (req.files?.length) req.body.images = req.files;
+
+  const validatedData = validator.update(req.body);
+  const product = await services.update(req.params.id, validatedData);
+
   return res.json(product);
 };
 
-module.exports = {
-  getProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getProductBySlug,
-  getProductsByQuery,
-  getProductsByBrand,
-  getProductsByCategory,
+const remove = async (req, res) => {
+  if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+
+  await services.remove(req.params.id);
+  return res.json({ message: "Produto deletado com sucesso" });
 };
+
+module.exports = { getAll, create, update, remove, getBySlug, getByQuery, getByBrand, getByCategory };

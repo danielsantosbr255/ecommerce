@@ -3,7 +3,7 @@ const { prisma } = require("../../common/database/prisma");
 
 const getAll = async (req) => {
   return await prisma.user.findMany({
-    where: { AND: [accessibleBy(req.ability, "read").User] },
+    where: accessibleBy(req.ability, "read").User,
     omit: { password: true },
   });
 };

@@ -1,9 +1,9 @@
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./products.repository");
 const CustomError = require("../../common/utils/CustomError");
 const { uploadToCloudinary } = require("../../common/utils/cloudinary.util");
 
-const createProduct = async (data) => {
-  const existingProduct = await prisma.product.findUnique({ where: { slug: data.slug } });
+const create = async (data) => {
+  const existingProduct = await repository.getBySlug(data.slug);
   if (existingProduct) throw new CustomError("Já existe um produto com este slug");
 
   const uploadResults = await Promise.all(
@@ -15,101 +15,44 @@ const createProduct = async (data) => {
     )
   );
 
-  const product = await prisma.product.create({
-    data: {
-      ...data,
-      images: {
-        create: uploadResults.map((result) => ({
-          url: result.secure_url,
-          alt: data.title,
-        })),
-      },
-      specifications: {
-        create: data.specifications,
-      },
-    },
-    include: { images: true, specifications: true, category: true },
-  });
-
-  return product;
+  return repository.create({ data, uploadResults });
 };
 
-const getProducts = () => {
-  return prisma.product.findMany({
-    include: { images: true, specifications: true, category: true, reviews: true },
-  });
+const getAll = () => {
+  return repository.getAll();
 };
 
-const getProductBySlug = async (slug) => {
-  return await prisma.product.findUnique({
-    where: { slug },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
+const getBySlug = async (slug) => {
+  return await repository.getBySlug(slug);
 };
 
-const getProductsByCategory = async (productId) => {
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-  });
-
+const getByCategory = async (productId) => {
+  const product = await repository.getById(productId);
   if (!product) throw new CustomError("Produto nao encontrado", 404);
 
-  return await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      NOT: { id: productId },
-    },
-    include: { images: true, specifications: true, category: true },
-  });
+  return repository.getByCategory(product.categoryId, productId);
 };
 
-const getProductsByBrand = (brand) => {
-  return prisma.product.findMany({
-    where: { brand: { name: brand } },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
+const getByBrand = (brand) => {
+  return repository.getByBrand(brand);
 };
 
-const getProductsByQuery = (query) => {
-  return prisma.product.findMany({
-    take: 10,
-    where: {
-      OR: [
-        { title: { contains: query, mode: "insensitive" } },
-        { description: { contains: query, mode: "insensitive" } },
-        // { category: { contains: query, mode: "insensitive" } },
-      ],
-    },
-    include: { images: true, specifications: true, category: true },
-  });
+const getByQuery = (query) => {
+  return repository.getByQuery(query);
 };
 
-const updateProduct = async (id, data) => {
-  const existingProduct = await prisma.product.findUnique({ where: { id } });
-  if (!existingProduct) throw new CustomError("Produto não encontrado!", 404);
-  return prisma.product.update({ where: { id }, data });
-};
-
-const deleteProduct = async (id) => {
-  const product = await prisma.product.findUnique({ where: { id } });
+const update = async (id, data) => {
+  const product = await repository.getById(id);
   if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-  // if (product.image) {
-  //     const oldImagePath = path.join(__dirname, "../../..", product.image);
-  //     fs.unlink(oldImagePath, (err) => {
-  //         if (err) console.error("Erro ao deletar imagem antiga:", err);
-  //     });
-  // }
-  return prisma.product.delete({ where: { id } });
+  return repository.update(id, data);
 };
 
-module.exports = {
-  createProduct,
-  getProducts,
-  getProductsByQuery,
-  getProductsByCategory,
-  getProductsByBrand,
-  getProductBySlug,
-  updateProduct,
-  deleteProduct,
+const remove = async (id) => {
+  const product = await repository.getById(id);
+  if (!product) throw new CustomError("Produto não encontrado!", 404);
+
+  return repository.remove(id);
 };
+
+module.exports = { create, getAll, getByQuery, getByCategory, getByBrand, getBySlug, update, remove };

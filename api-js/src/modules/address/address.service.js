@@ -14,8 +14,6 @@ const createAddress = async (data) => {
 };
 
 const getAddresses = async (ability) => {
-  console.log("🚨 MD - ability: ", accessibleBy(ability).Address);
-
   const address = await prisma.address.findMany({
     where: accessibleBy(ability).Address,
     include: { user: { omit: { password: true } } },

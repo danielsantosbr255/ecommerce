@@ -1,22 +1,22 @@
 const service = require("./brands.service");
 const validator = require("../../common/validators/brand.validator");
 
-const createBrand = async (req, res) => {
+const create = async (req, res) => {
   if (!req.ability.can("manage", "Brand")) throw new CustomError("Acesso negado!", 403);
 
   const validatedData = validator.create(req.body);
-  const brand = await service.createBrand(validatedData);
+  const brand = await service.create(validatedData);
   res.json(brand);
 };
 
-const getBrands = async (req, res) => {
-  const brands = await service.getBrands();
+const getAll = async (req, res) => {
+  const brands = await service.getAll();
   res.json(brands);
 };
 
-const getBrandBySlug = async (req, res) => {
-  const brand = await service.getBrandBySlug(req.params.slug);
+const getBySlug = async (req, res) => {
+  const brand = await service.getBySlug(req.params.slug);
   res.json(brand);
 };
 
-module.exports = { createBrand, getBrands, getBrandBySlug };
+module.exports = { create, getAll, getBySlug };

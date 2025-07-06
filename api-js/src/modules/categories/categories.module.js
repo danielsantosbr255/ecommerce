@@ -4,8 +4,8 @@ const { verifyToken } = require("../../common/middlewares/auth.middleware");
 
 const router = express.Router();
 
-router.get("/categories", controller.getCategories);
-router.get("/categories/:slug", controller.getCategoryBySlug);
-router.post("/categories", verifyToken, controller.createCategory);
+router.post("/categories", verifyToken, controller.create);
+router.get("/categories/:slug", controller.getBySlug);
+router.get("/categories", controller.getAll);
 
 module.exports = router;

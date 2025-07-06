@@ -32,7 +32,6 @@ const ProductSpecificationSchema = z.object({
 });
 
 const schema = {
-  id: z.string().uuid().optional(),
   isActive: z.boolean().default(true),
   rating: z.number().min(0).max(5).default(0),
   specifications: z.array(ProductSpecificationSchema).optional().default([]),
