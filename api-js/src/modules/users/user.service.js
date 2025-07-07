@@ -1,49 +1,53 @@
 const authUtil = require("../../common/utils/auth.util");
-const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
-const userRepository = require("./user.repository");
+const repository = require("./user.repository");
 
-const getUsers = async (req) => {
-  return await userRepository.getAll(req);
-};
-
-const getUserById = async (req, id) => {
-  const user = userRepository.getById(req, id);
-  if (!user) throw new CustomError("Usuário não encontrado", 404);
-  return user;
-};
-
-const updateUser = async (req, id, userData) => {
-  let { name, email, password, role } = userData;
-
-  const user = await prisma.user.findUnique({ where: { id } });
-
-  if (!user) throw new CustomError("Usuário não encontrado", 404);
-
-  if (email && email !== user.email) {
-    const existingEmail = await userRepository.getByEmail(email);
-    if (existingEmail) throw new CustomError("Email já cadastrado.", 400);
+class UserService {
+  constructor() {
+    this.repository = repository;
   }
 
-  if (password && password.length === 0) password = undefined;
-
-  if (password && (await authUtil.verifyPassword(password, user.password))) {
-    throw new CustomError("A senha não pode ser igual", 400);
+  async getAll(ability) {
+    return await this.repository.getAll(ability);
   }
 
-  if (role && role === user.role) {
-    throw new CustomError(`O usuário ${user.name} já é ${role}`, 400);
+  async getById(ability, id) {
+    const user = this.repository.getById(ability, id);
+    if (!user) throw new CustomError("Usuário não encontrado", 404);
+    return user;
   }
 
-  const updatedUser = userRepository.update(req, id, { name, email, password, role });
+  async update(ability, id, userData) {
+    let { name, email, password, role } = userData;
 
-  return { message: "Usuário atualizado com sucesso", user: updatedUser };
-};
+    const user = await this.repository.getById(ability, id);
+    if (!user) throw new CustomError("Usuário não encontrado", 404);
 
-const deleteUser = async (req, id) => {
-  const user = await userRepository.remove(req, id);
-  if (!user) throw new CustomError("Usuário não encontrado", 404);
-  return user;
-};
+    if (email && email !== user.email) {
+      const existingEmail = await this.repository.getByEmail(email);
+      if (existingEmail) throw new CustomError("Email já cadastrado.", 400);
+    }
 
-module.exports = { getUsers, getUserById, updateUser, deleteUser };
+    if (password && password.length === 0) password = undefined;
+
+    if (password && (await authUtil.verifyPassword(password, user.password))) {
+      throw new CustomError("A senha não pode ser igual", 400);
+    }
+
+    if (role && role === user.role) {
+      throw new CustomError(`O usuário ${user.name} já é ${role}`, 400);
+    }
+
+    const updatedUser = this.repository.update(ability, id, { name, email, password, role });
+
+    return { message: "Usuário atualizado com sucesso", user: updatedUser };
+  }
+
+  async delete(ability, id) {
+    const user = await this.repository.remove(ability, id);
+    if (!user) throw new CustomError("Usuário não encontrado", 404);
+    return user;
+  }
+}
+
+module.exports = new UserService();

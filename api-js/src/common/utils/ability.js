@@ -1,5 +1,5 @@
 const { AbilityBuilder } = require("@casl/ability");
-const { createPrismaAbility, accessibleBy } = require("@casl/prisma");
+const { createPrismaAbility } = require("@casl/prisma");
 
 function defineAbilityFor(user) {
   const { can, build } = new AbilityBuilder(createPrismaAbility);
@@ -25,4 +25,4 @@ function defineAbilityFor(user) {
   return build();
 }
 
-module.exports = { defineAbilityFor, accessibleBy };
+module.exports = { defineAbilityFor };

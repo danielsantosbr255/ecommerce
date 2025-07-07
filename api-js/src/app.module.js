@@ -9,6 +9,7 @@ const errorHandler = require("./common/middlewares/error.handler");
 const AuthModule = require("./modules/auth/auth.module");
 const CartModule = require("./modules/cart/cart.module");
 const UsersModule = require("./modules/users/user.module");
+const RolesModule = require("./modules/roles/role.module");
 const BrandModule = require("./modules/brands/brands.module");
 const OrdersModule = require("./modules/orders/orders.module");
 const AccountModule = require("./modules/account/account.module");
@@ -19,7 +20,6 @@ const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
 const PermissionsModule = require("./modules/permissions/permissions.module");
-const RolesModule = require("./modules/roles/role.module");
 
 const app = express();
 

@@ -1,77 +1,90 @@
 const { prisma } = require("../../common/database/prisma");
 
-const create = async ({ data, uploadResults }) => {
-  return await prisma.product.create({
-    data: {
-      ...data,
-      images: {
-        create: uploadResults.map((result) => ({
-          url: result.secure_url,
-          alt: data.title,
-        })),
+class ProductRepository {
+  constructor() {
+    this.prisma = prisma;
+  }
+
+  async create({ data, uploadResults }) {
+    return await this.prisma.product.create({
+      data: {
+        ...data,
+        images: {
+          create: uploadResults.map((result) => ({
+            url: result.secure_url,
+            alt: data.title,
+          })),
+        },
+        specifications: {
+          create: data.specifications,
+        },
       },
-      specifications: {
-        create: data.specifications,
+      include: { images: true, specifications: true, category: true, brand: true, reviews: true },
+    });
+  }
+
+  async getAll(where, take, skip, orderBy) {
+    const products = await this.prisma.product.findMany({
+      where,
+      take,
+      skip,
+      include: {
+        brand: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true } },
+        images: {
+          select: { id: true, url: true, alt: true },
+          take: 1,
+        },
       },
-    },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
-};
+      orderBy,
+    });
 
-const getAll = async () => {
-  return await prisma.product.findMany({
-    include: { images: true, specifications: true, category: true, reviews: true },
-  });
-};
+    const totalProducts = await this.prisma.product.count({ where });
 
-const getById = async (id) => {
-  return await prisma.product.findUnique({
-    where: { id },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
-};
+    return { products, totalProducts };
+  }
 
-const getBySlug = async (slug) => {
-  return await prisma.product.findUnique({
-    where: { slug },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
-};
+  async getById(id) {
+    return await this.prisma.product.findUnique({
+      where: { id },
+      include: { images: true, specifications: true, category: true, brand: true, reviews: true },
+    });
+  }
 
-const getByBrand = (brand) => {
-  return prisma.product.findMany({
-    where: { brand: { name: brand } },
-    include: { images: true, specifications: true, category: true, brand: true },
-  });
-};
+  async getBySlug(slug) {
+    return await this.prisma.product.findUnique({
+      where: { slug },
+      include: { images: true, specifications: true, category: true, brand: true, reviews: true },
+    });
+  }
 
-const getByCategory = async (categoryId, productId) => {
-  return await prisma.product.findMany({
-    where: { categoryId, NOT: { id: productId } },
-    include: { images: true, specifications: true, category: true, brand: true },
-  });
-};
+  async getRelated(productId, categoryId, brandId) {
+    return await this.prisma.product.findMany({
+      where: { isActive: true, OR: [{ categoryId }, { brandId }], NOT: { id: productId } },
+      take: 10,
+      include: {
+        brand: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true } },
+        images: {
+          select: { id: true, url: true, alt: true },
+          take: 1,
+        },
+      },
+    });
+  }
 
-const getByQuery = (query) => {
-  return prisma.product.findMany({
-    take: 10,
-    where: {
-      OR: [
-        { title: { contains: query, mode: "insensitive" } },
-        { description: { contains: query, mode: "insensitive" } },
-        // { category: { contains: query, mode: "insensitive" } },
-      ],
-    },
-    include: { images: true, specifications: true, category: true },
-  });
-};
+  async getCount(where) {
+    const defaultWhere = { isActive: true, ...where };
+    return this.prisma.product.count({ where: defaultWhere });
+  }
 
-const update = async (id, data) => {
-  return await prisma.product.update({ where: { id }, data });
-};
+  async update(id, data) {
+    return await this.prisma.product.update({ where: { id }, data });
+  }
 
-const remove = async (id) => {
-  return await prisma.product.delete({ where: { id } });
-};
+  async remove(id) {
+    return await this.prisma.product.delete({ where: { id } });
+  }
+}
 
-module.exports = { create, getAll, getById, getBySlug, getByCategory, getByBrand, getByQuery, update, remove };
+module.exports = new ProductRepository();

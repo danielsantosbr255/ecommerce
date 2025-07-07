@@ -2,57 +2,92 @@ const repository = require("./products.repository");
 const CustomError = require("../../common/utils/CustomError");
 const { uploadToCloudinary } = require("../../common/utils/cloudinary.util");
 
-const create = async (data) => {
-  const existingProduct = await repository.getBySlug(data.slug);
-  if (existingProduct) throw new CustomError("Já existe um produto com este slug");
+class ProductService {
+  constructor() {
+    this.repository = repository;
+  }
 
-  const uploadResults = await Promise.all(
-    data.images.map((image) =>
-      uploadToCloudinary(image.buffer, {
-        folder: "ecommerce/products",
-        transformation: [{ width: 800, height: 800, crop: "limit" }, { quality: "auto" }],
-      })
-    )
-  );
+  create = async (data) => {
+    const existingProduct = await this.repository.getBySlug(data.slug);
+    if (existingProduct) throw new CustomError("Já existe um produto com este slug");
 
-  return repository.create({ data, uploadResults });
-};
+    const uploadResults = await Promise.all(
+      data.images.map((image) =>
+        uploadToCloudinary(image.buffer, {
+          folder: "ecommerce/products",
+          transformation: [{ width: 800, height: 800, crop: "limit" }, { quality: "auto" }],
+        })
+      )
+    );
 
-const getAll = () => {
-  return repository.getAll();
-};
+    return this.repository.create({ data, uploadResults });
+  };
 
-const getBySlug = async (slug) => {
-  return await repository.getBySlug(slug);
-};
+  getAll = async (query) => {
+    const { q, categoryId, brandId, minPrice, maxPrice, page = 1, pageSize = 20 } = query;
 
-const getByCategory = async (productId) => {
-  const product = await repository.getById(productId);
-  if (!product) throw new CustomError("Produto nao encontrado", 404);
+    const take = parseInt(pageSize);
+    const skip = (parseInt(page) - 1) * take;
 
-  return repository.getByCategory(product.categoryId, productId);
-};
+    const where = { isActive: true, deletedAt: null };
 
-const getByBrand = (brand) => {
-  return repository.getByBrand(brand);
-};
+    if (q) {
+      where.OR = [
+        { title: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { category: { name: { contains: q, mode: "insensitive" } } },
+        { brand: { name: { contains: q, mode: "insensitive" } } },
+      ];
+    }
 
-const getByQuery = (query) => {
-  return repository.getByQuery(query);
-};
+    if (categoryId) where.categoryId = categoryId;
+    if (brandId) where.brandId = brandId;
 
-const update = async (id, data) => {
-  const product = await repository.getById(id);
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
+    if (minPrice || maxPrice) {
+      where.price = {};
+      if (minPrice) where.price.gte = parseFloat(minPrice);
+      if (maxPrice) where.price.lte = parseFloat(maxPrice);
+    }
 
-  return repository.update(id, data);
-};
+    const { products, totalProducts } = await this.repository.getAll(where, take, skip);
 
-const remove = async (id) => {
-  const product = await repository.getById(id);
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
+    return {
+      products,
+      pagination: {
+        totalItems: totalProducts,
+        currentPage: parseInt(page),
+        pageSize: take,
+        totalPages: Math.ceil(totalProducts / take),
+      },
+    };
+  };
 
-  return repository.remove(id);
-};
+  getById = async (id) => {
+    return await this.repository.getById(id);
+  };
 
-module.exports = { create, getAll, getByQuery, getByCategory, getByBrand, getBySlug, update, remove };
+  getBySlug = async (slug) => {
+    return await this.repository.getBySlug(slug);
+  };
+
+  getRelated = async (productId) => {
+    const product = await this.repository.getById(productId);
+    return this.repository.getRelated(productId, product.categoryId, product.brandId);
+  };
+
+  update = async (id, data) => {
+    const product = await this.repository.getById(id);
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
+
+    return this.repository.update(id, data);
+  };
+
+  remove = async (id) => {
+    const product = await this.repository.getById(id);
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
+
+    return this.repository.remove(id);
+  };
+}
+
+module.exports = new ProductService();

@@ -1,37 +1,43 @@
 const service = require("./role.service");
 const CustomError = require("../../common/utils/CustomError");
 
-const create = async (req, res) => {
-  if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
+class RoleController {
+  constructor() {
+    this.service = service;
+  }
 
-  const role = await service.create(req.body);
-  return res.status(201).json(role);
-};
+  create = async (req, res) => {
+    if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
-const getAll = async (req, res) => {
-  const roles = await service.getAll();
-  return res.status(200).json(roles);
-};
+    const role = await this.service.create(req.body);
+    return res.status(201).json(role);
+  };
 
-const getById = async (req, res) => {
-  if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
+  getAll = async (req, res) => {
+    const roles = await this.service.getAll();
+    return res.status(200).json(roles);
+  };
 
-  const role = await service.getById(req.params.id);
-  return res.status(200).json(role);
-};
+  getById = async (req, res) => {
+    if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
-const update = async (req, res) => {
-  if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
+    const role = await this.service.getById(req.params.id);
+    return res.status(200).json(role);
+  };
 
-  const updatedRole = await service.update(req.params.id, req.body);
-  res.status(200).json(updatedRole);
-};
+  update = async (req, res) => {
+    if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
-const remove = async (req, res) => {
-  if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
+    const updatedRole = await this.service.update(req.params.id, req.body);
+    res.status(200).json(updatedRole);
+  };
 
-  await service.remove(req.params.id);
-  return res.status(200).json({ message: "Cargo deletado com sucesso" });
-};
+  remove = async (req, res) => {
+    if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
-module.exports = { create, getAll, getById, update, remove };
+    await this.service.remove(req.params.id);
+    return res.status(200).json({ message: "Cargo deletado com sucesso" });
+  };
+}
+
+module.exports = new RoleController();

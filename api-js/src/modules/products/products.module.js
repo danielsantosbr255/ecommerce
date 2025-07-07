@@ -6,10 +6,8 @@ const multer = require("../../common/middlewares/multer.middleware");
 
 router.get("/products", controller.getAll);
 router.get("/products/:slug", controller.getBySlug);
-router.get("/products/brand/:brand", controller.getByBrand);
-router.get("/products/search/:query", controller.getByQuery);
-router.get("/products/:productId/related", controller.getByCategory);
-
+router.get("/products/:id", controller.getById);
+router.get("/products/:id/related", controller.getRelated);
 router.delete("/products/:id", verifyToken, controller.remove);
 router.post("/products", verifyToken, multer.array("images", 5), controller.create);
 router.put("/products/:id", verifyToken, multer.array("images", 5), controller.update);

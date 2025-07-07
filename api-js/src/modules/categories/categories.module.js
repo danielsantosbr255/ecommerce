@@ -7,5 +7,7 @@ const router = express.Router();
 router.post("/categories", verifyToken, controller.create);
 router.get("/categories/:slug", controller.getBySlug);
 router.get("/categories", controller.getAll);
+router.put("/categories/:slug", verifyToken, controller.update);
+router.delete("/categories/:slug", verifyToken, controller.remove);
 
 module.exports = router;
