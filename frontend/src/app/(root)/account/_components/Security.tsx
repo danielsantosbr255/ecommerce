@@ -27,8 +27,8 @@ export default function AccessAndSecurity() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue, // Adicione setValue aqui
-    watch, // Adicione watch para observar o valor das senhas
+    setValue,
+    watch,
   } = useForm<FormData>({
     defaultValues: {
       name: user?.name || "",
@@ -45,7 +45,7 @@ export default function AccessAndSecurity() {
 
   const onSubmit = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       alert("Em breve, essa funcionalidade estará disponível.");
     } catch {
       alert("Erro ao realizar alterações. Tente novamente mais tarde.");
@@ -58,7 +58,10 @@ export default function AccessAndSecurity() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-bg-secondary text-tx-primary shadow-xs p-4 rounded-lg flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="bg-bg-secondary text-tx-primary shadow-xs p-4 rounded-lg flex flex-col gap-4"
+    >
       <div className="flex items-center gap-3">
         <FaUserLock className="text-primary" size={20} />
         <h2 className="text-md font-semibold text-tx-primary">Configurações de Login</h2>

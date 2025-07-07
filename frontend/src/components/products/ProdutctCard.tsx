@@ -17,7 +17,7 @@ type ProductProps = {
 };
 
 export default function ProductCard({ product }: ProductProps) {
-  const { loadCart } = useAuth();
+  const { user, loadCart } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const productDiscount = product.price - (product.price * product.discount!) / 100;
@@ -25,13 +25,16 @@ export default function ProductCard({ product }: ProductProps) {
   const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
 
   const onAddToCart = async () => {
+    if (!user) {
+      return toast.error("Faça login para adicionar ao carrinho");
+    }
     setLoading(true);
     const newCartItem = await cartService.create(product.id, 1);
+    setLoading(false);
 
     if (newCartItem) {
       toast.success("Produto adicionado ao carrinho");
       await loadCart();
-      setLoading(false);
       return newCartItem;
     }
   };

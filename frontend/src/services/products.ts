@@ -1,5 +1,16 @@
 import api from "@/lib/axios";
-import { Product } from "@/types";
+import { Pagination, Product } from "@/types";
+
+export interface ProductResponse {
+  products: Product[];
+  pagination: Pagination;
+}
+
+export interface QueryParams {
+  query: string;
+  page: number;
+  pageSize: number;
+}
 
 class ProductService {
   public async create(productData: Omit<Product, "id">) {
@@ -12,7 +23,7 @@ class ProductService {
     }
   }
 
-  public async getAll(): Promise<Product[] | null> {
+  public async getAll(): Promise<ProductResponse | null> {
     try {
       const response = await api.get("/products");
       return response.data;
@@ -22,7 +33,7 @@ class ProductService {
     }
   }
 
-  public async getProduct(slug: string): Promise<Product | null> {
+  public async getBySlug(slug: string): Promise<Product | null> {
     try {
       const response = await api.get(`/products/${slug}`);
       return response.data;
@@ -32,9 +43,9 @@ class ProductService {
     }
   }
 
-  public async getProductsByCategory(productId: string): Promise<Product[] | null> {
+  public async getByQuery({ query, page, pageSize }: QueryParams): Promise<ProductResponse | null> {
     try {
-      const response = await api.get(`/products/${productId}/related`);
+      const response = await api.get(`/products?q=${query}&page=${page}&pageSize=${pageSize}`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -42,9 +53,9 @@ class ProductService {
     }
   }
 
-  public async getProductByQuery(query: string): Promise<Product[] | null> {
+  public async getRelated(productId: string): Promise<Product[] | null> {
     try {
-      const response = await api.get(`/products/search/${query}`);
+      const response = await api.get(`/products/${productId}/related`);
       return response.data;
     } catch (error) {
       console.error(error);

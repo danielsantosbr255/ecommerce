@@ -8,7 +8,7 @@ import RelatedProducts from "@/components/products/RelatedProducts";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await productService.getProduct(slug);
+  const product = await productService.getBySlug(slug);
 
   if (!product) {
     return (

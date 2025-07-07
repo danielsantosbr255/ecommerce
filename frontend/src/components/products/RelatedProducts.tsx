@@ -8,7 +8,7 @@ export default async function RelatedProducts({ product }: { product: Product })
     return null;
   }
 
-  const relatedProducts = await productService.getProductsByCategory(product.id);
+  const relatedProducts = await productService.getRelated(product.id);
 
   if (!relatedProducts || !relatedProducts.length) {
     return null;

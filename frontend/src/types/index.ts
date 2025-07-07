@@ -155,6 +155,19 @@ export interface Product {
   specifications?: ProductSpecification[];
 }
 
+export interface Pagination {
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface SearchPageProps {
+  q?: string;
+  page?: string;
+  pageSize?: string;
+}
+
 export interface Order {
   id: string;
   userId: string;

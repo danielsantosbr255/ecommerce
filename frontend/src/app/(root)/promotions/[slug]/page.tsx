@@ -35,8 +35,8 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
   }
 
   return (
-    <div>
-      <section className="flex flex-col gap-4 lg:max-w-10/12 mx-auto px-2 lg:px-0 mb-10">
+    <main className="lg:max-w-10/12 mx-auto px-4 py-10 space-y-16">
+      <section>
         <h2 className="border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
           Você está em: <span className="font-bold underline text-primary">{slug}</span>
         </h2>
@@ -48,7 +48,7 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
         </div>
       </section>
       )
-    </div>
+    </main>
   );
 };
 

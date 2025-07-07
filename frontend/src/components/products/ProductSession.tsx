@@ -3,14 +3,25 @@ import { Product } from "@/types";
 import ProductCarousel from "./ProductCarousel";
 import { Ghost } from "lucide-react";
 
+type Pagination = {
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+};
+
 interface Props {
-  callback: () => Promise<Product[] | null>;
+  callback: () => Promise<{ products: Product[]; pagination: Pagination } | null>;
   label: string;
   icon: React.ReactNode;
 }
 
 export default async function ProductSession({ callback, label, icon }: Props) {
-  const products = await callback();
+  const result = await callback();
+
+  if (!result) return null;
+
+  const { products } = result;
 
   if (!products || !products.length)
     return (
