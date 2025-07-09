@@ -1,39 +1,45 @@
 const service = require("./permissions.service");
 const CustomError = require("../../common/utils/CustomError");
 
-const create = async (req, res) => {
-  if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
+class PermissionController {
+  constructor() {
+    this.service = service;
+  }
 
-  const permission = await service.create(req.body);
-  return res.status(201).json(permission);
-};
+  create = async (req, res) => {
+    if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
 
-const getAll = async (req, res) => {
-  if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
-  
-  const permissions = await service.getAll();
-  return res.status(200).json(permissions);
-};
+    const permission = await this.service.create(req.body);
+    return res.status(201).json(permission);
+  };
 
-const getById = async (req, res) => {
-  if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
+  getAll = async (req, res) => {
+    if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
 
-  const permission = await service.getById(req.params.id);
-  return res.status(200).json(permission);
-};
+    const permissions = await this.service.getAll();
+    return res.status(200).json(permissions);
+  };
 
-const update = async (req, res) => {
-  if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
+  getById = async (req, res) => {
+    if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
 
-  const updatedPermission = await service.update(req.params.id, req.body);
-  res.status(200).json(updatedPermission);
-};
+    const permission = await this.service.getById(req.params.id);
+    return res.status(200).json(permission);
+  };
 
-const remove = async (req, res) => {
-  if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
+  update = async (req, res) => {
+    if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
 
-  await service.remove(req.params.id);
-  return res.status(200).json({ message: "Cargo deletado com sucesso" });
-};
+    const updatedPermission = await this.service.update(req.params.id, req.body);
+    res.status(200).json(updatedPermission);
+  };
 
-module.exports = { create, getAll, getById, update, remove };
+  remove = async (req, res) => {
+    if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
+
+    await this.service.remove(req.params.id);
+    return res.status(200).json({ message: "Cargo deletado com sucesso" });
+  };
+}
+
+module.exports = new PermissionController();

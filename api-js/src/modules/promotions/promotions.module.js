@@ -4,8 +4,10 @@ const { verifyToken } = require("../../common/middlewares/auth.middleware");
 
 const router = express.Router();
 
-router.get("/promotions", controller.getPromotions);
-router.get("/promotions/:slug", controller.getPromotionBySlug);
-router.post("/promotions", verifyToken, controller.createPromotion);
+router.post("/promotions", verifyToken, controller.create);
+router.get("/promotions", controller.getAll);
+router.get("/promotions/:slug", controller.getBySlug);
+router.put("/promotions/:slug", verifyToken, controller.update);
+router.delete("/promotions/:slug", verifyToken, controller.remove);
 
 module.exports = router;

@@ -1,34 +1,44 @@
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./promotions.repository");
 const CustomError = require("../../common/utils/CustomError");
+const validator = require("../../common/validators/promotion.validator");
 
-const createPromotion = async (data) => {
-  const { title, description, discount, isActive, startsAt, endsAt, products } = data;
+class PromotionService {
+  constructor() {
+    this.repository = repository;
+  }
 
-  return await prisma.promotion.create({
-    data: {
-      title,
-      description,
-      discount,
-      isActive,
-      startsAt: new Date(startsAt),
-      endsAt: new Date(endsAt),
-      products: { connect: products.map((id) => ({ id })) },
-    },
-  });
-};
+  async create(data) {
+    if (data.startsAt) data.startsAt = new Date(startsAt);
+    if (data.endsAt) data.endsAt = new Date(endsAt);
 
-const getPromotions = async () => {
-  return await prisma.promotion.findMany({
-    where: { isActive: true },
-    include: { products: { include: { product: { include: { images: true } } } } },
-  });
-};
+    const validatedData = validator.create(data);
+    return await this.repository.create(validatedData);
+  }
 
-const getPromotionBySlug = async (slug) => {
-  return await prisma.promotion.findUnique({
-    where: { slug },
-    include: { products: { include: { product: { include: { images: true } } } } },
-  });
-};
+  async getAll() {
+    return this.repository.getAll();
+  }
 
-module.exports = { createPromotion, getPromotions, getPromotionBySlug };
+  async getBySlug(slug) {
+    return this.repository.getBySlug(slug);
+  }
+
+  async update(id, data) {
+    const promotion = await this.repository.getById(id);
+    if (!promotion) throw new CustomError("Promocao nao encontrada", 404);
+
+    if (data.startsAt) data.startsAt = new Date(startsAt);
+    if (data.endsAt) data.endsAt = new Date(endsAt);
+
+    const validatedData = validator.update(data);
+    return await this.repository.update(id, validatedData);
+  }
+
+  async remove(id) {
+    const promotion = await this.repository.getById(id);
+    if (!promotion) throw new CustomError("Promocao nao encontrada", 404);
+    return this.repository.remove(id);
+  }
+}
+
+module.exports = new PromotionService();

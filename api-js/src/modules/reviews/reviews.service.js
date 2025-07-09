@@ -1,53 +1,43 @@
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./reviews.repository");
 const CustomError = require("../../common/utils/CustomError");
 const validator = require("../../common/validators/review.validator");
+const productRepository = require("../products/products.repository");
 
-const bodyData = (data) => {
-  const { productSlug, rating, comment, userId } = data;
+class ReviewService {
+  constructor() {
+    this.repository = repository;
+  }
 
-  return {
-    ...(productSlug !== undefined && { productSlug }),
-    ...(rating !== undefined && { rating }),
-    ...(comment !== undefined && { comment }),
-    ...(userId !== undefined && { userId }),
+  create = async (data) => {
+    const validatedData = validator.create(data);
+
+    const product = await productRepository.getBySlug(validatedData.productSlug);
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
+
+    return this.repository.create(validatedData);
   };
-};
 
-const createReview = async (productSlug, rating, comment, userId) => {
-  validator.create(bodyData({ productSlug, rating, comment, userId }));
+  getAll = () => {
+    return this.repository.getAll();
+  };
 
-  const product = await prisma.product.findUnique({ where: { slug: productSlug } });
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
+  getById = (id) => {
+    return this.repository.getById(id);
+  };
 
-  return prisma.review.create({ data: { productId: product.id, rating, comment, userId } });
-};
+  update = async (id, data) => {
+    const review = this.repository.getById(id);
+    if (!review) throw new CustomError("Produto não encontrado!", 404);
 
-const getReviewById = async (id) => {
-  return await prisma.review.findUnique({ where: { id } });
-};
+    const validatedData = validator.update(data);
+    return this.repository.update(id, validatedData);
+  };
 
-const getReviews = async (slug) => {
-  const product = await prisma.product.findUnique({ where: { slug } });
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
+  delete = async (id) => {
+    const review = await this.repository.getById(id);
+    if (!review) throw new CustomError("Produto não encontrado!", 404);
+    return this.repository.delete(id);
+  };
+}
 
-  return await prisma.review.findMany({
-    where: { productId: product.id },
-    include: { user: true, product: true },
-  });
-};
-
-const updateReview = async (id, rating, comment) => {
-  const existingReview = await prisma.review.findUnique({ where: { id } });
-  if (!existingReview) throw new CustomError("Produto não encontrado!", 404);
-
-  const validatedData = validator.update(bodyData({ rating, comment }));
-  return prisma.review.update({ where: { id }, data: validatedData });
-};
-
-const deleteReview = async (id) => {
-  const review = await prisma.review.findUnique({ where: { id } });
-  if (!review) throw new CustomError("Produto não encontrado!", 404);
-  return prisma.review.delete({ where: { id } });
-};
-
-module.exports = { createReview, getReviews, getReviewById, updateReview, deleteReview };
+module.exports = new ReviewService();

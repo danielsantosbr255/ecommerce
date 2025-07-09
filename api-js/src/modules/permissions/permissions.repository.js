@@ -1,27 +1,33 @@
 const { prisma } = require("../../common/database/prisma");
 
-const create = async (data) => {
-  return await prisma.permission.create({ data });
-};
+class PermissionRepository {
+  constructor() {
+    this.prisma = prisma;
+  }
 
-const getAll = async () => {
-  return await prisma.permission.findMany();
-};
+  create(data) {
+    return this.prisma.permission.create({ data });
+  }
 
-const getById = async (id) => {
-  return await prisma.permission.findUnique({ where: { id } });
-};
+  getAll() {
+    return this.prisma.permission.findMany();
+  }
 
-const getByActionAndSubject = async (action, subject) => {
-  return await prisma.permission.findUnique({ where: { action, subject } });
-};
+  getById(id) {
+    return this.prisma.permission.findUnique({ where: { id } });
+  }
 
-const update = async (id, data) => {
-  return await prisma.permission.update({ where: { id }, data });
-};
+  getByActionAndSubject(action, subject) {
+    return this.prisma.permission.findUnique({ where: { action, subject } });
+  }
 
-const remove = async (id) => {
-  return await prisma.permission.delete({ where: { id } });
-};
+  update(id, data) {
+    return this.prisma.permission.update({ where: { id }, data });
+  }
 
-module.exports = { create, getAll, getById, getByActionAndSubject, update, remove };
+  remove(id) {
+    return this.prisma.permission.delete({ where: { id } });
+  }
+}
+
+module.exports = new PermissionRepository();

@@ -6,12 +6,12 @@ const msg = {
   minLength: (num) => `deve ter pelo menos ${num} caracteres`,
   minItems: (num) => `deve ter pelo menos ${num} item(s)`,
   noempty: "nao pode ser vazio",
-  invalidId: "ID do produto inválido",
+  invalid: "inválido!",
 };
 
 const schema = {
-  id: z.string().uuid().optional(),
   name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
+  slug: z.string({ required_error: msg.required }).regex(/^[a-z0-9-]+$/, msg.invalid),
   image: z.string().url({ message: "URL inválida." }),
 };
 

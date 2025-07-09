@@ -1,6 +1,6 @@
 const { prisma } = require("../../common/database/prisma");
 
-class BrandService {
+class BrandRepository {
   constructor() {
     this.prisma = prisma;
   }
@@ -80,4 +80,4 @@ class BrandService {
   }
 }
 
-module.exports = new BrandService();
+module.exports = new BrandRepository();

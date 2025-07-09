@@ -1,31 +1,37 @@
 const service = require("./address.service");
 const dataValidator = require("../../common/validators/address.validator");
 
-const createAddress = async (req, res) => {
-  const validateData = dataValidator.create({ ...req.body, userId: req.user.id });
-  const address = await service.createAddress(validateData);
-  return res.json(address);
-};
+class AddressController {
+  constructor() {
+    this.service = service;
+  }
 
-const getAddresses = async (req, res) => {
-  const addresses = await service.getAddresses(req.ability);
-  return res.json(addresses);
-};
+  create = async (req, res) => {
+    const validateData = dataValidator.create({ ...req.body, userId: req.user.id });
+    const address = await this.service.create(validateData);
+    res.json(address);
+  };
 
-const getAddressById = async (req, res) => {
-  const address = await service.getAddressById(req, req.params.id);
-  return res.json(address);
-};
+  getAll = async (req, res) => {
+    const addresses = await this.service.getAll(req.ability);
+    res.json(addresses);
+  };
 
-const updateAddress = async (req, res) => {
-  const validateData = dataValidator.update(req.body);
-  const updatedAddress = await service.updateAddress(req, req.params.id, validateData);
-  return res.json(updatedAddress);
-};
+  getById = async (req, res) => {
+    const address = await this.service.getById(req, req.params.id);
+    res.json(address);
+  };
 
-const deleteAddress = async (req, res) => {
-  const address = await service.deleteAddress(req, req.params.id);
-  return res.json({ message: "Endereço deletado com sucesso", address });
-};
+  update = async (req, res) => {
+    const validateData = dataValidator.update(req.body);
+    const updatedAddress = await this.service.update(req, req.params.id, validateData);
+    res.json(updatedAddress);
+  };
 
-module.exports = { createAddress, getAddresses, getAddressById, updateAddress, deleteAddress };
+  remove = async (req, res) => {
+    const address = await this.service.remove(req, req.params.id);
+    res.json({ message: "Endereço deletado com sucesso", address });
+  };
+}
+
+module.exports = new AddressController();
