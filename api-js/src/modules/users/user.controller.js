@@ -7,7 +7,7 @@ class UserController {
   }
 
   getAll = async (req, res) => {
-    const users = await this.service.getAll(req);
+    const users = await this.service.getAll(req.ability);
     res.json(users);
   };
 
@@ -21,13 +21,13 @@ class UserController {
     const id = req.params.id === "me" ? req.user.id : req.params.id;
     const validateData = dataValidator.update(req.body);
 
-    const updatedUser = await this.service.update(req, id, validateData);
+    const updatedUser = await this.service.update(req.ability, id, validateData);
     res.json(updatedUser);
   };
 
   delete = async (req, res) => {
     const id = req.params.id === "me" ? req.user.id : req.params.id;
-    const user = await this.service.delete(req, id);
+    const user = await this.service.delete(req.ability, id);
     res.json({ message: "Usuário deletado com sucesso", user });
   };
 }

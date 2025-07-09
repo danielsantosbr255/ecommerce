@@ -1,4 +1,5 @@
-import api from "@/lib/axios";
+// import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Pagination, Product } from "@/types";
 
 export interface ProductResponse {
@@ -15,7 +16,7 @@ export interface QueryParams {
 class ProductService {
   public async create(productData: Omit<Product, "id">) {
     try {
-      const response = await api.post("/products", productData);
+      const response = await api.post<Product>("/products", productData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -23,9 +24,12 @@ class ProductService {
     }
   }
 
-  public async getAll(): Promise<ProductResponse | null> {
+  public async getAll() {
     try {
-      const response = await api.get("/products");
+      const response = await api.get<ProductResponse>("/products", {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -33,9 +37,12 @@ class ProductService {
     }
   }
 
-  public async getBySlug(slug: string): Promise<Product | null> {
+  public async getBySlug(slug: string) {
     try {
-      const response = await api.get(`/products/${slug}`);
+      const response = await api.get<Product>(`/products/${slug}`, {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -43,9 +50,12 @@ class ProductService {
     }
   }
 
-  public async getByQuery({ query, page, pageSize }: QueryParams): Promise<ProductResponse | null> {
+  public async getByQuery({ query, page, pageSize }: QueryParams) {
     try {
-      const response = await api.get(`/products?q=${query}&page=${page}&pageSize=${pageSize}`);
+      const response = await api.get<ProductResponse>(`/products?q=${query}&page=${page}&pageSize=${pageSize}`, {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -53,9 +63,9 @@ class ProductService {
     }
   }
 
-  public async getRelated(productId: string): Promise<Product[] | null> {
+  public async getRelated(productId: string) {
     try {
-      const response = await api.get(`/products/${productId}/related`);
+      const response = await api.get<Product[]>(`/products/${productId}/related`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -65,7 +75,7 @@ class ProductService {
 
   public async update(id: string, productData: Partial<Product>) {
     try {
-      const response = await api.put(`/products/${id}`, productData);
+      const response = await api.put<Product>(`/products/${id}`, productData);
       return response.data;
     } catch (error) {
       console.error(error);

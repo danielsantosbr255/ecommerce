@@ -6,18 +6,19 @@ import AdminProductFilters from "../components/AdminProductFilters";
 
 const AdminProductsPage: React.FC = () => {
   return (
-    <div className="w-full">
-      <div className="bg-white shadow-xs rounded-2xl p-2 lg:p-6 mb-6">
+    <main className="w-full">
+      <section className="bg-white shadow-xs rounded-2xl p-2 lg:p-6 mb-6">
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           <AdminProductFilters />
         </div>
+
         <Suspense fallback={<LoadingState />}>
           <AdminProductList />
         </Suspense>
-      </div>
+      </section>
 
       <AdminProductForm />
-    </div>
+    </main>
   );
 };
 

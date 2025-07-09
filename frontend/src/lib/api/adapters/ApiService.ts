@@ -1,5 +1,3 @@
-// lib/api/ApiService.ts
-
 import { HttpClient } from "./HttpClient";
 
 export class ApiService {

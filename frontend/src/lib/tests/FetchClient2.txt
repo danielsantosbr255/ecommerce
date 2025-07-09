@@ -1,52 +1,42 @@
-import { HttpClient } from "./HttpClient";
-import { Interceptors } from "./interceptors";
-import { isFormData, isJsonResponse, sleep } from "./utils";
+import { HttpClient } from "../api/adapters/HttpClient";
+import { isFormData, isJsonResponse, sleep } from "../api/utils/utils";
+import { FetchClientOptions, RequestInterceptor, ResponseInterceptor } from "../api/types";
 
-interface FetchClientOptions {
-  baseUrl?: string;
-  timeout?: number; // ms
-  maxRetries?: number;
-  getAuthToken?: () => string | Promise<string>;
-  interceptors?: Interceptors;
-  debug?: boolean;
+class InterceptorsManager<T> {
+  private handlers: T[] = [];
+
+  use(handler: T): void {
+    this.handlers.push(handler);
+  }
+
+  getHandlers(): T[] {
+    return this.handlers;
+  }
 }
 
 export class FetchClient implements HttpClient {
+  private debug: boolean;
   private baseUrl: string;
   private timeout: number;
   private maxRetries: number;
-  private getAuthToken?: () => string | Promise<string>;
-  private interceptors: Interceptors;
-  private debug: boolean;
 
-  constructor({
-    baseUrl = "",
-    timeout = 10000,
-    maxRetries = 2,
-    getAuthToken,
-    interceptors = {},
-    debug = false,
-  }: FetchClientOptions = {}) {
+  constructor({ baseUrl = "", timeout = 10000, maxRetries = 2, debug = false }: FetchClientOptions = {}) {
     this.baseUrl = baseUrl;
     this.timeout = timeout;
     this.maxRetries = maxRetries;
-    this.getAuthToken = getAuthToken;
-    this.interceptors = interceptors;
     this.debug = debug;
   }
 
-  private async request<T>(url: string, options: RequestInit, retries = 0): Promise<T> {
+  public interceptors = {
+    request: new InterceptorsManager<RequestInterceptor>(),
+    response: new InterceptorsManager<ResponseInterceptor>(),
+  };
+
+  async request<T>(url: string, options: RequestInit, retries = 0): Promise<T> {
     const fullUrl = `${this.baseUrl}${url}`;
     const method = options.method?.toUpperCase() || "GET";
     const shouldHaveBody = ["POST", "PUT", "PATCH"].includes(method);
     const headers = new Headers(options.headers || {});
-
-    // Autenticação
-    if (this.getAuthToken) {
-      const token = await this.getAuthToken();
-      if (token) headers.set("Authorization", `Bearer ${token}`);
-    }
-
     const bodyIsForm = isFormData(options.body);
 
     // Content-Type
@@ -54,38 +44,30 @@ export class FetchClient implements HttpClient {
       headers.set("Content-Type", "application/json");
     }
 
-    // Interceptors de request
+    // Interceptors de requisição
     let finalUrl = fullUrl;
     let finalOptions: RequestInit = { ...options, method, headers };
 
-    for (const interceptor of this.interceptors.request || []) {
-      const result = await interceptor(finalUrl, finalOptions);
-      [finalUrl, finalOptions] = result;
+    for (const interceptor of this.interceptors.request.getHandlers()) {
+      [finalUrl, finalOptions] = await Promise.resolve(interceptor(finalUrl, finalOptions));
     }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(finalUrl, {
-        ...finalOptions,
-        signal: controller.signal,
-        credentials: "include",
-      });
+      const response = await fetch(finalUrl, { ...finalOptions, signal: controller.signal, credentials: "include" });
 
-      // Interceptors de response
+      // Interceptors de resposta
       let finalResponse = response;
-      for (const interceptor of this.interceptors.response || []) {
-        finalResponse = await interceptor(finalResponse);
+      for (const interceptor of this.interceptors.response.getHandlers()) {
+        finalResponse = await Promise.resolve(interceptor(finalResponse));
       }
 
       clearTimeout(timeoutId);
 
       if (this.debug) {
-        console.log(`[DEBUG][${method}] ${finalUrl}`, {
-          request: finalOptions,
-          status: finalResponse.status,
-        });
+        console.log(`[DEBUG][${method}] ${finalUrl}`, { request: finalOptions, status: finalResponse.status });
       }
 
       if (!finalResponse.ok) {
@@ -93,7 +75,6 @@ export class FetchClient implements HttpClient {
         throw new Error(`HTTP ${finalResponse.status}: ${errorText}`);
       }
 
-      // No Content
       if (finalResponse.status === 204 || !isJsonResponse(finalResponse)) {
         return null as unknown as T;
       }
@@ -103,7 +84,7 @@ export class FetchClient implements HttpClient {
       clearTimeout(timeoutId);
 
       if (retries < this.maxRetries) {
-        await sleep(500 * (retries + 1)); // Backoff simples
+        await sleep(500 * (retries + 1));
         return this.request<T>(url, options, retries + 1);
       }
 
