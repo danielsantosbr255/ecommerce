@@ -56,7 +56,7 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
     "flex items-center p-2 rounded-lg",
     "font-medium text-lg cursor-pointer",
     "transition-colors group z-50",
-    active ? "bg-primary/5 border-l-3 border-primary text-primary" : "hover:bg-gray-200"
+    active ? "text-primary" : "hover:bg-gray-200"
   );
 
   return (

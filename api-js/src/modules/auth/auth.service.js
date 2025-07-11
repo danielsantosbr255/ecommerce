@@ -77,9 +77,9 @@ class AuthService {
     });
   }
 
-  async signOut({ userId, userAgent }) {
+  async signOut({ userId, userAgent, ability }) {
     const session = await this.repository.getSessionByUserId({ userId, userAgent });
-    if (session) await this.repository.deleteSession(session.id);
+    if (session) await this.repository.deleteSession(session.id, ability);
     return true;
   }
 

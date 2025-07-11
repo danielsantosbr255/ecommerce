@@ -1,27 +1,11 @@
-"use client";
-
-import { useProducts } from "@/hooks/useProduct";
 import AdminProductCard from "./AdminProductCard";
-// import { productService } from "@/services/products";
+import { productService } from "@/services/products";
 
-const AdminProductList = () => {
-  const productsHook = useProducts();
-  const { data, isLoading, isError } = productsHook.useGetAll();
+const AdminProductList = async () => {
+  const result = await productService.getAll();
+  if (!result) return null;
 
-  const products = data?.products;
-
-  // const result = productService.getAll();
-  // if (!result) return null;
-
-  // const { products } = result;
-
-  if (isError) {
-    return <p className="text-tx-primary col-span-full">Erro ao carregar produtos.</p>;
-  }
-
-  if (isLoading) {
-    return <p className="text-tx-primary col-span-full">Carregando...</p>;
-  }
+  const { products } = result;
 
   if (!products || !products.length) {
     return <p className="text-tx-primary col-span-full">Nenhum produto encontrado.</p>;

@@ -35,17 +35,18 @@ class AuthController {
   };
 
   signOut = async (req, res) => {
+    const ability = req.ability;
     const userId = req.user.id;
     const userAgent = req.headers["user-agent"] || "Desconhecido";
 
     try {
-      await this.service.signOut({ userId, userAgent });
+      await this.service.signOut({ userId, userAgent, ability });
       tokenUtil.clearTokens(res);
-
-      return res.status(200).json({ message: "Deslogado com sucesso" });
     } catch (error) {
       tokenUtil.clearTokens(res);
-      throw new CustomError("Token inválido. Deslogado com sucesso", 401);
+      throw error;
+    } finally {
+      res.json({ message: "Deslogado com sucesso" });
     }
   };
 

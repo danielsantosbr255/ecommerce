@@ -24,7 +24,7 @@ class ProductRepository {
   }
 
   async getAll(where, take, skip, orderBy) {
-    const products = await this.prisma.product.findMany({
+    return await this.prisma.product.findMany({
       where,
       take,
       skip,
@@ -38,10 +38,6 @@ class ProductRepository {
       },
       orderBy,
     });
-
-    const totalProducts = await this.prisma.product.count({ where });
-
-    return { products, totalProducts };
   }
 
   async getById(id) {
@@ -54,7 +50,13 @@ class ProductRepository {
   async getBySlug(slug) {
     return await this.prisma.product.findUnique({
       where: { slug },
-      include: { images: true, specifications: true, category: true, brand: true, reviews: true },
+      include: {
+        images: true,
+        specifications: true,
+        category: true,
+        brand: true,
+        reviews: { include: { user: { select: { id: true, name: true } } } },
+      },
     });
   }
 

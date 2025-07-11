@@ -49,15 +49,15 @@ class ProductService {
       if (maxPrice) where.price.lte = parseFloat(maxPrice);
     }
 
-    const { products, totalProducts } = await this.repository.getAll(where, take, skip);
+    const products = await this.repository.getAll(where, take, skip);
 
     return {
       products,
       pagination: {
-        totalItems: totalProducts,
+        totalItems: products.length,
         currentPage: parseInt(page),
         pageSize: take,
-        totalPages: Math.ceil(totalProducts / take),
+        totalPages: Math.ceil(products.length / take),
       },
     };
   };
@@ -72,7 +72,20 @@ class ProductService {
 
   getRelated = async (productId) => {
     const product = await this.repository.getById(productId);
-    return this.repository.getRelated(productId, product.categoryId, product.brandId);
+    const products = await this.repository.getRelated(productId, product.categoryId, product.brandId);
+
+    const page = 1;
+    const take = 10;
+
+    return {
+      products,
+      pagination: {
+        totalItems: products.length,
+        currentPage: parseInt(page),
+        pageSize: take,
+        totalPages: Math.ceil(products.length / take),
+      },
+    };
   };
 
   update = async (id, data) => {

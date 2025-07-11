@@ -14,32 +14,14 @@ export const api = new HttpService({
 });
 
 const refreshToken = async () => {
-  let clientHeaders = {};
+  const response = await api.post<{ session: Session }>(AUTH_REFRESH_URL);
 
-  if (isServer) {
-    const { cookies, headers } = await import("next/headers");
-    const cookieStore = await cookies();
-    const serverHeaders = await headers();
+  if (response.status !== 200) throw new Error("Failed to refresh token");
 
-    clientHeaders = {
-      Cookie: cookieStore.toString(),
-      "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
-      "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
-    };
-  }
-
-  const response = await fetch(AUTH_REFRESH_URL, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json", ...clientHeaders },
-  });
-
-  if (!response.ok) throw new Error("Failed to refresh token");
-  const data = await response.json();
+  const data = response.data;
   const session = data.session as Session;
 
   if (session) return session.accessToken;
-
   return null;
 };
 
@@ -49,6 +31,10 @@ api.interceptors.request.use(
       const { cookies, headers } = await import("next/headers");
       const cookieStore = await cookies();
       const serverHeaders = await headers();
+
+      if (cookieStore.get("accessToken")?.value) {
+        authManager.set(cookieStore.get("accessToken")?.value || "");
+      }
 
       config.headers = {
         ...config.headers,

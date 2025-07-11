@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { JSX, useState } from "react";
+import MobileMenu from "../MobileMenu";
 import Logo from "@/components/ui/Logo";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
-import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
-import MobileMenu from "../MobileMenu";
+import { FaSignInAlt, FaUserNinja, FaUserShield } from "react-icons/fa";
+import { Loader2, Menu } from "lucide-react";
 
 const MobileBar = (): JSX.Element => {
   const { user, userLoading } = useAuth();
@@ -18,11 +19,7 @@ const MobileBar = (): JSX.Element => {
   return (
     <section className="block lg:hidden w-full">
       <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
-        <button
-          onClick={toggleMobileMenu}
-          className="justify-start focus:outline-none"
-          aria-label="Abrir menu"
-        >
+        <button onClick={toggleMobileMenu} className="justify-start focus:outline-none" aria-label="Abrir menu">
           <Menu size={22} />
         </button>
 
@@ -31,16 +28,14 @@ const MobileBar = (): JSX.Element => {
         <div className="flex gap-4 justify-end items-center">
           {isAdmin && (
             <Link href="/admin" className="text-accent">
-              <ShieldUser size={22} className="animate-pulse" />
+              <FaUserShield size={22} className="animate-pulse" />
             </Link>
           )}
 
           {userLoading ? (
-            <Loader size={25} className="animate-spin" />
+            <Loader2 size={25} className="animate-spin" />
           ) : (
-            <Link href={user ? "/account" : "/sign-in"}>
-              {user ? <UserCircle size={22} /> : <LogIn />}
-            </Link>
+            <Link href={user ? "/account" : "/sign-in"}>{user ? <FaUserNinja size={22} /> : <FaSignInAlt />}</Link>
           )}
         </div>
       </main>

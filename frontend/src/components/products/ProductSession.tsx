@@ -1,46 +1,40 @@
-import React from "react";
-import { Product } from "@/types";
-import ProductCarousel from "./ProductCarousel";
+import React, { Suspense } from "react";
 import { Ghost } from "lucide-react";
-
-type Pagination = {
-  totalItems: number;
-  currentPage: number;
-  pageSize: number;
-  totalPages: number;
-};
+import ProductCarousel from "./ProductCarousel";
+import { ProductResponse } from "@/services/products";
+import SessionLabel from "../ui/SessionLabel";
 
 interface Props {
-  callback: () => Promise<{ products: Product[]; pagination: Pagination } | null>;
-  label: string;
-  icon: React.ReactNode;
+  callback: () => Promise<ProductResponse | null>;
+  label?: string;
+  icon?: React.ReactNode;
 }
 
-export default async function ProductSession({ callback, label, icon }: Props) {
+async function ProductList({ callback }: Props) {
   const result = await callback();
-
   if (!result) return null;
 
   const { products } = result;
 
-  if (!products || !products.length)
+  if (!products || !products.length) {
     return (
       <div className="flex flex-col w-full justify-center items-center mt-10">
-        <h1 className="text-2xl text-tx-primary font-bold my-2 py-2">
-          <span className="flex items-center gap-2">
-            <Ghost size={20} />
-          </span>
-        </h1>
+        <Ghost size={20} />
       </div>
     );
+  }
 
+  return <ProductCarousel products={products} />;
+}
+
+export default function ProductSession({ callback, label, icon }: Props) {
   return (
-    <div className="flex flex-col w-full">
-      <h2 className="flex gap-2 items-center border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
-        <span className="flex items-center justify-center text-primary">{icon}</span> {label}
-      </h2>
+    <section className="flex flex-col w-full gap-2">
+      <SessionLabel label={label} icon={icon} />
 
-      <ProductCarousel products={products} />
-    </div>
+      <Suspense fallback={<ProductCarousel products={null} />}>
+        <ProductList callback={callback} />
+      </Suspense>
+    </section>
   );
 }

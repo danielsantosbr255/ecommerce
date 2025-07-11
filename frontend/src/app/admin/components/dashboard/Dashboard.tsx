@@ -1,57 +1,26 @@
-"use client";
-
 import MetricCard from "./MetricCard";
-import React, { useCallback, useEffect } from "react";
-import { useUsers } from "@/hooks/useUsers";
-import { useProducts } from "@/hooks/useProducts";
-import LoadingState from "@/components/ui/LoadingState";
-import { Package, Users, ShoppingBag, ClipboardList } from "lucide-react";
+import { userService } from "@/services/users";
+import { productService } from "@/services/products";
+import { FaBox, FaClipboardList, FaShoppingBasket, FaUsers } from "react-icons/fa";
+import { orderService } from "@/services/orders";
 
-export default function Dashboard() {
-  const { users, loading: usersLoading, error: usersError, fetchUsers } = useUsers();
-  const { products, loading: productsLoading, error: productsError, fetchProducts } = useProducts();
-
-  const fectchDashboardData = useCallback(async () => {
-    await Promise.all([fetchUsers(), fetchProducts()]);
-  }, [fetchUsers, fetchProducts]);
-
-  useEffect(() => {
-    fectchDashboardData();
-  }, [fectchDashboardData]);
-
-  if (usersLoading || productsLoading) return <LoadingState />;
-  if (usersError || productsError) return <div>Erro: {usersError || productsError}</div>;
-
-  const totalUsers = users.length;
-  const totalProducts = products.length;
+export default async function Dashboard() {
+  const users = await userService.getAll();
+  const orders = await orderService.getAll();
+  const result = await productService.getAll();
+  const products = result?.products;
+  
+  const totalUsers = users?.length || 0;
+  const totalOrders = orders?.length || 0;
+  const totalProducts = products?.length || 0;
 
   return (
     <div className="flex-1 flex flex-col gap-4">
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard
-          iconColor="bg-green-500"
-          title="Total de Vendas"
-          value={34.254}
-          icon={<ShoppingBag size={40} />}
-        />
-        <MetricCard
-          iconColor="bg-blue-500"
-          title="Total de Pedidos"
-          value={34.254}
-          icon={<ClipboardList size={40} />}
-        />
-        <MetricCard
-          iconColor="bg-yellow-500"
-          title="Total de Produtos"
-          value={totalProducts}
-          icon={<Package size={40} />}
-        />
-        <MetricCard
-          iconColor="bg-red-500"
-          title="Total de Usuários"
-          value={totalUsers}
-          icon={<Users size={40} />}
-        />
+        <MetricCard iconColor="bg-green-500" title="Total de Vendas" value={34.254} icon={<FaShoppingBasket size={40} />} />
+        <MetricCard iconColor="bg-blue-500" title="Total de Pedidos" value={totalOrders} icon={<FaClipboardList size={40} />} />
+        <MetricCard iconColor="bg-yellow-500" title="Total de Produtos" value={totalProducts} icon={<FaBox size={40} />} />
+        <MetricCard iconColor="bg-red-500" title="Total de Usuários" value={totalUsers} icon={<FaUsers size={40} />} />
       </section>
 
       <section className="bg-white shadow-xs rounded-2xl p-6">

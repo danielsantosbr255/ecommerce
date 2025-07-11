@@ -1,9 +1,5 @@
-"use client";
-
 import React from "react";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/providers/AuthContext";
-import LoadingState from "@/components/ui/LoadingState";
 import { Sidebar, SidebarItem } from "./_components/Sidebar";
 import {
   FaAddressBook,
@@ -15,11 +11,18 @@ import {
   FaUserNinja,
   FaWindowClose,
 } from "react-icons/fa";
+import { userService } from "@/services/users";
+import { authService } from "@/services/auth";
+
+const signOut = async () => {
+  "use server";
+  await authService.signOut();
+  redirect("/sign-in");
+};
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { user, userLoading, signOut } = useAuth();
+  const user = userService.getOwn();
 
-  if (userLoading) return <LoadingState />;
   if (!user) redirect("/sign-in");
 
   return (

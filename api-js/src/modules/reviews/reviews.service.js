@@ -14,7 +14,8 @@ class ReviewService {
     const product = await productRepository.getBySlug(validatedData.productSlug);
     if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-    return this.repository.create(validatedData);
+    const { productSlug, ...validatedDataWithoutProductSlug } = validatedData;
+    return this.repository.create({ ...validatedDataWithoutProductSlug, productId: product.id });
   };
 
   getAll = () => {

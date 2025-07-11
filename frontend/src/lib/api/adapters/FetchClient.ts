@@ -45,7 +45,11 @@ export class HttpService implements HttpClient {
   };
 
   private buildFullUrl(url: string, params?: RequestConfig["params"]): string {
-    let fullUrl = `${this.baseURL}${url}`;
+    let fullUrl: string;
+
+    const isAbsoluteUrl = url.startsWith("http://") || url.startsWith("https://");
+    fullUrl = isAbsoluteUrl ? url : `${this.baseURL}${url}`;
+
     if (params) {
       const queryString = new URLSearchParams(params as Record<string, string>).toString();
       if (queryString) {
@@ -75,7 +79,6 @@ export class HttpService implements HttpClient {
 
     try {
       const rawResponse = await fetch(fullUrl, fetchOptions);
-      // console.log(fetchOptions)
 
       const responseData: T = await rawResponse.json().catch(() => null);
 

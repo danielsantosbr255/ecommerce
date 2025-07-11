@@ -65,7 +65,7 @@ class ProductService {
 
   public async getRelated(productId: string) {
     try {
-      const response = await api.get<Product[]>(`/products/${productId}/related`);
+      const response = await api.get<ProductResponse>(`/products/${productId}/related`);
       return response.data;
     } catch (error) {
       console.error(error);

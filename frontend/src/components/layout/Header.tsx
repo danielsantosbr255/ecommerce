@@ -20,7 +20,8 @@ export default function Header() {
 
   return (
     <header
-      className={cn(`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-${DELAY} ease-in-out`,
+      className={cn(
+        `fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-${DELAY} ease-in-out`,
         scrolled && "px-1"
       )}
     >
@@ -28,7 +29,7 @@ export default function Header() {
         className={cn(
           `bg-bg-secondary border-2 border-lines/50 shadow-xs p-1 transition-all duration-${DELAY} ease-in-out`,
           scrolled
-            ? "bg-bg-secondary/90 backdrop-blur-lg w-full mt-2 lg:max-w-10/12 mx-auto  rounded-lg"
+            ? "bg-bg-secondary/90 backdrop-blur-lg w-full mt-1 lg:max-w-10/12 mx-auto rounded-lg"
             : "w-full max-w-screen border-t-transparent border-transparent"
         )}
       >

@@ -37,9 +37,9 @@ class AuthRepository {
     return this.prisma.session.delete({ where: { userId_userAgent: { userId, userAgent } } });
   }
 
-  deleteSession(req, id) {
+  deleteSession(id, ability) {
     return this.prisma.session.delete({
-      where: { id, AND: accessibleBy(req.ability, "delete").Session },
+      where: { id, AND: accessibleBy(ability, "delete").Session },
     });
   }
 

@@ -86,6 +86,7 @@ export interface Review {
   id: string;
   rating: number;
   comment: string;
+  user: User;
   userId: string;
   productSlug: string;
 }
@@ -171,6 +172,7 @@ export interface SearchPageProps {
 export interface Order {
   id: string;
   userId: string;
+  user: User;
   products: Array<{
     productId: string;
     quantity: number;
