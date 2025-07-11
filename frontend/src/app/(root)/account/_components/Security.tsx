@@ -5,7 +5,7 @@ import Input from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import { FaUserLock, FaKey } from "react-icons/fa";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { Loader2 } from "lucide-react";

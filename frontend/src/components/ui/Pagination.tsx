@@ -7,7 +7,7 @@ const MAX_PAGES_DISPLAYED = 20;
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  query: string;
+  path: string;
   pageSize: number;
 }
 
@@ -61,7 +61,7 @@ const PaginationLink = ({ href, children, disabled, isActive, ariaLabel }: Pagin
   );
 };
 
-const Pagination = ({ currentPage, totalPages, query, pageSize }: PaginationProps) => {
+const Pagination = ({ currentPage, totalPages, path, pageSize }: PaginationProps) => {
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
@@ -98,7 +98,7 @@ const Pagination = ({ currentPage, totalPages, query, pageSize }: PaginationProp
     <section className="flex items-center justify-center gap-2">
       {/* Botão de página anterior */}
       <ArrowPagination
-        href={`/search?q=${query}&page=${currentPage - 1}&pageSize=${pageSize}`}
+        href={`${path}&page=${currentPage - 1}&pageSize=${pageSize}`}
         disabled={currentPage <= 1}
         ariaLabel="Página anterior"
       >
@@ -114,7 +114,7 @@ const Pagination = ({ currentPage, totalPages, query, pageSize }: PaginationProp
         ) : (
           <PaginationLink
             key={page}
-            href={`/search?q=${query}&page=${page}&pageSize=${pageSize}`}
+            href={`${path}&page=${page}&pageSize=${pageSize}`}
             isActive={currentPage === page}
             ariaLabel={`Página ${page}`}
           >
@@ -125,7 +125,7 @@ const Pagination = ({ currentPage, totalPages, query, pageSize }: PaginationProp
 
       {/* Botão de próxima página */}
       <ArrowPagination
-        href={`/search?q=${query}&page=${currentPage + 1}&pageSize=${pageSize}`}
+        href={`${path}&page=${currentPage + 1}&pageSize=${pageSize}`}
         disabled={currentPage >= totalPages}
         ariaLabel="Próxima página"
       >

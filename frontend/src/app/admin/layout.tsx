@@ -1,19 +1,37 @@
-"use client";
+// "use client";
 
 import React from "react";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+// import { useAuth } from "@/providers/AuthContext";
 import AdminHeader from "./components/AdminHeader";
+// import LoadingState from "@/components/ui/LoadingState";
 import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
 import { DropdownMenu, DropdownItem } from "@/components/ui/DropdownMenu";
-import { LayoutDashboard, Package, ClipboardList, Users, Settings } from "lucide-react";
+import { FaBox, FaClipboardList, FaUsers } from "react-icons/fa";
+import { MdSpaceDashboard } from "react-icons/md";
+import { IoMdSettings } from "react-icons/io";
+import { userService } from "@/services/users";
+import { authService } from "@/services/auth";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, signOut } = useAuth();
+const signOut = async () => {
+  "use server";
+  return authService.signOut();
+};
+
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  // const { user, userLoading, signOut } = useAuth();
+  const user = await userService.getOwn();
+
+  // if (userLoading)
+  //   return (
+  //     <main className="w-full h-screen flex items-center justify-center">
+  //       <LoadingState />
+  //     </main>
+  //   );
 
   if (!user) {
     redirect("/sign-in");
@@ -22,23 +40,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="bg-bg-primary h-screen gap-2 p-2 grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
       <Sidebar className="row-span-2" user={user} signOut={signOut}>
-        <SidebarItem href="/admin" icon={<LayoutDashboard />} text="Dashboard" alert />
+        <SidebarItem href="/admin" icon={<MdSpaceDashboard size={20} />} text="Dashboard" alert />
 
-        <DropdownMenu icon={<Package />} text="Produtos">
+        <DropdownMenu icon={<FaBox size={20} />} text="Produtos">
           <DropdownItem label="Listar Produtos" href="/admin/products" />
           <DropdownItem label="Novo Produto" href="#" />
         </DropdownMenu>
 
-        <DropdownMenu icon={<Users />} text="Users">
+        <DropdownMenu icon={<FaUsers size={20} />} text="Users">
           <DropdownItem label="Listar Usuários" href="/admin/users" />
           <DropdownItem label="Novo Usuário" href="#" />
         </DropdownMenu>
 
-        <DropdownMenu icon={<ClipboardList />} text="Pedidos">
+        <DropdownMenu icon={<FaClipboardList size={20} />} text="Pedidos">
           <DropdownItem label="Listar Pedidos" href="/admin/orders" />
         </DropdownMenu>
 
-        <SidebarItem href="#" icon={<Settings />} text="Configurações" />
+        <SidebarItem href="#" icon={<IoMdSettings size={20} />} text="Configurações" />
       </Sidebar>
 
       <AdminHeader />

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ProductImage from "./ProductImage";
 import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import { IoMdOptions } from "react-icons/io";
 import { FaCartPlus } from "react-icons/fa";
 import { useState } from "react";

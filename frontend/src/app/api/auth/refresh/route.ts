@@ -8,6 +8,8 @@ export async function POST() {
   const cookiesStore = await cookies();
   const refreshToken = cookiesStore.get("refreshToken")?.value;
 
+  // console.log("🚀 [REFRESH] - Refresh token:", refreshToken);
+
   try {
     if (!refreshToken) {
       return NextResponse.json({ message: "Não autorizado" });

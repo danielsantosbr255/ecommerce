@@ -64,7 +64,7 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
   };
 
   return (
-    <div className="bg-bg-secondary flex border border-lines/80 relative w-full h-auto rounded-lg shadow-xs">
+    <div className="bg-bg-secondary flex border border-lines/50 relative w-full h-auto rounded-lg shadow-xs">
       <Carousel
         className="flex w-full h-full"
         opts={{ align: "start", loop: true, startIndex: currentPromotionIndex }}

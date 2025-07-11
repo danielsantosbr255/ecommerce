@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import { IoIosMail, IoMdLock } from "react-icons/io";
 import { FaGithub, FaUser, FaUserPlus } from "react-icons/fa";
 import Checkbox from "@/components/ui/Checkbox";

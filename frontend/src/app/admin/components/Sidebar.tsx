@@ -31,17 +31,10 @@ export function Sidebar({ children, className, user, signOut }: SidebarProps) {
   const [isOpen, setIsOpen] = React.useState(true);
 
   return (
-    <nav className={`bg-bg-secondary flex flex-col rounded-2xl shadow-xs border border-lines ${className}`}>
+    <nav className={`bg-bg-secondary flex flex-col rounded-2xl shadow-xs border border-lines/20 ${className}`}>
       <div className="flex p-2 pb-4 items-center justify-between">
-        <Logo
-          size={30}
-          name
-          className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52" : "w-0"}`}
-        />
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 cursor-pointer"
-        >
+        <Logo size={30} name className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52" : "w-0"}`} />
+        <button onClick={() => setIsOpen(!isOpen)} className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
           {isOpen ? <ChevronFirst /> : <ChevronLast />}
         </button>
       </div>
@@ -60,23 +53,17 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
   const active = usePath === href;
 
   const mainStyle = cn(
-    "flex items-center p-2 rounded-r-xl shadow-xs",
-    "font-medium text-lg text-tx-primary cursor-pointer",
+    "flex items-center p-2 rounded-lg",
+    "font-medium text-lg cursor-pointer",
     "transition-colors group z-50",
-    active ? "bg-primary/5 border-l-3 border-accent text-accent" : "hover:bg-gray-200"
+    active ? "bg-primary/5 border-l-3 border-primary text-primary" : "hover:bg-gray-200"
   );
 
   return (
     <Link href={href}>
       <li className={mainStyle}>
         {icon}
-        <span
-          className={`overflow-hidden transition-all ease-in-out duration-300 ${
-            isOpen ? "w-52 ml-2" : "w-0"
-          }`}
-        >
-          {text}
-        </span>
+        <span className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52 ml-2" : "w-0"}`}>{text}</span>
       </li>
     </Link>
   );
@@ -97,7 +84,7 @@ export function SidebarFooter({ user, signOut }: { user: User | null; signOut: (
         >
           <div>
             <h1 className="font-semibold">{user?.name}</h1>
-            <p className="text-sm text-tx-primary">{user?.email}</p>
+            <p className="text-sm">{user?.email}</p>
           </div>
 
           <Button className="!p-2" onClick={signOut}>

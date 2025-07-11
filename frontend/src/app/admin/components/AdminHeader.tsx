@@ -4,7 +4,7 @@ import SearchBar from "@/components/ui/Searchbar";
 
 export default function AdminHeader() {
   return (
-    <nav className="bg-white grid grid-cols-2 items-center justify-between gap-4 h-20 p-2 w-full rounded-2xl shadow-xs">
+    <nav className="bg-white grid grid-cols-2 items-center justify-between gap-4 p-5 w-full rounded-2xl shadow-xs">
       <SearchBar />
 
       <div className="flex items-center space-x-10 justify-end mr-4">

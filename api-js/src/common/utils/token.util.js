@@ -44,8 +44,8 @@ class TokenUtil {
   createTokens = ({ userId, userAgent }) => {
     const ctx = cryptoUtil.encryptPayload({ userAgent });
 
-    const accessToken = generateAccessToken({ ctx });
-    const refreshToken = generateRefreshToken({ userId });
+    const accessToken = this.generateAccessToken({ ctx });
+    const refreshToken = this.generateRefreshToken({ userId });
 
     return { accessToken, refreshToken };
   };
@@ -65,12 +65,12 @@ class TokenUtil {
   };
 
   setCookiesTokens = (res, accessToken, refreshToken) => {
-    clearTokens(res);
+    this.clearTokens(res);
 
     if (!accessToken || !refreshToken) return;
 
-    const { exp: accessTokenExpiredAt } = decodeJWT(accessToken);
-    const { exp: refreshTokenExpiredAt } = decodeJWT(cryptoUtil.decryptData(refreshToken));
+    const { exp: accessTokenExpiredAt } = this.decodeJWT(accessToken);
+    const { exp: refreshTokenExpiredAt } = this.decodeJWT(cryptoUtil.decryptData(refreshToken));
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,

@@ -76,13 +76,13 @@ const AdminProductForm = () => {
         />
 
         <div className="col-span-full">
-          <label htmlFor="description" className="block text-tx-primary text-sm font-bold mb-2">
+          <label htmlFor="description" className="block text-tx-secondary text-sm font-bold mb-2">
             Descrição:
           </label>
           <textarea
             id="description"
             {...register("description")}
-            className="shadow-xs appearance-none border rounded w-full py-2 px-3 text-tx-primary leading-tight focus:outline-none focus:shadow-xs-outline"
+            className="shadow-xs appearance-none border-2 border-lines rounded-lg w-full py-2 px-3 leading-tight focus:outline-primary"
           />
           {errors.description && <span className="text-sm text-red-500">{errors.description.message}</span>}
         </div>

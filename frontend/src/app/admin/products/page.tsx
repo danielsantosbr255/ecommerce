@@ -1,5 +1,3 @@
-import React, { Suspense } from "react";
-import LoadingState from "@/components/ui/LoadingState";
 import AdminProductList from "../components/AdminProductList";
 import AdminProductForm from "../components/AdminProductForm";
 import AdminProductFilters from "../components/AdminProductFilters";
@@ -12,9 +10,7 @@ const AdminProductsPage: React.FC = () => {
           <AdminProductFilters />
         </div>
 
-        <Suspense fallback={<LoadingState />}>
-          <AdminProductList />
-        </Suspense>
+        <AdminProductList />
       </section>
 
       <AdminProductForm />

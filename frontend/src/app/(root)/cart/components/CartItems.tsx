@@ -6,7 +6,7 @@ import CartActions from "./CartActions";
 import CouponInput from "./CouponInput";
 import CartSummary from "./CartSummary";
 import CartItemCard from "./CartItemCard";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import { cartService } from "@/services/carts";
 import { toast } from "react-toastify";

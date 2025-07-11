@@ -26,7 +26,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   const handleSearch = () => {
     if (query.trim()) {
-      router.push(`/search?q=${query}&page=1&pageSize=20`);
+      router.push(`/search?q=${query}`);
     }
   };
 

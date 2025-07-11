@@ -3,7 +3,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import Button from "@/components/ui/Button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import {
   FaAddressBook, FaHeart,

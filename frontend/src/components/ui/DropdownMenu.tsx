@@ -50,9 +50,9 @@ export function DropdownMenu({ children, icon, text }: DropdownProps) {
   }, [dropdownRef, active]);
 
   const listStyle = cn(
-    "p-2 group flex flex-col z-50 font-medium text-lg cursor-pointer",
-    "transition-all duration-300 ease-in-out rounded-2xl overflow-hidden",
-    isDroped ? "shadow border border-lines/10" : "bg-transparent",
+    "p-2 group flex flex-col z-50 font-medium border text-lg cursor-pointer",
+    "transition-all duration-300 ease-in-out rounded-lg overflow-hidden",
+    isDroped ? "shadow-xs border-lines/10" : "bg-transparent border-transparent",
     active ? "text-primary" : "hover:bg-gray-200/50"
   );
 
@@ -91,7 +91,7 @@ export function DropdownItem({ label, href }: DropdownItemProps) {
 
   const listStyle = cn(
     `font-medium flex items-center py-2 px-2 rounded-xl my-1`,
-    active ? "text-primary" : "hover:bg-gray-200/50 text-tx-primary"
+    active ? "text-primary" : "hover:bg-gray-200/50"
   );
 
   return (

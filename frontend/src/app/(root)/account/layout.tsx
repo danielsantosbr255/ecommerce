@@ -2,7 +2,7 @@
 
 import React from "react";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import { Sidebar, SidebarItem } from "./_components/Sidebar";
 import {

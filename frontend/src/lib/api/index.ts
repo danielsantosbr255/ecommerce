@@ -14,9 +14,24 @@ export const api = new HttpService({
 });
 
 const refreshToken = async () => {
+  let clientHeaders = {};
+
+  if (isServer) {
+    const { cookies, headers } = await import("next/headers");
+    const cookieStore = await cookies();
+    const serverHeaders = await headers();
+
+    clientHeaders = {
+      Cookie: cookieStore.toString(),
+      "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
+      "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
+    };
+  }
+
   const response = await fetch(AUTH_REFRESH_URL, {
     method: "POST",
     credentials: "include",
+    headers: { "Content-Type": "application/json", ...clientHeaders },
   });
 
   if (!response.ok) throw new Error("Failed to refresh token");
@@ -30,12 +45,23 @@ const refreshToken = async () => {
 
 api.interceptors.request.use(
   async (config) => {
+    if (isServer) {
+      const { cookies, headers } = await import("next/headers");
+      const cookieStore = await cookies();
+      const serverHeaders = await headers();
+
+      config.headers = {
+        ...config.headers,
+        Cookie: cookieStore.toString(),
+        "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
+        "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
+      };
+    }
+
     const accessToken = authManager.get();
     if (accessToken) {
       config.headers = { ...config.headers, Authorization: `Bearer ${accessToken}` };
     }
-
-    console.log("🚀 [REQUEST] - Config da requisição:", config);
 
     return config;
   },
@@ -51,7 +77,6 @@ api.interceptors.response.use(
 
   async (error) => {
     if (!(error instanceof HttpError)) return Promise.reject(error);
-
     const originalRequest = error.config;
     const status = error.response?.status;
 

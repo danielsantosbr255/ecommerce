@@ -2,7 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ToastContainer, Flip } from "react-toastify";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/providers/AuthContext";
+import QueryProvider from "@/providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Fireforge Labs",
@@ -18,7 +19,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="pt-BR">
       <body className={roboto.className + " bg-bg-primary !text-tx-primary"}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </AuthProvider>
         <ToastContainer autoClose={1300} position="top-center" transition={Flip} />
       </body>
     </html>

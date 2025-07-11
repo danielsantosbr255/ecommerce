@@ -5,7 +5,7 @@ import Input from "@/components/ui/Input";
 import { SignInFormData } from "@/types";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { IoIosMail, IoMdLock } from "react-icons/io";

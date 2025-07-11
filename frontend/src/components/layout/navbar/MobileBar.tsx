@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { JSX, useState } from "react";
 import Logo from "@/components/ui/Logo";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import { Loader, LogIn, Menu, ShieldUser, UserCircle } from "lucide-react";
 import MobileMenu from "../MobileMenu";

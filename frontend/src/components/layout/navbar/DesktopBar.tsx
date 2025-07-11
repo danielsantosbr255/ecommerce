@@ -5,12 +5,12 @@ import { User } from "@/types";
 import { cn } from "@/lib/utils";
 import { JSX, ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
 import { FaBuildingCircleExclamation } from "react-icons/fa6";
 import { FaCartArrowDown, FaSignInAlt, FaUserNinja, FaUserShield } from "react-icons/fa";
-import { Loader } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 interface NavItemProps {
   href: string;
@@ -55,8 +55,8 @@ const CartItem = () => {
 
 const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) => {
   const isAdmin = user?.roles?.find((role) => role.role.name.toUpperCase() === "ADMIN");
-  
-  if (loading) return <NavItem href="#" icon={<Loader size={25} className="animate-spin" />} />;
+
+  if (loading) return <NavItem href="#" icon={<Loader2 size={25} className="animate-spin" />} />;
 
   return (
     <>
@@ -66,7 +66,7 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
         icon={user ? <FaUserNinja size={25} /> : <FaSignInAlt size={25} />}
       />
 
-      {isAdmin && <NavItem href="/admin" icon={<FaUserShield size={26} className="animate-pulse text-accent" />} />}
+      {isAdmin && <NavItem href="/admin" icon={<FaUserShield size={25} className="animate-pulse text-red-500" />} />}
     </>
   );
 };
@@ -82,7 +82,7 @@ export default function DesktopBar({ className }: { className?: string }): JSX.E
 
       <SearchBar />
 
-      <div className="bg-amber-30 flex w-full h-full items-center justify-end gap-2">
+      <div className="bg-amber-30 flex w-full h-full items-center justify-end gap-1">
         <NavItem href="/about" icon={<FaBuildingCircleExclamation size={25} className="text-primary" />} />
         <CartItem />
         <Notification />
