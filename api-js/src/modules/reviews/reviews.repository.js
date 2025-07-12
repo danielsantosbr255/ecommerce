@@ -16,8 +16,18 @@ class ReviewRepository {
     });
   }
 
+  getByProductId(productId) {
+    return this.prisma.review.findMany({
+      where: { productId },
+      include: { user: { select: { id: true, name: true } }, product: true },
+    });
+  }
+
   getById(id) {
-    return this.prisma.review.findUnique({ where: { id } });
+    return this.prisma.review.findUnique({
+      where: { id },
+      include: { user: { select: { id: true, name: true } }, product: true },
+    });
   }
 
   update(id, data) {

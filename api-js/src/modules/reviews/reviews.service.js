@@ -11,15 +11,18 @@ class ReviewService {
   create = async (data) => {
     const validatedData = validator.create(data);
 
-    const product = await productRepository.getBySlug(validatedData.productSlug);
+    const product = await productRepository.getById(validatedData.productId);
     if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-    const { productSlug, ...validatedDataWithoutProductSlug } = validatedData;
-    return this.repository.create({ ...validatedDataWithoutProductSlug, productId: product.id });
+    return this.repository.create(validatedData);
   };
 
   getAll = () => {
     return this.repository.getAll();
+  };
+
+  getByProductId = (productId) => {
+    return this.repository.getByProductId(productId);
   };
 
   getById = (id) => {

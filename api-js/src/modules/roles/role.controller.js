@@ -10,19 +10,19 @@ class RoleController {
     if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
     const role = await this.service.create(req.body);
-    return res.status(201).json(role);
+    res.status(201).json(role);
   };
 
   getAll = async (req, res) => {
     const roles = await this.service.getAll();
-    return res.status(200).json(roles);
+    res.status(200).json(roles);
   };
 
   getById = async (req, res) => {
     if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
     const role = await this.service.getById(req.params.id);
-    return res.status(200).json(role);
+    res.status(200).json(role);
   };
 
   update = async (req, res) => {
@@ -36,7 +36,7 @@ class RoleController {
     if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
     await this.service.remove(req.params.id);
-    return res.status(200).json({ message: "Cargo deletado com sucesso" });
+    res.status(200).json({ message: "Cargo deletado com sucesso" });
   };
 }
 

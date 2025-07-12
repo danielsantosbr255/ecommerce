@@ -17,7 +17,12 @@ class ReviewController {
   getAll = async (req, res) => {
     if (!req.ability.can("manage", "Review")) throw new CustomError("Acesso negado!", 403);
 
-    const reviews = await this.service.getByProductSlug(req.params.slug);
+    const reviews = await this.service.getAll();
+    res.json(reviews);
+  };
+
+  getByProductId = async (req, res) => {
+    const reviews = await this.service.getByProductId(req.params.productId);
     res.json(reviews);
   };
 

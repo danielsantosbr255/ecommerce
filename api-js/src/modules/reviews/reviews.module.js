@@ -7,5 +7,6 @@ router.post("/reviews", verifyToken, controller.create);
 router.get("/reviews/:id", verifyToken, controller.getById);
 router.put("/reviews/:id", verifyToken, controller.update);
 router.delete("/reviews/:id", verifyToken, controller.delete);
+router.get("/reviews/product/:productId", verifyToken, controller.getByProductId);
 
 module.exports = router;
