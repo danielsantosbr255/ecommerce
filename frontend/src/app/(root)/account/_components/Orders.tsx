@@ -1,30 +1,54 @@
-"use client";
-
-import { use } from "react";
 import { Order } from "@/types";
+import CurrencyUtil from "@/utils/currency.util";
+import Link from "next/link";
+import { FaBox } from "react-icons/fa";
 
-const Orders = ({ ordersPromise }: { ordersPromise: Promise<Order[]> }) => {
-  const orders = use(ordersPromise);
-
+const Orders = ({ orders }: { orders: Order[] }) => {
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
+      <div className="flex flex-col gap-6 bg-bg-secondary rounded-lg shadow-xs">
         <p className="text-tx-primary text-center font-semibold">Nenhum pedido encontrado.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <section className="flex flex-col w-full h-full gap-2">
       {orders.map((order) => (
-        <div key={order.id} className="bg-bg-secondary p-4 rounded-lg shadow-sm flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-tx-primary">Pedido #{order.id}</h2>
-          <p className="text-tx-primary">Data: {new Date(order.createdAt).toLocaleDateString()}</p>
-          <p className="text-tx-primary">Total: R$ {order.totalPrice}</p>
-          <p className="text-tx-primary">Status: {order.status}</p>
-        </div>
+        <article key={order.id} className="bg-bg-secondary flex justify-between items-center p-4 shadow-xs rounded-lg">
+          <div className="flex flex-col  justify-start gap-1">
+            <FaBox size={25} />
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="font-bold">Número do pedido</span>
+            <span>{order.id}</span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="font-bold">Total</span>
+            {CurrencyUtil.formatCurrency(order.totalPrice)}
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="font-bold">Status</span>
+            <span className="bg-primary/20 text-sm p-1 px-2 font-semibold rounded-full text-primary">{order.status}</span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="font-bold">Data do pedido</span>
+            <span>{new Date(order.createdAt).toLocaleString()}</span>
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="font-bold">Ação</span>
+            <Link href={`/admin/orders/${order.id}`} className="text-primary hover:underline">
+              Ver Detalhes
+            </Link>
+          </div>
+        </article>
       ))}
-    </div>
+    </section>
   );
 };
 

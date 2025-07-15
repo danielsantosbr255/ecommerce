@@ -2,13 +2,10 @@ import { Product } from "@/types";
 import { FaUser } from "react-icons/fa";
 import { MdRateReview } from "react-icons/md";
 import SessionLabel from "../ui/SessionLabel";
+import { reviewService } from "@/services/reviews";
 
-interface Props {
-  product: Product;
-}
-
-export default async function ProductReviews({ product }: Props) {
-  const reviews = product.reviews;
+export default async function ProductReviews({ product }: { product: Product }) {
+  const reviews = await reviewService.getByProductId(product.id);
 
   if (!reviews || !reviews.length) {
     return <div className="bg-bg-secondary font-semibold p-4 rounded-lg shadow-xs text-center">Nenhuma avaliação ainda.</div>;

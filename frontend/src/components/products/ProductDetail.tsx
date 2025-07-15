@@ -3,32 +3,20 @@
 import Image from "next/image";
 import Button from "../ui/Button";
 import { Product } from "@/types";
-import { toast } from "react-toastify";
 import ProductImage from "./ProductImage";
-import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/providers/AuthContext";
 import { IoMdOptions } from "react-icons/io";
 import { FaCartPlus } from "react-icons/fa";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 export const revalidate = 60;
 
 export default function ProductDetail({ product }: { product: Product }) {
-  const { loadCart } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const { addToCart, cartLoading } = useAuth();
 
   const onAddToCart = async () => {
-    setLoading(true);
-    const newCartItem = await cartService.create(product.id, 1);
-
-    if (newCartItem) {
-      toast.success("Produto adicionado ao carrinho");
-      await loadCart();
-      setLoading(false);
-      return newCartItem;
-    }
+    await addToCart(product.id, 1);
   };
 
   return (
@@ -67,15 +55,15 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <Button onClick={onAddToCart} className="!py-3 gap-2" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
+            <Button onClick={onAddToCart} className="!py-3 gap-2" disabled={cartLoading}>
+              {cartLoading ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
             </Button>
           </div>
         </div>
       </section>
 
       {/* Especificações técnicas */}
-      <div>
+      <section>
         <h2 className="text-2xl font-semibold mb-4 border-b border-lines py-2 flex items-center gap-2">
           <IoMdOptions className="text-primary" /> Especificações
         </h2>
@@ -99,7 +87,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </>
   );
 }

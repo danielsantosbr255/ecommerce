@@ -49,12 +49,13 @@ class ProductService {
       if (maxPrice) where.price.lte = parseFloat(maxPrice);
     }
 
+    const totalItems = await this.repository.getCount(where);
     const products = await this.repository.getAll(where, take, skip);
 
     return {
       products,
       pagination: {
-        totalItems: products.length,
+        totalItems,
         currentPage: parseInt(page),
         pageSize: take,
         totalPages: Math.ceil(products.length / take),

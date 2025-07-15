@@ -37,7 +37,6 @@ export interface Permission {
 export interface UserRole {
   user: User;
   userId: string;
-
   role: Role;
   roleId: number;
 }
@@ -88,7 +87,7 @@ export interface Review {
   comment: string;
   user: User;
   userId: string;
-  productSlug: string;
+  productId: string;
 }
 
 export interface Promotion {
@@ -154,6 +153,9 @@ export interface Product {
   promotions?: Promotion[];
   variants?: ProductVariant[];
   specifications?: ProductSpecification[];
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Pagination {

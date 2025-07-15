@@ -1,3 +1,4 @@
+const { accessibleBy } = require("@casl/prisma");
 const { prisma } = require("../../common/database/prisma");
 
 class AddressRepository {

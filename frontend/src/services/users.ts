@@ -1,16 +1,6 @@
 // import api from "@/lib/axios";
-import { api } from "@/lib/api";
 import { User } from "@/types";
-import { cache } from "react";
-
-const fetchOwnUser = cache(async () => {
-  try {
-    const response = await api.get<User>("/users/me");
-    return response.data;
-  } catch {
-    return null;
-  }
-});
+import { api } from "@/lib/api";
 
 class UserService {
   public async create(userData: Omit<User, "id">) {
@@ -24,12 +14,23 @@ class UserService {
   }
 
   public async getOwn() {
-    return fetchOwnUser();
+    try {
+      const response = await api.get<User>("/users/me", {
+        cache: "force-cache",
+        next: { revalidate: 30 },
+      });
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 
   public async getAll() {
     try {
-      const response = await api.get<User[]>("/users");
+      const response = await api.get<User[]>("/users", {
+        cache: "force-cache",
+        next: { revalidate: 30 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);

@@ -3,9 +3,9 @@ import LoadingState from "../ui/LoadingState";
 import { brandService } from "@/services/brands";
 import { productService } from "@/services/products";
 import BrandsCarousel from "../common/BrandsCarousel";
-import ProductSession from "../products/ProductSession";
+import ProductSession from "./ProductSession";
 import { categoryService } from "@/services/categories";
-import ProductCarousel from "../products/ProductCarousel";
+import ProductCarousel from "./ProductCarousel";
 import CategoriesCarousel from "../common/CategoriesCarousel";
 import { FaBullhorn, FaChartLine, FaStarHalfAlt } from "react-icons/fa";
 

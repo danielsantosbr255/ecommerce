@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { User } from "@/types";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import { JSX, ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
+import { RiAdminFill } from "react-icons/ri";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
 import { FaBuildingCircleExclamation } from "react-icons/fa6";
-import { FaCartArrowDown, FaSignInAlt, FaUserNinja, FaUserShield } from "react-icons/fa";
-import { Loader2 } from "lucide-react";
+import { FaCartArrowDown, FaSignInAlt, FaUserNinja } from "react-icons/fa";
 
 interface NavItemProps {
   href: string;
@@ -66,7 +67,7 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
         icon={user ? <FaUserNinja size={25} /> : <FaSignInAlt size={25} />}
       />
 
-      {isAdmin && <NavItem href="/admin" icon={<FaUserShield size={25} className="animate-pulse text-red-500" />} />}
+      {isAdmin && <NavItem href="/admin" icon={<RiAdminFill size={25} className="animate-pulse text-primary" />} />}
     </>
   );
 };

@@ -1,21 +1,25 @@
+import { productService } from "@/services/products";
 import AdminProductList from "../components/AdminProductList";
-import AdminProductForm from "../components/AdminProductForm";
-import AdminProductFilters from "../components/AdminProductFilters";
+import Pagination from "@/components/ui/Pagination";
+import SessionLabel from "@/components/ui/SessionLabel";
+import { FaBox } from "react-icons/fa";
 
-const AdminProductsPage: React.FC = () => {
+const page = async () => {
+  const result = await productService.getAll();
+  if (!result) return null;
+
+  const { products, pagination } = result;
+  const { currentPage, pageSize, totalPages } = pagination;
+
   return (
-    <main className="w-full">
-      <section className="bg-white shadow-xs rounded-2xl p-2 lg:p-6 mb-6">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4">
-          <AdminProductFilters />
-        </div>
+    <main className="flex flex-col w-full gap-4">
+      <SessionLabel label="Produtos" icon={<FaBox size={25} />} />
 
-        <AdminProductList />
-      </section>
+      <AdminProductList products={products} />
 
-      <AdminProductForm />
+      <Pagination currentPage={currentPage} totalPages={totalPages} path={"/admin/products"} pageSize={pageSize} />
     </main>
   );
 };
 
-export default AdminProductsPage;
+export default page;

@@ -29,7 +29,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <ProductReviews product={product} />
       </Suspense>
 
-      <ProductReviewsForm productSlug={product.slug} />
+      <ProductReviewsForm productId={product.id} />
 
       <Suspense fallback={<LoadingState />}>
         <ProductSession callback={getRelated} label="Produtos Relacionados" icon={<FaLink size={25} />} />

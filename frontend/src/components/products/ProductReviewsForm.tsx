@@ -9,17 +9,9 @@ import { reviewService } from "@/services/reviews";
 
 import Button from "../ui/Button";
 import ErrorMessage from "../ui/ErrorMessage";
+import { Review } from "@/types";
 
-interface ReviewFormValues {
-  rating: number;
-  comment: string;
-}
-
-interface ProductReviewsFormProps {
-  productSlug: string;
-}
-
-export default function ProductReviewsForm({ productSlug }: ProductReviewsFormProps) {
+export default function ProductReviewsForm({ productId }: { productId: string }) {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -28,14 +20,14 @@ export default function ProductReviewsForm({ productSlug }: ProductReviewsFormPr
     register,
     reset,
     formState: { isSubmitting, errors },
-  } = useForm<ReviewFormValues>({
+  } = useForm<Omit<Review, "id" | "user">>({
     defaultValues: { rating: 5, comment: "" },
   });
 
   if (!user) return null;
 
-  const onSubmit = async (data: ReviewFormValues) => {
-    const success = await reviewService.create({ userId: user.id, productSlug, ...data });
+  const onSubmit = async (data: Omit<Review, "id" | "user">) => {
+    const success = await reviewService.create({ ...data, productId, userId: user.id });
 
     if (success) {
       toast.success("Avaliação enviada com sucesso!");

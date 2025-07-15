@@ -21,4 +21,4 @@ async function getLocationFromIP(ip) {
   }
 }
 
-module.exports = getLocationFromIP;
+module.exports = { getLocationFromIP };

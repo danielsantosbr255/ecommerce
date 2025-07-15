@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Address } from "@/types";
 
 class AddressService {
@@ -14,15 +14,17 @@ class AddressService {
 
   public async getAll() {
     try {
-      const response = await api.get("/addresses");
-      return response.data as Address[];
-    } catch (error) {
-      console.error(error);
+      const response = await api.get<Address[]>("/addresses", {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
+      return response.data;
+    } catch {
       return [];
     }
   }
 
-  public async getAddress(id: string) {
+  public async getOne(id: string) {
     try {
       const response = await api.get(`/addresses/${id}`);
       return response.data;

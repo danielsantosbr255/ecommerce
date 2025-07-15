@@ -7,12 +7,11 @@ class AddressService {
   }
 
   async create(data) {
-    const address = await this.repository.create(data);
-    return address;
+    return this.repository.create(data);
   }
 
   async getAll(ability) {
-    this.repository.getAll(ability);
+    return this.repository.getAll(ability);
   }
 
   async getById(ability, id) {

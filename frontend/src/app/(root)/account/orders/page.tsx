@@ -1,21 +1,18 @@
-import LoadingState from "@/components/ui/LoadingState";
+import { Suspense } from "react";
 import Orders from "../_components/Orders";
 import { orderService } from "@/services/orders";
-import { Suspense } from "react";
 import { FaShoppingBasket } from "react-icons/fa";
+import SessionLabel from "@/components/ui/SessionLabel";
 
-function MyOrders() {
-  const ordersPromise = orderService.getAll();
+async function MyOrders() {
+  const orders = await orderService.getAll();
 
   return (
-    <main className="flex flex-col w-full flex-1 p-4 md:px-4 md:max-w-10/12 mx-auto">
-      <section className="flex w-full border-b border-lines p-4 items-center gap-3 my-2">
-        <FaShoppingBasket className="text-primary inline-block" size={24} />
-        <h1 className="text-lg font-bold text-tx-primary">Meus Pedidos</h1>
-      </section>
+    <main className="flex flex-col w-full flex-1 p-6 gap-4 md:px-4 md:max-w-10/12 mx-auto">
+      <SessionLabel label="Meus Pedidos" icon={<FaShoppingBasket size={25} />} />
 
-      <Suspense fallback={<LoadingState />}>
-        <Orders ordersPromise={ordersPromise} />
+      <Suspense fallback={<div className="text-tx-primary">Carregando...</div>}>
+        <Orders orders={orders} />
       </Suspense>
     </main>
   );

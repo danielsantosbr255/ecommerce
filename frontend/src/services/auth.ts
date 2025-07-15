@@ -9,8 +9,8 @@ class AuthService {
   }
 
   public async signIn(credentials: SignInFormData) {
-    const res = await api.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/sign-in`, credentials);
-    return res.data as { session: Session };
+    const res = await api.post<{ session: Session }>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/sign-in`, credentials);
+    return res.data;
   }
 
   public async signOut() {

@@ -40,7 +40,7 @@ export function Sidebar({ children, className, user, signOut }: SidebarProps) {
       </div>
 
       <SidebarContext.Provider value={{ isOpen }}>
-        <ul className="flex flex-col flex-1 p-2 gap-1">{children}</ul>
+        <ul className="flex flex-col flex-1 p-2 gap-2">{children}</ul>
         <SidebarFooter user={user} signOut={signOut} />
       </SidebarContext.Provider>
     </nav>
@@ -63,7 +63,7 @@ export function SidebarItem({ icon, text, href = "" }: SidebarItemProps) {
     <Link href={href}>
       <li className={mainStyle}>
         {icon}
-        <span className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52 ml-2" : "w-0"}`}>{text}</span>
+        <span className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52 ml-4" : "w-0"}`}>{text}</span>
       </li>
     </Link>
   );

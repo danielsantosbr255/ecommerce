@@ -9,7 +9,6 @@ import { CartItem, SignInFormData, SignUpFormData, User } from "@/types";
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-  error: unknown;
   user: User | null;
   loading: boolean;
   userLoading: boolean;
@@ -20,20 +19,19 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   loadUser: () => Promise<void>;
   loadCart: () => Promise<void>;
+  // clearCart: () => Promise<void>;
+  addToCart: (productId: string, quantity: number) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [userLoading, setUserLoading] = useState<boolean>(true);
   const [cartLoading, setCartLoading] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const route = useRouter();
-
-  // console.clear();
 
   const loadUser = useCallback(async () => {
     setUserLoading(true);
@@ -44,42 +42,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = useCallback(
     async ({ name, email, password }: SignUpFormData) => {
-      setLoading(true);
-      const { session } = await authService.signUp({ name, email, password });
-
-      if (!session) {
+      try {
+        setLoading(true);
+        const { session } = await authService.signUp({ name, email, password });
+        sessionStorage.setItem("accessToken", session.accessToken);
+        await loadUser();
+        route.push("/account");
+        toast.success("Conta criada com sucesso!");
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Erro ao criar conta. Tente novamente.");
+        }
+        console.error("Signup error:", error);
+      } finally {
         setLoading(false);
-        toast.error("Erro ao criar conta. Tente novamente.");
-        return;
       }
-
-      sessionStorage.setItem("accessToken", session.accessToken);
-      await loadUser();
-      route.push("/account");
-      toast.success("Conta criada com sucesso!");
-      setLoading(false);
     },
     [route, loadUser]
   );
 
   const signIn = useCallback(
     async ({ email, password }: SignInFormData) => {
-      setLoading(true);
-      const { session } = await authService.signIn({ email, password });
+      try {
+        setLoading(true);
+        const { session } = await authService.signIn({ email, password });
+        sessionStorage.setItem("accessToken", session.accessToken);
 
-      if (!session) {
+        await loadUser();
+        route.push("/account");
+        toast.success("Logado com sucesso!");
+      } catch (error) {
+        toast.error("Erro ao fazer login. Tente novamente.");
+        console.error("Login error:", error);
+      } finally {
         setLoading(false);
-        toast.error("Credenciais inválidas.");
-        return;
       }
-
-      sessionStorage.setItem("accessToken", session.accessToken);
-
-      await loadUser();
-      route.push("/account");
-      toast.success("Logado com sucesso!");
-
-      setLoading(false);
     },
     [route, loadUser]
   );
@@ -89,14 +88,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await authService.signOut();
     } catch (error) {
-      setError(error);
+      console.error("Logout error:", error);
+      toast.error("Erro ao deslogar. Tente novamente.");
     } finally {
       setUser(null);
       setCartItems(null);
       sessionStorage.removeItem("accessToken");
       toast.success("Deslogado com sucesso!");
       setLoading(false);
-      redirect("/");
+      redirect("/sign-in");
     }
   }, []);
 
@@ -106,6 +106,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCartItems(cartItems);
     setCartLoading(false);
   }, []);
+
+  const addToCart = useCallback(
+    async (productId: string, quantity: number) => {
+      if (!user) {
+        toast.error("Você precisa estar logado para adicionar produtos ao carrinho.");
+        return;
+      }
+
+      setLoading(true);
+      const newCartItem = await cartService.create(productId, quantity);
+
+      if (newCartItem) {
+        toast.success("Produto adicionado ao carrinho");
+        await loadCart();
+      }
+      setLoading(false);
+    },
+    [loadCart, user]
+  );
 
   useEffect(() => {
     loadUser();
@@ -123,12 +142,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         userLoading,
         loading,
         cartLoading,
-        error,
         cartItems,
         signUp,
         signIn,
         signOut,
         loadCart,
+        addToCart,
+        // clearCart, // Uncomment if you implement clearCart function
         loadUser,
       }}
     >

@@ -10,6 +10,7 @@ class UserRepository {
     return this.prisma.user.findMany({
       where: accessibleBy(ability, "read").User,
       omit: { password: true },
+      include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
     });
   }
 
