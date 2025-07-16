@@ -1,8 +1,8 @@
 "use client";
 
 import { Address } from "@/types";
-import Alert from "@/components/ui/Alert";
-import { FaRegAddressBook } from "react-icons/fa";
+import { FaPencil } from "react-icons/fa6";
+import { FaRegAddressCard } from "react-icons/fa";
 
 export default function Addresses({ addresses }: { addresses: Address[] }) {
   if (!addresses || addresses.length === 0) {
@@ -14,70 +14,37 @@ export default function Addresses({ addresses }: { addresses: Address[] }) {
   }
 
   return (
-    <section className="flex flex-col gap-2">
+    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       {addresses.map((address) => (
-        <article
-          key={address.id}
-          className="bg-bg-secondary grid grid-cols-5 justify-between items-center p-4 gap-1 shadow-xs rounded-lg"
-        >
-          <div className="flex flex-col text-lg justify-start gap-1">
-            <span className="relative flex font-bold items-center gap-2">
-              <FaRegAddressBook size={25} />
-              <span className="absolute top-0.5 -left-1">{address.isDefault && <Alert />}</span>
-              {address.label} {address.isDefault && "(Padrão)"}
-            </span>
+        <article key={address.id} className="bg-bg-secondary flex flex-col gap-4 p-5 rounded-lg shadow">
+          <div className="flex text-primary gap-2 font-semibold text-lg items-center">
+            <FaRegAddressCard size={25} />
+            {address.label} {address.isDefault ? "(Padrão)" : ""}
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="font-bold">Vizinhança</span>
-            {address.street}, {address.neighborhood} - {address.number} {address.complement}
+          <div className="flex flex-col gap-1">
+            <p>
+              <strong>Rua:</strong> {address.street}
+            </p>
+            <p>
+              <strong>Cidade:</strong> {address.city}
+            </p>
+            <p>
+              <strong>Estado:</strong> {address.state}
+            </p>
+            <p>
+              <strong>Código Postal:</strong> {address.zipCode}
+            </p>
+            <p>
+              <strong>País:</strong> {address.country}
+            </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="font-bold">Cidade</span>
-            <span className="bg-primary/20 text-sm p-1 px-2 font-semibold rounded-full text-primary">
-              {address.city}, {address.state} - {address.zipCode}
-            </span>
-          </div>
-
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="font-bold">Pais</span>
-            <span>{address.country}</span>
-          </div>
-
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="font-bold">Data de criação</span>
-            <span>{new Date(address.createdAt).toLocaleString()}</span>
+          <div className="flex text-primary w-full justify-end items-center gap-1">
+            <FaPencil />
+            <span className="cursor-pointer hover:underline">Editar</span>
           </div>
         </article>
-
-        // <div
-        //   key={address.id}
-        //   className="bg-bg-secondary flex justify-between items-center shadow-xs p-4 border border-lines/20 rounded-lg text-tx-primary"
-        // >
-        //   <span>
-        //     <h2 className="text-lg font-semibold">
-        //       {address.label} {address.isDefault && " (Padrão)"}
-        //     </h2>
-        //     <p>
-        //       {address.street}, {address.number}, {address.neighborhood} {address.complement && `, ${address.complement}`}
-        //     </p>
-        //     <p>
-        //       {address.city}, {address.state} - {address.zipCode}
-        //     </p>
-        //     <p>{address.country}</p>
-        //   </span>
-
-        //   <span>
-        //     <Button
-        //       onClick={() => toast.info("Funcionalidade de editar endereço ainda não implementada.")}
-        //       className="!bg-secondary px-4 py-2 rounded hover:bg-secondary/80 transition"
-        //     >
-        //       <FaPen className="inline-block mr-2" />
-        //       Editar Endereço
-        //     </Button>
-        //   </span>
-        // </div>
       ))}
     </section>
   );

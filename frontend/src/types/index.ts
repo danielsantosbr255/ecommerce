@@ -135,7 +135,7 @@ export interface ProductSpecification {
 export interface Product {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   price: number;
   discount?: number;
   stock: number;

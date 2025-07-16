@@ -1,5 +1,4 @@
 import { api } from "@/lib/api";
-// import api from "@/lib/axios";
 import { Session, SignInFormData, SignUpFormData } from "@/types";
 
 class AuthService {

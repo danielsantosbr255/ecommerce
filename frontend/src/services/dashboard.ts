@@ -1,19 +1,18 @@
-// src/services/dashboardService.ts
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 
 export const DashboardService = {
-  async getSummary(): Promise<DashboardSummary> {
-    const response = await api.get("/dashboard/summary");
+  async getSummary() {
+    const response = await api.get<DashboardSummary>("/dashboard/summary");
     return response.data;
   },
 
-  async getRecentOrders(): Promise<Order[]> {
-    const response = await api.get("/dashboard/recent-orders");
+  async getRecentOrders() {
+    const response = await api.get<Order[]>("/dashboard/recent-orders");
     return response.data;
   },
 
-  async getSalesChartData(): Promise<SalesChartData[]> {
-    const response = await api.get("/dashboard/sales-chart");
+  async getSalesChartData() {
+    const response = await api.get<SalesChartData[]>("/dashboard/sales-chart");
     return response.data;
   },
 };

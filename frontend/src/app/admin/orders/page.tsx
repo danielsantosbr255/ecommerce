@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { orderService } from "@/services/orders";
-import SessionLabel from "@/components/ui/SessionLabel";
-import { FaClipboardList } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import CurrencyUtil from "@/utils/currency.util";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { FaBoxesPacking } from "react-icons/fa6";
 
 export default async function OrdersPage() {
   const orders = await orderService.getAll();
@@ -17,69 +18,64 @@ export default async function OrdersPage() {
 
   return (
     <main className="flex flex-col w-full gap-4">
-      <SessionLabel label="Pedidos" icon={<FaClipboardList size={25} />} />
+      <Table>
+        <TableCaption className="text-center py-4">
+          <div className="relative flex justify-center items-center gap-2 text-tx-primary font-semibold text-xl">
+            <FaBoxesPacking className="text-primary" size={25} />
+            <p>Listagem de pedidos</p>
 
-      <table className="bg-bg-secondary min-w-full divide-y divide-lines shadow-xs rounded-xl overflow-hidden">
-        <thead className="bg-gray-200 font-bold text-sm">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              ID
-            </th>
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              Cliente
-            </th>
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              Email
-            </th>
+            <span className="absolute top-0 right-3 bg-primary/20 text-primary font-normal text-sm px-2 py-1 rounded-xl">
+              {orders.length > 0 ? `${orders.length} pedidos` : "Nenhum pedido"}
+            </span>
+          </div>
+        </TableCaption>
 
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              Total
-            </th>
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3 text-left tracking-wider">
-              Criado em
-            </th>
-            <th scope="col" className="px-6 py-3 text-center tracking-wider">
-              Ação
-            </th>
-          </tr>
-        </thead>
+        <TableHeader>
+          <TableRow className="bg-bg-overlay/10 text-sm">
+            <TableHead>ID</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead className="text-center">Total</TableHead>
+            <TableHead className="text-center">Status</TableHead>
+            <TableHead className="text-right">Criado em</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
 
-        <tbody className="bg-bg-secondary divide-y divide-lines">
+        <TableBody className="bg-bg-secondary divide-lines">
           {orders.map((order) => (
-            <tr key={order.id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="font-semibold text-sm">{order.id}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>{order.user.name}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>{order.user.email}</div>
-              </td>
-
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>{CurrencyUtil.formatCurrency(order.totalPrice)}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            <TableRow key={order.id}>
+              <TableCell className="py-5">{order.id}</TableCell>
+              <TableCell className="items-center">
+                <span className="flex items-center gap-2">
+                  <FaUser /> {order.user.name}
+                </span>
+              </TableCell>
+              <TableCell>{order.user.email}</TableCell>
+              <TableCell className="text-center">{CurrencyUtil.formatCurrency(order.totalPrice)}</TableCell>
+              <TableCell className="text-center">
+                <span className="bg-primary/20 text-primary font-medium text-sm px-2 py-1 rounded-full uppercase">
                   {order.status}
                 </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>{new Date(order.createdAt).toLocaleString()}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center  font-medium">
+              </TableCell>
+              <TableCell className="text-right">{new Date(order.createdAt).toLocaleString()}</TableCell>
+              <TableCell className="text-right">
                 <Link href={`/admin/orders/${order.id}`} className="text-primary hover:underline">
                   Ver Detalhes
                 </Link>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+        {/* <TableFooter>
+          <TableRow>
+            <TableCell className="pl-5" colSpan={6}>
+              Total de pedidos
+            </TableCell>
+            <TableCell className="text-right pr-5">{orders.length}</TableCell>
+          </TableRow>
+        </TableFooter> */}
+      </Table>
     </main>
   );
 }

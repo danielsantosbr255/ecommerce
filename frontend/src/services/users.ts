@@ -1,4 +1,3 @@
-// import api from "@/lib/axios";
 import { User } from "@/types";
 import { api } from "@/lib/api";
 
@@ -17,7 +16,7 @@ class UserService {
     try {
       const response = await api.get<User>("/users/me", {
         cache: "force-cache",
-        next: { revalidate: 30 },
+        next: { revalidate: 10 },
       });
       return response.data;
     } catch {

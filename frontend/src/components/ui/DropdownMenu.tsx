@@ -90,7 +90,7 @@ export function DropdownItem({ label, href }: DropdownItemProps) {
   const active = useMemo(() => usePath === href, [usePath, href]);
 
   const listStyle = cn(
-    `font-medium flex items-center py-2 px-2 rounded-xl my-1`,
+    `font-medium flex items-center p-2 rounded-xl my-1`,
     active ? "text-primary" : "hover:bg-gray-200/50"
   );
 

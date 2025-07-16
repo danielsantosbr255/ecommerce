@@ -20,13 +20,13 @@ const Input = ({ id, label, type = "text", icon, className, ...props }: InputPro
 
   return (
     <div
-      className={`relative flex border-2 border-lines rounded-lg gap-2 focus-within:border-primary items-center px-3 py-3 ${className}`}
+      className={`relative flex border-2 border-lines rounded-lg gap-2 focus-within:border-primary items-center px-3 ${className}`}
     >
       {icon}
       <input
         type={inputType}
         id={id}
-        className={`bg-bg-secondary block w-full appearance-none focus:outline-none focus:ring-0 peer placeholder-tx-muted/50`}
+        className={`bg-bg-secondary block w-full appearance-none focus:outline-none focus:ring-0 py-3 peer placeholder-tx-muted/50`}
         {...props}
       />
       <label

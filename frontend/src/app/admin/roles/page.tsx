@@ -1,6 +1,6 @@
-import SessionLabel from "@/components/ui/SessionLabel";
 import { roleService } from "@/services/roles";
 import { FaUsersCog, FaUserTie } from "react-icons/fa";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default async function page() {
   const roles = await roleService.getAll();
@@ -11,21 +11,46 @@ export default async function page() {
 
   return (
     <main className="flex flex-col w-full gap-4">
-      <SessionLabel label="Cargos" icon={<FaUsersCog size={25} />} />
+      <Table>
+        <TableCaption className="text-center py-4">
+          <div className="relative flex justify-center items-center gap-3 text-tx-primary font-semibold text-xl">
+            <FaUsersCog className="text-primary" size={25} />
+            <p>Listagem de cargos</p>
 
-      <section className="bg-bg-secondary flex flex-col w-full h-full gap-2 shadow-xs rounded-xl p-2">
-        {roles.map((role) => (
-          <article key={role.id} className="flex w-full p-4 gap-4 items-center border-b border-lines last:border-b-0">
-            <div>
-              <FaUserTie className="inline-block text-primary" size={20} />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-tx-primary">{role.name}</h2>
-              <p className="text-sm text-gray-600">{role.description}</p>
-            </div>
-          </article>
-        ))}
-      </section>
+            <span className="absolute top-0 right-3 bg-primary/20 text-primary font-normal text-sm px-2 py-1 rounded-xl">
+              {roles.length > 0 ? `${roles.length} cargos` : "nenhum cargo"}
+            </span>
+          </div>
+        </TableCaption>
+
+        <TableHeader>
+          <TableRow className="bg-bg-overlay/10 text-sm">
+            <TableHead>Cargo</TableHead>
+            <TableHead>Descrição</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody className="bg-bg-secondary divide-lines">
+          {roles.map((role) => (
+            <TableRow key={role.id}>
+              <TableCell className="items-center py-5">
+                <span className="flex items-center gap-4 font-medium uppercase">
+                  <FaUserTie className="inline-block text-primary" size={20} /> {role.name}
+                </span>
+              </TableCell>
+
+              <TableCell className="text-center">
+                <span className="flex items-center gap-2">{role.description}</span>
+              </TableCell>
+
+              <TableCell className="text-right">
+                <button className="text-primary hover:underline">Editar</button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </main>
   );
 }

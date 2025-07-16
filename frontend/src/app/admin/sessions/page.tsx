@@ -1,15 +1,23 @@
-import Sessions from "@/components/layout/Sessions";
-import SessionLabel from "@/components/ui/SessionLabel";
+import { Suspense } from "react";
 import { sessionService } from "@/services/sessions";
-import { FaWindowClose } from "react-icons/fa";
+import Sessions from "@/components/layout/Sessions";
 
 async function page() {
   const sessions = await sessionService.getAll();
 
+  if (!sessions || sessions.length === 0) {
+    return (
+      <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
+        <p className="text-tx-primary text-center font-semibold">Nenhuma sessão ativa encontrada.</p>
+      </div>
+    );
+  }
+
   return (
     <main className="flex flex-col w-full gap-4">
-      <SessionLabel label="Sessões de Usuários" icon={<FaWindowClose size={25} />} />
-      <Sessions sessions={sessions} />
+      <Suspense fallback={<div className="text-tx-primary">Carregando...</div>}>
+        <Sessions sessions={sessions} />
+      </Suspense>
     </main>
   );
 }

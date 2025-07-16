@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Brand } from "@/types";
 
 class BrandService {
@@ -12,9 +12,12 @@ class BrandService {
     }
   }
 
-  public async getAll(): Promise<Brand[] | null> {
+  public async getAll() {
     try {
-      const response = await api.get("/brands");
+      const response = await api.get<Brand[]>("/brands", {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -24,7 +27,10 @@ class BrandService {
 
   public async getOne(slug: string) {
     try {
-      const response = await api.get(`/brands/${slug}`);
+      const response = await api.get<Brand>(`/brands/${slug}`, {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);

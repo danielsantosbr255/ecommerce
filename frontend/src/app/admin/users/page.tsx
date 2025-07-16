@@ -1,6 +1,6 @@
 import { userService } from "@/services/users";
-import SessionLabel from "@/components/ui/SessionLabel";
-import { FaUsers } from "react-icons/fa";
+import { FaUser, FaUsers } from "react-icons/fa";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default async function page() {
   const users = await userService.getAll();
@@ -17,57 +17,58 @@ export default async function page() {
 
   return (
     <main className="flex flex-col w-full gap-4">
-      <SessionLabel label="Usuários" icon={<FaUsers size={25} />} />
+      <Table>
+        <TableCaption className="text-center py-4">
+          <div className="relative flex justify-center items-center gap-2 text-tx-primary font-semibold text-xl">
+            <FaUsers className="text-primary" size={25} />
+            <p>Listagem de usuários</p>
 
-      <table className="bg-bg-secondary min-w-full divide-y divide-lines shadow-xs rounded-xl overflow-hidden">
-        <thead className="bg-gray-200 font-bold text-sm">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-left font-medium tracking-wider">
-              ID
-            </th>
-            <th scope="col" className="px-6 py-3 text-left font-medium tracking-wider">
-              Nome
-            </th>
-            <th scope="col" className="px-6 py-3 text-left font-medium tracking-wider">
-              Email
-            </th>
-            <th scope="col" className="px-6 py-3 text-center font-medium tracking-wider">
-              Telefone
-            </th>
-            <th scope="col" className="px-6 py-3 text-center font-medium tracking-wider">
-              Cargo
-            </th>
-            <th scope="col" className="px-6 py-3 text-right font-medium tracking-wider">
-              Criado em
-            </th>
-          </tr>
-        </thead>
+            <span className="absolute top-0 right-3 bg-primary/20 text-primary font-normal text-sm px-2 py-1 rounded-xl">
+              {users.length > 0 ? `${users.length} usuários` : "Nenhum usuário"}
+            </span>
+          </div>
+        </TableCaption>
 
-        <tbody className="bg-bg-secondary divide-y divide-lines">
+        <TableHeader>
+          <TableRow className="bg-bg-overlay/10 text-sm">
+            <TableHead>ID</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead className="text-center">Telefone</TableHead>
+            <TableHead className="text-center">Cargo</TableHead>
+            <TableHead className="text-right">Criado em</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody className="bg-bg-secondary divide-lines">
           {users.map((user) => (
-            <tr key={user.id}>
-              <td className="pl-6 py-4 whitespace-nowrap">
-                <div className="font-semibold text-sm">{user.id}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm">{user.name}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>{user.email}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
-                <div>{user.phone || "-"}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
-                <div>{user?.roles?.map((role) => role.role.name).join(", ") || "-"}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right">
-                <div>{new Date(user.createdAt).toLocaleString()}</div>
-              </td>
-            </tr>
+            <TableRow key={user.id}>
+              <TableCell className="py-5">{user.id}</TableCell>
+              <TableCell className="items-center">
+                <span className="flex items-center gap-2">
+                  <FaUser /> {user.name}
+                </span>
+              </TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell className="text-center">{user.phone || "-"}</TableCell>
+              <TableCell className="text-center">
+                {user?.roles && user.roles.length > 0 ? (
+                  <span className="bg-primary/20 text-primary font-medium text-sm px-2 py-1 rounded-full uppercase">
+                    {user.roles.map((role) => role.role.name).join(", ")}
+                  </span>
+                ) : (
+                  "-"
+                )}
+              </TableCell>
+              <TableCell className="text-right">{new Date(user.createdAt).toLocaleString()}</TableCell>
+              <TableCell className="text-right">
+                <button className="text-primary hover:underline cursor-pointer">Editar</button>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </main>
   );
 }

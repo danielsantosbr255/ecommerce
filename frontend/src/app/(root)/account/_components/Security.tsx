@@ -4,9 +4,8 @@
 import Input from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
-import Checkbox from "@/components/ui/Checkbox";
 import { useAuth } from "@/providers/AuthContext";
-import { FaUserLock, FaKey } from "react-icons/fa";
+import { FaUserLock } from "react-icons/fa";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { Loader2 } from "lucide-react";
 import { formatPhone } from "@/utils/formatters";
@@ -137,10 +136,6 @@ export default function AccessAndSecurity() {
       />
       <ErrorMessage message={errors.confirmNewPassword?.message} />
 
-      <div className="flex items-center gap-2">
-        <Checkbox label="Autenticação de Dois Fatores" />
-        <FaKey className="text-primary" />
-      </div>
       <Button type="submit">{isSubmitting ? <Loader2 className="animate-material-spin" /> : "Salvar Alterações"}</Button>
     </form>
   );

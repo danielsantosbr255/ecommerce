@@ -1,4 +1,3 @@
-// import api from "@/lib/axios";
 import { api } from "@/lib/api";
 import { Pagination, Product } from "@/types";
 
@@ -14,9 +13,11 @@ export interface QueryParams {
 }
 
 class ProductService {
-  public async create(productData: Omit<Product, "id">) {
+  public async create(productData: FormData) {
     try {
-      const response = await api.post<Product>("/products", productData);
+      const response = await api.post("/products", productData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -24,9 +25,11 @@ class ProductService {
     }
   }
 
-  public async getAll() {
+  public async getAll(page: number = 1, pageSize: number = 10, query?: string) {
+    const url = query ? `/products?q=${query}&page=${page}&pageSize=${pageSize}` : `/products?page=${page}&pageSize=${pageSize}`;
+
     try {
-      const response = await api.get<ProductResponse>("/products", {
+      const response = await api.get<ProductResponse>(url, {
         cache: "force-cache",
         next: { revalidate: 60 },
       });

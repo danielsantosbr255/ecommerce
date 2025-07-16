@@ -10,9 +10,7 @@ class BrandRepository {
   }
 
   getAll() {
-    return this.prisma.brand.findMany({
-      include: { products: { include: { images: true } } },
-    });
+    return this.prisma.brand.findMany({ orderBy: { name: "asc" } });
   }
 
   getBySlug(slug) {
