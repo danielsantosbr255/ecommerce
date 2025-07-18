@@ -22,8 +22,8 @@ export interface Role {
   id: number;
   name: string;
   description?: string;
-  permissions: RolePermission[];
-  users: UserRole[];
+  permissions?: RolePermission[];
+  users?: UserRole[];
 }
 
 export interface Permission {

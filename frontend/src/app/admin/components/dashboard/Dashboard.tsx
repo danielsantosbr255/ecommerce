@@ -8,11 +8,10 @@ export default async function Dashboard() {
   const users = await userService.getAll();
   const orders = await orderService.getAll();
   const result = await productService.getAll();
-  const products = result?.products;
-  
+  const totalProducts = result?.pagination?.totalItems || 0;
+
   const totalUsers = users?.length || 0;
   const totalOrders = orders?.length || 0;
-  const totalProducts = products?.length || 0;
 
   return (
     <div className="flex-1 flex flex-col gap-4">

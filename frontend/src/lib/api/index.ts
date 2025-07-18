@@ -19,8 +19,9 @@ const refreshToken = async () => {
   if (response.status !== 200) throw new Error("Failed to refresh token");
 
   const data = response.data;
+  if (!data || !data.session) return null;
+  
   const session = data.session as Session;
-
   if (session) return session.accessToken;
   return null;
 };

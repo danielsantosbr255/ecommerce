@@ -14,10 +14,7 @@ class UserService {
 
   public async getOwn() {
     try {
-      const response = await api.get<User>("/users/me", {
-        cache: "force-cache",
-        next: { revalidate: 10 },
-      });
+      const response = await api.get<User>("/users/me");
       return response.data;
     } catch {
       return null;

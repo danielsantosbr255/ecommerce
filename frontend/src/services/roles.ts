@@ -4,7 +4,7 @@ import { Role } from "@/types";
 class RoleService {
   public async create(roleData: Omit<Role, "id">) {
     try {
-      const response = await api.post("/roles", roleData);
+      const response = await api.post<Role>("/roles", roleData);
       return response.data;
     } catch (error) {
       console.error(error);

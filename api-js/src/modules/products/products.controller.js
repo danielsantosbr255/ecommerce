@@ -11,7 +11,7 @@ class ProductController {
   create = async (req, res) => {
     if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
 
-    if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
+    if (req.body.title) req.body.slug = slugify(req.body.title, { lower: true });
     if (req.body.price) req.body.price = parseInt(req.body.price);
     if (req.body.stock) req.body.stock = parseInt(req.body.stock);
     if (req.body.rating) req.body.rating = parseInt(req.body.rating);

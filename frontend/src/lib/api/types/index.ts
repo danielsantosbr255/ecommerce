@@ -9,7 +9,7 @@ export interface RequestConfig extends RequestInit {
 }
 
 export interface ApiResponse<T = unknown> {
-  data: T;
+  data: T | null;
   status: number;
   statusText: string;
   headers: Headers;

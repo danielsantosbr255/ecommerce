@@ -4,7 +4,7 @@ import { Category } from "@/types";
 class CategoryService {
   public async create(categoryData: Omit<Category, "id">) {
     try {
-      const response = await api.post("/categories", categoryData);
+      const response = await api.post<Category>("/categories", categoryData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -40,7 +40,7 @@ class CategoryService {
 
   public async update(slug: string, categoryData: Partial<Category>) {
     try {
-      const response = await api.put(`/categories/${slug}`, categoryData);
+      const response = await api.put<Category>(`/categories/${slug}`, categoryData);
       return response.data;
     } catch (error) {
       console.error(error);

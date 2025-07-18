@@ -9,7 +9,7 @@ class ProductService {
 
   create = async (data) => {
     const existingProduct = await this.repository.getBySlug(data.slug);
-    if (existingProduct) throw new CustomError("Já existe um produto com este slug");
+    if (existingProduct) throw new CustomError("Já existe um produto com este slug", 422);
 
     const uploadResults = await Promise.all(
       data.images.map((image) =>

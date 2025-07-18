@@ -42,7 +42,7 @@ const Orders = ({ orders }: { orders: Order[] }) => {
 
           <div className="flex flex-col items-center justify-center gap-1">
             <span className="font-bold">Ação</span>
-            <Link href={`/admin/orders/${order.id}`} className="text-primary hover:underline">
+            <Link href="#" className="text-primary hover:underline">
               Ver Detalhes
             </Link>
           </div>

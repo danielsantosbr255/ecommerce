@@ -25,7 +25,7 @@ export default function Select({ label, id, name, options, className, ...props }
         {icon}
       </div>
 
-      <select name={name} {...props} className="w-full appearance-none focus:outline-none focus:ring-0 py-3 peer px-3">
+      <select name={name} {...props} className="w-full appearance-none focus:outline-none focus:ring-0 p-3 peer">
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

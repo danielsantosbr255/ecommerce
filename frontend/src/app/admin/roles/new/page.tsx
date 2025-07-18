@@ -1,10 +1,10 @@
 import React from "react";
-import ProductForm from "../_components/ProductForm";
+import RoleForm from "../_components/RoleForm";
 
 export default function page() {
   return (
     <main className="flex flex-col w-full gap-4">
-      <ProductForm />
+      <RoleForm />
     </main>
   );
 }

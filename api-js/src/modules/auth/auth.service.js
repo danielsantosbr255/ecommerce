@@ -15,7 +15,7 @@ class AuthService {
     const userExists = await this.repository.findByEmail(email);
     if (userExists) throw new CustomError("Este usuário já existe!", 400);
 
-    hashedPassword = await authUtil.hashPassword(password);
+    const hashedPassword = await authUtil.hashPassword(password);
     const user = await this.repository.createUser({ name, email, password: hashedPassword });
     const userId = user.id;
 
@@ -52,7 +52,7 @@ class AuthService {
     const userId = user.id;
 
     const existingSession = await this.repository.getSessionByUserId({ userId, userAgent });
-    if (existingSession) await this.repository.deleteSessionByAgent({ userId, userAgent });
+    if (existingSession) await this.repository.deleteSession(existingSession.id);
 
     let { accessToken, refreshToken } = tokenUtil.createTokens({ userId, userAgent });
 

@@ -4,11 +4,10 @@ import Link from "next/link";
 import { User } from "@/types";
 import { cn } from "@/lib/utils";
 import React, { useContext } from "react";
+import Button from "@/components/ui/Button";
 import { usePathname } from "next/navigation";
-import Logo from "../../../components/ui/Logo";
-import Button from "../../../components/ui/Button";
-import Skeleton from "../../../components/ui/Skeleton";
-import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
+import Skeleton from "@/components/ui/Skeleton";
+import { ChevronFirst, LogOut } from "lucide-react";
 
 interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
   icon: React.ReactNode;
@@ -21,27 +20,23 @@ interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
 interface SidebarProps {
   children: React.ReactNode;
   className?: string;
-  user: User | null;
-  signOut: () => void;
 }
 
 export const SidebarContext = React.createContext({ isOpen: true });
 
-export function Sidebar({ children, className, user, signOut }: SidebarProps) {
+export function Sidebar({ children, className }: SidebarProps) {
   const [isOpen, setIsOpen] = React.useState(true);
 
   return (
     <nav className={`bg-bg-secondary flex flex-col rounded-2xl shadow-xs border border-lines/20 ${className}`}>
-      <div className="flex p-2 pb-4 items-center justify-between">
-        <Logo size={30} name className={`overflow-hidden transition-all ease-in-out duration-300 ${isOpen ? "w-52" : "w-0"}`} />
+      <div className="flex p-2 pb-4 items-center">
         <button onClick={() => setIsOpen(!isOpen)} className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-          {isOpen ? <ChevronFirst /> : <ChevronLast />}
+          <ChevronFirst className={`transition-all ease-in-out duration-300 ${isOpen ? "" : "rotate-180"}`} />
         </button>
       </div>
 
       <SidebarContext.Provider value={{ isOpen }}>
         <ul className="flex flex-col flex-1 p-2 gap-2">{children}</ul>
-        <SidebarFooter user={user} signOut={signOut} />
       </SidebarContext.Provider>
     </nav>
   );
@@ -78,8 +73,8 @@ export function SidebarFooter({ user, signOut }: { user: User | null; signOut: (
         <Skeleton className="w-10 h-10 !rounded-lg" />
 
         <div
-          className={`flex justify-between overflow-hidden items-center transition-all ease-in-out duration-300 ${
-            isOpen ? "flex-1 ml-3" : "w-0"
+          className={`flex flex-1 justify-between overflow-hidden items-center transition-all ease-in-out duration-300 ${
+            isOpen ? "ml-3" : "w-0"
           }`}
         >
           <div>

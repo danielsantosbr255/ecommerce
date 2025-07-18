@@ -67,8 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async ({ email, password }: SignInFormData) => {
       try {
         setLoading(true);
-        const { session } = await authService.signIn({ email, password });
-        sessionStorage.setItem("accessToken", session.accessToken);
+        const result = await authService.signIn({ email, password });
+
+        if (!result || !result.session) {
+          toast.error("Erro ao fazer login. Tente novamente.");
+          setLoading(false);
+          return;
+        }
+        sessionStorage.setItem("accessToken", result.session.accessToken);
 
         await loadUser();
         route.push("/account");

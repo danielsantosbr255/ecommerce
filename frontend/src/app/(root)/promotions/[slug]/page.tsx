@@ -1,27 +1,23 @@
-import { Product } from "@/types";
 import ProductCard from "@/components/products/ProdutctCard";
 import { promotionService } from "@/services/promotions";
-
-interface PromotionsResponse {
-  id: number;
-  title: string;
-  description: string;
-  discount: number;
-  products: PromotionProductProps[];
-}
-
-interface PromotionProductProps {
-  id: number;
-  productId: number;
-  product: Product;
-}
 
 export const revalidate = 1800;
 
 const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
 
-  const promotion: PromotionsResponse = await promotionService.getPromotion(slug);
+  const promotion = await promotionService.getPromotion(slug);
+
+  if (!promotion) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-10">
+        <h1 className="text-2xl text-tx-primary font-medium my-2 py-2">
+          Promocão <span className="font-bold underline text-primary">{slug}</span> nao encontrada.
+        </h1>
+      </div>
+    );
+  }
+
   const products = promotion.products;
 
   if (!products.length) {
@@ -42,7 +38,7 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {products.map((promotionProduct: PromotionProductProps) => (
+          {products.map((promotionProduct) => (
             <ProductCard key={promotionProduct.product.id} product={promotionProduct.product} />
           ))}
         </div>

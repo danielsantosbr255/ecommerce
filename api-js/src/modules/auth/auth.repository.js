@@ -16,7 +16,9 @@ class AuthRepository {
   }
 
   getSessionByUserId({ userId, userAgent }) {
-    return this.prisma.session.findFirst({ where: { userId, userAgent } });
+    return this.prisma.session.findUnique({
+      where: { userId_userAgent: { userId, userAgent } },
+    });
   }
 
   getSessions(req) {
@@ -37,10 +39,8 @@ class AuthRepository {
     return this.prisma.session.delete({ where: { userId_userAgent: { userId, userAgent } } });
   }
 
-  deleteSession(id, ability) {
-    return this.prisma.session.delete({
-      where: { id, AND: accessibleBy(ability, "delete").Session },
-    });
+  deleteSession(id) {
+    return this.prisma.session.delete({ where: { id } });
   }
 
   createUser(data) {

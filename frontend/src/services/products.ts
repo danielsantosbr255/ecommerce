@@ -12,26 +12,41 @@ export interface QueryParams {
   pageSize: number;
 }
 
+export interface SearchParams {
+  q?: string;
+  page?: number;
+  pageSize?: number;
+  categoryId?: string;
+  brandId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
 class ProductService {
   public async create(productData: FormData) {
-    try {
-      const response = await api.post("/products", productData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.post<Product>("/products", productData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
   }
 
-  public async getAll(page: number = 1, pageSize: number = 10, query?: string) {
-    const url = query ? `/products?q=${query}&page=${page}&pageSize=${pageSize}` : `/products?page=${page}&pageSize=${pageSize}`;
+  public async getAll(search?: SearchParams) {
+    const { q, page, pageSize, brandId, categoryId, minPrice, maxPrice } = search || { page: 1, pageSize: 20 };
+    const params: Record<string, string | number> = {};
+
+    if (q) params["q"] = q;
+    if (page) params["page"] = page;
+    if (pageSize) params["pageSize"] = pageSize;
+    if (minPrice) params["minPrice"] = minPrice;
+    if (maxPrice) params["maxPrice"] = maxPrice;
+    if (brandId) params["brandId"] = brandId;
+    if (categoryId) params["categoryId"] = categoryId;
 
     try {
-      const response = await api.get<ProductResponse>(url, {
+      const response = await api.get<ProductResponse>("/products", {
         cache: "force-cache",
         next: { revalidate: 60 },
+        params,
       });
       return response.data;
     } catch (error) {
@@ -68,7 +83,10 @@ class ProductService {
 
   public async getRelated(productId: string) {
     try {
-      const response = await api.get<ProductResponse>(`/products/${productId}/related`);
+      const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);

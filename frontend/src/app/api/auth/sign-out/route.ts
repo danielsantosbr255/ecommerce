@@ -1,4 +1,3 @@
-// import api from "@/lib/axios";
 import { api } from "@/lib/api";
 import { NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
@@ -9,20 +8,16 @@ export async function POST() {
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   try {
-    const response = await api.post(
-      "/auth/sign-out",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-          Cookie: cookiesStore.toString(),
-          "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
-          "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
-        },
-        credentials: "include",
-      }
-    );
+    const response = await api.post("/auth/sign-out", undefined, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Cookie: cookiesStore.toString(),
+        "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
+        "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
+      },
+      credentials: "include",
+    });
 
     cookiesStore.delete("accessToken");
     cookiesStore.delete("refreshToken");

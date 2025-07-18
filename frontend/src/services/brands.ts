@@ -4,7 +4,7 @@ import { Brand } from "@/types";
 class BrandService {
   public async create(brandData: Omit<Brand, "id">) {
     try {
-      const response = await api.post("/brands", brandData);
+      const response = await api.post<Brand>("/brands", brandData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -40,7 +40,7 @@ class BrandService {
 
   public async update(slug: string, brandData: Partial<Brand>) {
     try {
-      const response = await api.put(`/brands/${slug}`, brandData);
+      const response = await api.put<Brand>(`/brands/${slug}`, brandData);
       return response.data;
     } catch (error) {
       console.error(error);

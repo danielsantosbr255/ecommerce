@@ -9,6 +9,7 @@ import {
   ResponseInterceptor,
 } from "../types";
 import { NonOkStatusError, NetworkError } from "../utils/errors";
+import { prepareRequestBodyAndHeaders } from "../utils/utils";
 import { HttpClient } from "./HttpClient";
 
 interface DispatchRequest {
@@ -60,16 +61,9 @@ export class HttpService implements HttpClient {
   }
 
   private async dispatchRequest<T = unknown>({ method, url, data, reqConfig }: DispatchRequest): Promise<ApiResponse<T>> {
-    const fetchOptions: RequestInit = { method, ...reqConfig };
-    const shouldHaveBody = ["POST", "PUT", "PATCH"].includes(method);
+    const { body, headers } = prepareRequestBodyAndHeaders(method, data, reqConfig.headers);
 
-    if (shouldHaveBody) {
-      fetchOptions.headers = { "Content-Type": "application/json", ...reqConfig.headers };
-    }
-
-    if (data !== undefined) {
-      fetchOptions.body = JSON.stringify(data);
-    }
+    const fetchOptions: RequestInit = { method, ...reqConfig, headers: headers, body: body };
 
     if (this.withCredentials) {
       fetchOptions.credentials = "include";
@@ -79,8 +73,7 @@ export class HttpService implements HttpClient {
 
     try {
       const rawResponse = await fetch(fullUrl, fetchOptions);
-
-      const responseData: T = await rawResponse.json().catch(() => null);
+      const responseData: T | null = await rawResponse.json().catch(() => null);
 
       const apiResponse: ApiResponse<T> = {
         data: responseData,
@@ -93,7 +86,19 @@ export class HttpService implements HttpClient {
       };
 
       if (!rawResponse.ok) {
-        throw new NonOkStatusError(`Request failed with status code ${rawResponse.status}`, reqConfig, fetchOptions, apiResponse);
+        let errorMessage = `Requisição falhou com status ${rawResponse.status}`;
+
+        if (responseData && typeof responseData === "object" && responseData !== null) {
+          const dataAsRecord = responseData as Record<string, unknown>;
+
+          if (typeof dataAsRecord.message === "string" && dataAsRecord.message.length > 0) {
+            errorMessage = dataAsRecord.message;
+          } else if (typeof dataAsRecord.error === "string" && dataAsRecord.error.length > 0) {
+            errorMessage = dataAsRecord.error;
+          }
+        }
+
+        throw new NonOkStatusError(errorMessage, reqConfig, fetchOptions, apiResponse);
       }
 
       return apiResponse;

@@ -37,7 +37,7 @@ export default function Logo({ className, size, variant = "default" }: LogoProps
     <main className={`${monoton.className} flex w-full h-full items-center text-primary ${className}`}>
       <Link
         href="/"
-        className={`relative flex h-15 md:text-2xl items-center hover:scale-105 transition-all duration-300  ${className}`}
+        className={`relative flex h-15 md:text-2xl items-center scale-98 hover:scale-100 transition-all duration-300  ${className}`}
       >
         <span className="flex gap-1 truncate">
           <BsFire className={`shrink-0 ${variants[variant]}`} size={size} /> Fireforge Labs

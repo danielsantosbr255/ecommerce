@@ -4,7 +4,7 @@ import { Address } from "@/types";
 import { FaPencil } from "react-icons/fa6";
 import { FaRegAddressCard } from "react-icons/fa";
 
-export default function Addresses({ addresses }: { addresses: Address[] }) {
+export default function Addresses({ addresses }: { addresses: Address[] | null }) {
   if (!addresses || addresses.length === 0) {
     return (
       <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">

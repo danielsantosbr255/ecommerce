@@ -8,7 +8,7 @@ import { FaBoxesPacking } from "react-icons/fa6";
 export default async function OrdersPage() {
   const orders = await orderService.getAll();
 
-  if (orders.length === 0) {
+  if (!orders || orders.length === 0) {
     return (
       <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
         <p className="text-tx-primary text-center font-semibold">Nenhum pedido encontrado.</p>

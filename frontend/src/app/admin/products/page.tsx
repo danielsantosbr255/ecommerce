@@ -1,13 +1,14 @@
-import { FaBox, FaPlus } from "react-icons/fa";
+import { FaBoxes, FaPlus } from "react-icons/fa";
 import CurrencyUtil from "@/utils/currency.util";
 import { productService } from "@/services/products";
 import Pagination from "@/components/ui/Pagination";
 import ProductImage from "@/components/products/ProductImage";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 const page = async () => {
-  const result = await productService.getAll(1, 8);
+  const result = await productService.getAll({ page: 1, pageSize: 8 });
   if (!result) return null;
 
   const { products, pagination } = result;
@@ -18,7 +19,7 @@ const page = async () => {
       <Table>
         <TableCaption className="text-center py-4">
           <div className="relative flex justify-center items-center gap-2 text-tx-primary font-semibold text-xl">
-            <FaBox className="text-primary" size={25} />
+            <FaBoxes className="text-primary" size={25} />
             <p>Listagem de produtos</p>
 
             <span className="absolute top-0 right-3 bg-primary/20 text-primary font-normal text-sm px-2 py-1 rounded-xl">
@@ -33,7 +34,7 @@ const page = async () => {
 
         <TableHeader>
           <TableRow className="bg-bg-overlay/10 text-sm">
-            <TableHead>Imagem</TableHead>
+            <TableHead className="text-center">Imagem</TableHead>
             <TableHead>Título</TableHead>
             <TableHead className="text-center">Status</TableHead>
             <TableHead className="text-center">Categoria</TableHead>
@@ -47,8 +48,8 @@ const page = async () => {
         <TableBody className="bg-bg-secondary divide-lines">
           {products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell className="items-center">
-                <div className="aspect-square w-16 h-16">
+              <TableCell className="flex items-center justify-center !p-0">
+                <div className="aspect-square w-20 h-20">
                   <ProductImage product={product} />
                 </div>
               </TableCell>
@@ -66,7 +67,9 @@ const page = async () => {
               </TableCell>
               <TableCell className="text-right">{new Date(product.createdAt).toLocaleString()}</TableCell>
               <TableCell className="text-right">
-                <button className="text-primary hover:underline cursor-pointer">Editar</button>
+                <Link href={`/admin/products/edit/${product.slug}`} className="text-primary hover:underline cursor-pointer">
+                  Editar
+                </Link>
               </TableCell>
             </TableRow>
           ))}

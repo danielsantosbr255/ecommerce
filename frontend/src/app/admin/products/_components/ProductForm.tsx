@@ -1,44 +1,43 @@
 "use client";
 
+import { Product } from "@/types";
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import Select from "@/components/ui/inputs/Select";
+import Select from "@/components/ui/Select";
 import { productService } from "@/services/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { useForm, useFieldArray } from "react-hook-form";
 import ImageInput from "@/components/ui/inputs/ImageInput";
 import { useProductFormOptions } from "./useProductFormOptions";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { ProductFormData, productSchema, productSpecificationSchema } from "./CreateProductSchema";
-import { FaTimes } from "react-icons/fa";
-import { FaCirclePlus } from "react-icons/fa6";
 
-const CreateProductForm = () => {
+const ProductForm = ({ product }: { product?: Product }) => {
   const { categories, brands, loadingOptions, optionsError } = useProductFormOptions();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-    setValue,
-    control,
-  } = useForm<ProductFormData>({
+  const defaultValues = {
+    isActive: product?.isActive ?? true,
+    discount: product?.discount ?? 0,
+    specifications: product?.specifications ?? [{ name: "", value: "" }],
+    images: [],
+    title: product?.title ?? "",
+    price: product?.price ?? 0,
+    stock: product?.stock ?? 0,
+    description: product?.description ?? "",
+    categoryId: product?.categoryId ?? "",
+    brandId: product?.brandId ?? "",
+  };
+
+  const { register, handleSubmit, formState, reset, setValue, control } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     mode: "onChange",
-    defaultValues: {
-      isActive: true,
-      discount: 0,
-      specifications: [{ name: "", value: "" }],
-      images: [],
-      title: "",
-      price: 0,
-      stock: 0,
-    },
+    defaultValues,
   });
 
+  const { errors, isSubmitting } = formState;
   const { fields, append, remove } = useFieldArray({ control, name: "specifications" });
 
   const prepareFormData = (data: ProductFormData): FormData => {
@@ -67,12 +66,13 @@ const CreateProductForm = () => {
       try {
         const formData = prepareFormData(data);
         await productService.create(formData);
+
         reset();
         setValue("images", []);
         toast.success("Produto adicionado com sucesso!");
       } catch (err) {
-        console.error("Erro ao adicionar produto:", err);
-        toast.error("Falha ao adicionar produto. Tente novamente.");
+        if (err instanceof Error) toast.error(err.message);
+        else toast.error("Erro ao adicionar produto. Tente novamente.");
       }
     },
     [reset, setValue]
@@ -92,22 +92,22 @@ const CreateProductForm = () => {
 
   return (
     <div>
-      <h1 className="text-lg font-semibold mb-4 text-center">Adicionar Novo Produto</h1>
+      <h1 className="text-lg font-semibold mb-4 text-center">{product ? "Editar produto" : "Novo produto"}</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-4">
         <section className="bg-bg-secondary shadow-xs rounded-2xl p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <Input label="Nome" id="title" {...register("title")} />
+            <Input label="Título" id="title" {...register("title")} placeholder="Informe o título do produto" />
             {errors.title && <ErrorMessage message={errors.title.message} />}
           </div>
 
           <div className="flex flex-col gap-1">
-            <Input label="Preço" id="price" type="number" {...register("price")} />
+            <Input label="Preço" id="price" type="number" {...register("price")} placeholder="Informe o preço do produto" />
             {errors.price && <ErrorMessage message={errors.price.message} />}
           </div>
 
           <div className="flex flex-col gap-1">
-            <Input label="Estoque" id="stock" type="number" {...register("stock")} />
+            <Input label="Estoque" id="stock" type="number" {...register("stock")} placeholder="Informe o estoque do produto" />
             {errors.stock && <ErrorMessage message={errors.stock.message} />}
           </div>
 
@@ -129,7 +129,8 @@ const CreateProductForm = () => {
               id="description"
               {...register("description")}
               rows={4}
-              className="shadow-xs appearance-none border-2 border-lines rounded-lg w-full py-2 px-3 leading-tight focus:outline-primary bg-bg-secondary"
+              className="shadow-xs appearance-none border-2 border-lines placeholder-tx-muted/50 rounded-lg w-full py-2 px-3 leading-tight focus:outline-primary bg-bg-secondary"
+              placeholder="Informe a descrição do produto"
             />
             {errors.description && <ErrorMessage message={errors.description.message} />}
           </div>
@@ -149,16 +150,26 @@ const CreateProductForm = () => {
               onClick={() => append({ name: "", value: "" })}
               className="text-tx-primary hover:text-tx-primary/80 cursor-pointer items-center"
             >
-              <FaCirclePlus size={22} />
+              <FaPlusCircle size={22} />
             </button>
           </h2>
 
           {fields.map((field, index) => (
             <div key={field.id} className="grid grid-cols-[1fr_1fr_auto] gap-2">
-              <Input id={`specifications.${index}.name`} label={`Nome`} {...register(`specifications.${index}.name`)} />
-              <Input id={`specifications.${index}.value`} label={`Valor`} {...register(`specifications.${index}.value`)} />
+              <Input
+                id={`specifications.${index}.name`}
+                label={`Nome`}
+                {...register(`specifications.${index}.name`)}
+                placeholder="ex: Tamanho"
+              />
+              <Input
+                id={`specifications.${index}.value`}
+                label={`Valor`}
+                {...register(`specifications.${index}.value`)}
+                placeholder="ex: 42"
+              />
               <button onClick={() => remove(index)} className="text-tx-error hover:text-tx-error/80 cursor-pointer">
-                <FaTimes size={20} />
+                <FaMinusCircle size={22} />
               </button>
             </div>
           ))}
@@ -166,7 +177,7 @@ const CreateProductForm = () => {
 
         <div className="col-span-full">
           <Button type="submit" className="font-bold" disabled={isSubmitting}>
-            {isSubmitting ? "Adicionando..." : "Adicionar Produto"}
+            {isSubmitting ? "Salvando..." : "Salvar"}
           </Button>
         </div>
       </form>
@@ -174,4 +185,4 @@ const CreateProductForm = () => {
   );
 };
 
-export default CreateProductForm;
+export default ProductForm;

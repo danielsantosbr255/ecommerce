@@ -1,6 +1,7 @@
 import { Product } from "@/types";
 import { brandService } from "@/services/brands";
 import ProductCard from "@/components/products/ProdutctCard";
+import { productService } from "@/services/products";
 
 export default async function page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -16,17 +17,17 @@ export default async function page({ params }: { params: Promise<{ slug: string 
     );
   }
 
-  const products = brand.products;
+  const result = await productService.getAll({ brandId: brand.id });
 
-  if (!products.length) {
+  if (!result || result.products.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center mt-10">
-        <h1 className="text-2xl text-tx-primary font-bold my-2 py-2">
-          Nenhum produto encontrado para {slug}.
-        </h1>
+        <h1 className="text-2xl text-tx-primary font-bold my-2 py-2">Nenhum produto encontrado para {slug}.</h1>
       </div>
     );
   }
+
+  const { products } = result;
 
   return (
     <div className="lg:max-w-10/12 mx-auto px-4 py-10 space-y-16">

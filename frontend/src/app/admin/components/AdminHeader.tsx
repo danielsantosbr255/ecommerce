@@ -1,23 +1,35 @@
-import React from "react";
-import { Bell } from "lucide-react";
-import SearchBar from "@/components/ui/Searchbar";
+"use client";
 
-export default function AdminHeader() {
+import Logo from "@/components/ui/Logo";
+import SearchBar from "@/components/ui/Searchbar";
+import Notification from "@/components/common/Notification";
+import { User } from "@/types";
+import Image from "next/image";
+import { FaSignOutAlt, FaUserSecret } from "react-icons/fa";
+import { useAuth } from "@/providers/AuthContext";
+
+export default function AdminHeader({ user }: { user?: User | null }) {
+  const { signOut } = useAuth();
+
   return (
-    <nav className="bg-white grid grid-cols-2 items-center justify-between gap-4 p-5 w-full rounded-2xl shadow-xs">
+    <nav className="bg-bg-primary grid grid-cols-3 items-center justify-between gap-4 py-2 px-5 w-full ">
+      <Logo size={30} name className={"overflow-hidden transition-all ease-in-out duration-300"} />
+
       <SearchBar />
 
-      <div className="flex items-center space-x-10 justify-end mr-4">
-        <button className="relative focus:outline-none">
-          <Bell size={25} />
-          <>
-            <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-primary rounded-full"></span>
-            <span className="absolute top-0 right-0 inline-flex h-2 w-2 bg-primary rounded-full animate-ping"></span>
-          </>
+      <div className="flex items-center space-x-2 justify-end">
+        <Notification />
+        <button className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 flex items-center justify-center cursor-pointer font-medium">
+          {user?.name}
+          {user?.image && <Image src={user.image} alt={user.name} width={30} height={30} className="rounded-full" />}
+          <FaUserSecret size={20} className="ml-2" />
         </button>
 
-        <button className="flex items-center space-x-2">
-          <span>Admin</span>
+        <button
+          onClick={signOut}
+          className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 flex items-center justify-center cursor-pointer font-medium"
+        >
+          <FaSignOutAlt size={20} />
         </button>
       </div>
     </nav>
