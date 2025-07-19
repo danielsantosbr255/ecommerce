@@ -24,7 +24,7 @@ const Input = ({ id, label, type = "text", icon, className, ...props }: InputPro
 
       <label
         htmlFor={id}
-        className="bg-bg-secondary absolute rounded-full text-sm text-tx-secondary font-semibold top-0 -translate-y-1/2 z-5 px-1 ml-3 leading-2 peer-focus:text-primary transition-all duration-300"
+        className="bg-bg-secondary absolute rounded-full text-sm text-tx-secondary font-semibold top-0 -translate-y-1/2 z-5 px-1 ml-3 leading-none peer-focus:text-primary transition-all duration-300"
       >
         {label}
       </label>
@@ -32,9 +32,10 @@ const Input = ({ id, label, type = "text", icon, className, ...props }: InputPro
       <input
         type={inputType}
         id={id}
-        className={`w-full rounded-md appearance-none focus:outline-none focus:ring-0 p-3 ${
-          icon && "pl-10"
-        } peer placeholder-tx-muted/50`}
+        className={`w-full rounded-md appearance-none focus:outline-none focus:ring-0 p-3 
+          ${icon && "pl-10"} 
+          peer placeholder-tx-muted/50 
+          bg-transparent autofill:bg-transparent`}
         {...props}
       />
 

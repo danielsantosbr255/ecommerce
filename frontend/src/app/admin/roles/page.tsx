@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { roleService } from "@/services/roles";
-import { FaPlus, FaUsersCog, FaUserTie } from "react-icons/fa";
+import CreateRole from "./_components/CreateRole";
+import { FaUsersCog, FaUserTie } from "react-icons/fa";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Button from "@/components/ui/Button";
 
 export default async function page() {
   const roles = await roleService.getAll();
@@ -22,9 +23,7 @@ export default async function page() {
               {roles.length > 0 ? `${roles.length} cargos` : "nenhum cargo"}
             </span>
 
-            <Button className="absolute left-3 top-1/2 -translate-y-1/2 !rounded-2xl !text-sm" href="/admin/roles/new">
-              <FaPlus className="mr-1" size={10} /> Novo cargo
-            </Button>
+            <CreateRole />
           </div>
         </TableCaption>
 
@@ -50,7 +49,9 @@ export default async function page() {
               </TableCell>
 
               <TableCell className="text-right">
-                <button className="text-primary hover:underline cursor-pointer">Editar</button>
+                <Link href={`/admin/roles/${role.id}`} className="text-primary hover:underline cursor-pointer">
+                  Editar
+                </Link>
               </TableCell>
             </TableRow>
           ))}

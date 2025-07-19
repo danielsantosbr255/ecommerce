@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { setCookiesFromResponse } from "@/lib/cookies";

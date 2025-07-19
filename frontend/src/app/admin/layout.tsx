@@ -17,11 +17,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="bg-bg-primary h-screen gap-2 p-2 grid grid-cols-1 grid-rows-[auto_1fr]">
+    <div className="bg-bg-primary w-full h-full min-h-screen gap-2 p-2 grid grid-cols-1 grid-rows-[auto_1fr]">
       <AdminHeader user={user} />
 
-      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-2">
-        <Sidebar className="row-span-2">
+      <div className="grid grid-cols-[auto_1fr] grid-rows-1 gap-2">
+        <Sidebar>
           <SidebarItem href="/admin" icon={<FaHome size={20} />} text="Inicio" />
 
           <SidebarItem href="/admin/products" icon={<FaBoxes size={20} />} text="Produtos" />
@@ -36,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <SidebarItem href="#" icon={<IoMdSettings size={20} />} text="Configurações" />
         </Sidebar>
 
-        <div className="flex overflow-y-auto">{children}</div>
+        <div className="flex overflow-y-auto h-full">{children}</div>
       </div>
     </div>
   );

@@ -44,17 +44,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async ({ name, email, password }: SignUpFormData) => {
       try {
         setLoading(true);
-        const { session } = await authService.signUp({ name, email, password });
-        sessionStorage.setItem("accessToken", session.accessToken);
-        await loadUser();
-        route.push("/account");
-        toast.success("Conta criada com sucesso!");
-      } catch (error) {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        } else {
-          toast.error("Erro ao criar conta. Tente novamente.");
+        const result = await authService.signUp({ name, email, password });
+
+        if (result && result.session) {
+          sessionStorage.setItem("accessToken", result.session.accessToken);
+          await loadUser();
+          route.push("/account");
+          toast.success("Conta criada com sucesso!");
         }
+      } catch (error) {
+        if (error instanceof Error) toast.error(error.message);
+        else toast.error("Erro ao criar conta. Tente novamente.");
+
         console.error("Signup error:", error);
       } finally {
         setLoading(false);
@@ -69,18 +70,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(true);
         const result = await authService.signIn({ email, password });
 
-        if (!result || !result.session) {
-          toast.error("Erro ao fazer login. Tente novamente.");
-          setLoading(false);
-          return;
+        if (result && result.session) {
+          sessionStorage.setItem("accessToken", result.session.accessToken);
+          await loadUser();
+          route.push("/account");
+          toast.success("Logado com sucesso!");
         }
-        sessionStorage.setItem("accessToken", result.session.accessToken);
-
-        await loadUser();
-        route.push("/account");
-        toast.success("Logado com sucesso!");
       } catch (error) {
-        toast.error("Erro ao fazer login. Tente novamente.");
+        if (error instanceof Error) toast.error(error.message);
+        else toast.error("Erro ao fazer login. Tente novamente.");
+
         console.error("Login error:", error);
       } finally {
         setLoading(false);

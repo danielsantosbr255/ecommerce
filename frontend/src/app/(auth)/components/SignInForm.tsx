@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import Input from "@/components/ui/Input";
 import { SignInFormData } from "@/types";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
+import Checkbox from "@/components/ui/Checkbox";
 import { useAuth } from "@/providers/AuthContext";
-import { Loader2 } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { IoIosMail, IoMdLock } from "react-icons/io";
 import { FaGithub, FaSignInAlt } from "react-icons/fa";
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import Checkbox from "@/components/ui/Checkbox";
 
 export default function SignInForm() {
   const { register, handleSubmit, formState } = useForm<SignInFormData>({ mode: "onChange" });

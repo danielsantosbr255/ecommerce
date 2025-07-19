@@ -1,10 +1,9 @@
 "use client";
 
 import clsx from "clsx";
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { Product } from "@/types";
-// import LoadingState from "../ui/LoadingState";
 import Skeleton from "../ui/Skeleton";
 
 type ProductImageProps = {

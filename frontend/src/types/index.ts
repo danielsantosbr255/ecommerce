@@ -2,11 +2,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
-
   password: string;
   phone?: string;
   role: "USER" | "ADMIN";
-
   image: string;
   createdAt: Date;
 
@@ -22,15 +20,15 @@ export interface Role {
   id: number;
   name: string;
   description?: string;
-  permissions?: RolePermission[];
-  users?: UserRole[];
+  permissions: RolePermission[];
+  users: UserRole[];
 }
 
 export interface Permission {
   id: number;
   action: string;
   subject: string;
-  description?: string;
+  description: string;
   roles: RolePermission[];
 }
 
@@ -135,12 +133,12 @@ export interface ProductSpecification {
 export interface Product {
   id: string;
   title: string;
-  description?: string;
+  description: string;
   price: number;
-  discount?: number;
+  discount: number;
   stock: number;
-  rating?: number;
-  isActive?: boolean;
+  rating: number;
+  isActive: boolean;
   slug: string;
 
   brand: Brand;

@@ -14,7 +14,10 @@ class RoleRepository {
   }
 
   async getById(id) {
-    return await this.prisma.role.findUnique({ where: { id } });
+    return await this.prisma.role.findUnique({
+      where: { id },
+      include: { permissions: true, users: { include: { user: true }} },
+    });
   }
 
   async getByName(name) {

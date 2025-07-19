@@ -23,7 +23,6 @@ async function ProductList({ callback }: Props) {
       </div>
     );
   }
-
   return <ProductCarousel products={products} />;
 }
 
