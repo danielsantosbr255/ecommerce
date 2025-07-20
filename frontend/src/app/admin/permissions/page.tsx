@@ -4,6 +4,26 @@ import { MdLibraryAddCheck } from "react-icons/md";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Button from "@/components/ui/Button";
 
+const TRANSLATIONS = {
+  CREATE: "Criar",
+  READ: "Ler",
+  UPDATE: "Atualizar",
+  DELETE: "Deletar",
+  MANAGE: "Gerenciar",
+  ALL: "Todos",
+  USER: "Usuários",
+  ADDRESS: "Endereços",
+  SESSION: "Sessões",
+  REVIEW: "Avaliações",
+  CART: "Carrinhos",
+  ORDER: "Pedidos",
+  PRODUCT: "Produtos",
+};
+
+const getPermissionName = (permission: string) => {
+  return TRANSLATIONS[permission.toUpperCase() as keyof typeof TRANSLATIONS] || permission;
+};
+
 export default async function page() {
   const permissions = await permissionService.getAll();
 
@@ -24,15 +44,15 @@ export default async function page() {
             </span>
 
             <Button className="absolute left-3 top-1/2 -translate-y-1/2 !rounded-2xl !text-sm" href="/admin/roles/new">
-              <FaPlus className="mr-1" size={10} /> Novo cargo
+              <FaPlus className="mr-1" size={10} /> Nova permissão
             </Button>
           </div>
         </TableCaption>
 
         <TableHeader>
           <TableRow className="bg-bg-overlay/10 text-sm">
-            <TableHead>Cargo</TableHead>
-            <TableHead>Recurso</TableHead>
+            <TableHead>Ação</TableHead>
+            <TableHead className="text-center">Recurso</TableHead>
             <TableHead>Descrição</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
@@ -42,13 +62,16 @@ export default async function page() {
           {permissions.map((permission) => (
             <TableRow key={permission.id}>
               <TableCell className="items-center py-5">
-                <span className="flex items-center gap-4 font-medium uppercase">
-                  <FaCheckCircle className="inline-block text-primary" size={20} /> {permission.action}
+                <span className="flex items-center gap-4 font-medium">
+                  <FaCheckCircle className="inline-block text-primary" size={20} /> {getPermissionName(permission.action)}
                 </span>
               </TableCell>
 
+
               <TableCell className="text-center">
-                <span className="flex items-center gap-2">{permission.subject}</span>
+                <span className="bg-primary/20 text-primary font-medium text-sm px-2 py-1 rounded-full ">
+                  {getPermissionName(permission.subject)}
+                </span>
               </TableCell>
 
               <TableCell className="text-center">

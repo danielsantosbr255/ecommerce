@@ -20,13 +20,13 @@ export class HttpError<T = unknown> extends Error {
   }
 }
 
-export class NonOkStatusError<T = unknown> extends HttpError<T> {
+export class HttpResponseError<T = unknown> extends HttpError<T> {
   constructor(message: string, config: RequestConfig, request?: RequestInit, response?: ApiResponse<T>) {
     super(message, config, request, response);
-    this.name = "NonOkStatusError";
+    this.name = "HttpResponseError";
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NonOkStatusError);
+      Error.captureStackTrace(this, HttpResponseError);
     }
   }
 }

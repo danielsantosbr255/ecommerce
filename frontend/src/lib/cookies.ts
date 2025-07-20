@@ -3,14 +3,11 @@ import { ApiResponse } from "./api/types";
 import setCookieParser from "set-cookie-parser";
 
 export async function setCookiesFromResponse(res: ApiResponse) {
-  const rawCookies = res.headers.get("set-cookie");
-  if (!rawCookies) return;
-
+  const rawCookies = res.headers.getSetCookie();
+  if (!rawCookies || rawCookies.length === 0) return;
+  
   const cookieStore = await cookies();
-
-  // 👇 ESSENCIAL: divide corretamente os headers com múltiplos cookies
-  const splitCookies = setCookieParser.splitCookiesString(rawCookies);
-  const parsedCookies = splitCookies.flatMap((cookieStr) => setCookieParser.parse(cookieStr, { map: false }));
+  const parsedCookies = setCookieParser.parse(rawCookies, { map: false });
 
   parsedCookies.forEach(({ name, value, ...options }) => {
     const allowed = ["path", "expires", "httpOnly", "maxAge", "sameSite", "secure", "domain"] as const;

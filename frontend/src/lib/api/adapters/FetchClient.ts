@@ -8,7 +8,7 @@ import {
   RequestInterceptor,
   ResponseInterceptor,
 } from "../types";
-import { NonOkStatusError, NetworkError } from "../utils/errors";
+import { HttpResponseError, NetworkError } from "../utils/errors";
 import { prepareRequestBodyAndHeaders } from "../utils/utils";
 import { HttpClient } from "./HttpClient";
 
@@ -98,12 +98,12 @@ export class HttpService implements HttpClient {
           }
         }
 
-        throw new NonOkStatusError(errorMessage, reqConfig, fetchOptions, apiResponse);
+        throw new HttpResponseError(errorMessage, reqConfig, fetchOptions, apiResponse);
       }
 
       return apiResponse;
     } catch (err: unknown) {
-      if (err instanceof NonOkStatusError) {
+      if (err instanceof HttpResponseError) {
         throw err;
       }
 

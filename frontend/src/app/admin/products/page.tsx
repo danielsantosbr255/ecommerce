@@ -6,19 +6,32 @@ import ProductImage from "@/components/products/ProductImage";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
+import { SearchPageProps } from "@/types";
 
-const page = async () => {
-  const result = await productService.getAll({ page: 1, pageSize: 8 });
+type Props = {
+  searchParams: Promise<SearchPageProps>;
+};
+
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 8;
+
+const page = async ({ searchParams }: Props) => {
+  const rawSearch = await searchParams;
+
+  const page = Number(rawSearch.page) || DEFAULT_PAGE;
+  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+
+  const result = await productService.getAll({ page, pageSize });
   if (!result) return null;
 
   const { products, pagination } = result;
-  const { currentPage, pageSize, totalPages, totalItems } = pagination;
+  const { totalPages, totalItems } = pagination;
 
   return (
     <main className="flex flex-col w-full gap-4">
       <Table>
         <TableCaption className="text-center py-4">
-          <div className="relative flex justify-center items-center gap-2 text-tx-primary font-semibold text-xl">
+          <div className="relative flex justify-center items-center gap-2 font-semibold text-xl">
             <FaBoxes className="text-primary" size={25} />
             <p>Listagem de produtos</p>
 
@@ -76,7 +89,7 @@ const page = async () => {
         </TableBody>
       </Table>
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} path={"/admin/products"} pageSize={pageSize} />
+      <Pagination currentPage={page} totalPages={totalPages} path={"/admin/products?"} pageSize={pageSize} />
     </main>
   );
 };

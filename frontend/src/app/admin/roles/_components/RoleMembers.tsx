@@ -5,7 +5,7 @@ export default async function RoleMembers({ members }: { members: UserRole[] | n
   if (!members) return null;
 
   return (
-    <div className="bg-bg-secondary flex flex-col gap-4 shadow-xs rounded-2xl px-2 py-6">
+    <div className="flex flex-col gap-4 px-2">
       <h1 className="font-semibold mb-4 ml-2">Membros</h1>
 
       <div className="flex flex-col gap-1">

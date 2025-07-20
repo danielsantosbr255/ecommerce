@@ -4,10 +4,11 @@ import { ProductResponse } from "@/services/products";
 
 interface ProductsGridProps {
   path: string;
+  children?: React.ReactNode;
   callback: () => Promise<ProductResponse | null>;
 }
 
-export default async function ProductsGrid({ callback, path }: ProductsGridProps) {
+export default async function ProductsGrid({ path, children, callback }: ProductsGridProps) {
   const result = await callback();
 
   if (!result || result.products.length === 0) {
@@ -25,10 +26,11 @@ export default async function ProductsGrid({ callback, path }: ProductsGridProps
     <main className="lg:max-w-10/12 mx-auto px-4 py-10 space-y-16">
       <section>
         <div className="flex border-b border-lines text-2xl text-tx-primary my-2 py-2 w-full justify-between items-center">
+          {children}
           <span className="text-sm font-semibold">({totalItems} produtos)</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

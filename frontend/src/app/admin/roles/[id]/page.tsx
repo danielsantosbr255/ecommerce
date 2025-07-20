@@ -16,10 +16,10 @@ export default async function page({ params }: { params: Promise<{ id: string }>
   }
 
   return (
-    <main className="w-full h-full grid grid-cols-1 lg:grid-cols-[1fr_5fr_1fr] gap-2">
+    <main className="bg-bg-secondary w-full h-full py-4 shadow-xs border border-lines/20 rounded-2xl grid grid-cols-1 lg:grid-cols-[1fr_5fr_1fr]">
       <RolesSection roles={roles} />
 
-      <section className="bg-bg-secondary flex flex-col gap-6 p-6 shadow-xs rounded-2xl">
+      <section className="bg-bg-secondary flex flex-col gap-6 px-6 border-x border-lines">
         <div className="flex flex-col gap-3">
           <h1 className="font-semibold">Editar cargo</h1>
           <RoleForm role={role} />

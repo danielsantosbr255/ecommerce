@@ -20,6 +20,7 @@ class ProductController {
     if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
     if (req.files?.length) req.body.images = req.files;
 
+    console.log(req.body.specifications)
     const validatedData = validator.create(req.body);
     const product = await this.service.create(validatedData);
 

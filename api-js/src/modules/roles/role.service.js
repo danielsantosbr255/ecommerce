@@ -8,8 +8,8 @@ class RoleService {
   }
 
   async create({ name, description }) {
-    const existingRole = await this.repository.getByName(name);
-    if (existingRole) throw new CustomError("Permissão ja cadastrada", 400);
+    // const existingRole = await this.repository.getByName(name);
+    // if (existingRole) throw new CustomError("Cargo ja cadastrado", 400);
 
     const validateData = validator.create({ name, description });
     return await this.repository.create(validateData);
@@ -25,7 +25,7 @@ class RoleService {
 
   async update(id, data) {
     const role = await this.repository.getById(parseInt(id));
-    if (!role) throw new CustomError("Permissão nao encontrada", 404);
+    if (!role) throw new CustomError("Cargo nao encontrado", 404);
 
     const validateData = validator.update(data);
     return await this.repository.update(role.id, validateData);
@@ -33,7 +33,7 @@ class RoleService {
 
   async remove(id) {
     const role = await this.repository.getById(parseInt(id));
-    if (!role) throw new CustomError("Permissão nao encontrada", 404);
+    if (!role) throw new CustomError("Cargo nao encontrado", 404);
 
     return await this.repository.remove(role.id);
   }

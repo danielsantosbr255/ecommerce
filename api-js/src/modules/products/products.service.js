@@ -58,7 +58,7 @@ class ProductService {
         totalItems,
         currentPage: parseInt(page),
         pageSize: take,
-        totalPages: Math.ceil(products.length / take),
+        totalPages: Math.ceil(totalItems / take),
       },
     };
   };

@@ -35,12 +35,12 @@ export default function ProductCard({ product }: { product: Product | null }) {
     <article className="bg-bg-secondary flex flex-col w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-sm hover:shadow-primary/50 transition-all">
       <div className="flex flex-col justify-between h-full">
         <div className="flex gap-2 items-center mb-2 h-6">
-          {product.promotions && (
+          {product.promotions?.length && (
             <span className="bg-green-500 text-tx-on-primary text-xs px-2 py-1 rounded-md truncate">Promo</span>
           )}
         </div>
 
-        <Link href={slug ? `/products/${slug}` : "#"} className="flex-1">
+        <Link href={slug ? `/product/${slug}` : "#"} className="flex-1">
           <div className="relative flex aspect-[4/3] items-center rounded-lg transition-all">
             {isLoading ? (
               <span className={`w-full h-full ${skeleton}`} />

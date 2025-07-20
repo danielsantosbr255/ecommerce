@@ -1,13 +1,13 @@
 const { z } = require("zod");
 
 const msg = {
-  required: "Campo Obrigatório",
+  required: "é obrigatório",
   partial: "Dados Inválidos!",
-  minLength: (num) => `Deve ter pelo menos ${num} caracteres`,
+  minLength: (num) => `deve ter pelo menos ${num} caracteres`,
   minItems: (num) => `deve ter pelo menos ${num} item(s)`,
-  noempty: "Nao pode ser vazio",
+  noempty: "não pode ser vazio",
   invalidId: "ID inválido! ID deve ser um UUID",
-  negative: "Nao pode ser negativo",
+  negative: "nao pode ser negativo",
   invalid: "inválido!",
 };
 
@@ -27,8 +27,8 @@ const FileSchema = z.object({
 });
 
 const ProductSpecificationSchema = z.object({
-  name: z.string({ required_error: msg.required }).min(2, msg.minLength(2)).max(25),
-  value: z.string({ required_error: msg.required }).min(2, msg.minLength(2)),
+  name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
+  value: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
 });
 
 const schema = {
@@ -43,7 +43,7 @@ const schema = {
   slug: z.string({ required_error: msg.required }).regex(/^[a-z0-9-]+$/, msg.invalid),
   brandId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
   categoryId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
-  images: z.array(FileSchema).max(5, { message: "Você pode enviar no máximo 5 imagens." }),
+  images: z.array(FileSchema, { required_error: msg.required }).max(5, { message: "Você pode enviar no máximo 5 imagens." }),
 };
 
 const create = (data) => {

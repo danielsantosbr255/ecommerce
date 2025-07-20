@@ -64,6 +64,7 @@ api.interceptors.response.use(
 
   async (error) => {
     if (!(error instanceof HttpError)) return Promise.reject(error);
+    
     const originalRequest = error.config;
     const status = error.response?.status;
 
