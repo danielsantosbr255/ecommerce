@@ -20,10 +20,10 @@ class PermissionController {
     res.status(200).json(permissions);
   };
 
-  getById = async (req, res) => {
+  getOne = async (req, res) => {
     if (!req.ability.can("manage", "Permission")) throw new CustomError("Acesso negado!", 403);
 
-    const permission = await this.service.getById(req.params.id);
+    const permission = await this.service.getOne(req.params.id);
     res.status(200).json(permission);
   };
 

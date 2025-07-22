@@ -30,6 +30,11 @@ class UserController {
     const user = await this.service.delete(req.ability, id);
     res.json({ message: "Usuário deletado com sucesso", user });
   };
+
+  assignRoleToUser = async(userId, roleId) => {
+    // Reutiliza a lógica do serviço de roles para manter a consistência
+    return rolesService.assignUserToRole(roleId, userId);
+  };
 }
 
 module.exports = new UserController();

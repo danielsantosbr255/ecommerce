@@ -5,7 +5,7 @@ const router = require("express").Router();
 
 router.post("/roles", verifyToken, controller.create);
 router.get("/roles", verifyToken, controller.getAll);
-router.get("/roles/:id", verifyToken, controller.getById);
+router.get("/roles/:id", verifyToken, controller.getOne);
 router.put("/roles/:id", verifyToken, controller.update);
 router.delete("/roles/:id", verifyToken, controller.remove);
 

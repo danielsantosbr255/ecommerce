@@ -18,10 +18,10 @@ class RoleController {
     res.status(200).json(roles);
   };
 
-  getById = async (req, res) => {
+  getOne = async (req, res) => {
     if (!req.ability.can("manage", "Role")) throw new CustomError("Acesso negado!", 403);
 
-    const role = await this.service.getById(req.params.id);
+    const role = await this.service.getOne(req.params.id);
     res.status(200).json(role);
   };
 

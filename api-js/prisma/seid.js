@@ -2,6 +2,7 @@ const { prisma } = require("../src/common/database/prisma");
 const authUtil = require("../src/common/utils/auth.util");
 
 async function main() {
+  //#region | Criar Usuários
   const adminUser = await prisma.user.upsert({
     where: { email: "admin@email.com" },
     update: {},
@@ -17,62 +18,74 @@ async function main() {
     update: {},
     create: { email: "buyer@email.com", name: "Comprador", password: await authUtil.hashPassword("123123") },
   });
-
-  const adminRole = await prisma.role.create({ data: { name: "admin", description: "Administrador completo do sistema" } });
-  const sellerRole = await prisma.role.create({ data: { name: "seller", description: "Pode criar e atualizar dados" } });
+  //#endregion
 
   // #region | Criar Permissões
   const manageAllPermission = await prisma.permission.create({
     data: {
       action: "manage",
       subject: "all",
-      description: "Gerenciar todas as ações em todos os sujeitos",
+      description:
+        "Permissão total: permite ao usuário acessar, criar, editar e excluir qualquer recurso do sistema, sem restrições.",
     },
   });
   const manageUserPermission = await prisma.permission.create({
     data: {
       action: "manage",
       subject: "User",
-      description: "Gerenciar usuários",
+      description:
+        "Permite gerenciar usuários: criar, visualizar, editar e remover contas de outros membros, além de alterar suas permissões e funções.",
     },
   });
   const manageProductPermission = await prisma.permission.create({
     data: {
       action: "manage",
       subject: "Product",
-      description: "Gerenciar produtos",
+      description:
+        "Permite gerenciar produtos: cadastrar novos produtos, editar informações, alterar preços, atualizar estoque e remover produtos do catálogo.",
     },
   });
   const manageAddressesPermission = await prisma.permission.create({
     data: {
       action: "manage",
       subject: "Address",
-      description: "Gerenciar endereços",
+      description:
+        "Permite gerenciar endereços: adicionar, editar e remover endereços associados a usuários ou pedidos no sistema.",
     },
   });
   const manageOrderPermission = await prisma.permission.create({
     data: {
       action: "manage",
       subject: "Order",
-      description: "Gerenciar pedidos",
+      description:
+        "Permite gerenciar pedidos: criar, visualizar, atualizar status, editar detalhes e cancelar pedidos realizados na plataforma.",
     },
   });
   // #endregion
 
   // #region | Atribuir Permissões aos Roles
-  await prisma.rolePermission.createMany({
-    data: [
-      { roleId: adminRole.id, permissionId: manageAllPermission.id }, // Admin: Pode gerenciar tudo
-      { roleId: sellerRole.id, permissionId: manageOrderPermission.id },
-      { roleId: sellerRole.id, permissionId: manageProductPermission.id },
-    ],
+  const adminRole = await prisma.role.upsert({
+    where: { name: "admin" },
+    update: { permissions: { set: manageAllPermission.map((p) => ({ id: p.id })) } },
+    create: {
+      name: "admin",
+      description: "Acesso total ao sistema",
+      permissions: {
+        connect: manageAllPermission.map((p) => ({ id: p.id })),
+      },
+    },
   });
 
-  await prisma.userRole.createMany({
-    data: [
-      { userId: adminUser.id, roleId: adminRole.id },
-      { userId: sellerUser.id, roleId: sellerRole.id },
-    ],
+  const sellerRole = await prisma.role.upsert({
+    where: { name: "seller" },
+    update: { permissions: { set: manageProductPermission.map((p) => ({ id: p.id })) } },
+    create: {
+      name: "seller",
+      description: "Gerente da loja com acesso a produtos e pedidos",
+      permissions: {
+        connect: manageProductPermission.map((p) => ({ id: p.id })),
+      },
+    },
   });
   // #endregion
 

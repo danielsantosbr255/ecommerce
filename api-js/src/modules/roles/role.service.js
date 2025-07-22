@@ -7,11 +7,8 @@ class RoleService {
     this.repository = repository;
   }
 
-  async create({ name, description }) {
-    // const existingRole = await this.repository.getByName(name);
-    // if (existingRole) throw new CustomError("Cargo ja cadastrado", 400);
-
-    const validateData = validator.create({ name, description });
+  async create(data) {
+    const validateData = validator.create(data);
     return await this.repository.create(validateData);
   }
 
@@ -19,20 +16,35 @@ class RoleService {
     return await this.repository.getAll();
   }
 
-  async getById(id) {
-    return await this.repository.getById(parseInt(id));
+  async getOne(id) {
+    return await this.repository.getOne(parseInt(id));
   }
 
   async update(id, data) {
-    const role = await this.repository.getById(parseInt(id));
+    const role = await this.repository.getOne(parseInt(id));
     if (!role) throw new CustomError("Cargo nao encontrado", 404);
 
     const validateData = validator.update(data);
+
+    if (validateData.permissions) {
+      validateData.permissions = {
+        deleteMany: {},
+        create: validateData.permissions.map((pid) => ({ permission: { connect: { id: pid } } })),
+      };
+    }
+
+    if (validateData.users) {
+      validateData.users = {
+        deleteMany: {},
+        create: validateData.users.map((userId) => ({ user: { connect: { id: userId } } })),
+      };
+    }
+
     return await this.repository.update(role.id, validateData);
   }
 
   async remove(id) {
-    const role = await this.repository.getById(parseInt(id));
+    const role = await this.repository.getOne(parseInt(id));
     if (!role) throw new CustomError("Cargo nao encontrado", 404);
 
     return await this.repository.remove(role.id);

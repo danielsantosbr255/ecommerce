@@ -19,12 +19,12 @@ class PermissionService {
     return repository.getAll();
   }
 
-  getById(id) {
-    return repository.getById(parseInt(id));
+  getOne(id) {
+    return repository.getOne(parseInt(id));
   }
 
   async update(id, { action, subject, description }) {
-    const permission = await repository.getById(parseInt(id));
+    const permission = await repository.getOne(parseInt(id));
     if (!permission) throw new CustomError("Permissão nao encontrada", 404);
 
     const validateData = validator.update({ action, subject, description });
@@ -32,7 +32,7 @@ class PermissionService {
   }
 
   async remove(id) {
-    const permission = await repository.getById(parseInt(id));
+    const permission = await repository.getOne(parseInt(id));
     if (!permission) throw new CustomError("Permissão nao encontrada", 404);
 
     return repository.remove(permission.id);

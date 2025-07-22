@@ -39,7 +39,7 @@ export default async function page() {
           {roles.map((role) => (
             <TableRow key={role.id}>
               <TableCell className="items-center py-5">
-                <span className="flex items-center gap-4 font-medium uppercase">
+                <span className="flex items-center gap-4 font-medium">
                   <FaUserTie className="inline-block text-primary" size={20} /> {role.name}
                 </span>
               </TableCell>

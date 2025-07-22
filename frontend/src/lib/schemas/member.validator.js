@@ -3,17 +3,14 @@ const { z } = require("zod");
 const msg = {
   required: "é obrigatório",
   partial: "dados Inválidos!",
-  noempty: "não pode ser vazio",
-  minLength: (min) => `deve ter pelo menos ${min} caracteres`,
-  array: "deve ser um array de IDs numéricos",
+  noempty: "nao pode ser vazio",
   invalidId: "ID inválido! ID deve ser um UUID",
+  minLength: (min) => `deve ter pelo menos ${min} caracteres`,
 };
 
 const schema = {
-  name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
-  description: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
-  permissions: z.array(z.number()).optional(),
-  users: z.array(z.string().uuid({ message: msg.invalidId })).optional(),
+  userId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
+  roleId: z.number({ required_error: msg.required }).min(1, msg.minLength(1)),
 };
 
 const create = (data) => {

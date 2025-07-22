@@ -13,15 +13,14 @@ class RoleRepository {
     return await this.prisma.role.findMany();
   }
 
-  async getById(id) {
+  async getOne(id) {
     return await this.prisma.role.findUnique({
       where: { id },
-      include: { permissions: true, users: { include: { user: true }} },
+      include: {
+        permissions: { include: { permission: true } },
+        users: { include: { user: true } },
+      },
     });
-  }
-
-  async getByName(name) {
-    return await this.prisma.role.findUnique({ where: { name } });
   }
 
   async update(id, data) {
@@ -30,6 +29,22 @@ class RoleRepository {
 
   async remove(id) {
     return await this.prisma.role.delete({ where: { id } });
+  }
+
+  async addPermissions(id, permissionIds) {
+    return this.prisma.role.update({
+      where: { id },
+      data: { permissions: { set: permissionIds.map((permId) => ({ id: permId })) } },
+      include: { permissions: true },
+    });
+  }
+
+  async addUser(id, userIds) {
+    return this.prisma.role.update({
+      where: { id },
+      data: { users: { set: userIds.map((userId) => ({ userId })) } },
+      include: { users: { include: { user: true } } },
+    });
   }
 }
 

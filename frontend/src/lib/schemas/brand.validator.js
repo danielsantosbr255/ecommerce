@@ -2,18 +2,17 @@ const { z } = require("zod");
 
 const msg = {
   required: "é obrigatório",
-  partial: "dados Inválidos!",
-  noempty: "não pode ser vazio",
-  minLength: (min) => `deve ter pelo menos ${min} caracteres`,
-  array: "deve ser um array de IDs numéricos",
-  invalidId: "ID inválido! ID deve ser um UUID",
+  partial: "Dados Inválidos!",
+  minLength: (num) => `deve ter pelo menos ${num} caracteres`,
+  minItems: (num) => `deve ter pelo menos ${num} item(s)`,
+  noempty: "nao pode ser vazio",
+  invalid: "inválido!",
 };
 
 const schema = {
   name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
-  description: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
-  permissions: z.array(z.number()).optional(),
-  users: z.array(z.string().uuid({ message: msg.invalidId })).optional(),
+  slug: z.string({ required_error: msg.required }).regex(/^[a-z0-9-]+$/, msg.invalid),
+  image: z.string().url({ message: "URL inválida." }),
 };
 
 const create = (data) => {

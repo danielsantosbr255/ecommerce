@@ -13,7 +13,7 @@ class PermissionRepository {
     return this.prisma.permission.findMany();
   }
 
-  getById(id) {
+  getOne(id) {
     return this.prisma.permission.findUnique({ where: { id } });
   }
 
