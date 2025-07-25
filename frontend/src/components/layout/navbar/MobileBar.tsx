@@ -6,7 +6,7 @@ import MobileMenu from "../MobileMenu";
 import Logo from "@/components/ui/Logo";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
-import { FaSignInAlt, FaUserNinja, FaUserShield } from "react-icons/fa";
+import { FaSignInAlt, FaUserAstronaut, FaUserShield } from "react-icons/fa";
 import { Loader2, Menu } from "lucide-react";
 
 const MobileBar = (): JSX.Element => {
@@ -35,7 +35,7 @@ const MobileBar = (): JSX.Element => {
           {userLoading ? (
             <Loader2 size={25} className="animate-spin" />
           ) : (
-            <Link href={user ? "/account" : "/sign-in"}>{user ? <FaUserNinja size={22} /> : <FaSignInAlt />}</Link>
+            <Link href={user ? "/account" : "/sign-in"}>{user ? <FaUserAstronaut size={22} /> : <FaSignInAlt />}</Link>
           )}
         </div>
       </main>

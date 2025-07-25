@@ -5,7 +5,7 @@ const router = require("express").Router();
 
 router.post("/members", verifyToken, controller.create);
 router.get("/members", verifyToken, controller.getAll);
-router.get("/members/:userId/:roleId", verifyToken, controller.getById);
+router.get("/members/:userId/:roleId", verifyToken, controller.getOne);
 router.put("/members/:userId/:roleId", verifyToken, controller.update);
 router.delete("/members/:userId/:roleId", verifyToken, controller.remove);
 

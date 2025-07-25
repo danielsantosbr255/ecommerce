@@ -9,7 +9,7 @@ import {
   FaShoppingBasket,
   FaSignOutAlt,
   FaThumbsUp,
-  FaUserNinja,
+  FaUserAstronaut,
   FaWindowClose,
 } from "react-icons/fa";
 
@@ -18,7 +18,7 @@ export default function SidebarLayout() {
 
   return (
     <Sidebar>
-      <SidebarItem href="/account" icon={<FaUserNinja size={27} />} text="Minha Conta" />
+      <SidebarItem href="/account" icon={<FaUserAstronaut size={27} />} text="Minha Conta" />
       <SidebarItem href="/account/security" icon={<FaShieldAlt size={27} />} text="Acesso e segurança" />
       <SidebarItem href="/account/orders" icon={<FaShoppingBasket size={27} />} text="Meus Pedidos" />
       <SidebarItem href="/account/address" icon={<FaAddressBook size={27} />} text="Meus Endereços" />

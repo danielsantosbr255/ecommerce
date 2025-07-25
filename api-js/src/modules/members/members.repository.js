@@ -15,7 +15,7 @@ class RoleRepository {
     });
   }
 
-  async getById(userId_role_Id) {
+  async getOne(userId_role_Id) {
     return await this.prisma.userRole.findUnique({
       where: { userId_role_Id },
       include: { permissions: true, users: true },

@@ -1,10 +1,11 @@
 import { api } from "@/lib/api";
-import { Address } from "@/types";
+import { AddressResponse } from "@/types";
+import { Address } from "@/lib/schemas/address.schema";
 
 class AddressService {
-  public async create(addressData: Omit<Address, "id">) {
+  public async create(addressData: Address) {
     try {
-      const response = await api.post("/addresses", addressData);
+      const response = await api.post<AddressResponse>("/addresses", addressData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -14,11 +15,8 @@ class AddressService {
 
   public async getAll() {
     try {
-      const response = await api.get<Address[]>("/addresses", {
-        cache: "force-cache",
-        next: { revalidate: 60 },
-      });
-      return response.data;
+      const response = await api.get<AddressResponse[]>("/addresses");
+      return response.data || [];
     } catch {
       return [];
     }
@@ -36,7 +34,7 @@ class AddressService {
 
   public async update(id: string, addressData: Partial<Address>) {
     try {
-      const response = await api.put(`/addresses/${id}`, addressData);
+      const response = await api.put<AddressResponse>(`/addresses/${id}`, addressData);
       return response.data;
     } catch (error) {
       console.error(error);

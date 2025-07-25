@@ -8,7 +8,7 @@ class MemberService {
   }
 
   async create({ userId, roleId }) {
-    const existingMember = await this.repository.getById({ userId, roleId });
+    const existingMember = await this.repository.getOne({ userId, roleId });
     if (existingMember) throw new CustomError("Membro ja cadastrado", 422);
 
     const validateData = validator.create({ userId, roleId });
@@ -19,12 +19,12 @@ class MemberService {
     return await this.repository.getAll();
   }
 
-  async getById({ userId, roleId }) {
-    return await this.repository.getById({ userId, roleId });
+  async getOne({ userId, roleId }) {
+    return await this.repository.getOne({ userId, roleId });
   }
 
   async update({ userId, roleId }, data) {
-    const member = await this.repository.getById({ userId, roleId });
+    const member = await this.repository.getOne({ userId, roleId });
     if (!member) throw new CustomError("Membro nao encontrado", 404);
 
     const validateData = validator.update(data);
@@ -32,7 +32,7 @@ class MemberService {
   }
 
   async remove({ userId, roleId }) {
-    const member = await this.repository.getById({ userId, roleId });
+    const member = await this.repository.getOne({ userId, roleId });
     if (!member) throw new CustomError("Membro nao encontrado", 404);
 
     return await this.repository.remove({ userId, roleId });

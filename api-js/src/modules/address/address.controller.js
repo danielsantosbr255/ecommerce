@@ -18,18 +18,18 @@ class AddressController {
   };
 
   getById = async (req, res) => {
-    const address = await this.service.getById(req, req.params.id);
+    const address = await this.service.getById(req.ability, req.params.id);
     res.json(address);
   };
 
   update = async (req, res) => {
     const validateData = dataValidator.update(req.body);
-    const updatedAddress = await this.service.update(req, req.params.id, validateData);
+    const updatedAddress = await this.service.update(req.ability, req.params.id, validateData);
     res.json(updatedAddress);
   };
 
   remove = async (req, res) => {
-    const address = await this.service.remove(req, req.params.id);
+    const address = await this.service.remove(req.ability, req.params.id);
     res.json({ message: "Endereço deletado com sucesso", address });
   };
 }

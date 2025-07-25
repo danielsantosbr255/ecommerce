@@ -7,12 +7,7 @@ class AddressRepository {
   }
 
   create(data) {
-    return this.prisma.address.upsert({
-      where: { userId: data.userId, isDefault: true },
-      update: { ...data, isDefault: true },
-      create: { ...data, isDefault: true },
-      include: { user: { omit: { password: true } } },
-    });
+    return this.prisma.address.create({ data, include: { user: { omit: { password: true } } } });
   }
 
   getAll(ability) {
@@ -22,7 +17,14 @@ class AddressRepository {
     });
   }
 
-  getById(ability, id) {
+  getByUserDefault(userId) {
+    return this.prisma.address.findFirst({
+      where: { userId, isDefault: true },
+      include: { user: { omit: { password: true } } },
+    });
+  }
+
+  getOne(ability, id) {
     return this.prisma.address.findUnique({
       where: { id, AND: accessibleBy(ability, "read").Address },
       include: { user: { omit: { password: true } } },

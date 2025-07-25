@@ -6,12 +6,11 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { JSX, ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
-import { RiAdminFill } from "react-icons/ri";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
 import { FaBuildingCircleExclamation } from "react-icons/fa6";
-import { FaCartArrowDown, FaSignInAlt, FaUserNinja } from "react-icons/fa";
+import { FaCartArrowDown, FaSignInAlt, FaUserAstronaut, FaUserSecret } from "react-icons/fa";
 
 interface NavItemProps {
   href: string;
@@ -55,7 +54,11 @@ const CartItem = () => {
 };
 
 const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) => {
-  const isAdmin = user?.roles?.find((role) => role.role.name.toUpperCase() === "ADMIN");
+  const isAdmin = user?.roles?.find((role) =>
+    role.role.permissions.find(
+      (permission) => permission.permission.action === "manage" && permission.permission.subject === "all"
+    )
+  );
 
   if (loading) return <NavItem href="#" icon={<Loader2 size={25} className="animate-spin" />} />;
 
@@ -64,10 +67,10 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
       <NavItem
         href={user ? "/account" : "/sign-in"}
         label=""
-        icon={user ? <FaUserNinja size={25} /> : <FaSignInAlt size={25} />}
+        icon={user ? <FaUserAstronaut size={25} /> : <FaSignInAlt size={25} />}
       />
 
-      {isAdmin && <NavItem href="/admin" icon={<RiAdminFill size={25} className="animate-pulse text-primary" />} />}
+      {isAdmin && <NavItem href="/admin" icon={<FaUserSecret size={25} className="animate-pulse text-primary" />} />}
     </>
   );
 };

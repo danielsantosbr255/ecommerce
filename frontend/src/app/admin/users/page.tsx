@@ -13,8 +13,6 @@ export default async function page() {
     );
   }
 
-  console.log(users.map((user) => user.roles));
-
   return (
     <main className="flex flex-col w-full gap-4">
       <Table>

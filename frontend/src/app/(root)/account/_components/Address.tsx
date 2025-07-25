@@ -1,10 +1,10 @@
 "use client";
 
-import { Address } from "@/types";
+import { AddressResponse } from "@/types";
 import { FaPencil } from "react-icons/fa6";
 import { FaRegAddressCard } from "react-icons/fa";
 
-export default function Addresses({ addresses }: { addresses: Address[] | null }) {
+export default function Addresses({ addresses }: { addresses: AddressResponse[] | null }) {
   if (!addresses || addresses.length === 0) {
     return (
       <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">

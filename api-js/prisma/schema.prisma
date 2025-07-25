@@ -17,30 +17,25 @@ enum ORDER_STATUS {
   RETURNED
 }
 
-enum USER_ROLES {
-  USER
-  ADMIN
-}
-
 // #endregion header
 
 // #region User
 model User {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  email     String     @unique
+  email     String   @unique
+  username  String?  @unique
   password  String
   phone     String?
-  role      USER_ROLES @default(USER)
-  image     String?    @default("")
-  createdAt DateTime   @default(now())
+  image     String?  @default("")
+  createdAt DateTime @default(now())
 
   orders    Order[]
   reviews   Review[]
   sessions  Session[]
   cart      Cart?
   addresses Address[]
-  UserRole  UserRole[]
+  roles     UserRole[]
 
   @@map("users")
 }
@@ -310,6 +305,8 @@ model Role {
   permissions RolePermission[]
   users       UserRole[]
 
+  createdAt DateTime @default(now())
+
   @@map("roles")
 }
 
@@ -335,7 +332,7 @@ model UserRole {
 }
 
 model RolePermission {
-  role   Role @relation(fields: [roleId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
   roleId Int
 
   permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)

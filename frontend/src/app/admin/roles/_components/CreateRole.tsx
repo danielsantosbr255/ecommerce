@@ -5,13 +5,17 @@ import { FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { roleService } from "@/services/roles";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateRole() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const createRole = async () => {
     try {
       const role = await roleService.create({ name: "Novo cargo", description: "Descrição do cargo" });
+      await queryClient.invalidateQueries({ queryKey: ["roles"] });
+
       if (role) router.push(`/admin/roles/${role.id}`);
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);

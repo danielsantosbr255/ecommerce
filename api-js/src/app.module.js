@@ -20,6 +20,7 @@ const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
 const PermissionsModule = require("./modules/permissions/permissions.module");
+const MembersModule = require("./modules/members/members.module");
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api", [
   BrandModule,
   RolesModule,
   PermissionsModule,
+  MembersModule,
 ]);
 
 app.use(errorHandler);

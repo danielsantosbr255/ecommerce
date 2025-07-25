@@ -12,7 +12,7 @@ export interface User {
   reviews: Review[];
   sessions: Session[];
   cart?: Cart;
-  addresses: Address[];
+  addresses: AddressResponse[];
   roles: UserRole[];
 }
 
@@ -184,7 +184,7 @@ export interface Order {
   totalPrice: number;
 }
 
-export interface Address {
+export interface AddressResponse {
   id: string;
   label: string;
   street: string;

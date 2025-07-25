@@ -18,11 +18,11 @@ class MemberController {
     res.status(200).json(members);
   };
 
-  getById = async (req, res) => {
+  getOne = async (req, res) => {
     const { userId, roleId } = req.params;
     if (!req.ability.can("manage", "Member")) throw new CustomError("Acesso negado!", 403);
 
-    const member = await this.service.getById({ userId, roleId: parseInt(roleId) });
+    const member = await this.service.getOne({ userId, roleId: parseInt(roleId) });
     res.status(200).json(member);
   };
 

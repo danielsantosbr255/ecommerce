@@ -10,6 +10,7 @@ const msg = {
 };
 
 const schema = {
+  label: z.string().min(3, "Nome do endereço deve ter pelo menos 3 caracteres").optional().nullable(),
   street: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
   number: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
   complement: z.string().optional(),
