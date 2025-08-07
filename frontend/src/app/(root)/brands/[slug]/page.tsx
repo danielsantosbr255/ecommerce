@@ -1,9 +1,26 @@
-import { Product } from "@/types";
+import { Suspense } from "react";
+import { SearchPageProps } from "@/types";
 import { brandService } from "@/services/brands";
-import ProductCard from "@/components/products/ProdutctCard";
+import { productService } from "@/services/products";
+import LoadingState from "@/components/ui/LoadingState";
+import ProductsGrid from "@/components/products/ProductsGrid";
 
-export default async function page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+interface Props {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<SearchPageProps>;
+}
+
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 10;
+
+export default async function page({ searchParams, params }: Props) {
+  const rawParams = await params;
+  const rawSearch = await searchParams;
+
+  const slug = rawParams.slug;
+  const page = Number(rawSearch.page) || DEFAULT_PAGE;
+  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+
   const brand = await brandService.getOne(slug);
 
   if (!brand) {
@@ -16,29 +33,15 @@ export default async function page({ params }: { params: Promise<{ slug: string 
     );
   }
 
-  const products = brand.products;
-
-  if (!products.length) {
-    return (
-      <div className="flex flex-col justify-center items-center mt-10">
-        <h1 className="text-2xl text-tx-primary font-bold my-2 py-2">
-          Nenhum produto encontrado para {slug}.
-        </h1>
-      </div>
-    );
-  }
+  const seachQuery = () => productService.getAll({ brandId: brand.id, page, pageSize });
 
   return (
-    <div className="lg:max-w-10/12 mx-auto px-4 py-10 space-y-16">
-      <h2 className="border-b border-lines text-2xl text-tx-primary font-semibold my-2 py-2">
-        Marca: <span className="font-bold underline text-primary">{brand.name}</span>
-      </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {products.map((product: Product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
+    <Suspense fallback={<LoadingState />}>
+      <ProductsGrid callback={seachQuery} path={`/brands/${brand.slug}?`}>
+        <h1 className="text-2xl font-medium text-center">
+          Marca: <strong className="text-primary underline">{brand.name}</strong>
+        </h1>
+      </ProductsGrid>
+    </Suspense>
   );
 }

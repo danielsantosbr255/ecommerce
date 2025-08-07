@@ -1,21 +1,10 @@
-import api from "@/lib/axios";
 import { User } from "@/types";
-import { cache } from "react";
-
-// Essa função é cacheada
-const fetchOwnUser = cache(async (): Promise<User | null> => {
-  try {
-    const response = await api.get("/users/me");
-    return response.data;
-  } catch {
-    return null;
-  }
-});
+import { api } from "@/lib/api";
 
 class UserService {
   public async create(userData: Omit<User, "id">) {
     try {
-      const response = await api.post("/users", userData);
+      const response = await api.post<User>("/users", userData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -23,13 +12,21 @@ class UserService {
     }
   }
 
-  public async getOwn(): Promise<User | null> {
-    return fetchOwnUser();
+  public async getOwn() {
+    try {
+      const response = await api.get<User>("/users/me");
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 
   public async getAll() {
     try {
-      const response = await api.get("/users");
+      const response = await api.get<User[]>("/users", {
+        cache: "force-cache",
+        next: { revalidate: 30 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -39,7 +36,7 @@ class UserService {
 
   public async getOne(id: string) {
     try {
-      const response = await api.get(`/users/${id}`);
+      const response = await api.get<User>(`/users/${id}`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -49,7 +46,7 @@ class UserService {
 
   public async update(id: string, userData: Partial<User>) {
     try {
-      const response = await api.put(`/users/${id}`, userData);
+      const response = await api.put<User>(`/users/${id}`, userData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -59,7 +56,7 @@ class UserService {
 
   public async delete(id: string) {
     try {
-      const response = await api.delete(`/users/${id}`);
+      const response = await api.delete<User>(`/users/${id}`);
       return response.data;
     } catch (error) {
       console.error(error);

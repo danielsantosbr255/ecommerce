@@ -1,37 +1,19 @@
 "use client";
 
 import { Product } from "@/types";
-import ProductCard from "../products/ProdutctCard";
-import ProductCardSkeleton from "../products/ProductCardSkeleton";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import ProductCard from "../products/ProdutctCard";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel/carousel";
 
-interface Props {
-  products: Product[] | null;
-}
-
-const ProductCarousel: React.FC<Props> = ({ products }) => {
+const ProductCarousel = ({ products }: { products: Product[] | null }) => {
   const isLoading = !products || products.length === 0;
-  const placeholder = Array(11).fill({}) as Product[];
-  const randomInt = Math.floor(Math.random() * 1000);
+  const placeholder = Array(11).fill(null) as Product[];
 
   const items = isLoading ? placeholder : products;
-  const renderItem = (product: Product, index: number) =>
-    isLoading ? <ProductCardSkeleton key={index} /> : <ProductCard product={product} />;
 
   return (
     <div className="flex flex-col w-full">
-      <Carousel
-        className="w-full"
-        opts={{ align: "start", loop: true }}
-        plugins={[Autoplay({ delay: 3000 + randomInt })]}
-      >
+      <Carousel className="w-full" opts={{ align: "start", loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
         <CarouselContent className="ml-0">
           {items.map((item, index) => (
             <CarouselItem
@@ -45,7 +27,7 @@ const ProductCarousel: React.FC<Props> = ({ products }) => {
               2xl:basis-[19.23%]   // desktop grande (5.2 colunas)
             "
             >
-              {renderItem(item, index)}
+              <ProductCard key={index} product={item} />
             </CarouselItem>
           ))}
         </CarouselContent>

@@ -12,7 +12,7 @@ interface Props {
 
 const AdminProductCard: React.FC<Props> = ({ product }) => {
   return (
-    <div className="bg-bg-secondary border border-lines hover:border-primary flex text-tx-primary  p-2 justify-between rounded-xl cursor-pointer transition-all">
+    <div className="bg-bg-secondary border-b border-lines last:border-b-0 flex p-2 justify-between cursor-pointer transition-all">
       <section className="flex flex-1 space-x-5">
         <div className="bg-bg-secondary aspect-square">
           <ProductImage product={product} className="w-full h-auto object-contain rounded-xl" />

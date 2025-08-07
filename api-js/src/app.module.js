@@ -9,6 +9,7 @@ const errorHandler = require("./common/middlewares/error.handler");
 const AuthModule = require("./modules/auth/auth.module");
 const CartModule = require("./modules/cart/cart.module");
 const UsersModule = require("./modules/users/user.module");
+const RolesModule = require("./modules/roles/role.module");
 const BrandModule = require("./modules/brands/brands.module");
 const OrdersModule = require("./modules/orders/orders.module");
 const AccountModule = require("./modules/account/account.module");
@@ -18,6 +19,9 @@ const SessionModule = require("./modules/sessions/session.module");
 const ProductsModule = require("./modules/products/products.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
+const PermissionsModule = require("./modules/permissions/permissions.module");
+const MembersModule = require("./modules/members/members.module");
+const UploadModule = require("./modules/uploads/uploads.module");
 
 const app = express();
 
@@ -28,6 +32,7 @@ app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use("/api", [
+  UploadModule,
   AuthModule,
   UsersModule,
   ProductsModule,
@@ -40,6 +45,9 @@ app.use("/api", [
   AddressModule,
   CategoriesModule,
   BrandModule,
+  RolesModule,
+  PermissionsModule,
+  MembersModule,
 ]);
 
 app.use(errorHandler);

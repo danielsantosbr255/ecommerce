@@ -14,8 +14,13 @@ import {
   FaMailBulk,
 } from "react-icons/fa";
 import Image from "next/image";
+import { Metadata } from "next";
 
-// Importe uma imagem sua (opcional)
+export const metadata: Metadata = {
+  title: "Sobre - Fireforge Labs",
+  description: "Aqui falo tudo sobre como foi feito o e-commerce e sobre mim.",
+};
+
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-16">
@@ -183,9 +188,5 @@ const AboutPage = () => {
     </div>
   );
 };
-
-// Importe os novos ícones e a Image do Next.js
-
-// Certifique-se de ter uma imagem de perfil em sua pasta 'public' (ou ajuste o caminho)
 
 export default AboutPage;

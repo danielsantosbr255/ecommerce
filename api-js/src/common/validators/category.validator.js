@@ -10,8 +10,8 @@ const msg = {
 };
 
 const schema = {
-  id: z.string().uuid().optional(),
   name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
+  slug: z.string({ required_error: msg.required }).min(1, msg.minLength(1)),
   image: z.string().url({ message: "URL inválida." }),
 };
 

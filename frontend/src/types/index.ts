@@ -2,11 +2,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
-
   password: string;
   phone?: string;
   role: "USER" | "ADMIN";
-
   image: string;
   createdAt: Date;
 
@@ -14,7 +12,7 @@ export interface User {
   reviews: Review[];
   sessions: Session[];
   cart?: Cart;
-  addresses: Address[];
+  addresses: AddressResponse[];
   roles: UserRole[];
 }
 
@@ -30,14 +28,13 @@ export interface Permission {
   id: number;
   action: string;
   subject: string;
-  description?: string;
+  description: string;
   roles: RolePermission[];
 }
 
 export interface UserRole {
   user: User;
   userId: string;
-
   role: Role;
   roleId: number;
 }
@@ -53,6 +50,8 @@ export interface ProductImage {
   id: string;
   url: string;
   alt?: string;
+  order: number;
+  publicId: string;
 }
 
 export interface CartItem {
@@ -73,6 +72,8 @@ export interface Brand {
   name: string;
   slug: string;
   image: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Category {
@@ -80,14 +81,17 @@ export interface Category {
   name: string;
   slug: string;
   image?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Review {
   id: string;
   rating: number;
   comment: string;
+  user: User;
   userId: string;
-  productSlug: string;
+  productId: string;
 }
 
 export interface Promotion {
@@ -137,10 +141,10 @@ export interface Product {
   title: string;
   description: string;
   price: number;
-  discount?: number;
+  discount: number;
   stock: number;
-  rating?: number;
-  isActive?: boolean;
+  rating: number;
+  isActive: boolean;
   slug: string;
 
   brand: Brand;
@@ -153,11 +157,28 @@ export interface Product {
   promotions?: Promotion[];
   variants?: ProductVariant[];
   specifications?: ProductSpecification[];
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Pagination {
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface SearchPageProps {
+  q?: string;
+  page?: string;
+  pageSize?: string;
 }
 
 export interface Order {
   id: string;
   userId: string;
+  user: User;
   products: Array<{
     productId: string;
     quantity: number;
@@ -169,7 +190,7 @@ export interface Order {
   totalPrice: number;
 }
 
-export interface Address {
+export interface AddressResponse {
   id: string;
   label: string;
   street: string;

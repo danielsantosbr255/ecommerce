@@ -1,62 +1,46 @@
-const { accessibleBy } = require("@casl/prisma");
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./address.repository");
 const CustomError = require("../../common/utils/CustomError");
 
-const createAddress = async (data) => {
-  const address = await prisma.address.upsert({
-    where: { userId: data.userId, isDefault: true },
-    update: { ...data, isDefault: true },
-    create: { ...data, isDefault: true },
-    include: { user: { omit: { password: true } } },
-  });
+class AddressService {
+  constructor() {
+    this.repository = repository;
+  }
 
-  return address;
-};
+  async create(data) {
+    const address = await this.repository.getByUserDefault(data.userId);
+    if (address && data.isDefault) throw new CustomError("Endereço padrão ja cadastrado", 422);
+    return this.repository.create(data);
+  }
 
-const getAddresses = async (ability) => {
-  console.log("🚨 MD - ability: ", accessibleBy(ability).Address);
+  async getAll(ability) {
+    return this.repository.getAll(ability);
+  }
 
-  const address = await prisma.address.findMany({
-    where: accessibleBy(ability).Address,
-    include: { user: { omit: { password: true } } },
-  });
-  return address;
-};
+  async getById(ability, id) {
+    const address = await this.repository.getOne(ability, id);
+    if (!address) throw new CustomError("Endereço não encontrado", 404);
+    return address;
+  }
 
-const getAddressById = async (req, id) => {
-  const address = await prisma.address.findUnique({
-    where: { id, AND: accessibleBy(req.ability, "read").Address },
-    include: { user: { omit: { password: true } } },
-  });
+  async update(ability, id, data) {
+    const address = await this.repository.getOne(ability, id);
+    if (!address) throw new CustomError("Endereço não encontrado", 404);
 
-  if (!address) throw new CustomError("Endereço não encontrado", 404);
+    const defaultAddress = await this.repository.getByUserDefault(data.userId);
+    
+    if (defaultAddress && data.isDefault && address.id !== defaultAddress.id) {
+      throw new CustomError("Endereço padrão ja cadastrado", 422);
+    }
 
-  return address;
-};
+    return this.repository.update(ability, id, data);
+  }
 
-const updateAddress = async (req, id, data) => {
-  const address = await prisma.address.findUnique({
-    where: { id, AND: accessibleBy(req.ability, "read").Address },
-  });
+  async remove(ability, id) {
+    const address = await this.repository.getOne(ability, id);
+    if (!address) throw new CustomError("Endereço não encontrado", 404);
 
-  if (!address) throw new CustomError("Endereço não encontrado", 404);
+    return this.repository.remove(ability, id);
+  }
+}
 
-  const updatedAddress = await prisma.address.update({
-    where: { id, AND: accessibleBy(req.ability, "update").Address },
-    data,
-    include: { user: { omit: { password: true } } },
-  });
-
-  return updatedAddress;
-};
-
-const deleteAddress = async (req, id) => {
-  const address = await prisma.address.delete({
-    where: { id, AND: accessibleBy(req.ability, "delete").Address },
-  });
-
-  if (!address) throw new CustomError("Endereço não encontrado", 404);
-  return address;
-};
-
-module.exports = { createAddress, getAddresses, getAddressById, updateAddress, deleteAddress };
+module.exports = new AddressService();

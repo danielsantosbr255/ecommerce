@@ -1,23 +1,29 @@
 const repository = require("./session.repository");
 
-const getAll = async (ability) => {
-  return await repository.getAll(ability);
-};
+class SessionService {
+  constructor() {
+    this.repository = repository;
+  }
 
-const getById = async (id, ability) => {
-  return await repository.getById(id, ability);
-};
+  getAll(ability) {
+    return this.repository.getAll(ability);
+  }
 
-const update = async (id, data, ability) => {
-  return await repository.update(id, data, ability);
-};
+  getById(id, ability) {
+    return this.repository.getById(id, ability);
+  }
 
-const remove = async (id, ability) => {
-  return await repository.remove(id, ability);
-};
+  update(id, data, ability) {
+    return this.repository.update(id, data, ability);
+  }
 
-const deleteByAgent = async ({ userId, userAgent }) => {
-  return await repository.deleteByAgent({ userId, userAgent });
-};
+  remove(id, ability) {
+    return this.repository.remove(id, ability);
+  }
 
-module.exports = { getAll, getById, update, remove, deleteByAgent };
+  deleteByAgent({ userId, userAgent }) {
+    return this.repository.deleteByAgent({ userId, userAgent });
+  }
+}
+
+module.exports = new SessionService();

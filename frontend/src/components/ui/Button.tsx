@@ -10,6 +10,7 @@ interface ButtonProps extends React.ComponentProps<"button"> {
 }
 
 const variants = {
+  primary: "bg-primary text-tx-on-primary",
   default: "bg-primary text-tx-on-primary",
   secondary: "bg-white text-primary border border-primary",
   light: "bg-white text-primary border border-primary",
@@ -32,7 +33,7 @@ export default function Button({ className, href, variant = "default", ...props 
           className={cn(
             className,
             variants[variant],
-            "rounded-md flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
+            "rounded-md flex justify-center items-center py-2 px-3 shadow-xs cursor-pointer",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             "hover:opacity-90 transition-all truncate"
           )}
@@ -47,7 +48,7 @@ export default function Button({ className, href, variant = "default", ...props 
       className={cn(
         className,
         variants[variant],
-        "rounded-md flex justify-center items-center py-2 px-4 shadow-xs cursor-pointer",
+        "rounded-md flex justify-center items-center py-2 px-3 shadow-xs cursor-pointer",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         "hover:opacity-90"
       )}

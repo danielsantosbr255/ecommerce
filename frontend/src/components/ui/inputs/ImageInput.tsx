@@ -1,99 +1,127 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, ChangeEvent, DragEvent, useEffect } from "react";
+import { FaMinusCircle } from "react-icons/fa";
 
-type Props = {
+interface ImageUploadProps {
   onChange: (files: File[]) => void;
   maxFiles?: number;
   maxSizeMB?: number;
-};
+}
 
-export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: Props) {
-  const [images, setImages] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [isDragging, setIsDragging] = useState(false);
-  const inputRef = useRef<HTMLLabelElement | HTMLLabelElement>(null);
+const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps) => {
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const updateFiles = useCallback(
+  useEffect(() => {
+    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews(newPreviews);
+
+    return () => {
+      newPreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [selectedFiles]);
+
+  const updateSelectedFiles = useCallback(
     (files: File[]) => {
-      setImages(files);
-      setPreviews(files.map((file) => URL.createObjectURL(file)));
+      setSelectedFiles(files);
       onChange(files);
     },
     [onChange]
   );
 
-  const handleFiles = useCallback(
+  const processFiles = useCallback(
     (fileList: FileList | null) => {
       if (!fileList) return;
 
-      const incomingFiles = Array.from(fileList)
-        .filter((file) => file.type.startsWith("image/"))
-        .filter((file) => file.size <= maxSizeMB * 1024 * 1024)
-        .slice(0, maxFiles);
+      const validFiles: File[] = Array.from(fileList).filter(
+        (file) => file.type.startsWith("image/") && file.size <= maxSizeMB * 1024 * 1024
+      );
 
-      updateFiles(incomingFiles);
+      const combinedFiles = Array.from(
+        new Map([...selectedFiles, ...validFiles].map((file) => [file.name + file.size, file])).values()
+      ).slice(0, maxFiles);
+
+      updateSelectedFiles(combinedFiles);
     },
-    [maxFiles, maxSizeMB, updateFiles]
+    [maxFiles, maxSizeMB, selectedFiles, updateSelectedFiles]
   );
 
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    handleFiles(e.dataTransfer.files);
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    processFiles(event.target.files);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
-  const handleRemove = (index: number) => {
-    const newFiles = [...images];
-    newFiles.splice(index, 1);
-    updateFiles(newFiles);
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    processFiles(event.dataTransfer.files);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const newFiles = selectedFiles.filter((_, i) => i !== index);
+    updateSelectedFiles(newFiles);
+  };
+
+  const handleLabelClick = () => {
+    fileInputRef.current?.click();
   };
 
   return (
     <div className="w-full">
       <label
-        htmlFor="image-upload"
-        ref={inputRef}
-        onDragOver={(e) => {
+        onDragOver={(e: DragEvent<HTMLLabelElement>) => {
           e.preventDefault();
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
+        onClick={handleLabelClick}
         className={`flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer transition ${
-          isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 bg-white hover:bg-gray-100"
+          isDragging ? "border-tx-link bg-tx-link/10" : "border-gray-300 bg-white hover:bg-gray-100"
         }`}
       >
-        <span className="text-tx-primary">
-          {isDragging ? "Solte as imagens aqui" : "Clique ou arraste imagens aqui"}
-        </span>
+        <span className="text-tx-primary">{isDragging ? "Solte as imagens aqui" : "Clique ou arraste imagens aqui"}</span>
       </label>
 
+      {/* Hidden file input: não está conectado ao label via htmlFor */}
       <input
-        id="image-upload"
+        id="image-upload-input" // Mantém o ID por boa prática, mas não é usado pelo label
         type="file"
         accept="image/*"
         multiple
         className="hidden"
-        // ref={inputRef}
-        onChange={(e) => handleFiles(e.target.files)}
+        ref={fileInputRef}
+        onChange={handleFileChange}
       />
 
-      {previews.length > 0 && (
+      {imagePreviews.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-4">
-          {previews.map((src, index) => (
-            <div key={index} className="relative group aspect-square rounded-lg overflow-hidden shadow-xs">
-              <Image src={src} alt={`preview-${index}`} fill className="object-cover w-full h-full" />
+          {imagePreviews.map((src, index) => (
+            <div
+              key={src}
+              className="relative group aspect-square rounded-lg overflow-hidden shadow border border-dotted border-lines/50"
+            >
+              <Image
+                src={src}
+                alt={`Prévia da imagem ${index + 1}`}
+                fill
+                className="object-cover w-full h-full"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
 
               <button
                 type="button"
-                onClick={() => handleRemove(index)}
-                className="absolute top-1 right-1 bg-red-600 text-tx-on-primary rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition"
+                onClick={() => handleRemoveImage(index)}
+                className="bg-bg-secondary absolute top-1 right-1 rounded-full text-tx-error opacity-0 group-hover:opacity-100 transition cursor-pointer"
                 title="Remover imagem"
               >
-                ✕
+                <FaMinusCircle size={22} />
               </button>
             </div>
           ))}
@@ -101,4 +129,6 @@ export default function ImageUpload({ onChange, maxFiles = 5, maxSizeMB = 5 }: P
       )}
     </div>
   );
-}
+};
+
+export default ImageUpload;

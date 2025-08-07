@@ -1,22 +1,40 @@
 const service = require("./brands.service");
-const validator = require("../../common/validators/brand.validator");
 
-const createBrand = async (req, res) => {
-  if (!req.ability.can("manage", "Brand")) throw new CustomError("Acesso negado!", 403);
+class BrandController {
+  constructor() {
+    this.service = service;
+  }
 
-  const validatedData = validator.create(req.body);
-  const brand = await service.createBrand(validatedData);
-  res.json(brand);
-};
+  create = async (req, res) => {
+    if (!req.ability.can("manage", "Brand")) throw new CustomError("Acesso negado!", 403);
 
-const getBrands = async (req, res) => {
-  const brands = await service.getBrands();
-  res.json(brands);
-};
+    const brand = await this.service.create(req.body);
+    res.json(brand);
+  };
 
-const getBrandBySlug = async (req, res) => {
-  const brand = await service.getBrandBySlug(req.params.slug);
-  res.json(brand);
-};
+  getAll = async (req, res) => {
+    const brands = await this.service.getAll();
+    res.json(brands);
+  };
 
-module.exports = { createBrand, getBrands, getBrandBySlug };
+  getBySlug = async (req, res) => {
+    const brand = await this.service.getBySlug(req.params.slug);
+    res.json(brand);
+  };
+
+  update = async (req, res) => {
+    if (!req.ability.can("manage", "Brand")) throw new CustomError("Acesso negado!", 403);
+
+    const brand = await this.service.update(req.params.slug, req.body);
+    res.json(brand);
+  };
+
+  remove = async (req, res) => {
+    if (!req.ability.can("manage", "Brand")) throw new CustomError("Acesso negado!", 403);
+
+    await this.service.remove(req.params.slug);
+    res.status(200).json({ message: "Marca deletada com sucesso" });
+  };
+}
+
+module.exports = new BrandController();

@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Order } from "@/types";
 
 class OrderService {
@@ -12,8 +12,11 @@ class OrderService {
     }
   }
 
-  public async getOrders() {
-    const response = await api.get("/orders");
+  public async getAll() {
+    const response = await api.get<Order[]>("/orders", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    });
     return response.data;
   }
 

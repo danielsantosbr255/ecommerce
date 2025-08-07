@@ -1,22 +1,41 @@
 const slugify = require("slugify");
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./brands.repository");
+const CustomError = require("../../common/utils/CustomError");
+const validator = require("../../common/validators/brand.validator");
 
-const createBrand = async (data) => {
-  const { name, image } = data;
-  return await prisma.brand.create({ data: { name, slug: slugify(name), image } });
-};
+class BrandService {
+  constructor() {
+    this.repository = repository;
+  }
 
-const getBrands = async () => {
-  return await prisma.brand.findMany({
-    include: { products: { include: { images: true } } },
-  });
-};
+  create = (data) => {
+    if (data.name) data.slug = slugify(data.name, { lower: true });
+    const validatedData = validator.create(data);
+    return this.repository.create(validatedData);
+  };
 
-const getBrandBySlug = async (slug) => {
-  return await prisma.brand.findUnique({
-    where: { slug },
-    include: { products: { include: { images: true } } },
-  });
-};
+  getAll = () => {
+    return this.repository.getAll();
+  };
 
-module.exports = { createBrand, getBrands, getBrandBySlug };
+  getBySlug = (slug) => {
+    return this.repository.getBySlug(slug);
+  };
+
+  update = async (slug, data) => {
+    const brand = await this.repository.getBySlug(slug);
+    if (!brand) throw new CustomError("Marca nao encontrada", 404);
+
+    if (data.name) data.slug = slugify(data.name, { lower: true });
+    const validatedData = validator.update(data);
+    return this.repository.update(slug, validatedData);
+  };
+
+  remove = async (slug) => {
+    const brand = await this.repository.getBySlug(slug);
+    if (!brand) throw new CustomError("Marca nao encontrada", 404);
+    return this.repository.remove(slug);
+  };
+}
+
+module.exports = new BrandService();

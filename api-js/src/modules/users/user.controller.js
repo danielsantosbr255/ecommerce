@@ -1,56 +1,40 @@
 const service = require("./user.service");
 const dataValidator = require("../../common/validators/user.validator");
 
-const getUsers = async (req, res) => {
-  // if (!req.ability.can("read", "User")) throw new CustomError("Acesso negado!", 403);
-  const users = await service.getUsers(req);
-  return res.json(users);
-};
+class UserController {
+  constructor() {
+    this.service = service;
+  }
 
-const getUserById = async (req, res) => {
-  const id = req.params.id === "me" ? req.user.id : req.params.id;
-  const user = await service.getUserById(req, id);
-  return res.json(user);
-};
+  getAll = async (req, res) => {
+    const users = await this.service.getAll(req.ability);
+    res.json(users);
+  };
 
-const updateUser = async (req, res) => {
-  const id = req.params.id === "me" ? req.user.id : req.params.id;
-  const validateData = dataValidator.update(req.body);
+  getById = async (req, res) => {
+    const id = req.params.id === "me" ? req.user.id : req.params.id;
+    const user = await this.service.getById(req.ability, id);
+    res.json(user);
+  };
 
-  const updatedUser = await service.updateUser(req, id, validateData);
-  return res.json(updatedUser);
-};
+  update = async (req, res) => {
+    const id = req.params.id === "me" ? req.user.id : req.params.id;
+    const validateData = dataValidator.update(req.body);
 
-const deleteUser = async (req, res) => {
-  const id = req.params.id === "me" ? req.user.id : req.params.id;
-  // if (!req.ability.can("manage", "User")) throw new CustomError("Acesso negado!", 403);
-  const user = await service.deleteUser(req, id);
-  return res.json({ message: "Usuário deletado com sucesso", user });
-};
+    const updatedUser = await this.service.update(req.ability, id, validateData);
+    res.json(updatedUser);
+  };
 
-// MY ACCOUNT
-const getMyAccount = async (req, res) => {
-  const user = await service.getUserById(req.user.id);
-  return res.json(user);
-};
+  delete = async (req, res) => {
+    const id = req.params.id === "me" ? req.user.id : req.params.id;
+    const user = await this.service.delete(req.ability, id);
+    res.json({ message: "Usuário deletado com sucesso", user });
+  };
 
-const updateMyAccount = async (req, res) => {
-  const validatedData = dataValidator.updateProfile(req.body);
-  const updatedUser = await service.updateUser(req.user.id, validatedData);
-  return res.json(updatedUser);
-};
+  assignRoleToUser = async(userId, roleId) => {
+    // Reutiliza a lógica do serviço de roles para manter a consistência
+    return rolesService.assignUserToRole(roleId, userId);
+  };
+}
 
-const deleteMyAccount = async (req, res) => {
-  const user = await service.deleteUser(req.user.id);
-  return res.json({ message: "Usuário deletado com sucesso", user });
-};
-
-module.exports = {
-  getUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-  getMyAccount,
-  updateMyAccount,
-  deleteMyAccount,
-};
+module.exports = new UserController();

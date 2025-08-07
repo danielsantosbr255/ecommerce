@@ -233,6 +233,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111342/smartphone-motorola_ctfpxk.webp",
             alt: "Smartphone Motorola Moto G20 64GB na cor rosa",
+            publicId: "smartphone-motorola_ctfpxk",
           },
         ],
       },
@@ -264,6 +265,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111344/smartphone-samsung-galaxy-a35_yqstlh.webp",
             alt: "Smartphone Samsung Galaxy S10 Plus na cor preta",
+            publicId: "smartphone-samsung-galaxy-a35_yqstlh",
           },
         ],
       },
@@ -295,6 +297,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111321/t-shirt_ep34ev.jpg",
             alt: "Camiseta Lacoste Classic Fit verde com logo de crocodilo",
+            publicId: "t-shirt_ep34ev",
           },
         ],
       },
@@ -324,6 +327,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111350/tennis-nike-air-max_fbf5i0.jpg",
             alt: "Tênis Nike Air Max 90 branco e vermelho",
+            publicId: "tennis-nike-air-max_fbf5i0",
           },
         ],
       },
@@ -344,7 +348,7 @@ async function main() {
       slug: slugify("Apple Watch Series 7", { lower: true }),
       description:
         "O Apple Watch Series 7 oferece tela sempre ativa maior, monitoramento de saúde avançado e resistência à água. Compatível com iPhone e apps de fitness.",
-      price: 4299.0,
+      price: 429.0,
       stock: 60,
       brandId: apple.id,
       categoryId: eletronics.id,
@@ -353,6 +357,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111347/smartwatch-preto_olhyxd.jpg",
             alt: "Apple Watch Series 7 preto com pulseira esportiva",
+            publicId: "smartwatch-preto_olhyxd",
           },
         ],
       },
@@ -383,6 +388,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111345/smart-tv_jbhwuv.webp",
             alt: "Smart TV AOC 50 polegadas 4K UHD",
+            publicId: "smart-tv_jbhwuv",
           },
         ],
       },
@@ -412,6 +418,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111326/headfone-wireless_sbkzmj.jpg",
             alt: "Fone de Ouvido Sony WH-CH510 branco",
+            publicId: "headfone-wireless_sbkzmj",
           },
         ],
       },
@@ -441,6 +448,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111334/notebook-dell_hknibz.jpg",
             alt: "Notebook Dell Inspiron 15 3000 prata",
+            publicId: "notebook-dell_hknibz",
           },
         ],
       },
@@ -470,6 +478,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111323/cafeteira-electrolux_afg63e.png",
             alt: "Cafeteira Electrolux 15 bares preta",
+            publicId: "cafeteira-electrolux_afg63e",
           },
         ],
       },
@@ -499,6 +508,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111336/office-desk_et12fj.webp",
             alt: "Mesa de Escritório Ikea",
+            publicId: "office-desk_et12fj",
           },
         ],
       },
@@ -527,6 +537,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111349/sound-box_ftcduw.webp",
             alt: "Caixa de Som LG XBOOM Go PL5 preta",
+            publicId: "sound-box_ftcduw",
           },
         ],
       },
@@ -543,19 +554,20 @@ async function main() {
   });
   const refrigerator = await prisma.product.create({
     data: {
-      title: "Geladeira/Refrigerador Philco Inverse 375L - Frost Free, Inox",
-      slug: slugify("Geladeira Philco Inverse 375L", { lower: true }),
+      title: "Geladeira/Refrigerador Electrolux Inverse 375L - Frost Free, Inox",
+      slug: slugify("Geladeira Electrolux Inverse 375L", { lower: true }),
       description:
-        "Geladeira Philco Inverse com 375 litros, tecnologia Frost Free e design em aço inox. Prateleiras em vidro temperado e gavetão para legumes.",
+        "Geladeira Electrolux Inverse com 375 litros, tecnologia Frost Free e design em aço inox. Prateleiras em vidro temperado e gavetão para legumes.",
       price: 2899.0,
       stock: 60,
-      brandId: philco.id,
+      brandId: electrolux.id,
       categoryId: home.id,
       images: {
         create: [
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111340/refrigerator_jusaja.jpg",
             alt: "Geladeira Philco Inverse 375L inox",
+            publicId: "refrigerator_jusaja",
           },
         ],
       },
@@ -585,6 +597,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111331/monitor-lg_oixwau.jpg",
             alt: "Monitor LG 24MP60G-B Full HD IPS preto",
+            publicId: "monitor-lg_oixwau",
           },
         ],
       },
@@ -615,6 +628,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746128983/teclado-sem-fio-mecanico-gamer-redragon_et7giu.webp",
             alt: "Teclado Sem Fio Mecânico Gamer Redragon Gloria Pro",
+            publicId: "teclado-sem-fio-mecanico-gamer-redragon_et7giu",
           },
         ],
       },
@@ -646,6 +660,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111324/console-ps5_p9zncd.webp",
             alt: "Console PlayStation 5 Digital Edition branco",
+            publicId: "console-ps5_p9zncd",
           },
         ],
       },
@@ -675,6 +690,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111333/mouse-wireless-logitec-superlight_kkzmq3.webp",
             alt: "Mouse Gamer Logitech Wireless Superlight Branco",
+            publicId: "mouse-wireless-logitec-superlight_kkzmq3",
           },
         ],
       },
@@ -705,6 +721,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111337/projetor-samsung_evyegc.webp",
             alt: "Projetor Samsung The Freestyle branco",
+            publicId: "projetor-samsung_evyegc",
           },
         ],
       },
@@ -734,6 +751,7 @@ async function main() {
           {
             url: "https://res.cloudinary.com/drhdpmlzh/image/upload/v1746111321/cadeira-gamer-thunder-x3_lnrltj.jpg",
             alt: "Cadeira Gamer ThunderX3 BC3 preta e vermelha",
+            publicId: "cadeira-gamer-thunder-x3_lnrltj",
           },
         ],
       },

@@ -1,37 +1,43 @@
 const service = require("./cart.service");
 const validator = require("../../common/validators/cart.validator");
 
-const addToCart = async (req, res) => {
-  const validatedData = validator.create(req.body);
-  const cart = await service.addItem({ userId: req.user.id, ...validatedData });
-  res.json(cart);
-};
+class CartController {
+  constructor() {
+    this.service = service;
+  }
 
-const getOwnCart = async (req, res) => {
-  const cart = await service.getOwnCart(req.user.id);
-  res.json(cart);
-};
+  addToCart = async (req, res) => {
+    const validatedData = validator.create(req.body);
+    const cart = await this.service.addItem({ userId: req.user.id, ...validatedData });
+    res.json(cart);
+  };
 
-const getCart = async (req, res) => {
-  const cart = await service.getCart(req.params.id);
-  res.json(cart);
-};
+  getOwnCart = async (req, res) => {
+    const cart = await this.service.getOwnCart(req.user.id);
+    res.json(cart);
+  };
 
-const updateItem = async (req, res) => {
-  const validatedData = validator.update({ id: req.params.id, ...req.body });
-  const item = await service.updateItem(validatedData);
-  res.json(item);
-};
+  getCart = async (req, res) => {
+    const cart = await this.service.getCart(req.params.id);
+    res.json(cart);
+  };
 
-const removeCart = async (req, res) => {
-  const cart = await service.removeCart({ userId: req.user.id });
-  res.json({ message: "Carrinho removido!", cart });
-};
+  updateItem = async (req, res) => {
+    const validatedData = validator.update({ id: req.params.id, ...req.body });
+    const item = await this.service.updateItem(validatedData);
+    res.json(item);
+  };
 
-const removeItem = async (req, res) => {
-  const validatedData = validator.remove({ id: req.params.id });
-  const item = await service.removeItem({ userId: req.user.id, ...validatedData });
-  res.json({ message: "Item removido do carrinho!", item });
-};
+  removeCart = async (req, res) => {
+    const cart = await this.service.removeCart({ userId: req.user.id });
+    res.json({ message: "Carrinho removido!", cart });
+  };
 
-module.exports = { addToCart, getOwnCart, getCart, updateItem, removeCart, removeItem };
+  removeItem = async (req, res) => {
+    const validatedData = validator.remove({ id: req.params.id });
+    const item = await this.service.removeItem({ userId: req.user.id, ...validatedData });
+    res.json({ message: "Item removido do carrinho!", item });
+  };
+}
+
+module.exports = new CartController();

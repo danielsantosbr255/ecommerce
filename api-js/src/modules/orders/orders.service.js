@@ -1,68 +1,58 @@
 const { accessibleBy } = require("@casl/prisma");
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
+const repository = require("./orders.repository");
 
-const createOrder = async (userId) => {
-  const cart = await prisma.cart.findUnique({
-    where: { userId },
-    include: { items: { include: { product: true } } },
-  });
-
-  const cartItems = cart.items;
-
-  if (!cartItems || cartItems.length === 0) {
-    throw new CustomError("O carrinho está vazio", 400);
+class OrderService {
+  constructor() {
+    this.repository = repository;
   }
 
-  const total = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-
-  const order = await prisma.order.create({
-    data: {
-      userId: userId,
-      totalPrice: total,
-      items: {
-        create: cartItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      },
-    },
-  });
-
-  // Atualizar o estoque
-  for (const item of cartItems) {
-    await prisma.product.update({
-      where: { id: item.productId },
-      data: { stock: { decrement: item.quantity } },
+  create = async (userId) => {
+    const cart = await prisma.cart.findUnique({
+      where: { userId },
+      include: { items: { include: { product: true } } },
     });
-  }
 
-  // Apagar o carrinho após a compra
-  await prisma.cart.update({
-    where: { userId },
-    data: { items: { deleteMany: {} } },
-  });
+    const cartItems = cart.items;
 
-  return order;
-};
+    if (!cartItems || cartItems.length === 0) {
+      throw new CustomError("O carrinho está vazio", 400);
+    }
 
-const getOrdersByUserId = async (req) => {
-  const orders = await prisma.order.findUnique({
-    where: {
-      id: req.params.id,
-      AND: [accessibleBy(req.ability, "read").Order],
-    },
-    include: { user: true, items: { include: { product: true } } },
-  });
-  return orders;
-};
+    const totalPrice = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const order = await repository.create({ userId, cartItems, totalPrice });
 
-const findAllOrders = async (req) => {
-  const orders = await prisma.order.findMany({
-    where: accessibleBy(req.ability).Order,
-    include: { user: true },
-  });
-  return orders;
-};
+    for (const item of cartItems) {
+      await prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+    }
 
-module.exports = { createOrder, getOrdersByUserId, findAllOrders };
+    await prisma.cart.update({
+      where: { userId },
+      data: { items: { deleteMany: {} } },
+    });
+
+    return order;
+  };
+
+  getAll = (ability) => {
+    return repository.getAll(ability);
+  };
+
+  getById = (id, ability) => {
+    return repository.getById(id, ability);
+  };
+
+  update = (id, data, ability) => {
+    return repository.update(id, data, ability);
+  };
+
+  delete = (id, ability) => {
+    return repository.delete(id, ability);
+  };
+}
+
+module.exports = new OrderService();

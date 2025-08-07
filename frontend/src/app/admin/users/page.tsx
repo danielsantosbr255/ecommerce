@@ -1,12 +1,20 @@
-"use client";
-import React from "react";
+import UsersTable from "./UsersTable";
+import { userService } from "@/services/users";
 
-const AdminUsersPage = () => {
+export default async function page() {
+  const users = await userService.getAll();
+
+  if (!users || users.length === 0) {
+    return (
+      <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
+        <p className="text-tx-primary text-center font-semibold">Nenhum usuário encontrado.</p>
+      </div>
+    );
+  }
+
   return (
-    <header className="mb-6">
-      <h2 className="text-xl font-semibold text-tx-primary">Gerenciamento de Usuários</h2>
-    </header>
+    <main className="flex flex-col w-full gap-4">
+      <UsersTable users={users} totalItems={users.length} />
+    </main>
   );
-};
-
-export default AdminUsersPage;
+}

@@ -1,5 +1,11 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Fireforge Labs - Loja de Informática",
+  description: "Aqui você encontra os melhores preços de hardware e software para seu computador.",
+};
 
 export default function ShopLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

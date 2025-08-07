@@ -1,8 +1,8 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Review } from "@/types";
 
 class ReviewService {
-  public async create(reviewData: Omit<Review, "id">) {
+  public async create(reviewData: Omit<Review, "id" | "user">) {
     try {
       const response = await api.post("/reviews", reviewData);
       return response.data;
@@ -12,9 +12,12 @@ class ReviewService {
     }
   }
 
-  public async getReviews() {
+  public async getAll() {
     try {
-      const response = await api.get("/reviews");
+      const response = await api.get<Review[]>("/reviews", {
+        cache: "force-cache",
+        next: { revalidate: 60 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -22,9 +25,19 @@ class ReviewService {
     }
   }
 
-  public async getReview(slug: string): Promise<Review[] | null> {
+  public async getOne(id: string) {
     try {
-      const response = await api.get(`/reviews/product/${slug}`);
+      const response = await api.get(`/reviews/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  public async getByProductId(id: string) {
+    try {
+      const response = await api.get<Review[]>(`/reviews/product/${id}`);
       return response.data;
     } catch (error) {
       console.error(error);

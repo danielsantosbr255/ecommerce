@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Promotion } from "@/types";
 
 class PromotionService {
@@ -14,7 +14,10 @@ class PromotionService {
 
   public async getPromotions() {
     try {
-      const response = await api.get("/promotions");
+      const response = await api.get<Promotion[]>("/promotions", {
+        cache: "force-cache",
+        next: { revalidate: 3600 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -24,7 +27,10 @@ class PromotionService {
 
   public async getPromotion(slug: string) {
     try {
-      const response = await api.get(`/promotions/${slug}`);
+      const response = await api.get<Promotion>(`/promotions/${slug}`, {
+        cache: "force-cache",
+        next: { revalidate: 3600 },
+      });
       return response.data;
     } catch (error) {
       console.error(error);

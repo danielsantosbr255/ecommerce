@@ -1,31 +1,37 @@
 const { accessibleBy } = require("@casl/prisma");
 const { prisma } = require("../../common/database/prisma");
 
-const getAll = (ability) => {
-  return prisma.session.findMany({ where: accessibleBy(ability, "read").Session, orderBy: { createdAt: "desc" } });
-};
+class SessionRepository {
+  constructor() {
+    this.prisma = prisma;
+  }
 
-const getById = (id, ability) => {
-  return prisma.session.findUnique({
-    where: { id, AND: accessibleBy(ability, "read").Session },
-  });
-};
+  getAll(ability) {
+    return this.prisma.session.findMany({ where: accessibleBy(ability, "read").Session, orderBy: { createdAt: "desc" } });
+  }
 
-const update = (id, data, ability) => {
-  return prisma.session.update({
-    where: { id, AND: accessibleBy(ability, "update").Session },
-    data,
-  });
-};
+  getById(id, ability) {
+    return this.prisma.session.findUnique({
+      where: { id, AND: accessibleBy(ability, "read").Session },
+    });
+  }
 
-const deleteByAgent = ({ userId, userAgent }) => {
-  return prisma.session.delete({ where: { userId_userAgent: { userId, userAgent } } });
-};
+  update(id, data, ability) {
+    return this.prisma.session.update({
+      where: { id, AND: accessibleBy(ability, "update").Session },
+      data,
+    });
+  }
 
-const remove = (id, ability) => {
-  return prisma.session.delete({
-    where: { id, AND: accessibleBy(ability, "delete").Session },
-  });
-};
+  deleteByAgent({ userId, userAgent }) {
+    return this.prisma.session.delete({ where: { userId_userAgent: { userId, userAgent } } });
+  }
 
-module.exports = { getAll, getById, update, deleteByAgent, remove };
+  remove(id, ability) {
+    return this.prisma.session.delete({
+      where: { id, AND: accessibleBy(ability, "delete").Session },
+    });
+  }
+}
+
+module.exports = new SessionRepository();

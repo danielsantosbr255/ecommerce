@@ -1,22 +1,41 @@
 const service = require("./promotions.service");
-const validator = require("../../common/validators/promotion.validator");
+const CustomError = require("../../common/utils/CustomError");
 
-const createPromotion = async (req, res) => {
-  if (!req.ability.can("manage", "Promotion")) throw new CustomError("Acesso negado!", 403);
+class PromotionController {
+  constructor() {
+    this.service = service;
+  }
 
-  const validatedData = validator.create(req.body);
-  const promotion = await service.createPromotion(validatedData);
-  res.json(promotion);
-};
+  create = async (req, res) => {
+    if (!req.ability.can("manage", "Promotion")) throw new CustomError("Acesso negado!", 403);
 
-const getPromotions = async (req, res) => {
-  const promotions = await service.getPromotions();
-  res.json(promotions);
-};
+    const promotion = await this.service.create(req.body);
+    res.json(promotion);
+  };
 
-const getPromotionBySlug = async (req, res) => {
-  const promotion = await service.getPromotionBySlug(req.params.slug);
-  res.json(promotion);
-};
+  getAll = async (req, res) => {
+    const promotions = await this.service.getAll();
+    res.json(promotions);
+  };
 
-module.exports = { createPromotion, getPromotions, getPromotionBySlug };
+  getBySlug = async (req, res) => {
+    const promotion = await this.service.getBySlug(req.params.slug);
+    res.json(promotion);
+  };
+
+  update = async (req, res) => {
+    if (!req.ability.can("manage", "Promotion")) throw new CustomError("Acesso negado!", 403);
+
+    const promotion = await this.service.update(req.params.slug, req.body);
+    res.json(promotion);
+  };
+
+  remove = async (req, res) => {
+    if (!req.ability.can("manage", "Promotion")) throw new CustomError("Acesso negado!", 403);
+
+    await this.service.remove(req.params.slug);
+    res.status(200).json({ message: "Promocao deletada com sucesso" });
+  };
+}
+
+module.exports = new PromotionController();

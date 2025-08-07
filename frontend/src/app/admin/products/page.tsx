@@ -1,24 +1,29 @@
-import React, { Suspense } from "react";
-import LoadingState from "@/components/ui/LoadingState";
-import AdminProductList from "../components/AdminProductList";
-import AdminProductForm from "../components/AdminProductForm";
-import AdminProductFilters from "../components/AdminProductFilters";
+import { SearchPageProps } from "@/types";
+import { productService } from "@/services/products";
+import Pagination from "@/components/ui/Pagination";
+import ProductsTable from "./_components/ProductsTable";
 
-const AdminProductsPage: React.FC = () => {
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 8;
+
+const page = async ({ searchParams }: { searchParams: Promise<SearchPageProps> }) => {
+  const rawSearch = await searchParams;
+
+  const page = Number(rawSearch.page) || DEFAULT_PAGE;
+  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+
+  const result = await productService.getAll({ page, pageSize });
+  if (!result) return null;
+
+  const { products, pagination } = result;
+  const { totalPages, totalItems } = pagination;
+
   return (
-    <div className="w-full">
-      <div className="bg-white shadow-xs rounded-2xl p-2 lg:p-6 mb-6">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4">
-          <AdminProductFilters />
-        </div>
-        <Suspense fallback={<LoadingState />}>
-          <AdminProductList />
-        </Suspense>
-      </div>
-
-      <AdminProductForm />
-    </div>
+    <main className="flex flex-col w-full gap-4">
+      <ProductsTable products={products} totalItems={totalItems} />
+      <Pagination currentPage={page} totalPages={totalPages} path={"/admin/products?"} pageSize={pageSize} />
+    </main>
   );
 };
 
-export default AdminProductsPage;
+export default page;

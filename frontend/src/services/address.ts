@@ -1,28 +1,23 @@
-import api from "@/lib/axios";
-import { Address } from "@/types";
+import { api } from "@/lib/api";
+import { AddressResponse } from "@/types";
+import { Address } from "@/lib/schemas/address.schema";
 
 class AddressService {
-  public async create(addressData: Omit<Address, "id">) {
-    try {
-      const response = await api.post("/addresses", addressData);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+  public async create(addressData: Address) {
+    const response = await api.post<AddressResponse>("/addresses", addressData);
+    return response.data;
   }
 
   public async getAll() {
     try {
-      const response = await api.get("/addresses");
-      return response.data as Address[];
-    } catch (error) {
-      console.error(error);
+      const response = await api.get<AddressResponse[]>("/addresses");
+      return response.data || [];
+    } catch {
       return [];
     }
   }
 
-  public async getAddress(id: string) {
+  public async getOne(id: string) {
     try {
       const response = await api.get(`/addresses/${id}`);
       return response.data;
@@ -33,23 +28,13 @@ class AddressService {
   }
 
   public async update(id: string, addressData: Partial<Address>) {
-    try {
-      const response = await api.put(`/addresses/${id}`, addressData);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.put<AddressResponse>(`/addresses/${id}`, addressData);
+    return response.data;
   }
 
   public async delete(id: string) {
-    try {
-      const response = await api.delete(`/addresses/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    const response = await api.delete(`/addresses/${id}`);
+    return response.data;
   }
 }
 

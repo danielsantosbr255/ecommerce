@@ -1,35 +1,45 @@
-const services = require("./reviews.service");
+const CustomError = require("../../common/utils/CustomError");
+const service = require("./reviews.service");
 
-const createReview = async (req, res) => {
-  const { productSlug, rating, comment } = req.body;
-  const userId = req.user?.id;
+class ReviewController {
+  constructor() {
+    this.service = service;
+  }
 
-  const review = await services.createReview(productSlug, rating, comment, userId);
-  return res.status(201).json(review);
-};
+  create = async (req, res) => {
+    const userId = req.user?.id;
+    if (userId) req.body.userId = userId;
 
-const getReviews = async (req, res) => {
-  const { slug } = req.params;
-  const reviews = await services.getReviews(slug);
-  return res.json(reviews);
-};
+    const review = await this.service.create(req.body);
+    res.status(201).json(review);
+  };
 
-const getReviewById = async (req, res) => {
-  const { id } = req.params;
-  const review = await services.getReviewById(id);
-  return res.json(review);
-};
+  getAll = async (req, res) => {
+    if (!req.ability.can("manage", "Review")) throw new CustomError("Acesso negado!", 403);
 
-const updateReview = async (req, res) => {
-  const id = req.params.id;
-  const { rating, comment } = req.body;
-  const review = await services.updateReview(id, rating, comment);
-  return res.json(review);
-};
+    const reviews = await this.service.getAll();
+    res.json(reviews);
+  };
 
-const deleteReview = async (req, res) => {
-  const review = await services.deleteReview(req.params.id);
-  return res.json(review);
-};
+  getByProductId = async (req, res) => {
+    const reviews = await this.service.getByProductId(req.params.productId);
+    res.json(reviews);
+  };
 
-module.exports = { getReviews, createReview, getReviewById, updateReview, deleteReview };
+  getById = async (req, res) => {
+    const review = await this.service.getById(req.params.id);
+    res.json(review);
+  };
+
+  update = async (req, res) => {
+    const review = await this.service.update(req.params.id, req.body);
+    res.json(review);
+  };
+
+  delete = async (req, res) => {
+    const review = await this.service.delete(req.params.id);
+    res.json(review);
+  };
+}
+
+module.exports = new ReviewController();

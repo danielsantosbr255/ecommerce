@@ -1,37 +1,43 @@
 const CustomError = require("../../common/utils/CustomError");
 const service = require("./session.service");
 
-const getAll = async (req, res) => {
-  const sessions = await service.getAll(req.ability);
-  res.json(sessions);
-};
+class SessionController {
+  constructor() {
+    this.service = service;
+  }
 
-const getById = async (req, res) => {
-  const sessionId = parseInt(req.params.id, 10);
-  const session = await service.getById(sessionId, req.ability);
+  getAll = async (req, res) => {
+    const sessions = await this.service.getAll(req.ability);
+    res.json(sessions);
+  };
 
-  if (!session) throw new CustomError("Sessão não encontrada", 404);
-  res.json(session);
-};
+  getById = async (req, res) => {
+    const sessionId = parseInt(req.params.id, 10);
+    const session = await this.service.getById(sessionId, req.ability);
 
-const update = async (req, res) => {
-  const sessionId = parseInt(req.params.id, 10);
+    if (!session) throw new CustomError("Sessão não encontrada", 404);
+    res.json(session);
+  };
 
-  const existingSession = await service.getById(sessionId, req.ability);
-  if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
+  update = async (req, res) => {
+    const sessionId = parseInt(req.params.id, 10);
 
-  const session = await service.update(sessionId, req.body, req.ability);
-  res.json({ message: "Sessão atualizada com sucesso", session });
-};
+    const existingSession = await this.service.getById(sessionId, req.ability);
+    if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
 
-const remove = async (req, res) => {
-  const sessionId = parseInt(req.params.id, 10);
+    const session = await this.service.update(sessionId, req.body, req.ability);
+    res.json({ message: "Sessão atualizada com sucesso", session });
+  };
 
-  const existingSession = await service.getById(sessionId, req.ability);
-  if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
+  remove = async (req, res) => {
+    const sessionId = parseInt(req.params.id, 10);
 
-  const session = await service.remove(sessionId, req.ability);
-  res.json({ message: "Sessão deletada com sucesso", session });
-};
+    const existingSession = await this.service.getById(sessionId, req.ability);
+    if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
 
-module.exports = { getAll, getById, update, remove };
+    const session = await this.service.remove(sessionId, req.ability);
+    res.json({ message: "Sessão deletada com sucesso", session });
+  };
+}
+
+module.exports = new SessionController();

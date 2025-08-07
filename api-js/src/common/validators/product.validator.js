@@ -1,13 +1,13 @@
 const { z } = require("zod");
 
 const msg = {
-  required: "Campo Obrigatório",
+  required: "é obrigatório",
   partial: "Dados Inválidos!",
-  minLength: (num) => `Deve ter pelo menos ${num} caracteres`,
+  minLength: (num) => `deve ter pelo menos ${num} caracteres`,
   minItems: (num) => `deve ter pelo menos ${num} item(s)`,
-  noempty: "Nao pode ser vazio",
+  noempty: "não pode ser vazio",
   invalidId: "ID inválido! ID deve ser um UUID",
-  negative: "Nao pode ser negativo",
+  negative: "nao pode ser negativo",
   invalid: "inválido!",
 };
 
@@ -26,16 +26,22 @@ const FileSchema = z.object({
   encoding: z.string(),
 });
 
-const ProductSpecificationSchema = z.object({
-  name: z.string({ required_error: msg.required }).min(2, msg.minLength(2)).max(25),
-  value: z.string({ required_error: msg.required }).min(2, msg.minLength(2)),
+const specificationSchema = z.object({
+  name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
+  value: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
+});
+
+const keptImageSchema = z.object({
+  id: z.string().uuid(), // Valida se é uma string no formato UUID
+  url: z.string().url(), // Valida se é uma string que é uma URL válida
+  alt: z.string().optional(), // Valida se é uma string opcional
+  order: z.number().int().min(0), // Valida se é um número inteiro não negativo
+  publicId: z.string().min(1, "publicId é obrigatório"), // Valida se é uma string não vazia
 });
 
 const schema = {
-  id: z.string().uuid().optional(),
   isActive: z.boolean().default(true),
   rating: z.number().min(0).max(5).default(0),
-  specifications: z.array(ProductSpecificationSchema).optional().default([]),
   title: z.string({ required_error: msg.required }).min(5, msg.minLength(5)),
   description: z.string({ required_error: msg.required }).min(10, msg.minLength(10)),
   price: z.number({ required_error: msg.required }).nonnegative({ message: msg.negative }),
@@ -44,7 +50,9 @@ const schema = {
   slug: z.string({ required_error: msg.required }).regex(/^[a-z0-9-]+$/, msg.invalid),
   brandId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
   categoryId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
+  specifications: z.array(specificationSchema).optional(),
   images: z.array(FileSchema).max(5, { message: "Você pode enviar no máximo 5 imagens." }),
+  keptImages: z.array(keptImageSchema).optional().default([]),
 };
 
 const create = (data) => {

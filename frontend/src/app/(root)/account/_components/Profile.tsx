@@ -3,17 +3,18 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import Button from "@/components/ui/Button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import {
-  FaAddressBook, FaHeart,
+  FaAddressBook,
+  FaHeart,
   FaMailBulk,
   FaShieldAlt,
   FaShoppingBasket,
   FaThumbsUp,
   FaUserEdit,
-  FaUserNinja,
-  FaWindowClose
+  FaUserAstronaut,
+  FaWindowClose,
 } from "react-icons/fa";
 import Link from "next/link";
 
@@ -51,7 +52,7 @@ export default function Profile() {
       <section className="bg-bg-secondary flex w-full p-6 rounded-lg items-center justify-between shadow-xs gap-3 my-2">
         <div className="flex gap-4 items-center">
           <span className="bg-bg-primary p-3 shadow rounded-full">
-            <FaUserNinja className="text-primary" size={40} />
+            <FaUserAstronaut className="text-primary" size={40} />
           </span>
           <div className="flex flex-col gap-1">
             <h1 className="flex w-full text-lg font-bold text-tx-primary">Bem-vindo, {user.name}</h1>
@@ -61,7 +62,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <Button>
+        <Button href="/account/security">
           <FaUserEdit className="mr-2" size={20} /> Editar Dados
         </Button>
       </section>

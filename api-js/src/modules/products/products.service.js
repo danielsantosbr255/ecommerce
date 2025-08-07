@@ -1,115 +1,176 @@
+const slugify = require("slugify");
+const repository = require("./products.repository");
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
-const { uploadToCloudinary } = require("../../common/utils/cloudinary.util");
+const validator = require("../../common/validators/product.validator");
+const { uploadToCloudinary, deleteImage } = require("../../common/utils/cloudinary.util");
 
-const createProduct = async (data) => {
-  const existingProduct = await prisma.product.findUnique({ where: { slug: data.slug } });
-  if (existingProduct) throw new CustomError("Já existe um produto com este slug");
+const formatData = (data) => {
+  if (data.title) data.slug = slugify(data.title, { lower: true });
+  if (data.price) data.price = parseInt(data.price);
+  if (data.stock) data.stock = parseInt(data.stock);
+  if (data.rating) data.rating = parseInt(data.rating);
+  if (data.discount) data.discount = parseInt(data.discount);
+  if (data.isActive) data.isActive = Boolean(data.isActive);
+  if (data.keptImages) data.keptImages = JSON.parse(data.keptImages || "[]");
+  else data.keptImages = [];
 
-  const uploadResults = await Promise.all(
-    data.images.map((image) =>
-      uploadToCloudinary(image.buffer, {
-        folder: "ecommerce/products",
-        transformation: [{ width: 800, height: 800, crop: "limit" }, { quality: "auto" }],
-      })
-    )
-  );
+  if (data.specifications) {
+    if (!data.specifications.length) delete data.specifications;
+    else data.specifications = JSON.parse(data.specifications || "[]");
+  }
+  return data;
+};
 
-  const product = await prisma.product.create({
-    data: {
-      ...data,
-      images: {
-        create: uploadResults.map((result) => ({
-          url: result.secure_url,
-          alt: data.title,
-        })),
+class ProductService {
+  constructor() {
+    this.repository = repository;
+  }
+
+  create = async (data) => {
+    data = formatData(data);
+    const existingProduct = await this.repository.getBySlug(data.slug);
+    if (existingProduct) throw new CustomError("Já existe um produto com este slug", 422);
+
+    const validatedData = validator.create(data);
+
+    const uploadResults = await Promise.all(
+      validatedData.images?.map((image) =>
+        uploadToCloudinary(image.buffer, {
+          folder: "ecommerce/products",
+          transformation: [{ width: 800, height: 800, crop: "limit" }, { quality: "auto" }],
+        })
+      )
+    );
+
+    validatedData.images = uploadResults.map((img, index) => ({
+      url: img.secure_url,
+      publicId: img.public_id,
+      order: index,
+      alt: `${validatedData.title} image ${index + 1}`,
+    }));
+
+    return this.repository.create(validatedData);
+  };
+
+  getAll = async (query) => {
+    const { q, categoryId, brandId, minPrice, maxPrice, page = 1, pageSize = 20 } = query;
+
+    const take = parseInt(pageSize);
+    const skip = (parseInt(page) - 1) * take;
+
+    const where = { isActive: true, deletedAt: null };
+
+    if (q) {
+      where.OR = [
+        { title: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { category: { name: { contains: q, mode: "insensitive" } } },
+        { brand: { name: { contains: q, mode: "insensitive" } } },
+      ];
+    }
+
+    if (categoryId) where.categoryId = categoryId;
+    if (brandId) where.brandId = brandId;
+
+    if (minPrice || maxPrice) {
+      where.price = {};
+      if (minPrice) where.price.gte = parseFloat(minPrice);
+      if (maxPrice) where.price.lte = parseFloat(maxPrice);
+    }
+
+    const totalItems = await this.repository.getCount(where);
+    const products = await this.repository.getAll(where, take, skip);
+
+    return {
+      products,
+      pagination: {
+        totalItems,
+        currentPage: parseInt(page),
+        pageSize: take,
+        totalPages: Math.ceil(totalItems / take),
       },
-      specifications: {
-        create: data.specifications,
+    };
+  };
+
+  getById = async (id) => {
+    return await this.repository.getById(id);
+  };
+
+  getBySlug = async (slug) => {
+    return await this.repository.getBySlug(slug);
+  };
+
+  getRelated = async (productId) => {
+    const product = await this.repository.getById(productId);
+    const products = await this.repository.getRelated(productId, product.categoryId, product.brandId);
+
+    const page = 1;
+    const take = 10;
+
+    return {
+      products,
+      pagination: {
+        totalItems: products.length,
+        currentPage: parseInt(page),
+        pageSize: take,
+        totalPages: Math.ceil(products.length / take),
       },
-    },
-    include: { images: true, specifications: true, category: true },
-  });
+    };
+  };
 
-  return product;
-};
+  update = async (id, data) => {
+    const formatedData = formatData(data);
 
-const getProducts = () => {
-  return prisma.product.findMany({
-    include: { images: true, specifications: true, category: true, reviews: true },
-  });
-};
+    const product = await this.repository.getById(id);
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-const getProductBySlug = async (slug) => {
-  return await prisma.product.findUnique({
-    where: { slug },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
-};
+    const existingProductSlug = await this.repository.getBySlug(formatedData.slug);
+    if (existingProductSlug && existingProductSlug.id !== id) throw new CustomError("Já existe um produto com este slug", 422);
 
-const getProductsByCategory = async (productId) => {
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-  });
+    const validatedData = validator.update(formatedData);
 
-  if (!product) throw new CustomError("Produto nao encontrado", 404);
+    const imagesToDelete = product.images.filter(
+      (img) => !validatedData.keptImages.some((keptImg) => keptImg.publicId === img.publicId)
+    );
 
-  return await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      NOT: { id: productId },
-    },
-    include: { images: true, specifications: true, category: true },
-  });
-};
+    if (imagesToDelete.length > 0) {
+      await Promise.all(imagesToDelete.map((img) => deleteImage(img.publicId)));
+      await prisma.productImage.deleteMany({
+        where: { id: { in: imagesToDelete.map((img) => img.id) } },
+      });
+    }
 
-const getProductsByBrand = (brand) => {
-  return prisma.product.findMany({
-    where: { brand: { name: brand } },
-    include: { images: true, specifications: true, category: true, brand: true, reviews: true },
-  });
-};
+    let uploadResults = [];
+    if (validatedData.images) {
+      uploadResults = await Promise.all(
+        validatedData.images.map((image) =>
+          uploadToCloudinary(image.buffer, {
+            folder: "ecommerce/products",
+            transformation: [{ width: 800, height: 800, crop: "limit" }, { quality: "auto" }],
+          })
+        )
+      );
+    }
 
-const getProductsByQuery = (query) => {
-  return prisma.product.findMany({
-    take: 10,
-    where: {
-      OR: [
-        { title: { contains: query, mode: "insensitive" } },
-        { description: { contains: query, mode: "insensitive" } },
-        // { category: { contains: query, mode: "insensitive" } },
-      ],
-    },
-    include: { images: true, specifications: true, category: true },
-  });
-};
+    validatedData.images = uploadResults.map((img, index) => ({
+      url: img.secure_url,
+      publicId: img.public_id,
+      order: validatedData.keptImages?.length + index,
+      alt: `${product.title} image ${validatedData.keptImages?.length + index + 1}`,
+    }));
 
-const updateProduct = async (id, data) => {
-  const existingProduct = await prisma.product.findUnique({ where: { id } });
-  if (!existingProduct) throw new CustomError("Produto não encontrado!", 404);
-  return prisma.product.update({ where: { id }, data });
-};
+    return this.repository.update(id, validatedData);
+  };
 
-const deleteProduct = async (id) => {
-  const product = await prisma.product.findUnique({ where: { id } });
-  if (!product) throw new CustomError("Produto não encontrado!", 404);
+  remove = async (id) => {
+    const product = await this.repository.getById(id);
+    if (!product) throw new CustomError("Produto não encontrado!", 404);
 
-  // if (product.image) {
-  //     const oldImagePath = path.join(__dirname, "../../..", product.image);
-  //     fs.unlink(oldImagePath, (err) => {
-  //         if (err) console.error("Erro ao deletar imagem antiga:", err);
-  //     });
-  // }
-  return prisma.product.delete({ where: { id } });
-};
+    await Promise.all(product.images.map((img) => deleteImage(img.publicId)));
 
-module.exports = {
-  createProduct,
-  getProducts,
-  getProductsByQuery,
-  getProductsByCategory,
-  getProductsByBrand,
-  getProductBySlug,
-  updateProduct,
-  deleteProduct,
-};
+    return this.repository.remove(id);
+  };
+}
+
+module.exports = new ProductService();

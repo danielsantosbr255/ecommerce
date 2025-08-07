@@ -26,7 +26,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   const handleSearch = () => {
     if (query.trim()) {
-      router.push(`/search/${query}`);
+      router.push(`/search?q=${query}`);
     }
   };
 
@@ -40,8 +40,8 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         onKeyDown={(e) => {
           if (e.key === "Enter") handleSearch();
         }}
-        placeholder="Pesquisar..."
-        className="border-none outline-none py-2.5 w-full"
+        placeholder="Pesquisar produtos..."
+        className="border-none outline-none py-2.5 pl-1 w-full"
       />
 
       {query && (

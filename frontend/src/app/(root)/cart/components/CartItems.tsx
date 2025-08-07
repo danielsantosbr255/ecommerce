@@ -6,15 +6,17 @@ import CartActions from "./CartActions";
 import CouponInput from "./CouponInput";
 import CartSummary from "./CartSummary";
 import CartItemCard from "./CartItemCard";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import { cartService } from "@/services/carts";
 import { toast } from "react-toastify";
 import { orderService } from "@/services/orders";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CartItems() {
   const { user, cartItems, cartLoading, loadCart } = useAuth();
+  const [isPeding, setIsPeding] = useState(false);
   const router = useRouter();
 
   if (cartLoading) return <LoadingState />;
@@ -60,12 +62,15 @@ export default function CartItems() {
 
   const handleCheckout = async () => {
     try {
+      setIsPeding(true);
       await orderService.create();
       await loadCart();
       router.push("/account/orders");
       toast.success("Compra finalizada com sucesso");
     } catch {
       toast.error("Não foi possível finalizar a compra");
+    } finally {
+      setIsPeding(false);
     }
   };
 
@@ -80,7 +85,7 @@ export default function CartItems() {
       <section className="flex flex-col gap-4">
         <CartSummary subtotal={subtotal} discount={discount} discountPercent={0} total={total} />
         <CouponInput />
-        <CartActions handleClearCart={handleClearCart} handleCheckout={handleCheckout} />
+        <CartActions handleClearCart={handleClearCart} handleCheckout={handleCheckout} isPeding={isPeding} />
       </section>
     </main>
   );

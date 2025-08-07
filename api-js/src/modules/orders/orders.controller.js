@@ -1,18 +1,34 @@
 const service = require("./orders.service");
 
-const createOrder = async (req, res) => {
-  const cart = await service.createOrder(req.user.id);
-  res.json(cart);
-};
+class OrderController {
+  constructor() {
+    this.service = service;
+  }
 
-const getOrdersByUserId = async (req, res) => {
-  const orders = await service.getOrdersByUserId(req);
-  res.json(orders);
-};
+  create = async (req, res) => {
+    const cart = await service.create(req.user.id);
+    res.json(cart);
+  };
 
-const findAllOrders = async (req, res) => {
-  const orders = await service.findAllOrders(req);
-  res.json(orders);
-};
+  getAll = async (req, res) => {
+    const orders = await service.getAll(req.ability);
+    res.json(orders);
+  };
 
-module.exports = { createOrder, getOrdersByUserId, findAllOrders };
+  getById = async (req, res) => {
+    const orders = await service.getById(req.params.id, req.ability);
+    res.json(orders);
+  };
+
+  update = async (req, res) => {
+    const order = await service.update(req.params.id, req.body, req.ability);
+    res.json(order);
+  };
+
+  delete = async (req, res) => {
+    const order = await service.delete(req.params.id, req.ability);
+    res.json(order);
+  };
+}
+
+module.exports = new OrderController();

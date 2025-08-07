@@ -3,20 +3,19 @@ import { productService } from "@/services/products";
 import LoadingState from "@/components/ui/LoadingState";
 import ProductDetail from "@/components/products/ProductDetail";
 import ProductReviews from "@/components/products/ProductReviews";
+import ProductSession from "@/components/products/ProductSession";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
-import RelatedProducts from "@/components/products/RelatedProducts";
+import { FaLink } from "react-icons/fa";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await productService.getProduct(slug);
+  const product = await productService.getBySlug(slug);
 
   if (!product) {
-    return (
-      <div className="flex flex-col w-full h-full justify-center items-center">
-        <h1>Produto nao encontrado</h1>
-      </div>
-    );
+    return <div className="bg-bg-secondary font-semibold p-4 rounded-lg shadow-xs text-center">Produto nao encontrado</div>;
   }
+
+  const getRelated = () => productService.getRelated(product.id);
 
   return (
     <main className="flex flex-1 flex-col py-10 mx-auto w-full px-2 lg:px-4 lg:max-w-10/12 h-full gap-6 text-tx-primary">
@@ -26,10 +25,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <ProductReviews product={product} />
       </Suspense>
 
-      <ProductReviewsForm productSlug={product.slug} />
+      <ProductReviewsForm productId={product.id} />
 
       <Suspense fallback={<LoadingState />}>
-        <RelatedProducts product={product} />
+        <ProductSession callback={getRelated} label="Produtos Relacionados" icon={<FaLink size={25} />} />
       </Suspense>
     </main>
   );

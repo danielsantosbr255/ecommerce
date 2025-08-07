@@ -1,16 +1,11 @@
-"use server";
-
-import { AxiosResponse } from "axios";
 import { cookies } from "next/headers";
+import { ApiResponse } from "./api/types";
 import setCookieParser from "set-cookie-parser";
 
-export async function setCookiesFromResponse(res: AxiosResponse) {
-  const rawCookies = res.headers["set-cookie"];
-
-  // console.log("🚀 [SET COOKIES] - Raw cookies: ", rawCookies);
-
-  if (!rawCookies) return;
-
+export async function setCookiesFromResponse(res: ApiResponse) {
+  const rawCookies = res.headers.getSetCookie();
+  if (!rawCookies || rawCookies.length === 0) return;
+  
   const cookieStore = await cookies();
   const parsedCookies = setCookieParser.parse(rawCookies, { map: false });
 

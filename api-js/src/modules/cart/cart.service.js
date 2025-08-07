@@ -1,78 +1,83 @@
 const { prisma } = require("../../common/database/prisma");
-const CustomError = require("../../common/utils/CustomError");
 
-const addItem = async (data) => {
-  const { userId, productId, quantity } = data;
+class BrandService {
+  constructor() {
+    this.prisma = prisma;
+  }
 
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-    select: { stock: true },
-  });
+  async addItem(data) {
+    const { userId, productId, quantity } = data;
 
-  if (!product) throw new CustomError("Produto não encontrado.", 404);
-  if (product.stock < quantity) throw new CustomError("Quantidade em estoque insuficiente.", 400);
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+      select: { stock: true },
+    });
 
-  let cart = await prisma.cart.findUnique({ where: { userId } });
-  if (!cart) cart = await prisma.cart.create({ data: { userId } });
+    if (!product) throw new CustomError("Produto não encontrado.", 404);
+    if (product.stock < quantity) throw new CustomError("Quantidade em estoque insuficiente.", 400);
 
-  const cartItem = await prisma.cartItem.upsert({
-    where: { cartId_productId: { cartId: cart.id, productId } },
-    update: { quantity: { increment: quantity } },
-    create: { cartId: cart.id, productId, quantity },
-  });
-  return cartItem;
-};
+    let cart = await this.prisma.cart.findUnique({ where: { userId } });
+    if (!cart) cart = await this.prisma.cart.create({ data: { userId } });
 
-const getOwnCart = async (userId) => {
-  const cart = await prisma.cart.findUnique({
-    where: { userId },
-    include: {
-      items: {
-        include: { product: { include: { images: true } } },
-        orderBy: { createdAt: "desc" },
+    const cartItem = await this.prisma.cartItem.upsert({
+      where: { cartId_productId: { cartId: cart.id, productId } },
+      update: { quantity: { increment: quantity } },
+      create: { cartId: cart.id, productId, quantity },
+    });
+    return cartItem;
+  }
+
+  async getOwnCart(userId) {
+    const cart = await this.prisma.cart.findUnique({
+      where: { userId },
+      include: {
+        items: {
+          include: { product: { include: { images: true } } },
+          orderBy: { createdAt: "desc" },
+        },
       },
-    },
-  });
+    });
 
-  if (!cart) {
-    await prisma.cart.create({ data: { userId } });
-    return [];
+    if (!cart) {
+      await this.prisma.cart.create({ data: { userId } });
+      return [];
+    }
+
+    return cart.items;
   }
 
-  return cart.items;
-};
+  async getCart(id) {
+    const cart = await this.prisma.cart.findUnique({
+      where: { id },
+      include: { items: { include: { product: true } } },
+    });
 
-const getCart = async (id) => {
-  const cart = await prisma.cart.findUnique({
-    where: { id },
-    include: { items: { include: { product: true } } },
-  });
+    if (!cart) {
+      await this.prisma.cart.create({ data: { id } });
+      return [];
+    }
 
-  if (!cart) {
-    await prisma.cart.create({ data: { id } });
-    return [];
+    return cart.items;
   }
 
-  return cart.items;
-};
+  updateItem(data) {
+    const { id, quantity } = data;
 
-const updateItem = (data) => {
-  const { id, quantity } = data;
+    return this.prisma.cartItem.update({
+      where: { id },
+      data: { quantity },
+    });
+  }
 
-  return prisma.cartItem.update({
-    where: { id },
-    data: { quantity },
-  });
-};
+  removeCart(data) {
+    const { userId } = data;
+    return this.prisma.cart.delete({ where: { userId } });
+  }
 
-const removeCart = (data) => {
-  const { userId } = data;
-  return prisma.cart.delete({ where: { userId } });
-};
+  removeItem(data) {
+    const { id } = data;
+    return this.prisma.cartItem.delete({ where: { id } });
+  }
+}
 
-const removeItem = (data) => {
-  const { id } = data;
-  return prisma.cartItem.delete({ where: { id } });
-};
-
-module.exports = { addItem, updateItem, getOwnCart, getCart, removeItem, removeCart };
+module.exports = new BrandService();

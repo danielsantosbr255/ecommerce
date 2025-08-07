@@ -23,8 +23,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async function (config) {
-    console.clear();
-
     if (isServer) {
       const { cookies, headers } = await import("next/headers");
       const cookieStore = await cookies();

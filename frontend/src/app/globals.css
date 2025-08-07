@@ -16,6 +16,11 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+input:-webkit-autofill {
+  background-color: transparent !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
 @theme {
   --color-navbar: var(--color-gray-50);
   --color-primary: var(--color-orange-500); /* Sua cor atual */
@@ -28,7 +33,7 @@ input[type="number"] {
 
   --color-bg-primary: var(--color-gray-50); /* Fundo principal (páginas) */
   --color-bg-secondary: white; /* Fundo secundário (cards, seções) */
-  --color-bg-overlay: rgba(0, 0, 0, 0.5); /* Overlays (modais, menus) */
+  --color-bg-overlay: rgba(0, 0, 0, 0.1); /* Overlays (modais, menus) */
 
   /* Cor Secundária (Complementar - ex: botões secundários) */
   --color-secondary: var(--color-gray-600);

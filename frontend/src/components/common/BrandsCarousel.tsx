@@ -7,37 +7,51 @@ import { Group } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel/carousel";
 
-const BrandCard = ({ brand }: { brand: Brand }) => {
+const BrandCard = ({ brand }: { brand: Brand | null }) => {
+  const isLoading = !brand;
+  if (!brand) brand = {} as Brand;
+
+  const slug = brand.slug || null;
+
   return (
     <section className="flex flex-col gap-2 w-full h-full justify-center items-center font-medium" key={brand.slug}>
       <Link
-        href={`/brands/${brand.slug}`}
+        href={slug ? `/brands/${slug}` : "#"}
         className="bg-bg-secondary text-primary flex relative aspect-square border border-lines hover:border-primary/50 w-full h-full hover:shadow-sm hover:shadow-primary/50 rounded-lg items-center justify-center"
       >
-        <Image
-          src={brand?.image || ""}
-          alt={brand?.name || ""}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
-          className="object-contain p-3"
-        />
+        {isLoading ? (
+          <span className={`w-full h-full animate-pulse  !bg-gray-200 !text-transparent rounded-md transition-all`} />
+        ) : (
+          <Image
+            src={brand?.image || ""}
+            alt={brand?.name || ""}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+            className="object-contain p-3 transition-all"
+          />
+        )}
       </Link>
 
-      <h3 className="text-tx-primary text-sm md:text-lg leading-5">{brand.name}</h3>
+      <h3 className="text-sm md:text-lg leading-5">{brand.name}</h3>
     </section>
   );
 };
 
-export default function BrandsCarousel({ brands }: { brands: Brand[] }) {
+export default function BrandsCarousel({ brands }: { brands: Brand[] | null }) {
+  const isLoading = !brands || brands.length === 0;
+  const placeholder = Array(11).fill(null) as Brand[];
+
+  const items = isLoading ? placeholder : brands;
+
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <h2 className="flex gap-2 items-center  border-lines text-2xl text-tx-primary font-bold py-2">
+      <h2 className="flex gap-2 items-center  border-lines text-2xl font-bold py-2">
         <Group className="text-primary" size={24} /> Nossas Marcas
       </h2>
 
       <Carousel className="w-full" opts={{ align: "start", loop: true }} plugins={[Autoplay({ delay: 3000 })]}>
         <CarouselContent className="ml-0">
-          {brands.map((brand, index) => (
+          {items.map((item, index) => (
             <CarouselItem
               key={index}
               className="
@@ -50,7 +64,7 @@ export default function BrandsCarousel({ brands }: { brands: Brand[] }) {
                 2xl:basis-[11.76%]   // desktop grande (8.5 colunas)
               "
             >
-              <BrandCard brand={brand} />
+              <BrandCard brand={item} />
             </CarouselItem>
           ))}
         </CarouselContent>
