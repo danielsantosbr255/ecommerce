@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum ORDER_STATUS {
@@ -99,7 +100,7 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   cartId    String
   cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
   productId String
@@ -186,9 +187,11 @@ model Product {
 }
 
 model ProductImage {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid())
   url       String
   alt       String?
+  publicId  String
+  order     Int     @default(0)
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
@@ -196,7 +199,7 @@ model ProductImage {
 }
 
 model Category {
-  id        String    @id @default(cuid())
+  id        String    @id @default(uuid())
   name      String
   slug      String    @unique
   image     String    @default("")
@@ -220,7 +223,7 @@ model Brand {
 }
 
 model Review {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid())
   userId    String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
@@ -235,7 +238,7 @@ model Review {
 }
 
 model Promotion {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
   slug        String   @unique
   description String?
@@ -254,7 +257,7 @@ model Promotion {
 }
 
 model PromotionProduct {
-  id          String    @id @default(cuid())
+  id          String    @id @default(uuid())
   promotionId String
   promotion   Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
   productId   String
@@ -266,7 +269,7 @@ model PromotionProduct {
 }
 
 model ProductVariant {
-  id         String  @id @default(cuid())
+  id         String  @id @default(uuid())
   productId  String
   product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   name       String
@@ -282,7 +285,7 @@ model ProductVariant {
 }
 
 model ProductSpecification {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   name      String

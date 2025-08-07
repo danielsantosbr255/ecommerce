@@ -16,11 +16,11 @@ export const api = new HttpService({
 const refreshToken = async () => {
   const response = await api.post<{ session: Session }>(AUTH_REFRESH_URL);
 
-  if (response.status !== 200) throw new Error("Failed to refresh token");
+  if (response.status !== 200) throw new Error("Não autorizado");
 
   const data = response.data;
   if (!data || !data.session) return null;
-  
+
   const session = data.session as Session;
   if (session) return session.accessToken;
   return null;
@@ -64,14 +64,14 @@ api.interceptors.response.use(
 
   async (error) => {
     if (!(error instanceof HttpError)) return Promise.reject(error);
-    
+
     const originalRequest = error.config;
     const status = error.response?.status;
 
     const isUnauthorized = status === 401;
-    const isNotRefreshEndpoint = originalRequest.url && !originalRequest.url.includes("/refresh");
+    const shouldRetry = originalRequest.url && !originalRequest.url.includes("/auth");
 
-    if (isUnauthorized && originalRequest && isNotRefreshEndpoint && !originalRequest._retry) {
+    if (isUnauthorized && originalRequest && shouldRetry && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -96,7 +96,7 @@ api.interceptors.response.use(
         }
 
         return api.request(originalRequest.method, relativeUrl, originalBody, originalRequest);
-      } catch (error: unknown) {
+      } catch (error) {
         console.error("Falha ao atualizar o token:", error);
         authManager.clear();
 

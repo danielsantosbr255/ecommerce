@@ -5,14 +5,18 @@ class ProductRepository {
     this.prisma = prisma;
   }
 
-  async create({ data, uploadResults }) {
+  async create(data) {
+    const { keptImages, ...restData } = data;
+
     return await this.prisma.product.create({
       data: {
-        ...data,
+        ...restData,
         images: {
-          create: uploadResults.map((result) => ({
-            url: result.secure_url,
-            alt: data.title,
+          create: data.images.map((image) => ({
+            url: image.url,
+            alt: image.alt,
+            order: image.order,
+            publicId: image.publicId,
           })),
         },
         specifications: {
@@ -34,6 +38,7 @@ class ProductRepository {
         images: {
           select: { id: true, url: true, alt: true },
           take: 1,
+          orderBy: { order: "asc" },
         },
       },
       orderBy,
@@ -81,7 +86,35 @@ class ProductRepository {
   }
 
   async update(id, data) {
-    return await this.prisma.product.update({ where: { id }, data });
+    const { keptImages, brandId, categoryId, ...updateData } = data;
+
+    return await this.prisma.product.update({
+      where: { id },
+      data: {
+        ...updateData,
+        images: {
+          create: data.images,
+          updateMany: keptImages.map((img) => ({
+            where: { id: img.id },
+            data: {
+              order: img.order,
+              alt: img.alt,
+            },
+          })),
+        },
+        brand: {
+          connect: { id: data.brandId },
+        },
+        category: {
+          connect: { id: data.categoryId },
+        },
+        specifications: {
+          deleteMany: {},
+          create: data.specifications || [],
+        },
+      },
+      include: { images: true, specifications: true, category: true, brand: true, reviews: true },
+    });
   }
 
   async remove(id) {

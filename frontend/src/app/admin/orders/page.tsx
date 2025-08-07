@@ -67,14 +67,6 @@ export default async function OrdersPage() {
             </TableRow>
           ))}
         </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <TableCell className="pl-5" colSpan={6}>
-              Total de pedidos
-            </TableCell>
-            <TableCell className="text-right pr-5">{orders.length}</TableCell>
-          </TableRow>
-        </TableFooter> */}
       </Table>
     </main>
   );

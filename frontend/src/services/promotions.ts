@@ -16,7 +16,7 @@ class PromotionService {
     try {
       const response = await api.get<Promotion[]>("/promotions", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ class PromotionService {
     try {
       const response = await api.get<Promotion>(`/promotions/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {

@@ -6,7 +6,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadToCloudinary = async (buffer, options) => {
+async function uploadToCloudinary(buffer, options = {}) {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(options, (err, result) => {
       if (err) return reject(err);
@@ -14,6 +14,22 @@ const uploadToCloudinary = async (buffer, options) => {
     });
     uploadStream.end(buffer);
   });
-};
+}
 
-module.exports = { cloudinary, uploadToCloudinary };
+async function deleteImage(publicId) {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error("Erro ao deletar imagem da Cloudinary:", error);
+    throw new Error("Falha ao deletar a imagem.");
+  }
+}
+
+function getPublicIdFromUrl(url) {
+  const parts = url.split("/");
+  const filename = parts.pop();
+  const publicId = filename.split(".")[0];
+  return publicId;
+}
+
+module.exports = { cloudinary, uploadToCloudinary, deleteImage, getPublicIdFromUrl };

@@ -8,12 +8,13 @@ import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/providers/AuthContext";
 import { FaCartPlus } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function ProductCard({ product }: { product: Product | null }) {
-  const { addToCart, cartLoading } = useAuth();
-  const skeleton = "animate-pulse w-fit !bg-gray-200 !text-transparent rounded-md transition-all";
+  const { addToCart } = useAuth();
+  const [isPeding, setIsPeding] = useState(false);
 
-  // product = null;
+  const skeleton = "animate-pulse w-fit !bg-gray-200 !text-transparent rounded-md transition-all";
   const isLoading = !product;
 
   if (!product) {
@@ -28,7 +29,9 @@ export default function ProductCard({ product }: { product: Product | null }) {
 
   const onAddToCart = async () => {
     if (!product) return;
+    setIsPeding(true);
     await addToCart(product.id, 1);
+    setIsPeding(false);
   };
 
   return (
@@ -62,8 +65,8 @@ export default function ProductCard({ product }: { product: Product | null }) {
           </div>
         </Link>
 
-        <Button onClick={onAddToCart} className={`mt-10 !py-3 gap-2 !w-full ${isLoading && skeleton}`} disabled={cartLoading}>
-          {cartLoading ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
+        <Button onClick={onAddToCart} className={`mt-10 !py-3 gap-2 !w-full ${isLoading && skeleton}`} disabled={isPeding}>
+          {isPeding ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
         </Button>
       </div>
     </article>

@@ -5,15 +5,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "fakestoreapi.com",
-        pathname: "/**",
-      },
-      {
         protocol: "http",
         hostname: "localhost",
         port: "3001",
-        pathname: "/**", // Permite todas as imagens
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -21,6 +16,12 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
   },
 };
 

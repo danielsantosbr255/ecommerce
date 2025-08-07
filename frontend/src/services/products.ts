@@ -23,10 +23,10 @@ export interface SearchParams {
 }
 
 class ProductService {
+  private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`;
+
   public async create(productData: FormData) {
-    const response = await api.post<Product>("/products", productData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const response = await api.post<Product>(`${this.baseUrl}`, productData);
     return response.data;
   }
 
@@ -45,7 +45,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>("/products", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
         params,
       });
       return response.data;
@@ -59,7 +59,7 @@ class ProductService {
     try {
       const response = await api.get<Product>(`/products/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -72,7 +72,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>(`/products?q=${query}&page=${page}&pageSize=${pageSize}`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -85,7 +85,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -94,9 +94,9 @@ class ProductService {
     }
   }
 
-  public async update(id: string, productData: Partial<Product>) {
+  public async update(id: string, productData: FormData) {
     try {
-      const response = await api.put<Product>(`/products/${id}`, productData);
+      const response = await api.put<Product>(`${this.baseUrl}/${id}`, productData);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -106,7 +106,7 @@ class ProductService {
 
   public async delete(id: string) {
     try {
-      const response = await api.delete(`/products/${id}`);
+      const response = await api.delete(`${this.baseUrl}/${id}`);
       return response.data;
     } catch (error) {
       console.error(error);

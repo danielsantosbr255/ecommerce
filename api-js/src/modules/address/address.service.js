@@ -8,7 +8,7 @@ class AddressService {
 
   async create(data) {
     const address = await this.repository.getByUserDefault(data.userId);
-    if (address) throw new CustomError("Endereço padrão ja cadastrado", 422);
+    if (address && data.isDefault) throw new CustomError("Endereço padrão ja cadastrado", 422);
     return this.repository.create(data);
   }
 
@@ -25,6 +25,12 @@ class AddressService {
   async update(ability, id, data) {
     const address = await this.repository.getOne(ability, id);
     if (!address) throw new CustomError("Endereço não encontrado", 404);
+
+    const defaultAddress = await this.repository.getByUserDefault(data.userId);
+    
+    if (defaultAddress && data.isDefault && address.id !== defaultAddress.id) {
+      throw new CustomError("Endereço padrão ja cadastrado", 422);
+    }
 
     return this.repository.update(ability, id, data);
   }

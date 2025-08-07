@@ -10,8 +10,8 @@ type SelectOption = {
 };
 
 export function useProductFormOptions() {
-  const [categories, setCategories] = useState<SelectOption[]>([]);
   const [brands, setBrands] = useState<SelectOption[]>([]);
+  const [categories, setCategories] = useState<SelectOption[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true);
   const [optionsError, setOptionsError] = useState<string | null>(null);
 

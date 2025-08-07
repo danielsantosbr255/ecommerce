@@ -12,11 +12,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = await productService.getBySlug(slug);
 
   if (!product) {
-    return (
-      <div className="flex flex-col w-full h-full justify-center items-center">
-        <h1>Produto nao encontrado</h1>
-      </div>
-    );
+    return <div className="bg-bg-secondary font-semibold p-4 rounded-lg shadow-xs text-center">Produto nao encontrado</div>;
   }
 
   const getRelated = () => productService.getRelated(product.id);

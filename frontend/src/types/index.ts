@@ -50,6 +50,8 @@ export interface ProductImage {
   id: string;
   url: string;
   alt?: string;
+  order: number;
+  publicId: string;
 }
 
 export interface CartItem {
@@ -70,6 +72,8 @@ export interface Brand {
   name: string;
   slug: string;
   image: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Category {
@@ -77,6 +81,8 @@ export interface Category {
   name: string;
   slug: string;
   image?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Review {

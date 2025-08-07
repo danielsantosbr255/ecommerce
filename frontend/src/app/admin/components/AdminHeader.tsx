@@ -1,6 +1,5 @@
 "use client";
 
-import Logo from "@/components/ui/Logo";
 import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
 import { User } from "@/types";
@@ -13,7 +12,9 @@ export default function AdminHeader({ user }: { user?: User | null }) {
 
   return (
     <nav className="bg-bg-primary grid grid-cols-3 items-center justify-between gap-4 py-2 px-5 w-full ">
-      <Logo size={30} name className={"overflow-hidden transition-all ease-in-out duration-300"} />
+      <div>
+        <h1 className="text-2xl font-semibold text-tx-primary">Painel Administrativo</h1>
+      </div>
 
       <SearchBar />
 

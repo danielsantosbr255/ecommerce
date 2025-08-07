@@ -16,7 +16,7 @@ class UserRoleService {
     try {
       const response = await api.get<UserRole[]>("/members", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {

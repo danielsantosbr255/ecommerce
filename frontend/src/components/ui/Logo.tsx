@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { BsFire } from "react-icons/bs";
 import { Ubuntu as Monoton } from "next/font/google";
-// import { GiFlame } from "react-icons/gi";
 
 const monoton = Monoton({ weight: "500", subsets: ["latin"] });
 

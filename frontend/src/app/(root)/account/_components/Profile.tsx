@@ -6,14 +6,15 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/providers/AuthContext";
 import LoadingState from "@/components/ui/LoadingState";
 import {
-  FaAddressBook, FaHeart,
+  FaAddressBook,
+  FaHeart,
   FaMailBulk,
   FaShieldAlt,
   FaShoppingBasket,
   FaThumbsUp,
   FaUserEdit,
   FaUserAstronaut,
-  FaWindowClose
+  FaWindowClose,
 } from "react-icons/fa";
 import Link from "next/link";
 
@@ -61,7 +62,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <Button>
+        <Button href="/account/security">
           <FaUserEdit className="mr-2" size={20} /> Editar Dados
         </Button>
       </section>

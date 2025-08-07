@@ -16,7 +16,7 @@ class BrandService {
     try {
       const response = await api.get<Brand[]>("/brands", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ class BrandService {
     try {
       const response = await api.get<Brand>(`/brands/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {

@@ -21,6 +21,8 @@ async function main() {
   //#endregion
 
   // #region | Criar Permissões
+  await prisma.permission.deleteMany();
+
   const manageAllPermission = await prisma.permission.create({
     data: {
       action: "manage",
@@ -64,29 +66,33 @@ async function main() {
   // #endregion
 
   // #region | Atribuir Permissões aos Roles
-  const adminRole = await prisma.role.upsert({
-    where: { name: "admin" },
-    update: { permissions: { set: manageAllPermission.map((p) => ({ id: p.id })) } },
-    create: {
+  const adminRole = await prisma.role.create({
+    data: {
       name: "admin",
       description: "Acesso total ao sistema",
       permissions: {
-        connect: manageAllPermission.map((p) => ({ id: p.id })),
+        create: [{ permission: { connect: { id: manageAllPermission.id } } }],
       },
     },
   });
 
-  const sellerRole = await prisma.role.upsert({
-    where: { name: "seller" },
-    update: { permissions: { set: manageProductPermission.map((p) => ({ id: p.id })) } },
-    create: {
+  const sellerRole = await prisma.role.create({
+    data: {
       name: "seller",
       description: "Gerente da loja com acesso a produtos e pedidos",
       permissions: {
-        connect: manageProductPermission.map((p) => ({ id: p.id })),
+        create: [
+          { permission: { connect: { id: manageProductPermission.id } } },
+          { permission: { connect: { id: manageOrderPermission.id } } },
+        ],
       },
     },
   });
+  // #endregion
+
+  // #region | Atribuir Roles aos Usuarsios
+  await prisma.userRole.create({ data: { role: { connect: { id: adminRole.id } }, user: { connect: { id: adminUser.id } } } });
+  await prisma.userRole.create({ data: { role: { connect: { id: sellerRole.id } }, user: { connect: { id: sellerUser.id } } } });
   // #endregion
 
   // #region | Criar Endereços

@@ -11,7 +11,6 @@ import { useAuth } from "@/providers/AuthContext";
 import { IoIosMail, IoMdLock } from "react-icons/io";
 import { FaGithub, FaUser, FaUserPlus } from "react-icons/fa";
 import Checkbox from "@/components/ui/Checkbox";
-import ErrorMessage from "@/components/ui/ErrorMessage";
 
 export default function SignInForm() {
   const { register, handleSubmit, formState } = useForm<SignUpFormData>({ mode: "onChange" });
@@ -29,7 +28,7 @@ export default function SignInForm() {
         <p className="text-center"> comece a comprar agora mesmo!</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full space-y-5">
         <Input
           id="text"
           label="Nome"
@@ -40,8 +39,8 @@ export default function SignInForm() {
             minLength: { value: 3, message: "O nome precisa ter pelo menos 3 caracteres" },
           })}
           placeholder="Informe seu nome"
+          error={errors.name}
         />
-        <ErrorMessage message={errors.name?.message} />
 
         <Input
           id="email"
@@ -56,8 +55,8 @@ export default function SignInForm() {
             },
           })}
           placeholder="Informe seu email"
+          error={errors.email}
         />
-        <ErrorMessage message={errors.email?.message} />
 
         <Input
           id="password"
@@ -69,15 +68,12 @@ export default function SignInForm() {
             minLength: { value: 5, message: "Senha deve ter pelo menos 5 caracteres" },
           })}
           placeholder="Informe sua senha"
+          error={errors.password}
         />
-        <ErrorMessage message={errors.password?.message} />
 
         <Checkbox label="Eu concordo com os termos e condicões" />
 
-        <Button
-          disabled={loading}
-          className={`text-tx-on-primary w-full gap-2 mt-2 ${loading ? "cursor-not-allowed bg-primary/50" : "bg-primary"}`}
-        >
+        <Button disabled={loading} className="w-full gap-2 mt-2">
           {loading ? (
             <div>
               <Loader2 className="animate-spin" />{" "}

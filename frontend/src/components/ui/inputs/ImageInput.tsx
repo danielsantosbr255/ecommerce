@@ -11,26 +11,20 @@ interface ImageUploadProps {
 }
 
 const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps) => {
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Effect to manage object URLs for previews
   useEffect(() => {
     const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
     setImagePreviews(newPreviews);
 
-    // Cleanup object URLs when component unmounts or selectedFiles change
     return () => {
       newPreviews.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [selectedFiles]);
 
-  /**
-   * Updates the state with new files and notifies the parent component.
-   * @param files The array of files to set.
-   */
   const updateSelectedFiles = useCallback(
     (files: File[]) => {
       setSelectedFiles(files);
@@ -39,11 +33,6 @@ const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps
     [onChange]
   );
 
-  /**
-   * Handles processing of incoming file lists (from input or drag-and-drop).
-   * Filters by image type, size, and respects maxFiles limit.
-   * @param fileList The FileList object from the event.
-   */
   const processFiles = useCallback(
     (fileList: FileList | null) => {
       if (!fileList) return;
@@ -52,8 +41,6 @@ const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps
         (file) => file.type.startsWith("image/") && file.size <= maxSizeMB * 1024 * 1024
       );
 
-      // Combine new files with existing ones, then slice to respect maxFiles
-      // Filter out duplicates based on file name and size for robustness
       const combinedFiles = Array.from(
         new Map([...selectedFiles, ...validFiles].map((file) => [file.name + file.size, file])).values()
       ).slice(0, maxFiles);
@@ -63,48 +50,30 @@ const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps
     [maxFiles, maxSizeMB, selectedFiles, updateSelectedFiles]
   );
 
-  /**
-   * Handles file selection from the input element.
-   * @param event The ChangeEvent from the input.
-   */
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     processFiles(event.target.files);
-    // Reset input value to allow selecting the same file again if needed
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  /**
-   * Handles the drop event for drag-and-drop functionality.
-   * @param event The DragEvent from the drop area.
-   */
   const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     setIsDragging(false);
     processFiles(event.dataTransfer.files);
   };
 
-  /**
-   * Handles removing an image from the selection.
-   * @param index The index of the image to remove.
-   */
   const handleRemoveImage = (index: number) => {
     const newFiles = selectedFiles.filter((_, i) => i !== index);
     updateSelectedFiles(newFiles);
   };
 
-  /**
-   * Triggers the hidden file input click event when the label is clicked.
-   * This is the primary mechanism for opening the file dialog.
-   */
   const handleLabelClick = () => {
     fileInputRef.current?.click();
   };
 
   return (
     <div className="w-full">
-      {/* O label não tem mais "htmlFor", o clique é gerenciado apenas pelo onClick */}
       <label
         onDragOver={(e: DragEvent<HTMLLabelElement>) => {
           e.preventDefault();
@@ -134,7 +103,10 @@ const ImageUpload = ({ onChange, maxFiles = 5, maxSizeMB = 5 }: ImageUploadProps
       {imagePreviews.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-4">
           {imagePreviews.map((src, index) => (
-            <div key={src} className="relative group aspect-square rounded-lg overflow-hidden shadow border border-dotted border-lines/50">
+            <div
+              key={src}
+              className="relative group aspect-square rounded-lg overflow-hidden shadow border border-dotted border-lines/50"
+            >
               <Image
                 src={src}
                 alt={`Prévia da imagem ${index + 1}`}

@@ -11,7 +11,6 @@ import Checkbox from "@/components/ui/Checkbox";
 import { useAuth } from "@/providers/AuthContext";
 import { IoIosMail, IoMdLock } from "react-icons/io";
 import { FaGithub, FaSignInAlt } from "react-icons/fa";
-import ErrorMessage from "@/components/ui/ErrorMessage";
 
 export default function SignInForm() {
   const { register, handleSubmit, formState } = useForm<SignInFormData>({ mode: "onChange" });
@@ -29,11 +28,12 @@ export default function SignInForm() {
         <p className="text-center">e comece a comprar com a gente</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full gap-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full space-y-5">
         <Input
           id="email"
           label="Email"
           type="email"
+          error={errors.email}
           placeholder="Informe seu email"
           icon={<IoIosMail size={20} className="text-primary" />}
           {...register("email", {
@@ -44,7 +44,6 @@ export default function SignInForm() {
             },
           })}
         />
-        <ErrorMessage message={errors.email?.message} />
 
         <Input
           id="password"
@@ -53,8 +52,8 @@ export default function SignInForm() {
           icon={<IoMdLock size={20} className="text-primary" />}
           {...register("password", { required: "Senha é obrigatoria" })}
           placeholder="Informe sua senha"
+          error={errors.password}
         />
-        <ErrorMessage message={errors.password?.message} />
 
         <div className="flex justify-between items-center text-xs sm:text-sm w-full">
           <Checkbox label="Lembrar-me" />
@@ -64,13 +63,10 @@ export default function SignInForm() {
           </Link>
         </div>
 
-        <Button
-          disabled={loading}
-          className={`text-tx-on-primary w-full gap-2 mt-2 ${loading ? "cursor-not-allowed bg-primary/50" : "bg-primary"}`}
-        >
+        <Button disabled={loading} className="w-full gap-2 mt-2">
           {loading ? (
             <div>
-              <Loader2 className="animate-spin" />{" "}
+              <Loader2 className="animate-spin" />
             </div>
           ) : (
             <FaSignInAlt size={20} />

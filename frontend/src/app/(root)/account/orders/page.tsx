@@ -8,7 +8,7 @@ async function MyOrders() {
   const orders = await orderService.getAll();
 
   if (!orders || orders.length === 0) {
-    return <div className="text-tx-primary">Nenhum pedido encontrado.</div>;
+    return <div className="flex flex-col flex-1 w-full items-center justify-center font-semibold text-xl">Nenhum pedido encontrado.</div>;
   }
 
   return (

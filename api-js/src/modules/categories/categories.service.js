@@ -15,12 +15,12 @@ class CategoryService {
     return await this.repository.create(validatedData);
   };
 
-  getAll = async () => {
-    return await this.repository.getAll();
+  getAll = () => {
+    return this.repository.getAll();
   };
 
-  getBySlug = async (slug) => {
-    return await this.repository.getBySlug(slug);
+  getBySlug = (slug) => {
+    return this.repository.getBySlug(slug);
   };
 
   update = async (slug, data) => {

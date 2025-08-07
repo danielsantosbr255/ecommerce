@@ -15,7 +15,7 @@ class OrderService {
   public async getAll() {
     const response = await api.get<Order[]>("/orders", {
       cache: "force-cache",
-      next: { revalidate: 60 },
+      next: { revalidate: 3600 },
     });
     return response.data;
   }

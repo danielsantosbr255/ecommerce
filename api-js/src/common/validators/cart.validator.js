@@ -9,7 +9,7 @@ const msg = {
 };
 
 const schema = {
-  id: z.string().cuid().optional(),
+  id: z.string().uuid().optional(),
   quantity: z.number({ required_error: msg.required }).int().nonnegative({ message: msg.negative }),
   productId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
 };

@@ -92,9 +92,10 @@ class AuthService {
     const session = await this.repository.getSessionByUserId({ userId, userAgent });
 
     if (!session || session.expiresAt < new Date()) {
-      if (session) await this.repository.deleteSession(req, session.id);
+      if (session) await this.repository.deleteSession(session.id);
       throw new CustomError("Sessão inválida ou expirada", 401);
     }
+    console.log("[REVALIDATE] - Atualizando sessão...");
 
     const newTokens = tokenUtil.createTokens({ userId, userAgent });
     const ua = getUserAgent(userAgent);

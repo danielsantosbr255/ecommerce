@@ -56,8 +56,7 @@ class AuthController {
     const refreshToken = req.cookies.refreshToken;
 
     const session = await this.service.revalidateTokens({ req, refreshToken, userAgent, ipAddress });
-
-    // console.log("⚙️ [CONTROLLER] - refresh session: ", session);
+    
     tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
     res.json({ session });

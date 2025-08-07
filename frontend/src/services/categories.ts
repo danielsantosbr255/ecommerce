@@ -16,7 +16,7 @@ class CategoryService {
     try {
       const response = await api.get<Category[]>("/categories", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ class CategoryService {
     try {
       const response = await api.get<Category>(`/categories/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {

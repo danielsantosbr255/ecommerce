@@ -64,7 +64,8 @@ export default function Sessions({ sessions }: { sessions: Session[] | null }) {
             <TableCell className="text-right">{new Date(session.updatedAt).toLocaleString()}</TableCell>
 
             <TableCell className="text-right">
-              <Link href={`/admin/sessions/${session.id}`} className="text-primary hover:underline">
+              {/* <Link href={`/admin/sessions/${session.id}`} className="text-primary hover:underline"> */}
+              <Link href="#" className="text-primary hover:underline">
                 Ver Detalhes
               </Link>
             </TableCell>

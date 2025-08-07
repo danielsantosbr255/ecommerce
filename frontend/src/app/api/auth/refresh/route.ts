@@ -14,6 +14,8 @@ export async function POST() {
   }
 
   try {
+    console.log("🚀 [REFRESH] - Enviando refresh token ao servidor...");
+
     const response = await api.post("/auth/refresh", undefined, {
       headers: {
         Cookie: cookiesStore.toString(),
@@ -22,16 +24,15 @@ export async function POST() {
       },
     });
 
-    if (response.status !== 200) {
-      cookiesStore.delete("accessToken");
-      cookiesStore.delete("refreshToken");
-      throw new Error("Não autorizado");
-    }
+    // console.log("🚀 [REFRESH] - Resposta do servidor: ", response.data);
 
     setCookiesFromResponse(response);
 
     return NextResponse.json(response.data);
   } catch (error) {
+    cookiesStore.delete("accessToken");
+    cookiesStore.delete("refreshToken");
+
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
     }

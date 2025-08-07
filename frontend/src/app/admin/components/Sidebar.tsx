@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import { usePathname } from "next/navigation";
 import Skeleton from "@/components/ui/Skeleton";
 import { ChevronFirst, LogOut } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 interface SidebarItemProps extends React.HTMLAttributes<HTMLLIElement> {
   icon: React.ReactNode;
@@ -29,7 +30,9 @@ export function Sidebar({ children, className }: SidebarProps) {
 
   return (
     <nav className={`bg-bg-secondary flex flex-col rounded-2xl shadow-xs border border-lines/20 ${className}`}>
-      <div className="flex p-2 pb-4 items-center">
+      <div className="flex p-2 pb-4 items-center justify-between">
+        <Logo size={30} name className={cn("overflow-hidden transition-all ease-in-out duration-300", isOpen ? "w-52" : "w-0")} />
+
         <button onClick={() => setIsOpen(!isOpen)} className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
           <ChevronFirst className={`transition-all ease-in-out duration-300 ${isOpen ? "" : "rotate-180"}`} />
         </button>

@@ -79,7 +79,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="text-tx-primary text-center py-4">
+                  <td colSpan={2} className="text-tx-primary text-center font-semibold">
                     Nenhuma especificação informada.
                   </td>
                 </tr>

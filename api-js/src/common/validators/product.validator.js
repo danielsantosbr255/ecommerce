@@ -26,15 +26,22 @@ const FileSchema = z.object({
   encoding: z.string(),
 });
 
-const ProductSpecificationSchema = z.object({
+const specificationSchema = z.object({
   name: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
   value: z.string({ required_error: msg.required }).min(1, msg.minLength(1)).max(25),
+});
+
+const keptImageSchema = z.object({
+  id: z.string().uuid(), // Valida se é uma string no formato UUID
+  url: z.string().url(), // Valida se é uma string que é uma URL válida
+  alt: z.string().optional(), // Valida se é uma string opcional
+  order: z.number().int().min(0), // Valida se é um número inteiro não negativo
+  publicId: z.string().min(1, "publicId é obrigatório"), // Valida se é uma string não vazia
 });
 
 const schema = {
   isActive: z.boolean().default(true),
   rating: z.number().min(0).max(5).default(0),
-  specifications: z.array(ProductSpecificationSchema).optional().default([]),
   title: z.string({ required_error: msg.required }).min(5, msg.minLength(5)),
   description: z.string({ required_error: msg.required }).min(10, msg.minLength(10)),
   price: z.number({ required_error: msg.required }).nonnegative({ message: msg.negative }),
@@ -43,7 +50,9 @@ const schema = {
   slug: z.string({ required_error: msg.required }).regex(/^[a-z0-9-]+$/, msg.invalid),
   brandId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
   categoryId: z.string({ required_error: msg.required }).uuid({ message: msg.invalidId }),
-  images: z.array(FileSchema, { required_error: msg.required }).max(5, { message: "Você pode enviar no máximo 5 imagens." }),
+  specifications: z.array(specificationSchema).optional(),
+  images: z.array(FileSchema).max(5, { message: "Você pode enviar no máximo 5 imagens." }),
+  keptImages: z.array(keptImageSchema).optional().default([]),
 };
 
 const create = (data) => {

@@ -1,7 +1,6 @@
-const slugify = require("slugify");
 const service = require("./products.service");
+const { ANSIColors } = require("../../scripts/colors");
 const CustomError = require("../../common/utils/CustomError");
-const validator = require("../../common/validators/product.validator");
 
 class ProductController {
   constructor() {
@@ -10,20 +9,9 @@ class ProductController {
 
   create = async (req, res) => {
     if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+    if (req.files && req.files.length > 0) req.body.images = req.files;
 
-    if (req.body.title) req.body.slug = slugify(req.body.title, { lower: true });
-    if (req.body.price) req.body.price = parseInt(req.body.price);
-    if (req.body.stock) req.body.stock = parseInt(req.body.stock);
-    if (req.body.rating) req.body.rating = parseInt(req.body.rating);
-    if (req.body.discount) req.body.discount = parseInt(req.body.discount);
-    if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
-    if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
-    if (req.files?.length) req.body.images = req.files;
-
-    console.log(req.body.specifications)
-    const validatedData = validator.create(req.body);
-    const product = await this.service.create(validatedData);
-
+    const product = await this.service.create(req.body);
     res.status(201).json(product);
   };
 
@@ -59,19 +47,9 @@ class ProductController {
 
   update = async (req, res) => {
     if (!req.ability.can("manage", "Product")) throw new CustomError("Acesso negado!", 403);
+    if (req.files && req.files.length > 0) req.body.images = req.files;
 
-    if (req.body.slug) req.body.slug = slugify(req.body.slug, { lower: true });
-    if (req.body.price) req.body.price = parseInt(req.body.price);
-    if (req.body.stock) req.body.stock = parseInt(req.body.stock);
-    if (req.body.rating) req.body.rating = parseInt(req.body.rating);
-    if (req.body.discount) req.body.discount = parseInt(req.body.discount);
-    if (req.body.isActive) req.body.isActive = Boolean(req.body.isActive);
-    if (req.body.specifications) req.body.specifications = JSON.parse(req.body.specifications);
-    if (req.files?.length) req.body.images = req.files;
-
-    const validatedData = validator.update(req.body);
-    const product = await this.service.update(req.params.id, validatedData);
-
+    const product = await this.service.update(req.params.id, req.body);
     res.json(product);
   };
 

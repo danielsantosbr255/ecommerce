@@ -94,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await authService.signOut();
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Erro ao deslogar. Tente novamente.");
+      // toast.error("Erro ao deslogar. Tente novamente.");
     } finally {
       setUser(null);
       setCartItems(null);
@@ -123,8 +123,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const newCartItem = await cartService.create(productId, quantity);
 
       if (newCartItem) {
-        toast.success("Produto adicionado ao carrinho");
         await loadCart();
+        toast.success("Produto adicionado ao carrinho");
+      } else {
+        toast.error("Erro ao adicionar produto ao carrinho");
       }
       setLoading(false);
     },

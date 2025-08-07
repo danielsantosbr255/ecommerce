@@ -21,6 +21,7 @@ const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
 const PermissionsModule = require("./modules/permissions/permissions.module");
 const MembersModule = require("./modules/members/members.module");
+const UploadModule = require("./modules/uploads/uploads.module");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.use("/api", [
+  UploadModule,
   AuthModule,
   UsersModule,
   ProductsModule,
