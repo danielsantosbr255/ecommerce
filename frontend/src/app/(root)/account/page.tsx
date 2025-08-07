@@ -1,4 +1,12 @@
 import Profile from "@/app/(root)/account/_components/Profile";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Minha Conta - Fireforge Labs",
+  description: "Aqui você  pode atualizar suas informações de conta e segurança.",
+};
+
+export const revalidate = 0;
 
 export default async function MyAccount() {
   return (

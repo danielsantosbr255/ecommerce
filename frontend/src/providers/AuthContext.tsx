@@ -7,6 +7,7 @@ import { cartService } from "@/services/carts";
 import { redirect, useRouter } from "next/navigation";
 import { CartItem, SignInFormData, SignUpFormData, User } from "@/types";
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AuthContextType {
   user: User | null;
@@ -19,7 +20,6 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   loadUser: () => Promise<void>;
   loadCart: () => Promise<void>;
-  // clearCart: () => Promise<void>;
   addToCart: (productId: string, quantity: number) => Promise<void>;
 }
 
@@ -32,6 +32,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [cartLoading, setCartLoading] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const route = useRouter();
+  // 2. Obter a instância do QueryClient
+  const queryClient = useQueryClient();
 
   const loadUser = useCallback(async () => {
     setUserLoading(true);
@@ -92,9 +94,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await authService.signOut();
+      // 3. Invalidar todos os caches do TanStack Query
+      queryClient.invalidateQueries();
     } catch (error) {
       console.error("Logout error:", error);
-      // toast.error("Erro ao deslogar. Tente novamente.");
     } finally {
       setUser(null);
       setCartItems(null);
@@ -103,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       redirect("/sign-in");
     }
-  }, []);
+  }, [queryClient]); // Adicione queryClient como dependência
 
   const loadCart = useCallback(async () => {
     setCartLoading(true);
@@ -155,7 +158,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
         loadCart,
         addToCart,
-        // clearCart, // Uncomment if you implement clearCart function
         loadUser,
       }}
     >

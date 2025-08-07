@@ -9,6 +9,13 @@ import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
 import { FaBoxes, FaHome, FaUsers, FaUsersCog, FaWindowClose } from "react-icons/fa";
 import { MdLocalFireDepartment } from "react-icons/md";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Fireforge Labs - Painel de Administração",
+  description:
+    "Painel de administração do ecommerce Fireforge Labs, aqui você pode gerenciar os produtos, usuários, pedidos e muito mais.",
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await userService.getOwn();

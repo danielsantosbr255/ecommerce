@@ -19,9 +19,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="pt-BR">
       <body className={roboto.className + " bg-bg-primary !text-tx-primary"}>
-        <AuthProvider>
-          <QueryProvider>{children}</QueryProvider>
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryProvider>
+        
         <ToastContainer autoClose={1300} position="top-center" transition={Flip} />
       </body>
     </html>
