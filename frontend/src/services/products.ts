@@ -26,7 +26,8 @@ class ProductService {
   private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`;
 
   public async create(productData: FormData) {
-    const response = await api.post<Product>(`${this.baseUrl}`, productData);
+    const response = await api.post<Product>(`/products`, productData);
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
     return response.data;
   }
 
@@ -45,7 +46,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>("/products", {
         cache: "force-cache",
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ["products"] },
         params,
       });
       return response.data;
@@ -59,7 +60,7 @@ class ProductService {
     try {
       const response = await api.get<Product>(`/products/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ["products"] },
       });
       return response.data;
     } catch (error) {
@@ -72,7 +73,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>(`/products?q=${query}&page=${page}&pageSize=${pageSize}`, {
         cache: "force-cache",
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ["products"] },
       });
       return response.data;
     } catch (error) {
@@ -96,7 +97,8 @@ class ProductService {
 
   public async update(id: string, productData: FormData) {
     try {
-      const response = await api.put<Product>(`${this.baseUrl}/${id}`, productData);
+      const response = await api.put<Product>(`/products/${id}`, productData);
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -106,7 +108,8 @@ class ProductService {
 
   public async delete(id: string) {
     try {
-      const response = await api.delete(`${this.baseUrl}/${id}`);
+      const response = await api.delete(`/products/${id}`);
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
       return response.data;
     } catch (error) {
       console.error(error);

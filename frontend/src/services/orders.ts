@@ -13,11 +13,13 @@ class OrderService {
   }
 
   public async getAll() {
-    const response = await api.get<Order[]>("/orders", {
-      cache: "force-cache",
-      next: { revalidate: 3600 },
-    });
-    return response.data;
+    try {
+      const response = await api.get<Order[]>("/orders");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   public async getOrder(id: string) {

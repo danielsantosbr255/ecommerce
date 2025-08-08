@@ -13,7 +13,6 @@ interface Props {
 async function ProductList({ callback }: Props) {
   const result = await callback();
   if (!result) return null;
-
   const { products } = result;
 
   if (!products || !products.length) {

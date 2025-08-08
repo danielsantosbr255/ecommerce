@@ -16,7 +16,7 @@ class PermissionService {
     try {
       const response = await api.get<Permission[]>("/permissions", {
         cache: "force-cache",
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ["permissions"] },
       });
       return response.data;
     } catch (error) {

@@ -19,15 +19,21 @@ export default function ProductDetail({ product }: { product: Product }) {
     await addToCart(product.id, 1);
   };
 
+  const productDiscount = product.price - (product.price * product.discount!) / 100;
+  const productPrice = product.discount > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
+  const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
+
   return (
     <>
       <section className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="bg-white border-lines relative aspect-video rounded-xl shadow-xs p-4">
+        <div className="bg-white border-lines relative aspect-video rounded-xl shadow-xs p-1">
           <ProductImage product={product} />
         </div>
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h1 className="text-3xl font-bold">{product.title}</h1>
-          <p className="text-xl text-primary font-semibold">{CurrencyUtil.formatCurrency(product.price)}</p>
+
+          <p className={`text-sm truncate line-through ${product.discount === 0 && "hidden"}`}>{productPrice}</p>
+          <p className="text-xl text-primary font-semibold">{productDiscountPrice}</p>
 
           <p className="text-tx-primary">
             <span className="font-bold">Estoque: </span> {product.stock}
@@ -51,7 +57,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 className="object-contain rounded"
               />
             </span>
-            <p className="text-tx-primary font-bold">{product.brand?.name}</p>
+            <p className="font-bold">{product.brand?.name}</p>
           </div>
 
           <div className="flex gap-4 pt-4">
