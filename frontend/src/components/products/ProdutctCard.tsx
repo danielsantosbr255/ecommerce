@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Product } from "@/types";
 import Button from "../ui/Button";
+import { Loader2 } from "lucide-react";
 import ProductImage from "./ProductImage";
+import { FaCartPlus } from "react-icons/fa";
 import CurrencyUtil from "@/utils/currency.util";
 import { useAuth } from "@/providers/AuthContext";
-import { FaCartPlus } from "react-icons/fa";
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
 
 export default function ProductCard({ product }: { product: Product | null }) {
   const { addToCart } = useAuth();
@@ -57,7 +57,7 @@ export default function ProductCard({ product }: { product: Product | null }) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p className={`text-sm truncate ${!isLoading && "line-through"}`}>{productPrice}</p>
+            <p className={`text-sm truncate ${!isLoading && product.discount > 0 && "line-through"}`}>{productPrice}</p>
             <p className={`text-2xl text-primary font-bold ${isLoading && skeleton}`}>{productDiscountPrice}</p>
             <p className={`text-sm truncate ${isLoading && skeleton}`}>
               À vista <br /> ou até 10x de {CurrencyUtil.formatCurrency(productDiscount / 10)}

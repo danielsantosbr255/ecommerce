@@ -7,7 +7,7 @@ import ProductsGrid from "@/components/products/ProductsGrid";
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 const SearchResultsPage = async ({ searchParams }: { searchParams: Promise<SearchPageProps> }) => {
   const params = await searchParams;

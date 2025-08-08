@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { categoryService } from "@/services/categories";
 import Link from "next/link";
 import { Suspense, use, useState } from "react";
-import { FaBoxOpen, FaChevronDown, FaList } from "react-icons/fa";
+import { FaChevronDown, FaTags, FaThList } from "react-icons/fa";
 
 const categoriesPromise = categoryService.getAll();
 
@@ -25,10 +25,10 @@ const CategoryItems = ({ isCategOpen }: { isCategOpen: boolean }) => {
         {categories.map((category) => (
           <li
             key={category.id}
-            className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-tx-primary py-4 px-4 text-sm cursor-pointer transition hover:bg-primary/10"
+            className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-sm cursor-pointer transition hover:bg-primary/10"
           >
-            <Link href={`/categories/${category.slug}`} className="flex items-center gap-2 w-full">
-              <FaBoxOpen size={20} className="text-primary shrink-0" />
+            <Link href={`/categories/${category.slug}`} className="flex items-center gap-2 py-4 px-4 w-full">
+              <FaTags size={20} className="text-primary shrink-0" />
               <span className="truncate">{category.name}</span>
             </Link>
           </li>
@@ -53,8 +53,8 @@ export default function CategoriesMenu() {
         )}
       >
         <div className="flex items-center gap-4 truncate">
-          <FaList />
-          <span className="hidden md:inline">Navegar por categorias</span>
+          <FaThList />
+          <span className="hidden md:inline">Nossos departamentos</span>
         </div>
         <FaChevronDown size={12} />
       </div>

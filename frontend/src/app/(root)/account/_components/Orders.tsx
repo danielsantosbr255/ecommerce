@@ -3,11 +3,11 @@ import CurrencyUtil from "@/utils/currency.util";
 import Link from "next/link";
 import { FaBox } from "react-icons/fa";
 
-const Orders = ({ orders }: { orders: Order[] }) => {
+const Orders = ({ orders }: { orders: Order[] | null }) => {
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col gap-6 bg-bg-secondary rounded-lg shadow-xs">
-        <p className="text-tx-primary text-center font-semibold">Nenhum pedido encontrado.</p>
+      <div className="flex flex-col w-full h-full justify-center items-center">
+        <p className="text-center font-semibold">Nenhum pedido encontrado.</p>
       </div>
     );
   }

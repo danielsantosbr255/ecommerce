@@ -8,8 +8,9 @@ export async function POST(request: Request) {
     const data = await request.formData();
     const response = await api.post("/products", data);
 
+    revalidatePath("/");
+    revalidatePath("/admin/products");
     revalidateTag("products");
-    revalidatePath("/products");
 
     return NextResponse.json(response.data);
   } catch (error) {

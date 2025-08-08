@@ -2,7 +2,7 @@
 
 import Alert from "../ui/Alert";
 import { useRef, useState, useEffect } from "react";
-import { FaRegBell } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([
@@ -60,7 +60,7 @@ export default function Notification() {
       onClick={toggleNotifications}
     >
       <div className="relative">
-        <FaRegBell size={24} />
+        <FaBell size={24} />
         {unreadCount > 0 && <Alert className="absolute top-0 right-0" />}
       </div>
 
@@ -79,7 +79,7 @@ export default function Notification() {
                 key={notif.id}
                 className="bg-bg-secondary flex gap-2 rounded-lg shadow-xs text-tx-primary py-4 px-4 text-sm cursor-pointer transition hover:bg-primary/10"
               >
-                <FaRegBell size={20} className="text-primary shrink-0" />
+                <FaBell size={20} className="text-primary shrink-0" />
                 <span className="truncate">{notif.message}</span>
               </li>
             ))

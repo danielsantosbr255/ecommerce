@@ -78,7 +78,8 @@ export default function AddressesComponent() {
                 <FaRegAddressCard size={25} />
                 {address.label} {address.isDefault ? "(Padrão)" : ""}
               </span>
-              <span className="flex w-full justify-end items-center gap-2">
+
+              <span className="flex justify-end items-center gap-2">
                 <button onClick={() => handleEdit(address)} className="cursor-pointer hover:scale-110 transition-all">
                   <FaPencilAlt className="text-primary" />
                 </button>
