@@ -14,10 +14,7 @@ class PermissionService {
 
   public async getAll() {
     try {
-      const response = await api.get<Permission[]>("/permissions", {
-        cache: "force-cache",
-        next: { revalidate: 3600, tags: ["permissions"] },
-      });
+      const response = await api.get<Permission[]>("/permissions");
       return response.data;
     } catch (error) {
       console.error(error);

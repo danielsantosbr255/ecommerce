@@ -18,16 +18,15 @@ import { RoleUpdateFormValues } from "@/lib/schemas/role.schema";
 
 const RoleForm = ({ role }: { role: Role | null | undefined }) => {
   const queryClient = useQueryClient();
-
   const { data: permissions, isLoading } = useQuery({ queryKey: ["permissions"], queryFn: permissionService.getAll });
+
   const { register, handleSubmit, setValue, watch, formState } = useForm<RoleUpdateFormValues>({
     resolver: zodResolver(roleUpdateSchema),
     mode: "onChange",
     defaultValues: {
       name: role?.name || "",
       description: role?.description || "",
-      permissions: role?.permissions?.map((permission) => permission.permission.id) || [],
-      users: role?.users.map((user) => user.user.id) || [],
+      permissions: role?.permissions?.map((permission) => permission.permission.id) || [],      
     },
   });
 

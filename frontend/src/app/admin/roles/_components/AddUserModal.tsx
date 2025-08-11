@@ -2,12 +2,12 @@
 
 import { Role } from "@/types";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "@/components/ui/Button";
 import { roleService } from "@/services/roles";
 import { userService } from "@/services/users";
 import Checkbox from "@/components/ui/Checkbox";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface AddUserModalProps {
   role: Role;
@@ -15,8 +15,7 @@ interface AddUserModalProps {
 }
 
 export const AddUserModal = ({ role, handleAddUsers }: AddUserModalProps) => {
-  const [users, setUsers] = useState<{ id: string; name: string }[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: userService.getAll });
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>(role.users.map((user) => user.userId));
 
   const queryClient = useQueryClient();
@@ -25,17 +24,8 @@ export const AddUserModal = ({ role, handleAddUsers }: AddUserModalProps) => {
     setSelectedUserIds((prev) => (prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]));
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await userService.getAll();
-      setUsers(users);
-    };
-    fetchUsers();
-  }, []);
-
   const onClick = async () => {
     try {
-      setLoading(true);
       await roleService.update(role.id, { users: selectedUserIds });
       await queryClient.invalidateQueries({ queryKey: ["roles"] });
       setSelectedUserIds([]);
@@ -43,8 +33,6 @@ export const AddUserModal = ({ role, handleAddUsers }: AddUserModalProps) => {
       toast.success("Membros atualizados com sucesso!");
     } catch {
       toast.error("Erro ao atualizar membros. Tente novamente.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -64,8 +52,8 @@ export const AddUserModal = ({ role, handleAddUsers }: AddUserModalProps) => {
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={onClick} disabled={loading}>
-            {loading ? "Atualizando..." : "Atualizar"}
+          <Button onClick={onClick} disabled={isLoading}>
+            {isLoading ? "Atualizando..." : "Atualizar"}
           </Button>
           <Button variant="secondary" onClick={handleAddUsers}>
             Fechar

@@ -1,8 +1,6 @@
 import CartItems from "./components/CartItems";
 import { FaCartArrowDown } from "react-icons/fa";
 
-export const dynamic = "force-dynamic";
-
 export default function CartPage() {
   return (
     <main className="flex flex-col w-full h-full md:max-w-10/12 px-4 md:px-0 mx-auto py-5">

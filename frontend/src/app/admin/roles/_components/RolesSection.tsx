@@ -31,7 +31,7 @@ export default function RolesSection({ roles }: { roles: Role[] }) {
       await roleService.delete(id);
       await queryClient.invalidateQueries({ queryKey: ["roles"] });
       toast.success("Cargo excluído com sucesso!");
-      router.push(`/admin/roles/${roles[0].id}`);
+      router.push(`/admin/roles/${roles[roles.length - 1].id}`);
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
     }

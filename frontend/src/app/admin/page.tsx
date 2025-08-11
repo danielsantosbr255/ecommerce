@@ -1,7 +1,7 @@
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./_components/dashboard/Dashboard";
 
 export const revalidate = 0;
 
-export default async function AdminDashboard() {
+export default function AdminDashboard() {
   return <Dashboard />;
 }

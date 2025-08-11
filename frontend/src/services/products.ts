@@ -33,23 +33,24 @@ class ProductService {
 
   public async getAll(search?: SearchParams) {
     const { q, page, pageSize, brandId, categoryId, minPrice, maxPrice } = search || { page: 1, pageSize: 20 };
-    const params: Record<string, string | number> = {};
+    const params: Record<string, string> = {};
 
     if (q) params["q"] = q;
-    if (page) params["page"] = page;
-    if (pageSize) params["pageSize"] = pageSize;
-    if (minPrice) params["minPrice"] = minPrice;
-    if (maxPrice) params["maxPrice"] = maxPrice;
+    if (page) params["page"] = page.toString();
+    if (pageSize) params["pageSize"] = pageSize.toString();
+    if (minPrice) params["minPrice"] = minPrice.toString();
+    if (maxPrice) params["maxPrice"] = maxPrice.toString();
     if (brandId) params["brandId"] = brandId;
     if (categoryId) params["categoryId"] = categoryId;
 
     try {
-      const response = await api.get<ProductResponse>("/products", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?${new URLSearchParams(params).toString()}`, {
+        method: "GET",
         cache: "force-cache",
         next: { revalidate: 3600, tags: ["products"] },
-        params,
       });
-      return response.data;
+
+      return await response.json() as ProductResponse;
     } catch (error) {
       console.error(error);
       return null;

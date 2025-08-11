@@ -32,7 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [cartLoading, setCartLoading] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[] | null>(null);
   const route = useRouter();
-  // 2. Obter a instância do QueryClient
   const queryClient = useQueryClient();
 
   const loadUser = useCallback(async () => {
@@ -94,7 +93,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await authService.signOut();
-      // 3. Invalidar todos os caches do TanStack Query
       queryClient.invalidateQueries();
     } catch (error) {
       console.error("Logout error:", error);
@@ -106,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       redirect("/sign-in");
     }
-  }, [queryClient]); // Adicione queryClient como dependência
+  }, [queryClient]);
 
   const loadCart = useCallback(async () => {
     setCartLoading(true);

@@ -1,9 +1,17 @@
-import { Order } from "@/types";
-import CurrencyUtil from "@/utils/currency.util";
+"use client";
+
 import Link from "next/link";
 import { FaBox } from "react-icons/fa";
+import { orderService } from "@/services/orders";
+import CurrencyUtil from "@/utils/currency.util";
+import { useQuery } from "@tanstack/react-query";
+import LoadingState from "@/components/ui/LoadingState";
 
-const Orders = ({ orders }: { orders: Order[] | null }) => {
+const Orders = () => {
+  const { data: orders, isLoading } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll, staleTime: 60 * 1000 });
+
+  if (isLoading) return <LoadingState label="Carregando pedidos" />;
+
   if (!orders || orders.length === 0) {
     return (
       <div className="flex flex-col w-full h-full justify-center items-center">

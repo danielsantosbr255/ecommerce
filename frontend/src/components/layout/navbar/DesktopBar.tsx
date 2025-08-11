@@ -11,6 +11,8 @@ import SearchBar from "@/components/ui/Searchbar";
 import Notification from "@/components/common/Notification";
 import { FaBuildingCircleExclamation } from "react-icons/fa6";
 import { FaCartArrowDown, FaSignInAlt, FaUserAstronaut, FaUserSecret } from "react-icons/fa";
+import { cartService } from "@/services/carts";
+import { useQuery } from "@tanstack/react-query";
 
 interface NavItemProps {
   href: string;
@@ -35,7 +37,7 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
 );
 
 const CartItem = () => {
-  const { cartItems } = useAuth();
+  const { data: cartItems } = useQuery({ queryKey: ["cart"], queryFn: cartService.getOwnCart });
   const cartItemCount = cartItems?.length ? cartItems?.length : null;
 
   return (
@@ -54,13 +56,9 @@ const CartItem = () => {
 };
 
 const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) => {
-  const isAdmin = user?.roles?.find((role) =>
-    role.role.permissions.find(
-      (permission) => permission.permission.action === "manage" && permission.permission.subject === "all"
-    )
-  );
-
   if (loading) return <NavItem href="#" icon={<Loader2 size={25} className="animate-spin" />} />;
+
+  const isStaff = user && user.roles.length > 0;
 
   return (
     <>
@@ -70,7 +68,7 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
         icon={user ? <FaUserAstronaut size={25} /> : <FaSignInAlt size={25} />}
       />
 
-      {isAdmin && <NavItem href="/admin" icon={<FaUserSecret size={25} className="animate-pulse text-primary" />} />}
+      {isStaff && <NavItem href="/admin" icon={<FaUserSecret size={25} className="animate-pulse text-primary" />} />}
     </>
   );
 };

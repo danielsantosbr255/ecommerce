@@ -33,7 +33,7 @@ const ProfileCard = ({ children, label, icon, href = "" }: ProfileCardProps) => 
     >
       <span className="flex items-center p-4 justify-center text-primary">{icon}</span>
 
-      <div className="flex flex-col justify-center items- w-full text-tx-primary">
+      <div className="flex flex-col justify-center items- w-full ">
         <h2 className="text-lg font-semibold mb-1">{label}</h2>
         {children}
       </div>
@@ -44,7 +44,7 @@ const ProfileCard = ({ children, label, icon, href = "" }: ProfileCardProps) => 
 export default function Profile() {
   const { user, userLoading } = useAuth();
 
-  if (userLoading) return <LoadingState />;
+  if (userLoading) return <LoadingState label="Carregando perfil" />;
   if (!user) redirect("/sign-in");
 
   return (
@@ -55,8 +55,8 @@ export default function Profile() {
             <FaUserAstronaut className="text-primary" size={40} />
           </span>
           <div className="flex flex-col gap-1">
-            <h1 className="flex w-full text-lg font-bold text-tx-primary">Bem-vindo, {user.name}</h1>
-            <p className="text-tx-primary flex items-center gap-2">
+            <h1 className="flex w-full text-lg font-bold ">Bem-vindo, {user.name}</h1>
+            <p className=" flex items-center gap-2">
               <FaMailBulk className="text-primary" size={16} /> {user.email}
             </p>
           </div>

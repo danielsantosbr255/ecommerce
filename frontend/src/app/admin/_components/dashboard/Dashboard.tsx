@@ -1,13 +1,18 @@
+"use client";
+
 import MetricCard from "./MetricCard";
 import { userService } from "@/services/users";
 import { productService } from "@/services/products";
 import { FaBox, FaClipboardList, FaShoppingBasket, FaUsers } from "react-icons/fa";
 import { orderService } from "@/services/orders";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Dashboard() {
-  const users = await userService.getAll();
-  const orders = await orderService.getAll();
-  const result = await productService.getAll();
+export default function Dashboard() {
+  const { data: users } = useQuery({ queryKey: ["users"], queryFn: userService.getAll });
+  const { data: orders } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll });
+  const { data: result } = useQuery({ queryKey: ["products"], queryFn: () => productService.getAll() });
+
+  // const result = await productService.getAll();
   const totalProducts = result?.pagination?.totalItems || 0;
 
   const totalUsers = users?.length || 0;

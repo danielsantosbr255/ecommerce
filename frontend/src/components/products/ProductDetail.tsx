@@ -3,21 +3,33 @@
 import Image from "next/image";
 import Button from "../ui/Button";
 import { Product } from "@/types";
-import ProductImage from "./ProductImage";
-import CurrencyUtil from "@/utils/currency.util";
-import { useAuth } from "@/providers/AuthContext";
-import { IoMdOptions } from "react-icons/io";
-import { FaCartPlus } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
-
-export const revalidate = 60;
+import { toast } from "react-toastify";
+import ProductImage from "./ProductImage";
+import { FaCartPlus } from "react-icons/fa";
+import { IoMdOptions } from "react-icons/io";
+import { cartService } from "@/services/carts";
+import CurrencyUtil from "@/utils/currency.util";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function ProductDetail({ product }: { product: Product }) {
-  const { addToCart, cartLoading } = useAuth();
+  const queryClient = useQueryClient();
 
-  const onAddToCart = async () => {
-    await addToCart(product.id, 1);
-  };
+  const addToCart = useMutation({
+    mutationFn: async (data: { id: string; quantity: number }) => {
+      return await cartService.create(data.id, data.quantity);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Item adicionado ao carrinho");
+    },
+    onError: () => {
+      toast.error("Não foi possível adicionar o item ao carrinho");
+    },
+  });
+
+  const onAddToCart = () => addToCart.mutate({ id: product.id, quantity: 1 });
+  const { isPending } = addToCart;
 
   const productDiscount = product.price - (product.price * product.discount!) / 100;
   const productPrice = product.discount > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
@@ -61,8 +73,8 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <Button onClick={onAddToCart} className="!py-3 gap-2" disabled={cartLoading}>
-              {cartLoading ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
+            <Button onClick={onAddToCart} className="!py-3 gap-2" disabled={isPending}>
+              {isPending ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
             </Button>
           </div>
         </div>

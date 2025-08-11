@@ -9,6 +9,7 @@ import { Address } from "@/lib/schemas/address.schema";
 import { AddressFormModal } from "../_components/AddressFormModal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaPencilAlt, FaAddressBook, FaPlus, FaRegAddressCard, FaTrashAlt } from "react-icons/fa";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function AddressesComponent() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function AddressesComponent() {
   };
   const handleRemove = (address: AddressResponse) => removeMutation.mutate(address);
 
-  if (isLoading) return <p className="p-4 text-center">Carregando endereços...</p>;
+  if (isLoading) return <LoadingState label="Carregando endereços" />;
   if (isError) return <p className="p-4 text-center text-tx-error">Erro ao carregar endereços.</p>;
 
   return (

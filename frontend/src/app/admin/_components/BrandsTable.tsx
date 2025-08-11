@@ -5,18 +5,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { Brand } from "@/types";
 import { toast } from "react-toastify";
-import Button from "@/components/ui/Button";
 import { FaPencil } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
 import { brandService } from "@/services/brands";
+import { useQuery } from "@tanstack/react-query";
 import { MdLocalFireDepartment } from "react-icons/md";
+import LoadingState from "@/components/ui/LoadingState";
 import { FaBoxes, FaPlus, FaTimes } from "react-icons/fa";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-interface Props {
-  brands: Brand[];
-  totalItems: number;
-}
 
 const Actions = ({ brand }: { brand: Brand }) => {
   const router = useRouter();
@@ -56,7 +53,23 @@ const Actions = ({ brand }: { brand: Brand }) => {
   );
 };
 
-function BrandsTable({ brands, totalItems }: Props) {
+function BrandsTable() {
+  const { data: brands, isLoading } = useQuery({ queryKey: ["brands"], queryFn: () => brandService.getAll(), staleTime: 1800 });
+
+  if (isLoading) return <LoadingState label="Carregando marcas" />;
+
+  if (!brands || brands.length === 0) {
+    return (
+      <Table>
+        <TableCaption className="text-center py-4">
+          <p className="font-semibold text-xl">Nenhuma marca cadastrada</p>
+        </TableCaption>
+      </Table>
+    );
+  }
+
+  const totalItems = brands.length;
+
   return (
     <Table>
       <TableCaption className="text-center py-4">
