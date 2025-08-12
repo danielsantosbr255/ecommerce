@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Painel de administração do ecommerce Fireforge Labs, aqui você pode gerenciar os produtos, usuários, pedidos e muito mais.",
 };
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <PrivateRoute admin={true}>
       <div className="bg-bg-primary w-full h-full min-h-screen gap-2 p-2 grid grid-cols-[auto_1fr] grid-rows-1">

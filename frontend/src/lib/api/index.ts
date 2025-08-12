@@ -28,7 +28,7 @@ const refreshToken = async () => {
 
 api.interceptors.request.use(
   async (config) => {
-    if (isServer) {
+    if (isServer && (config.method?.toLowerCase() !== "get" || config._auth)) {
       const { cookies, headers } = await import("next/headers");
       const cookieStore = await cookies();
       const serverHeaders = await headers();

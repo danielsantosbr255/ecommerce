@@ -28,9 +28,16 @@ class OrderRepository {
     });
   }
 
-  getById(id, ability) {
+  getOne(id, ability) {
     return this.prisma.order.findUnique({
       where: { id, AND: [accessibleBy(ability, "read").Order] },
+      include: { user: true, items: { include: { product: true } } },
+    });
+  }
+
+  getByUserId(userId, ability) {
+    return this.prisma.order.findMany({
+      where: { userId, AND: [accessibleBy(ability).Order] },
       include: { user: true, items: { include: { product: true } } },
     });
   }

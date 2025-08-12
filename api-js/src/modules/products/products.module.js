@@ -6,7 +6,7 @@ const controller = require("./products.controller");
 
 router.get("/products", controller.getAll);
 router.get("/products/:slug", controller.getBySlug);
-router.get("/products/:id", controller.getById);
+// router.get("/products/:id", controller.getById);
 router.get("/products/:id/related", controller.getRelated);
 router.post("/products", verifyToken, upload.array("images"), controller.create);
 router.put("/products/:id", verifyToken, upload.array("images"), controller.update);

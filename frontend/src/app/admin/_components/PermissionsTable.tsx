@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import { MdLibraryAddCheck } from "react-icons/md";
 import { FaCheckCircle, FaPlus } from "react-icons/fa";
+import LoadingState from "@/components/ui/LoadingState";
 import { permissionService } from "@/services/permissions";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -28,7 +29,13 @@ const getPermissionName = (permission: string) => {
 };
 
 function PermissionsTable() {
-  const { data: permissions } = useQuery({ queryKey: ["permissions"], queryFn: permissionService.getAll });
+  const { data: permissions, isLoading } = useQuery({
+    queryKey: ["permissions"],
+    queryFn: permissionService.getAll,
+    staleTime: 60 * 1000,
+  });
+
+  if (isLoading) return <LoadingState label="Carregando permissões" />;
 
   if (!permissions) {
     return <div className="w-full h-full flex items-center justify-center">Nenhuma permissão encontrada.</div>;

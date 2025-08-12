@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await authService.signOut();
-      queryClient.invalidateQueries();
+      await queryClient.invalidateQueries();
     } catch (error) {
       console.error("Logout error:", error);
     } finally {

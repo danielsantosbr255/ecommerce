@@ -11,6 +11,7 @@ import { userService } from "@/services/users";
 import { FaTimes, FaUserAstronaut, FaUsers } from "react-icons/fa";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
+import LoadingState from "@/components/ui/LoadingState";
 
 const Actions = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -51,7 +52,9 @@ const Actions = ({ user }: { user: User }) => {
 };
 
 function UsersTable() {
-  const { data: users } = useQuery({ queryKey: ["users"], queryFn: () => userService.getAll(), staleTime: 1800 });
+  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: () => userService.getAll(), staleTime: 60 * 1000 });
+
+  if (isLoading) return <LoadingState label="Carregando usuários" />;
 
   if (!users || users.length === 0) {
     return (

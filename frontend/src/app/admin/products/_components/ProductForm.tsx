@@ -10,6 +10,7 @@ import Select from "@/components/ui/Select";
 import TextArea from "@/components/ui/TextArea";
 import { productService } from "@/services/products";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { ProductImagesInput } from "./ProductImagesInput";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useImageUploader } from "@/hooks/useImageUploader";
@@ -29,6 +30,7 @@ const ProductForm = ({ initialData }: ProductFormProps) => {
   const schema = initialData ? productUpdateSchema : productCreateSchema;
   const { categories, brands } = useProductFormOptions();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit, control, setValue, reset, trigger, formState } = useForm<ProductFormData>({
     resolver: zodResolver(schema),
@@ -65,6 +67,7 @@ const ProductForm = ({ initialData }: ProductFormProps) => {
       if (initialData && initialData.id) await productService.update(initialData.id, formData);
       else await productService.create(formData);
 
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Produto salvo com sucesso!");
       router.push("/admin/products");
     } catch (error) {

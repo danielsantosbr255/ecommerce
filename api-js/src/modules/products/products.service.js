@@ -119,6 +119,10 @@ class ProductService {
     };
   };
 
+  getCount = async (where) => {
+    return await this.repository.getCount(where);
+  };
+
   update = async (id, data) => {
     const formatedData = formatData(data);
 

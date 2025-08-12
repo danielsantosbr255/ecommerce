@@ -12,7 +12,7 @@ export default function Sessions() {
   const { data: sessions, isLoading } = useQuery({
     queryKey: ["sessions"],
     queryFn: () => sessionService.getAll(),
-    staleTime: 1800,
+    staleTime: 60 * 1000,
   });
 
   if (isLoading) return <LoadingState label="Carregando sessões" />;

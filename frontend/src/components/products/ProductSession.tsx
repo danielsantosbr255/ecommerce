@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
 import { Ghost } from "lucide-react";
+import React, { Suspense } from "react";
+import SessionLabel from "../ui/SessionLabel";
 import ProductCarousel from "./ProductCarousel";
 import { ProductResponse } from "@/services/products";
-import SessionLabel from "../ui/SessionLabel";
 
 interface Props {
   callback: () => Promise<ProductResponse | null>;

@@ -42,8 +42,12 @@ class OrderService {
     return repository.getAll(ability);
   };
 
-  getById = (id, ability) => {
-    return repository.getById(id, ability);
+  getOne = (id, ability) => {
+    return repository.getOne(id, ability);
+  };
+
+  getByUserId = (userId, ability) => {
+    return repository.getByUserId(userId, ability);
   };
 
   update = (id, data, ability) => {

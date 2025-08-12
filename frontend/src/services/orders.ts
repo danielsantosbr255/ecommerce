@@ -14,7 +14,7 @@ class OrderService {
 
   public async getAll() {
     try {
-      const response = await api.get<Order[]>("/orders");
+      const response = await api.get<Order[]>("/orders", { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -24,7 +24,7 @@ class OrderService {
 
   public async getOrder(id: string) {
     try {
-      const response = await api.get(`/orders/${id}`);
+      const response = await api.get(`/orders/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);

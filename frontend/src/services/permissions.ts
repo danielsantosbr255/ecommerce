@@ -14,7 +14,7 @@ class PermissionService {
 
   public async getAll() {
     try {
-      const response = await api.get<Permission[]>("/permissions");
+      const response = await api.get<Permission[]>("/permissions", { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -24,7 +24,7 @@ class PermissionService {
 
   public async getOne(slug: string) {
     try {
-      const response = await api.get<Permission>(`/permissions/${slug}`);
+      const response = await api.get<Permission>(`/permissions/${slug}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);

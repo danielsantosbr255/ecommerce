@@ -12,6 +12,7 @@ import ProductImage from "@/components/products/ProductImage";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   products: Product[];
@@ -21,11 +22,13 @@ interface Props {
 const Actions = ({ product }: { product: Product }) => {
   const router = useRouter();
   const [isPeding, setIsPeding] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleRemove = async (id: string) => {
     try {
       setIsPeding(true);
       await productService.delete(id);
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Produto excluído com sucesso!");
       router.refresh();
     } catch (error) {

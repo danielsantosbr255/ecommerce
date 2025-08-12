@@ -54,7 +54,7 @@ const Actions = ({ brand }: { brand: Brand }) => {
 };
 
 function BrandsTable() {
-  const { data: brands, isLoading } = useQuery({ queryKey: ["brands"], queryFn: () => brandService.getAll(), staleTime: 1800 });
+  const { data: brands, isLoading } = useQuery({ queryKey: ["brands"], queryFn: () => brandService.getAll(), staleTime: 60 * 1000 });
 
   if (isLoading) return <LoadingState label="Carregando marcas" />;
 

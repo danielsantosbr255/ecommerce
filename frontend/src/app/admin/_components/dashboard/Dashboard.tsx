@@ -2,28 +2,29 @@
 
 import MetricCard from "./MetricCard";
 import { userService } from "@/services/users";
-import { productService } from "@/services/products";
-import { FaBox, FaClipboardList, FaShoppingBasket, FaUsers } from "react-icons/fa";
 import { orderService } from "@/services/orders";
 import { useQuery } from "@tanstack/react-query";
+import { productService } from "@/services/products";
+import { FaBoxesPacking } from "react-icons/fa6";
+import { FaBoxes, FaShoppingBasket, FaUsers } from "react-icons/fa";
 
 export default function Dashboard() {
-  const { data: users } = useQuery({ queryKey: ["users"], queryFn: userService.getAll });
-  const { data: orders } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll });
+  const { data: users } = useQuery({ queryKey: ["users"], queryFn: userService.getAll, staleTime: 60 * 1000 });
+  const { data: orders } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll, staleTime: 60 * 1000 });
   const { data: result } = useQuery({ queryKey: ["products"], queryFn: () => productService.getAll() });
-
-  // const result = await productService.getAll();
-  const totalProducts = result?.pagination?.totalItems || 0;
 
   const totalUsers = users?.length || 0;
   const totalOrders = orders?.length || 0;
+  const totalProducts = result?.pagination?.totalItems || 0;
+
+  console.log(result);
 
   return (
     <div className="flex-1 flex flex-col gap-4">
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard iconColor="bg-green-500" title="Total de Vendas" value={34.254} icon={<FaShoppingBasket size={40} />} />
-        <MetricCard iconColor="bg-blue-500" title="Total de Pedidos" value={totalOrders} icon={<FaClipboardList size={40} />} />
-        <MetricCard iconColor="bg-yellow-500" title="Total de Produtos" value={totalProducts} icon={<FaBox size={40} />} />
+        <MetricCard iconColor="bg-green-500" title="Total de Vendas" value={1.265} icon={<FaShoppingBasket size={40} />} />
+        <MetricCard iconColor="bg-blue-500" title="Total de Pedidos" value={totalOrders} icon={<FaBoxesPacking size={40} />} />
+        <MetricCard iconColor="bg-amber-500" title="Total de Produtos" value={totalProducts} icon={<FaBoxes size={40} />} />
         <MetricCard iconColor="bg-red-500" title="Total de Usuários" value={totalUsers} icon={<FaUsers size={40} />} />
       </section>
 

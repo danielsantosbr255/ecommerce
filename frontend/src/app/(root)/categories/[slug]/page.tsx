@@ -36,7 +36,7 @@ export default async function page({ searchParams, params }: Props) {
   const seachQuery = () => productService.getAll({ categoryId: category.id, page, pageSize });
 
   return (
-    <Suspense fallback={<LoadingState />}>
+    <Suspense fallback={<LoadingState label="Carregando produtos" />}>
       <ProductsGrid callback={seachQuery} path={`/categories/${category.slug}?`}>
         <h1 className="text-2xl font-medium text-center">
           Categoria: <strong className="text-primary underline">{category.name}</strong>

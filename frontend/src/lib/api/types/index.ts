@@ -6,6 +6,7 @@ export interface RequestConfig extends RequestInit {
   params?: Record<string, string | number | boolean>;
   withCredentials?: boolean;
   _retry?: boolean;
+  _auth?: boolean;
 }
 
 export interface ApiResponse<T = unknown> {

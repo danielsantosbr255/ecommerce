@@ -10,7 +10,7 @@ import LoadingState from "@/components/ui/LoadingState";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function OrdersTable() {
-  const { data: orders, isLoading } = useQuery({ queryKey: ["orders"], queryFn: () => orderService.getAll(), staleTime: 1800 });
+  const { data: orders, isLoading } = useQuery({ queryKey: ["orders"], queryFn: () => orderService.getAll(), staleTime: 60 * 1000 });
 
   if (isLoading) return <LoadingState label="Carregando pedidos" />;
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-interface MetricCardProps {
+interface MetricCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   value: number;
   icon: React.ReactNode;
@@ -13,8 +13,8 @@ export default function MetricCard({ title, value, icon, iconColor = "text-tx-pr
       <div className="flex items-center space-x-8 ">
         <span className={`${iconColor} p-4 rounded-2xl text-tx-on-primary`}>{icon}</span>
         <div>
-          <h3 className="text-tx-primary text-lg leading-5">{title}</h3>
-          <p className="text-tx-primary text-2xl font-bold">{value}</p>
+          <h3 className="text-lg leading-5">{title}</h3>
+          <p className="text-2xl font-bold">{value}</p>
         </div>
       </div>
     </div>

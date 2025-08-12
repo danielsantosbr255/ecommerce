@@ -57,7 +57,7 @@ function CategorysTable() {
   const { data: categories, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: categoryService.getAll,
-    staleTime: 1800,
+    staleTime: 60 * 1000,
   });
 
   if (isLoading) return <LoadingState label="Carregando categorias" />;

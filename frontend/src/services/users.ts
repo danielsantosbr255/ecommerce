@@ -14,7 +14,7 @@ class UserService {
 
   public async getOwn() {
     try {
-      const response = await api.get<User>("/users/me");
+      const response = await api.get<User>("/users/me", { _auth: true });
       return response.data;
     } catch {
       return null;
@@ -23,10 +23,7 @@ class UserService {
 
   public async getAll() {
     try {
-      const response = await api.get<User[]>("/users", {
-        cache: "force-cache",
-        next: { revalidate: 30 },
-      });
+      const response = await api.get<User[]>("/users", { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -36,7 +33,7 @@ class UserService {
 
   public async getOne(id: string) {
     try {
-      const response = await api.get<User>(`/users/${id}`);
+      const response = await api.get<User>(`/users/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);

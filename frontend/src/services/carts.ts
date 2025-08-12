@@ -1,38 +1,38 @@
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
 import { Cart, CartItem } from "@/types";
 
 class CartService {
-  public async create(productId: string, quantity: number = 1): Promise<CartItem | null> {
+  public async create(productId: string, quantity: number = 1) {
     try {
       const response = await api.post("/carts", { productId, quantity });
-      return response.data;
+      return response.data as CartItem;
     } catch {
       return null;
     }
   }
 
-  public async getAll(): Promise<Cart[] | null> {
+  public async getAll() {
     try {
-      const response = await api.get("/carts");
-      return response.data;
+      const response = await api.get("/carts", { _auth: true });
+      return response.data as Cart[];
     } catch {
       return null;
     }
   }
 
-  public async getOwnCart(): Promise<CartItem[] | null> {
+  public async getOwnCart() {
     try {
-      const response = await api.get("/cart");
-      return response.data;
+      const response = await api.get("/cart", { _auth: true });
+      return response.data as CartItem[];
     } catch {
       return null;
     }
   }
 
-  public async getOne(id: string): Promise<Cart | null> {
+  public async getOne(id: string) {
     try {
-      const response = await api.get(`/carts/${id}`);
-      return response.data;
+      const response = await api.get(`/carts/${id}`, { _auth: true });
+      return response.data as CartItem;
     } catch {
       return null;
     }

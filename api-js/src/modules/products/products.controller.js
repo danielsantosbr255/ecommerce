@@ -35,6 +35,11 @@ class ProductController {
     res.json(result);
   };
 
+  getCount = async (req, res) => {
+    const result = await this.service.getCount(req.query);
+    res.json(result);
+  };
+
   getBestSellers = async (req, res) => {
     const result = await this.service.getBestSellers();
     res.json(result);
