@@ -1,18 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { Product } from "@/types";
 import Button from "../ui/Button";
+import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 import ProductImage from "./ProductImage";
 import { FaCartPlus } from "react-icons/fa";
+import { cartService } from "@/services/carts";
 import CurrencyUtil from "@/utils/currency.util";
-import { useAuth } from "@/providers/AuthContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function ProductCard({ product }: { product: Product | null }) {
-  const { addToCart } = useAuth();
-  const [isPeding, setIsPeding] = useState(false);
+  const queryClient = useQueryClient();
+
+  const addToCart = useMutation({
+    mutationFn: async (data: { id: string; quantity: number }) => {
+      return await cartService.create(data.id, data.quantity);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Item adicionado ao carrinho");
+    },
+    onError: () => {
+      toast.error("Não foi possível adicionar o item ao carrinho");
+    },
+  });
 
   const skeleton = "animate-pulse w-fit !bg-gray-200 !text-transparent rounded-md transition-all";
   const isLoading = !product;
@@ -27,12 +40,8 @@ export default function ProductCard({ product }: { product: Product | null }) {
   const productPrice = product.discount > 0 ? CurrencyUtil.formatCurrency(product.price) : " ";
   const productDiscountPrice = CurrencyUtil.formatCurrency(productDiscount);
 
-  const onAddToCart = async () => {
-    if (!product) return;
-    setIsPeding(true);
-    await addToCart(product.id, 1);
-    setIsPeding(false);
-  };
+  const onAddToCart = () => addToCart.mutate({ id: product.id, quantity: 1 });
+  const { isPending } = addToCart;
 
   return (
     <article className="bg-bg-secondary flex flex-col w-full h-auto shrink-0 gap-2 p-2 rounded-lg border border-lines cursor-pointer scale-97 hover:scale-98 hover:border-primary/50 hover:shadow-sm hover:shadow-primary/50 transition-all">
@@ -65,8 +74,8 @@ export default function ProductCard({ product }: { product: Product | null }) {
           </div>
         </Link>
 
-        <Button onClick={onAddToCart} className={`mt-10 !py-3 gap-2 !w-full ${isLoading && skeleton}`} disabled={isPeding}>
-          {isPeding ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
+        <Button onClick={onAddToCart} className={`mt-10 !py-3 gap-2 !w-full ${isLoading && skeleton}`} disabled={isPending}>
+          {isPending ? <Loader2 className="animate-spin" /> : <FaCartPlus />} {"Adicionar ao carrinho"}
         </Button>
       </div>
     </article>

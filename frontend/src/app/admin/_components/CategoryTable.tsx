@@ -1,22 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Category } from "@/types";
 import { toast } from "react-toastify";
 import Button from "@/components/ui/Button";
 import { FaPencil } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-import { categoryService } from "@/services/categories";
 import { FaPlus, FaTimes } from "react-icons/fa";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
 import { BiSolidCategoryAlt } from "react-icons/bi";
-import Image from "next/image";
-
-interface Props {
-  categories: Category[];
-  totalItems: number;
-}
+import LoadingState from "@/components/ui/LoadingState";
+import { categoryService } from "@/services/categories";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const Actions = ({ category }: { category: Category }) => {
   const router = useRouter();
@@ -56,7 +53,27 @@ const Actions = ({ category }: { category: Category }) => {
   );
 };
 
-function CategorysTable({ categories, totalItems }: Props) {
+function CategorysTable() {
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: categoryService.getAll,
+    staleTime: 60 * 1000,
+  });
+
+  if (isLoading) return <LoadingState label="Carregando categorias" />;
+
+  if (!categories || categories.length === 0) {
+    return (
+      <Table>
+        <TableCaption className="text-center py-4">
+          <p className="font-semibold text-xl">Nenhuma categoria cadastrada</p>
+        </TableCaption>
+      </Table>
+    );
+  }
+
+  const totalItems = categories.length;
+
   return (
     <Table>
       <TableCaption className="text-center py-4">

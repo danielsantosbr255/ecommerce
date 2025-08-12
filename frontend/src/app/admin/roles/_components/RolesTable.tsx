@@ -38,7 +38,7 @@ function RolesTable() {
     }
   };
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingState label="Carregando cargos..." />;
 
   if (!roles) return <div className="w-full h-full flex items-center justify-center">Nenhum cargo encontrado.</div>;
 

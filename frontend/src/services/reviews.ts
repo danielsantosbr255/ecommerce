@@ -16,7 +16,7 @@ class ReviewService {
     try {
       const response = await api.get<Review[]>("/reviews", {
         cache: "force-cache",
-        next: { revalidate: 60 },
+        next: { revalidate: 60, tags: ["reviews"] },
       });
       return response.data;
     } catch (error) {

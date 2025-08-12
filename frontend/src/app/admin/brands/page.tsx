@@ -1,15 +1,10 @@
 import React from "react";
-import BrandTable from "./BrandsTable";
-import { brandService } from "@/services/brands";
+import BrandTable from "../_components/BrandsTable";
 
-export default async function page() {
-  const brands = await brandService.getAll();
-
-  if (!brands) return null;
-
+export default function page() {
   return (
     <main className="flex flex-col w-full gap-4">
-      <BrandTable brands={brands} totalItems={brands.length} />
+      <BrandTable />
     </main>
   );
 }

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Dot } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { Children, useState, useContext, useEffect, useRef, useMemo } from "react";
-import { SidebarContext } from "../../app/admin/components/Sidebar";
+import { SidebarContext } from "../../app/admin/_components/Sidebar";
 
 interface DropdownProps {
   text: string;

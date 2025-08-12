@@ -23,33 +23,39 @@ export interface SearchParams {
 }
 
 class ProductService {
-  private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`;
+  private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
 
   public async create(productData: FormData) {
     const response = await api.post<Product>(`/products`, productData);
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
+    await fetch(`${this.baseUrl}/revalidate?tag=products`);
     return response.data;
   }
 
-  public async getAll(search?: SearchParams) {
-    const { q, page, pageSize, brandId, categoryId, minPrice, maxPrice } = search || { page: 1, pageSize: 20 };
-    const params: Record<string, string | number> = {};
+  public async getAll(search: SearchParams = { page: 1, pageSize: 20 }, auth = false) {
+    const { q, page, pageSize, brandId, categoryId, minPrice, maxPrice } = search;
+    const params: Record<string, string> = {};
 
     if (q) params["q"] = q;
-    if (page) params["page"] = page;
-    if (pageSize) params["pageSize"] = pageSize;
-    if (minPrice) params["minPrice"] = minPrice;
-    if (maxPrice) params["maxPrice"] = maxPrice;
+    if (page) params["page"] = page.toString();
+    if (pageSize) params["pageSize"] = pageSize.toString();
+    if (minPrice) params["minPrice"] = minPrice.toString();
+    if (maxPrice) params["maxPrice"] = maxPrice.toString();
     if (brandId) params["brandId"] = brandId;
     if (categoryId) params["categoryId"] = categoryId;
 
     try {
-      const response = await api.get<ProductResponse>("/products", {
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?${new URLSearchParams(params).toString()}`, {
+      //   method: "GET",
+      //   cache: "force-cache",
+      //   next: { revalidate: 3600, tags: ["products"] },
+      // });
+      const response = await api.get(`/products`, {
         cache: "force-cache",
         next: { revalidate: 3600, tags: ["products"] },
-        params,
+        params: params,
+        _auth: auth,
       });
-      return response.data;
+      return response.data as ProductResponse;
     } catch (error) {
       console.error(error);
       return null;
@@ -69,11 +75,11 @@ class ProductService {
     }
   }
 
-  public async getByQuery({ query, page, pageSize }: QueryParams) {
+  public async getRelated(productId: string) {
     try {
-      const response = await api.get<ProductResponse>(`/products?q=${query}&page=${page}&pageSize=${pageSize}`, {
+      const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["products"] },
+        next: { revalidate: 3600 },
       });
       return response.data;
     } catch (error) {
@@ -82,12 +88,10 @@ class ProductService {
     }
   }
 
-  public async getRelated(productId: string) {
+  public async getCount() {
     try {
-      const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const response = await api.get<number>("/products/count");
+      console.log("Response data:", response.data);
       return response.data;
     } catch (error) {
       console.error(error);

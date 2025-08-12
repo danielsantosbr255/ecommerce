@@ -1,7 +1,13 @@
-import Dashboard from "./components/dashboard/Dashboard";
+import { Suspense } from "react";
+import Dashboard from "./_components/dashboard/Dashboard";
+import LoadingState from "@/components/ui/LoadingState";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
-export default async function AdminDashboard() {
-  return <Dashboard />;
+export default function AdminDashboard() {
+  return (
+    <Suspense fallback={<LoadingState label="Carregando dados" />}>
+      <Dashboard />
+    </Suspense>
+  );
 }

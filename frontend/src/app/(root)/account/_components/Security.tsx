@@ -1,4 +1,3 @@
-// component.tsx
 "use client";
 
 import Input from "@/components/ui/Input";

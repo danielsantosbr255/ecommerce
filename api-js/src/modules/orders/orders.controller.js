@@ -15,8 +15,14 @@ class OrderController {
     res.json(orders);
   };
 
-  getById = async (req, res) => {
-    const orders = await service.getById(req.params.id, req.ability);
+  getOne = async (req, res) => {
+    const orders = await service.getOne(req.params.id, req.ability);
+    res.json(orders);
+  };
+
+  getByUserId = async (req, res) => {
+    const id = req.params.id === "my" ? req.user.id : req.params.id;
+    const orders = await service.getByUserId(id, req.ability);
     res.json(orders);
   };
 

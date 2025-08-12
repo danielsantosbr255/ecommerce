@@ -1,13 +1,30 @@
-import { Session } from "@/types";
-import Alert from "@/components/ui/Alert";
+"use client";
 
 import Link from "next/link";
+import Alert from "@/components/ui/Alert";
+import { useQuery } from "@tanstack/react-query";
+import { sessionService } from "@/services/sessions";
 import { MdImportantDevices, MdMonitor, MdSmartphone } from "react-icons/md";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import LoadingState from "../ui/LoadingState";
 
-export default function Sessions({ sessions }: { sessions: Session[] | null }) {
+export default function Sessions() {
+  const { data: sessions, isLoading } = useQuery({
+    queryKey: ["sessions"],
+    queryFn: () => sessionService.getAll(),
+    staleTime: 60 * 1000,
+  });
+
+  if (isLoading) return <LoadingState label="Carregando sessões" />;
+
   if (!sessions || sessions.length === 0) {
-    return <p>Nenhuma sessão ativa encontrada.</p>;
+    return (
+      <Table>
+        <TableCaption className="text-center py-4">
+          <p className="font-semibold text-xl">Nenhuma sessão encontrada</p>
+        </TableCaption>
+      </Table>
+    );
   }
 
   return (

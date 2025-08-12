@@ -1,14 +1,13 @@
 "use client";
 
-import SearchBar from "@/components/ui/Searchbar";
-import Notification from "@/components/common/Notification";
-import { User } from "@/types";
 import Image from "next/image";
-import { FaSignOutAlt, FaUserSecret } from "react-icons/fa";
+import SearchBar from "@/components/ui/Searchbar";
 import { useAuth } from "@/providers/AuthContext";
+import Notification from "@/components/common/Notification";
+import { FaSignOutAlt, FaUserSecret } from "react-icons/fa";
 
-export default function AdminHeader({ user }: { user?: User | null }) {
-  const { signOut } = useAuth();
+export default function AdminHeader() {
+  const { signOut, user } = useAuth();
 
   return (
     <nav className="bg-bg-primary grid grid-cols-3 items-center justify-between gap-4 py-2 px-5 w-full ">

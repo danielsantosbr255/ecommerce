@@ -7,8 +7,6 @@ import ProductsGrid from "@/components/products/ProductsGrid";
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 
-export const revalidate = 3600;
-
 const SearchResultsPage = async ({ searchParams }: { searchParams: Promise<SearchPageProps> }) => {
   const params = await searchParams;
   const q = (params.q as string) || "";
@@ -18,10 +16,10 @@ const SearchResultsPage = async ({ searchParams }: { searchParams: Promise<Searc
   const seachQuery = () => productService.getAll({ q, page, pageSize });
 
   return (
-    <Suspense fallback={<LoadingState />}>
+    <Suspense fallback={<LoadingState label="Carregando resultados" />}>
       <ProductsGrid callback={seachQuery} path={`/search?q=${q}`}>
         <h1 className="text-2xl font-medium text-center">
-          Resultados para: <strong className="text-primary">&quot;{q}&quot;</strong>
+          Resultados para: <strong className="text-primary underline">&quot;{q}&quot;</strong>
         </h1>
       </ProductsGrid>
     </Suspense>

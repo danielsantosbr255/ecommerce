@@ -4,10 +4,7 @@ import { Session } from "@/types";
 class SessionService {
   public async getAll() {
     try {
-      const response = await api.get<Session[]>("/sessions", {
-        cache: "force-cache",
-        next: { revalidate: 60 },
-      });
+      const response = await api.get<Session[]>("/sessions", { _auth: true });
       return response.data;
     } catch {
       return null;
@@ -15,7 +12,7 @@ class SessionService {
   }
 
   public async getOne(id: string) {
-    const res = await api.get<Session>(`/sessions/${id}`);
+    const res = await api.get<Session>(`/sessions/${id}`, { _auth: true });
     return res.data;
   }
 

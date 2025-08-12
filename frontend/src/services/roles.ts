@@ -10,7 +10,7 @@ class RoleService {
 
   public async getAll() {
     try {
-      const response = await api.get<Role[]>("/roles");
+      const response = await api.get<Role[]>("/roles", { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -20,7 +20,7 @@ class RoleService {
 
   public async getOne(id: number) {
     try {
-      const response = await api.get<Role>(`/roles/${id}`);
+      const response = await api.get<Role>(`/roles/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);

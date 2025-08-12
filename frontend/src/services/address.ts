@@ -10,7 +10,7 @@ class AddressService {
 
   public async getAll() {
     try {
-      const response = await api.get<AddressResponse[]>("/addresses");
+      const response = await api.get<AddressResponse[]>("/addresses", { _auth: true });
       return response.data || [];
     } catch {
       return [];
@@ -19,7 +19,7 @@ class AddressService {
 
   public async getOne(id: string) {
     try {
-      const response = await api.get(`/addresses/${id}`);
+      const response = await api.get(`/addresses/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);
