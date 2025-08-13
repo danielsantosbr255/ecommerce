@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { roleService } from "@/services/roles";
 import { FaPlus, FaTimes, FaUsersCog, FaUserTie } from "react-icons/fa";
 import LoadingState from "@/components/ui/LoadingState";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Button from "@/components/ui/Button";
 import { FaPencil } from "react-icons/fa6";
@@ -16,27 +16,37 @@ function RolesTable() {
   const queryClient = useQueryClient();
   const { data: roles, isLoading } = useQuery({ queryKey: ["roles"], queryFn: roleService.getAll });
 
-  const createRole = async () => {
-    try {
-      const role = await roleService.create({ name: "Novo cargo", description: "Descrição do cargo" });
-      await queryClient.invalidateQueries({ queryKey: ["roles"] });
-
-      if (role) router.push(`/admin/roles/${role.id}`);
-    } catch (error) {
+  const createRole = useMutation({
+    mutationFn: async () => {
+      return await roleService.create({ name: "Novo cargo", description: "Descrição do cargo" });
+    },
+    onSuccess: (role) => {
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
+      if (role) {
+        router.push(`/admin/roles/${role.id}`);
+        toast.success("Cargo criado com sucesso!");
+      }
+    },
+    onError: (error) => {
       if (error instanceof Error) toast.error(error.message);
-      else toast.error("Erro ao adicionar cargo. Tente novamente.");
-    }
-  };
+      else toast.error("Erro ao criar cargo. Tente novamente.");
+    },
+  });
 
-  const deleteRole = async (id: number) => {
-    try {
-      await roleService.delete(id);
-      await queryClient.invalidateQueries({ queryKey: ["roles"] });
+  const deleteRole = useMutation({
+    mutationFn: (id: number) => roleService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
       toast.success("Cargo excluído com sucesso!");
-    } catch (error) {
+    },
+    onError: (error) => {
       if (error instanceof Error) toast.error(error.message);
-    }
-  };
+      else toast.error("Erro ao excluir cargo. Tente novamente.");
+    },
+  });
+
+  const handleCreate = () => createRole.mutate();
+  const handleRemove = (id: number) => deleteRole.mutate(id);
 
   if (isLoading) return <LoadingState label="Carregando cargos..." />;
 
@@ -53,7 +63,11 @@ function RolesTable() {
             {roles.length > 0 ? `${roles.length} cargos` : "nenhum cargo"}
           </span>
 
-          <Button className="absolute left-3 top-1/2 -translate-y-1/2 !rounded-2xl !text-sm" onClick={createRole}>
+          <Button
+            className="absolute left-3 top-1/2 -translate-y-1/2 !rounded-2xl !text-sm"
+            onClick={handleCreate}
+            disabled={createRole.isPending}
+          >
             <FaPlus className="mr-1" size={10} /> Novo cargo
           </Button>
         </div>
@@ -86,7 +100,7 @@ function RolesTable() {
                   <FaPencil size={18} className="hover:scale-110 transition cursor-pointer" />
                 </Link>
 
-                <button className="text-tx-error hover:scale-110 transition cursor-pointer" onClick={() => deleteRole(role.id)}>
+                <button className="text-tx-error hover:scale-110 transition cursor-pointer" onClick={() => handleRemove(role.id)}>
                   <FaTimes size={20} />
                 </button>
               </div>
