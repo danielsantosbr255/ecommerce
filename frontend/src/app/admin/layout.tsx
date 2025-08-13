@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import AdminHeader from "./_components/AdminHeader";
-import { PrivateRoute } from "@/providers/PrivateRoute";
+import { ProtectedRoute } from "@/providers/PrivateRoute";
 import { AdminSidebar } from "./_components/AdminSidebar";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <PrivateRoute admin={true}>
+    <ProtectedRoute admin={true} className="h-screen">
       <div className="bg-bg-primary w-full h-full min-h-screen gap-2 p-2 grid grid-cols-[auto_1fr] grid-rows-1">
         <AdminSidebar />
 
@@ -21,6 +21,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex overflow-y-auto h-full">{children}</div>
         </div>
       </div>
-    </PrivateRoute>
+    </ProtectedRoute>
   );
 }

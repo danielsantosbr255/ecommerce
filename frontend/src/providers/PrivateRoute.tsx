@@ -4,13 +4,19 @@ import LoadingState from "@/components/ui/LoadingState";
 import { useAuth } from "@/providers/AuthContext";
 import { redirect } from "next/navigation";
 
-export const PrivateRoute = ({ children, admin }: { children: React.ReactNode; admin?: boolean }) => {
+interface Props {
+  children: React.ReactNode;
+  admin?: boolean;
+  className?: string;
+}
+
+export const ProtectedRoute = ({ children, admin, className }: Props) => {
   const { user, userLoading } = useAuth();
 
   if (userLoading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <LoadingState label="Verificando autorização" />
+      <div className={`w-full flex flex-1 items-center justify-center ${className}`}>
+        <LoadingState label="Verificando autenticação" />
       </div>
     );
   }

@@ -51,9 +51,6 @@ class AuthService {
 
     const userId = user.id;
 
-    const existingSession = await this.repository.getSessionByUserId({ userId, userAgent });
-    if (existingSession) await this.repository.deleteSession(existingSession.id);
-
     let { accessToken, refreshToken } = tokenUtil.createTokens({ userId, userAgent });
 
     const expiresAt = new Date(tokenUtil.decodeJWT(refreshToken).exp * 1000);

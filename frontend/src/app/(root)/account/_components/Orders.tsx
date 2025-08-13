@@ -8,7 +8,11 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingState from "@/components/ui/LoadingState";
 
 const Orders = () => {
-  const { data: orders, isLoading } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll, staleTime: 60 * 1000 });
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ["my-orders"],
+    queryFn: () => orderService.getByUserId("me"),
+    staleTime: 60 * 1000,
+  });
 
   if (isLoading) return <LoadingState label="Carregando pedidos" />;
 

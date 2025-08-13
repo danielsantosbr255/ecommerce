@@ -7,12 +7,22 @@ class SessionRepository {
   }
 
   getAll(ability) {
-    return this.prisma.session.findMany({ where: accessibleBy(ability, "read").Session, orderBy: { createdAt: "desc" } });
+    return this.prisma.session.findMany({
+      where: accessibleBy(ability, "read").Session,
+      orderBy: { createdAt: "desc" },
+    });
   }
 
-  getById(id, ability) {
+  getOne(id, ability) {
     return this.prisma.session.findUnique({
       where: { id, AND: accessibleBy(ability, "read").Session },
+    });
+  }
+
+  getByUserId(userId, ability) {
+    return this.prisma.session.findMany({
+      where: { userId, AND: accessibleBy(ability, "read").Session },
+      orderBy: { createdAt: "desc" },
     });
   }
 
