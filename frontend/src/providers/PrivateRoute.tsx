@@ -10,27 +10,18 @@ export const PrivateRoute = ({ children, admin }: { children: React.ReactNode; a
   if (userLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
-        <LoadingState label="Verificando autenticação" />
+        <LoadingState label="Verificando autorização" />
       </div>
     );
   }
 
-  if (!user) {
-    redirect("/sign-in");
+  if (!user) redirect("/sign-in");
+
+  const isStaff = user && user.roles.length > 0;
+
+  if (admin && !isStaff) {
+    redirect("/account");
   }
-
-  const permissions = user.roles.flatMap((ur) => ur.role.permissions.map((rp) => rp.permission));
-  // const hasPermission = (action: string, subject: string) => {
-  //   return permissions.find((p) => p.action === action && p.subject === subject);
-  // };
-
-  if (admin && !permissions) {
-    redirect("/sign-in");
-  }
-
-  // if (admin && !hasPermission("manage", "all")) {
-  //   redirect("/sign-in");
-  // }
 
   return <>{children}</>;
 };

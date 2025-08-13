@@ -4,46 +4,58 @@ import Link from "next/link";
 import { Role } from "@/types";
 import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
-import { FaPlus, FaTimes, FaUserTie } from "react-icons/fa";
 import { roleService } from "@/services/roles";
 import { usePathname, useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { FaPlus, FaTimes, FaUserTie } from "react-icons/fa";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function RolesSection({ roles }: { roles: Role[] }) {
   const path = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const createRole = async () => {
-    try {
-      const role = await roleService.create({ name: "Novo cargo", description: "Descrição do cargo" });
+  const createRole = useMutation({
+    mutationFn: async () => {
+      return await roleService.create({ name: "Novo cargo", description: "Descrição do cargo" });
+    },
+    onSuccess: (role) => {
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
       if (role) {
-        await queryClient.invalidateQueries({ queryKey: ["roles"] });
         router.push(`/admin/roles/${role.id}`);
+        toast.success("Cargo criado com sucesso!");
       }
-    } catch (error) {
+    },
+    onError: (error) => {
       if (error instanceof Error) toast.error(error.message);
-    }
-  };
+      else toast.error("Erro ao criar cargo. Tente novamente.");
+    },
+  });
 
-  const deleteRole = async (id: number) => {
-    try {
-      await roleService.delete(id);
+  const deleteRole = useMutation({
+    mutationFn: async (id: number) => roleService.delete(id),
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["roles"] });
       toast.success("Cargo excluído com sucesso!");
-      router.push(`/admin/roles/${roles[roles.length - 1].id}`);
-    } catch (error) {
+      router.push(`/admin/roles/${roles[0].id}`);
+    },
+    onError: (error) => {
       if (error instanceof Error) toast.error(error.message);
-    }
-  };
+      else toast.error("Erro ao excluir cargo. Tente novamente.");
+    },
+  });
+
+  const handleCreate = () => createRole.mutate();
+  const handleRemove = (id: number) => deleteRole.mutate(id);
 
   return (
     <section className="flex flex-col gap-4 px-2">
       <h1 className="flex justify-between items-center font-semibold mb-4 mx-2">
         Cargos
         <button
-          onClick={createRole}
-          className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 flex items-center justify-center cursor-pointer font-medium"
+          type="button"
+          onClick={handleCreate}
+          disabled={createRole.isPending}
+          className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 flex items-center justify-center cursor-pointer font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
           <FaPlus size={12} />
         </button>
@@ -64,7 +76,11 @@ export default function RolesSection({ roles }: { roles: Role[] }) {
               {role.name}
             </div>
 
-            <button onClick={() => deleteRole(role.id)}>
+            <button
+              onClick={() => handleRemove(role.id)}
+              disabled={deleteRole.isPending}
+              className="disabled:cursor-not-allowed disabled:opacity-50"
+            >
               <FaTimes size={12} className=" hover:text-red-500 hover:scale-120 cursor-pointer transition-all" />
             </button>
           </Link>

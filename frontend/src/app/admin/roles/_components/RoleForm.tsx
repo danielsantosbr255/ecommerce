@@ -18,7 +18,11 @@ import { RoleUpdateFormValues } from "@/lib/schemas/role.schema";
 
 const RoleForm = ({ role }: { role: Role | null | undefined }) => {
   const queryClient = useQueryClient();
-  const { data: permissions, isLoading } = useQuery({ queryKey: ["permissions"], queryFn: permissionService.getAll });
+  const { data: permissions, isLoading } = useQuery({
+    queryKey: ["permissions"],
+    queryFn: permissionService.getAll,
+    staleTime: 60,
+  });
 
   const { register, handleSubmit, setValue, watch, formState } = useForm<RoleUpdateFormValues>({
     resolver: zodResolver(roleUpdateSchema),
@@ -26,7 +30,7 @@ const RoleForm = ({ role }: { role: Role | null | undefined }) => {
     defaultValues: {
       name: role?.name || "",
       description: role?.description || "",
-      permissions: role?.permissions?.map((permission) => permission.permission.id) || [],      
+      permissions: role?.permissions?.map((permission) => permission.permission.id) || [],
     },
   });
 
@@ -39,6 +43,8 @@ const RoleForm = ({ role }: { role: Role | null | undefined }) => {
     try {
       await roleService.update(role.id, data);
       await queryClient.invalidateQueries({ queryKey: ["roles"] });
+      await queryClient.invalidateQueries({ queryKey: ["role"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success("Cargo atualizado com sucesso!");
     } catch (err) {
       if (err instanceof Error) toast.error(`Erro na atualização: ${err.message}`);
