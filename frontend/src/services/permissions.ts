@@ -5,6 +5,7 @@ class PermissionService {
   public async create(permissionData: Omit<Permission, "id">) {
     try {
       const response = await api.post("/permissions", permissionData);
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=permissions`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -14,7 +15,11 @@ class PermissionService {
 
   public async getAll() {
     try {
-      const response = await api.get<Permission[]>("/permissions", { _auth: true });
+      const response = await api.get<Permission[]>("/permissions", {
+        cache: "force-cache",
+        next: { revalidate: 1800, tags: ["permissions"] },
+        _auth: true,
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -35,6 +40,7 @@ class PermissionService {
   public async update(slug: string, permissionData: Partial<Permission>) {
     try {
       const response = await api.put<Permission>(`/permissions/${slug}`, permissionData);
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=permissions`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -45,6 +51,7 @@ class PermissionService {
   public async delete(slug: string) {
     try {
       const response = await api.delete(`/permissions/${slug}`);
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=permissions`);
       return response.data;
     } catch (error) {
       console.error(error);

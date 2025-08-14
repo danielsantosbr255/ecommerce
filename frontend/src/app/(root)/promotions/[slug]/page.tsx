@@ -6,7 +6,7 @@ export const revalidate = 1800;
 const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
 
-  const promotion = await promotionService.getPromotion(slug);
+  const promotion = await promotionService.getOne(slug);
 
   if (!promotion) {
     return (

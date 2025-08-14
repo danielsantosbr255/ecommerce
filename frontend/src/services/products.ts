@@ -28,6 +28,9 @@ class ProductService {
   public async create(productData: FormData) {
     const response = await api.post<Product>(`/products`, productData);
     await fetch(`${this.baseUrl}/revalidate?tag=products`);
+    await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
+    await fetch(`${this.baseUrl}/revalidate?tag=categories`);
+    await fetch(`${this.baseUrl}/revalidate?tag=brands`);
     return response.data;
   }
 
@@ -44,11 +47,6 @@ class ProductService {
     if (categoryId) params["categoryId"] = categoryId;
 
     try {
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?${new URLSearchParams(params).toString()}`, {
-      //   method: "GET",
-      //   cache: "force-cache",
-      //   next: { revalidate: 3600, tags: ["products"] },
-      // });
       const response = await api.get(`/products`, {
         cache: "force-cache",
         next: { revalidate: 3600, tags: ["products"] },
@@ -64,9 +62,10 @@ class ProductService {
 
   public async getBySlug(slug: string) {
     try {
+      const productTag = `product-${slug}`;
       const response = await api.get<Product>(`/products/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["products"] },
+        next: { revalidate: 3600, tags: ["products", productTag] },
       });
       return response.data;
     } catch (error) {
@@ -79,7 +78,7 @@ class ProductService {
     try {
       const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
         cache: "force-cache",
-        next: { revalidate: 3600 },
+        next: { revalidate: 3600, tags: ["products"] },
       });
       return response.data;
     } catch (error) {
@@ -102,7 +101,10 @@ class ProductService {
   public async update(id: string, productData: FormData) {
     try {
       const response = await api.put<Product>(`/products/${id}`, productData);
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
+      await fetch(`${this.baseUrl}/revalidate?tag=products`);
+      await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
+      await fetch(`${this.baseUrl}/revalidate?tag=categories`);
+      await fetch(`${this.baseUrl}/revalidate?tag=brands`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -113,7 +115,10 @@ class ProductService {
   public async delete(id: string) {
     try {
       const response = await api.delete(`/products/${id}`);
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=products`, { method: "GET" });
+      await fetch(`${this.baseUrl}/revalidate?tag=products`);
+      await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
+      await fetch(`${this.baseUrl}/revalidate?tag=categories`);
+      await fetch(`${this.baseUrl}/revalidate?tag=brands`);
       return response.data;
     } catch (error) {
       console.error(error);
