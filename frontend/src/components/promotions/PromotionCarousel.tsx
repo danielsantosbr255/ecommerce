@@ -11,7 +11,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import ProductImage from "../products/ProductImage";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel/carousel";
 
-const orbitron = Orbitron({ weight: ["700"], subsets: ["latin"] });
+const orbitron = Orbitron({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 // Componente para o cartão de convite (skeleton version)
 function PromotionArtisticSlot({ isLoading = false }: { isLoading?: boolean }) {
@@ -56,7 +56,7 @@ function PromotionArtisticSlot({ isLoading = false }: { isLoading?: boolean }) {
 function DiscountBadge({ discount, isLoading }: { discount: number; isLoading?: boolean }) {
   if (isLoading)
     return (
-      <div className="w-20 h-20 items-center justify-center mx-auto md:mx-0 rounded-full shadow-lg bg-primary/50 animate-pulse" />
+      <div className="w-20 h-20 items-center justify-center mx-auto md:mx-0 rounded-full shadow-lg bg-gray-200 animate-pulse" />
     );
   return (
     <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary shadow-lg overflow-hidden mx-auto md:mx-0">
@@ -111,14 +111,13 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
   if (!promotion) {
     promotion = {
       title: "Titulo",
-      description: Array(100).fill(" -").join(""),
+      description: Array(100).fill(" -").join(""),
       discount: 1,
+      products: Array(maxProductsToShow).fill(null),
     } as Promotion;
   }
 
-  const productsToDisplay = isLoading
-    ? Array(maxProductsToShow).fill(null)
-    : (promotion?.products || []).slice(0, maxProductsToShow);
+  const productsToDisplay = promotion.products.slice(0, maxProductsToShow);
 
   return (
     <Link
@@ -128,7 +127,7 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
       <div className="flex flex-col gap-2 md:gap-4 text-center md:text-left">
         <h1
           className={`text-3xl md:text-5xl font-bold ${orbitron.className} text-transparent ${
-            isLoading ? skeleton : " bg-gradient-to-r from-primary to-pink-500 bg-clip-text"
+            isLoading ? skeleton : "bg-gradient-to-r from-primary to-pink-500 bg-clip-text"
           }`}
         >
           {promotion?.title}
@@ -160,7 +159,7 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
         ))}
         {productsToDisplay.length < maxProductsToShow && <PromotionArtisticSlot isLoading={isLoading} />}
 
-        {promotion?.products.length < maxProductsToShow - 1 && (
+        {promotion.products.length < maxProductsToShow - 1 && (
           <div className="flex flex-col gap-2">
             <div className="flex flex-col items-center justify-center rounded-lg">
               <span className="relative w-full h-full aspect-square !max-h-80 !max-w-80 m-auto flex items-center justify-center">
@@ -182,7 +181,7 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
   const isLoading = !promotions || promotions.length === 0;
   const autoplayRef = useRef(Autoplay({ delay: 8000, stopOnInteraction: false }));
 
-  const placeholderPromotions = Array(3).fill(null) as Promotion[]; // Cria 3 "slots" de esqueleto para o carrossel
+  const placeholderPromotions = Array(3).fill(null) as Promotion[];
   const items = isLoading ? placeholderPromotions : promotions;
 
   return (
