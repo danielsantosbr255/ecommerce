@@ -24,7 +24,7 @@ export default function Logo({ className, size, variant = "default" }: LogoProps
   if (variant === "animated") {
     return (
       <Link href="/">
-        <div className={`${className} relative flex items-center justify-center animate-bounce`}>
+        <div className={`${className} relative flex items-center justify-center animate-flicker`}>
           <BsFire className="absolute" size={size} />
           <BsFire className={variants[variant]} size={size} />
         </div>
@@ -39,25 +39,10 @@ export default function Logo({ className, size, variant = "default" }: LogoProps
         className={`relative flex h-15 md:text-2xl items-center scale-98 hover:scale-100 transition-all duration-300  ${className}`}
       >
         <span className="flex gap-1 truncate">
-          <BsFire className={`shrink-0 ${variants[variant]}`} size={size} /> Fireforge Labs
+          <BsFire className={`shrink-0 ${variants[variant]}`} size={size} />
+          <span className="from-primary to-red-500 bg-clip-text bg-gradient-to-r text-transparent">Fireforge Labs</span>
         </span>
       </Link>
     </main>
   );
-}
-
-{
-  /* <Image
-        src="https://res.cloudinary.com/drhdpmlzh/image/upload/v1746193772/fireforge-labs-width-logo_vlqm3a.png"
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
-        priority
-        alt="Fireforge Labs"
-        className="object-contain"
-      /> */
-}
-
-{
-  /* <BsFire className={variants[variant]} size={size} />
-  {name && <span className="text-tx-on-primary truncate">Fireforge Labs</span>} */
 }

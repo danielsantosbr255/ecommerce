@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { Promotion } from "@/types";
-import Autoplay from "embla-carousel-autoplay";
-import ProductImage from "../products/ProductImage";
+import { GiRocket } from "react-icons/gi";
 import { Orbitron } from "next/font/google";
-import { ShoppingCart } from "lucide-react";
+import { TbBackground } from "react-icons/tb";
+import Autoplay from "embla-carousel-autoplay";
+import { FiShoppingCart } from "react-icons/fi";
+import ProductImage from "../products/ProductImage";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel/carousel";
 
 const orbitron = Orbitron({ weight: ["700"], subsets: ["latin"] });
@@ -86,7 +88,7 @@ function ProductCard({ item, isLoading = false }: { item: Promotion["products"][
           <div className={`absolute bottom-2 right-2 !rounded-full h-6 w-16 ${skeleton}`}></div>
         ) : (
           <div className="absolute bottom-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 shadow-md hover:bg-primary/90 transition-colors">
-            <ShoppingCart size={14} />
+            <FiShoppingCart size={14} />
             Comprar
           </div>
         )}
@@ -121,7 +123,7 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
   return (
     <Link
       href={promotion?.slug ? `/promotions/${promotion.slug}` : "#"}
-      className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 lg:px-20 lg:py-10 min-h-[280px] lg:min-h-[400px]"
+      className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 lg:px-20 lg:py-10 min-h-[280px] lg:min-h-[400px]"
     >
       <div className="flex flex-col gap-2 md:gap-4 text-center md:text-left">
         <h1
@@ -157,6 +159,20 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
           </div>
         ))}
         {productsToDisplay.length < maxProductsToShow && <PromotionArtisticSlot isLoading={isLoading} />}
+
+        {promotion?.products.length < maxProductsToShow - 1 && (
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col items-center justify-center rounded-lg">
+              <span className="relative w-full h-full aspect-square !max-h-80 !max-w-80 m-auto flex items-center justify-center">
+                <GiRocket className="text-primary inline-block rotate-90 animate-bounce" size={80} />
+                <span className="absolute bottom-2 text-xs text-center text-tx-secondary px-2">
+                  Confira a lista completa de produtos!
+                </span>
+                <TbBackground className="absolute inset-0 text-primary/10 animate-pulse w-full h-full" size={120} />
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </Link>
   );
@@ -170,7 +186,7 @@ export default function PromotionCarousel({ promotions }: { promotions: Promotio
   const items = isLoading ? placeholderPromotions : promotions;
 
   return (
-    <div className="bg-gradient-to-r from-transparent to-gray-100 rounded-lg shadow-lg w-full overflow-hidden">
+    <div className="bg-gradient-to-r from-bg-secondary via-bg-primary/50 to-bg-secondary rounded-lg shadow-lg w-full overflow-hidden border border-lines/10">
       <Carousel className="w-full" opts={{ loop: true }} plugins={[autoplayRef.current]}>
         <CarouselContent>
           {items.map((promotion, index) => (
