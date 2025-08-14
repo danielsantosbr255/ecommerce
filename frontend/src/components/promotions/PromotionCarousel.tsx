@@ -122,18 +122,18 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
   return (
     <Link
       href={promotion?.slug ? `/promotions/${promotion.slug}` : "#"}
-      className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 lg:px-20 lg:py-10 min-h-[280px] lg:min-h-[400px]"
+      className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 md:px-10 xl:px-20 lg:py-10 min-h-[280px] lg:min-h-[400px]"
     >
       <div className="flex flex-col gap-2 md:gap-4 text-center md:text-left">
         <h1
-          className={`text-3xl md:text-5xl font-bold ${orbitron.className} text-transparent ${
+          className={`text-3xl md:text-2xl xl:text-5xl font-bold ${orbitron.className} text-transparent ${
             isLoading ? skeleton : "bg-gradient-to-r from-primary to-pink-500 bg-clip-text"
           }`}
         >
           {promotion?.title}
         </h1>
 
-        <p className={`text-primary/80 text-base md:text-lg ${orbitron.className} ${isLoading && skeleton}`}>
+        <p className={`text-primary/80 text-base md:text-sm xl:text-lg ${orbitron.className} ${isLoading && skeleton}`}>
           {promotion?.description}
         </p>
 

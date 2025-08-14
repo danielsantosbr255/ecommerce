@@ -27,9 +27,10 @@ class CategoryService {
 
   public async getOne(slug: string) {
     try {
+      const categoryTag = `category-${slug}`;
       const response = await api.get<Category>(`/categories/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["categories"] },
+        next: { revalidate: 3600, tags: ["categories", categoryTag] },
       });
       return response.data;
     } catch (error) {

@@ -3,7 +3,7 @@ import PromotionCarousel from "./PromotionCarousel";
 import { promotionService } from "@/services/promotions";
 
 const FetchPromotionBanner = async () => {
-  const promotions = await promotionService.getPromotions();
+  const promotions = await promotionService.getAll();
   return <PromotionCarousel promotions={promotions} />;
 };
 
