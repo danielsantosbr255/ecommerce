@@ -48,7 +48,7 @@ export default function BrandsCarousel({ brands }: { brands: Brand[] | null }) {
 
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <h2 className="flex gap-3 items-center  border-lines text-3xl font-bold uppercase py-2">
+      <h2 className="flex gap-3 items-center  border-lines lg:text-3xl font-bold uppercase py-2">
         <FaHandshake className="text-primary" size={40} /> Marcas Parceiras
       </h2>
 

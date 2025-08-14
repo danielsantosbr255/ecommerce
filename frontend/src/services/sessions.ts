@@ -16,6 +16,11 @@ class SessionService {
     return res.data;
   }
 
+  public async getByUserId(userId: string) {
+    const res = await api.get<Session[]>(`/sessions/user/${userId}`, { _auth: true });
+    return res.data;
+  }
+
   public async update(id: string, data: Partial<Session>) {
     const res = await api.put<Session>(`/sessions/${id}`, data);
     return res.data;

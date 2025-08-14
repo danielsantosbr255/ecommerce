@@ -22,9 +22,19 @@ class OrderService {
     }
   }
 
-  public async getOrder(id: string) {
+  public async getOne(id: string) {
     try {
       const response = await api.get(`/orders/${id}`, { _auth: true });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  public async getByUserId(id: string) {
+    try {
+      const response = await api.get<Order[]>(`/orders/user/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
       console.error(error);

@@ -1,4 +1,5 @@
 const repository = require("./session.repository");
+const CustomError = require("../../common/utils/CustomError");
 
 class SessionService {
   constructor() {
@@ -9,15 +10,25 @@ class SessionService {
     return this.repository.getAll(ability);
   }
 
-  getById(id, ability) {
-    return this.repository.getById(id, ability);
+  getOne(id, ability) {
+    return this.repository.getOne(parseInt(id, 10), ability);
   }
 
-  update(id, data, ability) {
+  getByUserId(userId, ability) {
+    return this.repository.getByUserId(userId, ability);
+  }
+
+  async update(id, data, ability) {
+    const existingSession = await this.repository.getOne(parseInt(id, 10), ability);
+    if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
+
     return this.repository.update(id, data, ability);
   }
 
-  remove(id, ability) {
+  async remove(id, ability) {
+    const existingSession = await this.repository.getOne(parseInt(id, 10), ability);
+    if (!existingSession) throw new CustomError("Sessão não encontrada", 404);
+
     return this.repository.remove(id, ability);
   }
 

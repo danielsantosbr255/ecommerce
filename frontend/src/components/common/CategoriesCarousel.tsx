@@ -47,7 +47,7 @@ export default function CategoriesCarousel({ categories }: { categories: Categor
 
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <h2 className="flex gap-3 items-center text-3xl uppercase font-bold my-2 py-2">
+      <h2 className="flex gap-3 items-center lg:text-3xl uppercase font-bold my-2 py-2">
         <FaThList className="text-primary" size={30} /> Nossos Departamentos
       </h2>
 
