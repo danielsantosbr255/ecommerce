@@ -24,14 +24,12 @@ class UserService {
 
   public async getAll() {
     try {
-      const response = await api.get<User[]>("/users", {
-        cache: "force-cache",
-        next: { revalidate: 60, tags: ["users"] },
-        _auth: true,
-      });
+      const response = await api.get<User[]>("/users", { _auth: true });
       return response.data;
     } catch (error) {
-      console.error(error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error fetching users:", error);
+      }
       return null;
     }
   }
@@ -41,7 +39,9 @@ class UserService {
       const response = await api.get<User>(`/users/${id}`, { _auth: true });
       return response.data;
     } catch (error) {
-      console.error(error);
+      if (process.env.NODE_ENV === "development") {
+        console.error(`Error fetching user with ID ${id}:`, error);
+      }
       return null;
     }
   }

@@ -31,7 +31,7 @@ export function prepareRequestBodyAndHeaders(
 
   if (isFormData(data)) {
     body = data;
-    headers.delete("Content-Type"); // Let browser set boundary
+    headers.delete("Content-Type");
   } else if (data instanceof URLSearchParams) {
     body = data;
     if (!headers.has("Content-Type")) {
@@ -52,10 +52,6 @@ export function prepareRequestBodyAndHeaders(
       headers.set("Content-Type", "application/json;charset=UTF-8");
     }
   }
-
-  const finalHeaders = Object.fromEntries(headers.entries());
-
-  console.log("🚀 Final Headers", finalHeaders);
 
   return { body, headers };
 }
