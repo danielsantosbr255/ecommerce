@@ -68,13 +68,13 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onQuantityChange, onR
     <main className="bg-white w-full grid md:grid-cols-[auto_4fr_2fr] gap-4 px-4 py-2 items-center border-b last:border-b-0 border-lines">
       {/* Seções de imagem e descrição */}
       <section className="flex h-full items-center gap-4">
-        <Link href={`/product/${item.product.slug}`} className="relative w-24 h-24 flex-shrink-0">
+        <Link href={`/products/${item.product.slug}`} className="relative w-24 h-24 flex-shrink-0">
           <ProductImage product={item.product} />
         </Link>
       </section>
 
       <section className="w-full flex flex-col justify-center h-full gap-2">
-        <Link href={`/product/${item.product.slug}`} className="flex-1 text-center sm:text-left">
+        <Link href={`/products/${item.product.slug}`} className="flex-1 text-center sm:text-left">
           <h2 className="font-semibold text-tx-primary text-lg hover:underline">{item.product.title}</h2>
           <p className="text-tx-secondary">{CurrencyUtil.formatCurrency(item.product.price)}</p>
         </Link>

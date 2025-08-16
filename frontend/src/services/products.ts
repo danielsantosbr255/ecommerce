@@ -49,9 +49,10 @@ class ProductService {
     try {
       const response = await api.get(`/products`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["products"] },
+        next: { revalidate: 3600 * 2, tags: ["products"] },
         params: params,
         _auth: auth,
+        _noToken: true,
       });
       return response.data as ProductResponse;
     } catch (error) {
@@ -63,9 +64,11 @@ class ProductService {
   public async getBySlug(slug: string) {
     try {
       const productTag = `product-${slug}`;
+
       const response = await api.get<Product>(`/products/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["products", productTag] },
+        next: { revalidate: 3600 * 2, tags: ["products", productTag] },
+        _noToken: true,
       });
       return response.data;
     } catch (error) {
@@ -79,6 +82,7 @@ class ProductService {
       const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
         cache: "force-cache",
         next: { revalidate: 3600, tags: ["products"] },
+        _noToken: true,
       });
       return response.data;
     } catch (error) {

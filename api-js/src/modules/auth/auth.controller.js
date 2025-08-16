@@ -23,6 +23,7 @@ class AuthController {
   };
 
   signIn = async (req, res) => {
+    console.log("SignIn request body:", req.body);
     const { email, password } = authValidator.signIn(req.body);
 
     const ipAddress = getClientIp(req);
