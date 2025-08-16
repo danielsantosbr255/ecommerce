@@ -20,7 +20,7 @@ class BrandService {
     try {
       const response = await api.get<Brand[]>("/brands", {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["brands"] },
+        next: { revalidate: 3600 * 24, tags: ["brands"] },
       });
       return response.data;
     } catch (error) {
@@ -34,7 +34,8 @@ class BrandService {
       const brandTag = `brand-${slug}`;
       const response = await api.get<Brand>(`/brands/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["brands", brandTag] },
+        next: { revalidate: 3600 * 24, tags: ["brands", brandTag] },
+        _noToken: true,
       });
       return response.data;
     } catch (error) {

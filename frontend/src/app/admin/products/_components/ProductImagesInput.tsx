@@ -1,4 +1,3 @@
-// /components/product/ProductImagesInput.tsx
 import { DragEvent } from "react";
 import { ProductImage } from "@/types";
 import Image from "next/image";

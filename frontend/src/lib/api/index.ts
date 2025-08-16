@@ -1,110 +1,72 @@
 import { Session } from "@/types";
 import { HttpError } from "./utils/errors";
 import { authManager } from "./utils/authManager";
-import { HttpService } from "./adapters/FetchClient";
+import { HttpService } from "./HttpService";
 
 const isServer = typeof window === "undefined";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-const AUTH_REFRESH_URL = `${BASE_URL}/api/auth/refresh`;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
 export const api = new HttpService({
-  baseURL: API_BASE_URL,
+  baseURL: API_URL,
   withCredentials: true,
 });
 
-const refreshToken = async () => {
-  const response = await api.post<{ session: Session }>(AUTH_REFRESH_URL);
-
-  if (response.status !== 200) throw new Error("Não autorizado");
-
-  const data = response.data;
-  if (!data || !data.session) return null;
-
-  const session = data.session as Session;
-  if (session) return session.accessToken;
-  return null;
+const refreshAccessToken = async (): Promise<string | null> => {
+  try {
+    const response = await api.post<{ session: Session }>(`${BASE_URL}/api/auth/refresh`);
+    if (response.status !== 200 || !response.data?.session) return null;
+    return response.data.session.accessToken;
+  } catch {
+    return null;
+  }
 };
 
-api.interceptors.request.use(
-  async (config) => {
-    if (isServer && (config.method?.toLowerCase() !== "get" || config._auth)) {
-      const { cookies, headers } = await import("next/headers");
-      const cookieStore = await cookies();
-      const serverHeaders = await headers();
+api.interceptors.request.use(async (config) => {
+  const headers = new Headers(config.headers);
 
-      if (cookieStore.get("accessToken")?.value) {
-        authManager.set(cookieStore.get("accessToken")?.value || "");
-      }
+  if (isServer && (config._auth || config.method?.toUpperCase() !== "GET")) {
+    const { cookies, headers: serverHeaders } = await import("next/headers");
+    const cookieStore = await cookies();
+    const headerStore = await serverHeaders();
 
-      config.headers = {
-        ...config.headers,
-        Cookie: cookieStore.toString(),
-        "x-forwarded-for": serverHeaders.get("x-forwarded-for") || "127.0.0.1",
-        "user-agent": serverHeaders.get("user-agent") || "Next.js Server",
-      };
-    }
+    const token = cookieStore.get("accessToken")?.value;
+    if (token) authManager.set(token);
 
-    const accessToken = authManager.get();
-    if (accessToken) {
-      config.headers = { ...config.headers, Authorization: `Bearer ${accessToken}` };
-    }
-
-    return config;
-  },
-
-  (error) => {
-    console.error("Erro no interceptor de requisição:", error);
-    return Promise.reject(error);
+    headers.set("Cookie", cookieStore.toString());
+    headers.set("x-forwarded-for", headerStore.get("x-forwarded-for") || "127.0.0.1");
+    headers.set("user-agent", headerStore.get("user-agent") || "Next.js Server");
   }
-);
+
+  const token = authManager.get();
+  if (token && !headers.has("Authorization") && !config._noToken) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  return { ...config, headers };
+});
 
 api.interceptors.response.use(
   (response) => response,
-
   async (error) => {
+    if (!(error instanceof Error) || !("response" in error) || !error.response) throw error;
     if (!(error instanceof HttpError)) return Promise.reject(error);
 
-    const originalRequest = error.config;
-    const status = error.response?.status;
+    const originalConfig = error.config;
+    if (error.response.status !== 401 || originalConfig._retry || originalConfig.url?.includes("/auth")) throw error;
 
-    const isUnauthorized = status === 401;
-    const shouldRetry = originalRequest.url && !originalRequest.url.includes("/auth");
+    originalConfig._retry = true;
 
-    if (isUnauthorized && originalRequest && shouldRetry && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const accessToken = await refreshToken();
-
-        if (!accessToken) {
-          authManager.clear();
-          if (!isServer) sessionStorage.removeItem("accessToken");
-          return Promise.reject(error);
-        }
-
-        authManager.set(accessToken);
-        originalRequest.headers = { ...originalRequest.headers, Authorization: `Bearer ${accessToken}` };
-        if (!isServer) sessionStorage.setItem("accessToken", accessToken);
-
-        const baseURL = originalRequest.baseURL || BASE_URL;
-        const relativeUrl = originalRequest.url ? originalRequest.url.replace(baseURL, "") : "";
-        const originalBody = originalRequest.data;
-
-        if (!originalRequest.method) {
-          return Promise.reject(new Error("Original request method is undefined."));
-        }
-
-        return api.request(originalRequest.method, relativeUrl, originalBody, originalRequest);
-      } catch (error) {
-        console.error("Falha ao atualizar o token:", error);
-        authManager.clear();
-
-        if (!isServer) sessionStorage.removeItem("accessToken");
-        return Promise.reject(error);
-      }
+    const newToken = await refreshAccessToken();
+    if (!newToken) {
+      authManager.clear();
+      throw error;
     }
 
-    return Promise.reject(error);
+    authManager.set(newToken);
+    originalConfig.headers = new Headers(originalConfig.headers);
+    originalConfig.headers.set("Authorization", `Bearer ${newToken}`);
+
+    return api.request(originalConfig.method || "GET", originalConfig.url || "", originalConfig.data, originalConfig);
   }
 );

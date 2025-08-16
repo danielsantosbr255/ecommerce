@@ -26,6 +26,7 @@ class ProductController {
   };
 
   getBySlug = async (req, res) => {
+    // console.log(ANSIColors.MAGENTA, `Fetching product with slug: ${req.params.slug}`, ANSIColors.RESET);
     const product = await this.service.getBySlug(req.params.slug);
     res.json(product);
   };

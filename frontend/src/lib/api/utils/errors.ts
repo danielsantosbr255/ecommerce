@@ -1,10 +1,9 @@
 import { RequestConfig, ApiResponse } from "../types";
 
 export class HttpError<T = unknown> extends Error {
-  public config: RequestConfig;
-  public request?: RequestInit;
-  public response?: ApiResponse<T>;
-  public isHttpError: boolean;
+  public readonly config: RequestConfig;
+  public readonly request?: RequestInit;
+  public readonly response?: ApiResponse<T>;
 
   constructor(message: string, config: RequestConfig, request?: RequestInit, response?: ApiResponse<T>) {
     super(message);
@@ -12,11 +11,7 @@ export class HttpError<T = unknown> extends Error {
     this.config = config;
     this.request = request;
     this.response = response;
-    this.isHttpError = true;
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, HttpError);
-    }
+    Object.setPrototypeOf(this, HttpError.prototype);
   }
 }
 
@@ -24,20 +19,14 @@ export class HttpResponseError<T = unknown> extends HttpError<T> {
   constructor(message: string, config: RequestConfig, request?: RequestInit, response?: ApiResponse<T>) {
     super(message, config, request, response);
     this.name = "HttpResponseError";
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, HttpResponseError);
-    }
+    Object.setPrototypeOf(this, HttpResponseError.prototype);
   }
 }
 
 export class NetworkError extends HttpError<unknown> {
   constructor(message: string, config: RequestConfig, request?: RequestInit) {
-    super(message, config, request, undefined);
+    super(message, config, request);
     this.name = "NetworkError";
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NetworkError);
-    }
+    Object.setPrototypeOf(this, NetworkError.prototype);
   }
 }

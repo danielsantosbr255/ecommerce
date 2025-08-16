@@ -2,8 +2,11 @@ import { api } from "@/lib/api";
 import { Session, SignInFormData, SignUpFormData } from "@/types";
 
 class AuthService {
+  private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
+
   public async signUp(credentials: SignUpFormData) {
     const res = await api.post<{ session: Session }>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/sign-up`, credentials);
+    await fetch(`${this.baseUrl}/revalidate?tag=users`);
     return res.data;
   }
 

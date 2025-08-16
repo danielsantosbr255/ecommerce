@@ -17,7 +17,8 @@ class PromotionService {
     try {
       const response = await api.get<Promotion[]>("/promotions", {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["promotions"] },
+        next: { revalidate: 3600 * 24, tags: ["promotions"] },
+        _noToken: true,
       });
       return response.data;
     } catch (error) {
@@ -31,7 +32,8 @@ class PromotionService {
       const promotionTag = `promotion-${slug}`;
       const response = await api.get<Promotion>(`/promotions/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["promotions", promotionTag] },
+        next: { revalidate: 3600 * 24, tags: ["promotions", promotionTag] },
+        _noToken: true,
       });
       return response.data;
     } catch (error) {

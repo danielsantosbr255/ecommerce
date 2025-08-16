@@ -52,7 +52,7 @@ export default function ProductCard({ product }: { product: Product | null }) {
           )}
         </div>
 
-        <Link href={slug ? `/product/${slug}` : "#"} className="flex-1">
+        <Link href={slug ? `/products/${slug}` : "#"} className="flex-1">
           <div className="relative flex aspect-[4/3] items-center rounded-lg transition-all">
             {isLoading ? (
               <span className={`w-full h-full ${skeleton}`} />
