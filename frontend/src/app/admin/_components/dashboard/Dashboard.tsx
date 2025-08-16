@@ -17,8 +17,6 @@ export default function Dashboard() {
   const totalOrders = orders?.length || 0;
   const totalProducts = result?.pagination?.totalItems || 0;
 
-  console.log(result);
-
   return (
     <div className="flex-1 flex flex-col gap-4">
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -29,11 +27,11 @@ export default function Dashboard() {
       </section>
 
       <section className="bg-white shadow-xs rounded-2xl p-6">
-        <h2 className="text-xl font-semibold text-tx-primary mb-4">Atividade Recente</h2>
+        <h2 className="text-xl font-semibold mb-4">Atividade Recente</h2>
         <ul>
           <li className="py-2 border-b border-lines last:border-b-0 flex items-center justify-between">
             <span>Novo usuário registrado: João Silva</span>
-            <span className="text-sm text-tx-primary">Há 5 minutos</span>
+            <span className="text-sm">Há 5 minutos</span>
           </li>
         </ul>
       </section>
