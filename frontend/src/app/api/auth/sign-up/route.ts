@@ -1,7 +1,7 @@
 import { api } from "@/lib/api";
 import { SignUpFormData } from "@/types";
 import { NextResponse } from "next/server";
-import { setCookiesFromResponse } from "@/lib/cookies";
+import { setCookiesFromResponse } from "@/lib/utils/cookies";
 
 export async function POST(request: Request) {
   try {

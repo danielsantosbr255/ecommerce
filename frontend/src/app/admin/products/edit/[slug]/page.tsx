@@ -4,7 +4,7 @@ import ProductForm from "../../_components/ProductForm";
 
 export default async function page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await productService.getBySlug(slug);
+  const product = await productService.getOne(slug);
 
   if (!product) return <div>Produto não encontrado</div>;
 

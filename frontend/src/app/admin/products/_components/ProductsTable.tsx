@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Product } from "@/types";
 import { toast } from "react-toastify";
 import Button from "@/components/ui/Button";
 import { FaPencil } from "react-icons/fa6";
-import CurrencyUtil from "@/utils/currency.util";
+import { useRouter } from "next/navigation";
+import CurrencyUtil from "@/lib/utils/currency.util";
 import { productService } from "@/services/products";
+import { useQueryClient } from "@tanstack/react-query";
 import { FaBoxes, FaPlus, FaTimes } from "react-icons/fa";
 import ProductImage from "@/components/products/ProductImage";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   products: Product[];
@@ -79,7 +79,7 @@ function ProductsTable({ products, totalItems }: Props) {
 
       <TableHeader>
         <TableRow className="bg-bg-overlay/10 text-sm">
-          <TableHead className="text-center">Imagem</TableHead>
+          <TableHead>Imagem</TableHead>
           <TableHead>Título</TableHead>
           <TableHead className="text-center">Status</TableHead>
           <TableHead className="text-center">Categoria</TableHead>
@@ -93,8 +93,8 @@ function ProductsTable({ products, totalItems }: Props) {
       <TableBody className="bg-bg-secondary divide-lines">
         {products.map((product) => (
           <TableRow key={product.id}>
-            <TableCell className="flex items-center justify-center !p-0">
-              <div className="aspect-square w-20 h-20">
+            <TableCell className="flex items-center !py-0">
+              <div className="relative aspect-square w-14 h-14">
                 <ProductImage product={product} />
               </div>
             </TableCell>

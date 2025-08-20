@@ -9,11 +9,14 @@ import { FaPencil } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { brandService } from "@/services/brands";
-import { useQuery } from "@tanstack/react-query";
+import { FaPlus, FaTimes } from "react-icons/fa";
 import { MdLocalFireDepartment } from "react-icons/md";
-import LoadingState from "@/components/ui/LoadingState";
-import { FaBoxes, FaPlus, FaTimes } from "react-icons/fa";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+interface Props {
+  brands?: Brand[];
+  totalItems: number;
+}
 
 const Actions = ({ brand }: { brand: Brand }) => {
   const router = useRouter();
@@ -53,11 +56,7 @@ const Actions = ({ brand }: { brand: Brand }) => {
   );
 };
 
-function BrandsTable() {
-  const { data: brands, isLoading } = useQuery({ queryKey: ["brands"], queryFn: () => brandService.getAll(), staleTime: 60 * 1000 });
-
-  if (isLoading) return <LoadingState label="Carregando marcas" />;
-
+function BrandsTable({ brands, totalItems }: Props) {
   if (!brands || brands.length === 0) {
     return (
       <Table>
@@ -68,13 +67,11 @@ function BrandsTable() {
     );
   }
 
-  const totalItems = brands.length;
-
   return (
     <Table>
       <TableCaption className="text-center py-4">
         <div className="relative flex justify-center items-center gap-2 font-semibold text-xl">
-          <FaBoxes className="text-primary" size={25} />
+          <MdLocalFireDepartment className="text-primary" size={25} />
           <p>Listagem de marcas</p>
 
           <span className="absolute top-0 right-3 bg-primary/20 text-primary font-normal text-sm px-2 py-1 rounded-xl">
@@ -100,9 +97,18 @@ function BrandsTable() {
       <TableBody className="bg-bg-secondary divide-lines">
         {brands.map((brand) => (
           <TableRow key={brand.id}>
-            <TableCell className="text-center">
+            <TableCell className="flex items-center !py-0">
               {brand.image ? (
-                <Image src={brand.image} alt={brand.name} className="object-cover" width={40} height={40} priority />
+                <div className="relative aspect-square w-14 h-14">
+                  <Image
+                    src={brand.image}
+                    alt={brand.name}
+                    className="object-contain p-1"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    priority
+                  />
+                </div>
               ) : (
                 <MdLocalFireDepartment size={20} />
               )}

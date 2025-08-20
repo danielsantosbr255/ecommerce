@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { User } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { Loader2 } from "lucide-react";
 import { JSX, ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
-import Notification from "@/components/common/Notification";
-import { FaBuildingCircleExclamation } from "react-icons/fa6";
-import { FaCartArrowDown, FaSignInAlt, FaUserAstronaut, FaUserSecret } from "react-icons/fa";
 import { cartService } from "@/services/carts";
 import { useQuery } from "@tanstack/react-query";
+import { FaBuildingShield } from "react-icons/fa6";
+import Notification from "@/components/common/Notification";
+import { FaCartArrowDown, FaInfoCircle, FaSignInAlt, FaUserAstronaut } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface NavItemProps {
   href: string;
@@ -29,7 +30,7 @@ const NavItem = ({ href, label = "", icon, onClick, className }: NavItemProps): 
     onClick={onClick}
     className={cn(
       className,
-      "flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+      "flex items-center py-2 px-3 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     )}
   >
     {icon} {label}
@@ -43,7 +44,7 @@ const CartItem = () => {
   return (
     <Link
       href="/cart"
-      className="relative flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
+      className="relative flex items-center gap-0 py-2 px-3 text-tx-primary hover:bg-gray-100 hover:text-primary rounded-md transition duration-300"
     >
       {cartItemCount && (
         <span className="absolute bg-primary top-0.5 right-0.5 flex items-center justify-center w-[18px] h-[18px] text-xs font-bold text-white rounded-full">
@@ -68,13 +69,19 @@ const UserItem = ({ user, loading }: { user: User | null; loading: boolean }) =>
         icon={user ? <FaUserAstronaut size={25} /> : <FaSignInAlt size={25} />}
       />
 
-      {isStaff && <NavItem href="/admin" icon={<FaUserSecret size={25} className="animate-pulse text-primary" />} />}
+      {isStaff && <NavItem href="/admin" icon={<FaBuildingShield size={25} className="text-primary" />} />}
     </>
   );
 };
 
 export default function DesktopBar({ className }: { className?: string }): JSX.Element {
+  const router = useRouter();
   const { user, userLoading } = useAuth();
+
+  const handleSearch = (query?: string) => {
+    if (query?.trim()) router.push(`/search?q=${query}`);
+    else router.push("/");
+  };
 
   return (
     <main className={cn(className, "hidden w-full px-2 lg:grid grid-cols-[1fr_2fr_1fr] items-center justify-between")}>
@@ -82,10 +89,10 @@ export default function DesktopBar({ className }: { className?: string }): JSX.E
         <Logo size={25} />
       </div>
 
-      <SearchBar />
+      <SearchBar onSearch={handleSearch} placeholder="Pesquisar produtos..." />
 
       <div className="bg-amber-30 flex w-full h-full items-center justify-end gap-1">
-        <NavItem href="/about" icon={<FaBuildingCircleExclamation size={25} className="text-primary" />} />
+        <NavItem href="/about" icon={<FaInfoCircle size={25} className="text-primary" />} />
         <CartItem />
         <Notification />
         <UserItem user={user} loading={userLoading} />

@@ -3,27 +3,22 @@ import { productService } from "@/services/products";
 import Pagination from "@/components/ui/Pagination";
 import ProductsTable from "./_components/ProductsTable";
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_PAGE_SIZE = 8;
-
-const page = async ({ searchParams }: { searchParams: Promise<SearchPageProps> }) => {
+export default async function page({ searchParams }: { searchParams: Promise<SearchPageProps> }) {
   const rawSearch = await searchParams;
 
-  const page = Number(rawSearch.page) || DEFAULT_PAGE;
-  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+  const page = Number(rawSearch.page) || 1;
+  const limit = Number(rawSearch.limit) || 12;
 
-  const result = await productService.getAll({ page, pageSize });
+  const result = await productService.getMany({ page, limit });
   if (!result) return null;
 
-  const { products, pagination } = result;
-  const { totalPages, totalItems } = pagination;
+  const { data: products, meta } = result;
+  const { totalPages, total } = meta;
 
   return (
     <main className="flex flex-col w-full gap-4">
-      <ProductsTable products={products} totalItems={totalItems} />
-      <Pagination currentPage={page} totalPages={totalPages} path={"/admin/products?"} pageSize={pageSize} />
+      <ProductsTable products={products} totalItems={total} />
+      <Pagination page={page} limit={limit} totalPages={totalPages} path={"/admin/products?"} />
     </main>
   );
-};
-
-export default page;
+}

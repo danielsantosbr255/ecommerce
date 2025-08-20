@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { orderService } from "@/services/orders";
-import CurrencyUtil from "@/utils/currency.util";
+import CurrencyUtil from "@/lib/utils/currency.util";
 import { FaBoxesPacking } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 import LoadingState from "@/components/ui/LoadingState";

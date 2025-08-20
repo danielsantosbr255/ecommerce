@@ -1,7 +1,7 @@
 // import api from "@/lib/axios";
 import { api } from "@/lib/api";
 import { NextResponse } from "next/server";
-import { setCookiesFromResponse } from "@/lib/cookies";
+import { setCookiesFromResponse } from "@/lib/utils/cookies";
 import { SignInFormData } from "@/types";
 
 export async function POST(request: Request) {

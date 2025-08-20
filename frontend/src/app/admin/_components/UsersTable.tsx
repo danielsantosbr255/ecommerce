@@ -10,8 +10,6 @@ import { useRouter } from "next/navigation";
 import { userService } from "@/services/users";
 import { FaTimes, FaUserAstronaut, FaUsers } from "react-icons/fa";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import LoadingState from "@/components/ui/LoadingState";
 
 const Actions = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -51,11 +49,7 @@ const Actions = ({ user }: { user: User }) => {
   );
 };
 
-function UsersTable() {
-  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: () => userService.getAll(), staleTime: 60 * 1000 });
-
-  if (isLoading) return <LoadingState label="Carregando usuários" />;
-
+function UsersTable({ users, totalItems }: { users: User[]; totalItems: number }) {
   if (!users || users.length === 0) {
     return (
       <div className="flex flex-col gap-4 p-6 bg-bg-secondary rounded-lg shadow-xs">
@@ -63,8 +57,6 @@ function UsersTable() {
       </div>
     );
   }
-
-  const totalItems = users.length;
 
   return (
     <Table>

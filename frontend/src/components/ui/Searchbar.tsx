@@ -1,51 +1,39 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 import { Search, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 type SearchBarProps = {
-  onSearch?: (query: string) => void;
+  onSearch: (query?: string) => void;
+  placeholder?: string;
   className?: string;
 };
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+export default function SearchBar({ onSearch, placeholder }: SearchBarProps) {
   const [query, setQuery] = useState("");
-  const router = useRouter();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    onSearch?.(value);
-  };
-
-  const clearSearch = () => {
-    setQuery("");
-    onSearch?.("");
-  };
-
-  const handleSearch = () => {
-    if (query.trim()) {
-      router.push(`/search?q=${query}`);
-    }
-  };
+  // const handleSearch = () => {
+  //   if (query.trim()) {
+  //     router.push(`/search?q=${query}`);
+  //   }
+  // };
 
   return (
     <section className="bg-bg-secondary border border-dashed shadow-xs border-lines flex flex-1 w-full items-center px-3 gap-1 text-md text-tx-secondary rounded-xl">
       <Search className="shrink-0" />
       <input
-        type="text"
+        type="search"
         value={query}
-        onChange={handleChange}
+        onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") handleSearch();
+          if (e.key === "Enter") onSearch(query);
         }}
-        placeholder="Pesquisar produtos..."
+        placeholder={placeholder || "Pesquisar produtos..."}
         className="border-none outline-none py-2.5 pl-1 w-full"
       />
 
       {query && (
-        <button onClick={clearSearch}>
+        <button onClick={() => setQuery("")}>
           <X className="cursor-pointer hover:text-primary" />
         </button>
       )}

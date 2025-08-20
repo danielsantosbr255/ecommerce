@@ -1,5 +1,11 @@
 import { api } from "@/lib/api";
-import { Brand } from "@/types";
+import { Brand, Pagination } from "@/types";
+import { QueryParams } from "./products";
+
+interface BrandResponse {
+  data: Brand[];
+  meta: Pagination;
+}
 
 class BrandService {
   private baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
@@ -16,11 +22,22 @@ class BrandService {
     }
   }
 
-  public async getAll() {
+  public async getMany(query: QueryParams = { page: 1, limit: 10 }) {
+    const { search, page, limit } = query;
+    const params: Record<string, string> = {};
+
+    if (search) params["search"] = search;
+    if (page) params["page"] = page.toString();
+    if (limit) params["limit"] = limit.toString();
+
+    const brandTag = `brands-${JSON.stringify(params)}`;
+
     try {
-      const response = await api.get<Brand[]>("/brands", {
+      const response = await api.get<BrandResponse>("/brands", {
         cache: "force-cache",
-        next: { revalidate: 3600 * 24, tags: ["brands"] },
+        next: { revalidate: 3600, tags: ["brands", brandTag] },
+        params: params,
+        _noToken: true,
       });
       return response.data;
     } catch (error) {

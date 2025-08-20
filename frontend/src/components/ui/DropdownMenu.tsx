@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { ChevronDown, Dot } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { Children, useState, useContext, useEffect, useRef, useMemo } from "react";

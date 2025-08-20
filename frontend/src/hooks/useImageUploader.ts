@@ -1,7 +1,7 @@
-// /hooks/useImageUploader.ts
+"use client";
+
 import { ProductImage } from "@/types";
 import { useCallback, useState } from "react";
-// import { ProductImage } from "@/types";
 
 type ImageInput = File | ProductImage;
 

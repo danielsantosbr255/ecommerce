@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Role } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { toast } from "react-toastify";
 import { roleService } from "@/services/roles";
 import { usePathname, useRouter } from "next/navigation";

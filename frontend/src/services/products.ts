@@ -2,24 +2,18 @@ import { api } from "@/lib/api";
 import { Pagination, Product } from "@/types";
 
 export interface ProductResponse {
-  products: Product[];
-  pagination: Pagination;
+  data: Product[];
+  meta: Pagination;
 }
 
 export interface QueryParams {
-  query: string;
-  page: number;
-  pageSize: number;
-}
-
-export interface SearchParams {
-  q?: string;
+  search?: string;
   page?: number;
-  pageSize?: number;
-  categoryId?: string;
+  limit?: number;
   brandId?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  categoryId?: string;
+  orderBy?: string;
+  order?: "asc" | "desc";
 }
 
 class ProductService {
@@ -28,32 +22,32 @@ class ProductService {
   public async create(productData: FormData) {
     const response = await api.post<Product>(`/products`, productData);
     await fetch(`${this.baseUrl}/revalidate?tag=products`);
-    await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
-    await fetch(`${this.baseUrl}/revalidate?tag=categories`);
-    await fetch(`${this.baseUrl}/revalidate?tag=brands`);
     return response.data;
   }
 
-  public async getAll(search: SearchParams = { page: 1, pageSize: 20 }, auth = false) {
-    const { q, page, pageSize, brandId, categoryId, minPrice, maxPrice } = search;
+  public async getMany(query: QueryParams = { page: 1, limit: 20 }, auth = false) {
+    const { search, page, limit, brandId, categoryId } = query;
     const params: Record<string, string> = {};
 
-    if (q) params["q"] = q;
+    if (search) params["search"] = search;
     if (page) params["page"] = page.toString();
-    if (pageSize) params["pageSize"] = pageSize.toString();
-    if (minPrice) params["minPrice"] = minPrice.toString();
-    if (maxPrice) params["maxPrice"] = maxPrice.toString();
+    if (limit) params["limit"] = limit.toString();
     if (brandId) params["brandId"] = brandId;
     if (categoryId) params["categoryId"] = categoryId;
+    if (query.orderBy) params["orderBy"] = query.orderBy;
+    if (query.order) params["order"] = query.order;
+
+    const productTag = `products-${JSON.stringify(params)}`;
 
     try {
       const response = await api.get(`/products`, {
         cache: "force-cache",
-        next: { revalidate: 3600 * 2, tags: ["products"] },
+        next: { revalidate: 3600, tags: ["products", productTag] },
         params: params,
         _auth: auth,
         _noToken: true,
       });
+
       return response.data as ProductResponse;
     } catch (error) {
       console.error(error);
@@ -61,13 +55,13 @@ class ProductService {
     }
   }
 
-  public async getBySlug(slug: string) {
+  public async getOne(slug: string) {
     try {
       const productTag = `product-${slug}`;
 
       const response = await api.get<Product>(`/products/${slug}`, {
         cache: "force-cache",
-        next: { revalidate: 3600 * 2, tags: ["products", productTag] },
+        next: { revalidate: 3600, tags: ["products", productTag] },
         _noToken: true,
       });
       return response.data;
@@ -79,22 +73,13 @@ class ProductService {
 
   public async getRelated(productId: string) {
     try {
+      const productTag = `related-products-${productId}`;
+
       const response = await api.get<ProductResponse>(`/products/${productId}/related`, {
         cache: "force-cache",
-        next: { revalidate: 3600, tags: ["products"] },
+        next: { revalidate: 1800, tags: ["products", productTag] },
         _noToken: true,
       });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  }
-
-  public async getCount() {
-    try {
-      const response = await api.get<number>("/products/count");
-      console.log("Response data:", response.data);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -107,8 +92,6 @@ class ProductService {
       const response = await api.put<Product>(`/products/${id}`, productData);
       await fetch(`${this.baseUrl}/revalidate?tag=products`);
       await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
-      await fetch(`${this.baseUrl}/revalidate?tag=categories`);
-      await fetch(`${this.baseUrl}/revalidate?tag=brands`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -121,8 +104,6 @@ class ProductService {
       const response = await api.delete(`/products/${id}`);
       await fetch(`${this.baseUrl}/revalidate?tag=products`);
       await fetch(`${this.baseUrl}/revalidate?tag=promotions`);
-      await fetch(`${this.baseUrl}/revalidate?tag=categories`);
-      await fetch(`${this.baseUrl}/revalidate?tag=brands`);
       return response.data;
     } catch (error) {
       console.error(error);

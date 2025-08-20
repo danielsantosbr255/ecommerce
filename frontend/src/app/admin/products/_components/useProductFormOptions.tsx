@@ -29,7 +29,7 @@ export function useProductFormOptions() {
         );
       }
 
-      const brandsFromApi = await brandService.getAll();
+      const brandsFromApi = await brandService.getMany();
       if (brandsFromApi) {
         setBrands(
           brandsFromApi.map((brand) => ({

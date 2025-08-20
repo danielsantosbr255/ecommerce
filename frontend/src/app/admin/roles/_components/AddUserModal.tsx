@@ -15,7 +15,7 @@ interface AddUserModalProps {
 }
 
 export const AddUserModal = ({ role, handleAddUsers }: AddUserModalProps) => {
-  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: userService.getAll });
+  const { data: users, isLoading } = useQuery({ queryKey: ["users"], queryFn: userService.getMany });
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>(role.users.map((user) => user.userId));
 
   const queryClient = useQueryClient();

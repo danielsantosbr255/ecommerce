@@ -19,21 +19,21 @@ export default async function page({ searchParams, params }: Props) {
 
   const slug = rawParams.slug;
   const page = Number(rawSearch.page) || DEFAULT_PAGE;
-  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+  const limit = Number(rawSearch.limit) || DEFAULT_PAGE_SIZE;
 
   const brand = await brandService.getOne(slug);
 
   if (!brand) {
     return (
       <div className="flex flex-col w-full justify-center items-center">
-        <h1 className="text-2xl text-tx-primary font-semibold my-2 py-2">
+        <h1 className="text-2xl font-semibold my-2 py-2">
           Marca <span className="font-bold underline text-primary">{slug}</span> não encontrada.
         </h1>
       </div>
     );
   }
 
-  const seachQuery = () => productService.getAll({ brandId: brand.id, page, pageSize });
+  const seachQuery = () => productService.getMany({ brandId: brand.id, page, limit });
 
   return (
     <Suspense fallback={<LoadingState />}>

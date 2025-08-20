@@ -2,24 +2,32 @@
 
 import Link from "next/link";
 import { JSX, useState } from "react";
-import MobileMenu from "../MobileMenu";
+import MobileMenu from "./MobileMenu";
 import Logo from "@/components/ui/Logo";
+import { useRouter } from "next/navigation";
+import { Loader2, Menu } from "lucide-react";
 import { useAuth } from "@/providers/AuthContext";
 import SearchBar from "@/components/ui/Searchbar";
-import { FaSignInAlt, FaUserAstronaut, FaUserShield } from "react-icons/fa";
-import { Loader2, Menu } from "lucide-react";
+import { FaBuildingShield } from "react-icons/fa6";
+import { FaSignInAlt, FaUserAstronaut } from "react-icons/fa";
 
 const MobileBar = (): JSX.Element => {
+  const router = useRouter();
   const { user, userLoading } = useAuth();
 
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = user && user.roles.length > 0;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+
+  const handleSearch = (query?: string) => {
+    if (query?.trim()) router.push(`/search?q=${query}`);
+    else router.push("/");
+  };
 
   return (
     <section className="block lg:hidden w-full">
       <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
-        <button onClick={toggleMobileMenu} className="justify-start focus:outline-none" aria-label="Abrir menu">
+        <button onClick={toggleMobileMenu} className="justify-start focus:outline-none cursor-pointer" aria-label="Abrir menu">
           <Menu size={22} />
         </button>
 
@@ -27,8 +35,8 @@ const MobileBar = (): JSX.Element => {
 
         <div className="flex gap-4 justify-end items-center">
           {isAdmin && (
-            <Link href="/admin" className="text-accent">
-              <FaUserShield size={22} className="animate-pulse" />
+            <Link href="/admin">
+              <FaBuildingShield size={22} className="text-primary" />
             </Link>
           )}
 
@@ -43,7 +51,7 @@ const MobileBar = (): JSX.Element => {
       <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />
 
       <div className="lg:hidden">
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} placeholder="Pesquisar produtos..." />
       </div>
     </section>
   );

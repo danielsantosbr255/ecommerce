@@ -4,14 +4,14 @@ import { Suspense } from "react";
 import { FaLink } from "react-icons/fa";
 import { productService } from "@/services/products";
 import LoadingState from "@/components/ui/LoadingState";
-import ProductDetail from "@/components/products/ProductDetail";
+import ProductDetail from "@/components/products/ProductDetails";
 import ProductReviews from "@/components/products/ProductReviews";
 import ProductSession from "@/components/products/ProductSession";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await productService.getBySlug(slug);
+  const product = await productService.getOne(slug);
 
   if (!product) {
     return (
@@ -35,6 +35,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         callback={() => productService.getRelated(product.id)}
         label="Produtos Relacionados"
         icon={<FaLink size={25} />}
+        empty={true}
       />
     </main>
   );

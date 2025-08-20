@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { FaBox } from "react-icons/fa";
 import { orderService } from "@/services/orders";
-import CurrencyUtil from "@/utils/currency.util";
+import CurrencyUtil from "@/lib/utils/currency.util";
 import { useQuery } from "@tanstack/react-query";
 import LoadingState from "@/components/ui/LoadingState";
+import { FaBoxesPacking } from "react-icons/fa6";
 
 const Orders = () => {
   const { data: orders, isLoading } = useQuery({
@@ -27,9 +27,9 @@ const Orders = () => {
   return (
     <section className="flex flex-col w-full h-full gap-2">
       {orders.map((order) => (
-        <article key={order.id} className="bg-bg-secondary flex justify-between items-center p-4 shadow-xs rounded-lg">
+        <article key={order.id} className="bg-bg-secondary flex flex-col lg:flex-row justify-between items-center p-4 shadow-xs rounded-lg">
           <div className="flex flex-col  justify-start gap-1">
-            <FaBox size={25} />
+            <FaBoxesPacking size={25} />
           </div>
 
           <div className="flex flex-col items-center justify-center gap-1">

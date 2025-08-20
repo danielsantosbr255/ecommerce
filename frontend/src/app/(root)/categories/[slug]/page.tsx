@@ -19,7 +19,7 @@ export default async function page({ searchParams, params }: Props) {
 
   const slug = rawParams.slug;
   const page = Number(rawSearch.page) || DEFAULT_PAGE;
-  const pageSize = Number(rawSearch.pageSize) || DEFAULT_PAGE_SIZE;
+  const limit = Number(rawSearch.limit) || DEFAULT_PAGE_SIZE;
 
   const category = await categoryService.getOne(slug);
 
@@ -33,7 +33,7 @@ export default async function page({ searchParams, params }: Props) {
     );
   }
 
-  const seachQuery = () => productService.getAll({ categoryId: category.id, page, pageSize });
+  const seachQuery = () => productService.getMany({ categoryId: category.id, page, limit });
 
   return (
     <Suspense fallback={<LoadingState label="Carregando produtos" />}>

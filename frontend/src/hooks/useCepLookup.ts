@@ -1,5 +1,5 @@
-// src/hooks/useCepLookup.ts
 "use client";
+
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { UseFormSetValue } from "react-hook-form";
@@ -25,7 +25,7 @@ export function useCepLookup(cep: string, setValue: UseFormSetValue<Address>) {
         }
       }
     };
-    const timeout = setTimeout(fetchAddress, 500); // debounce
+    const timeout = setTimeout(fetchAddress, 500);
     return () => clearTimeout(timeout);
   }, [cep, setValue]);
 }

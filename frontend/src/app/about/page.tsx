@@ -3,7 +3,6 @@ import {
   FaArrowLeft,
   FaCode,
   FaShoppingCart,
-  FaPuzzlePiece,
   FaGithub,
   FaDatabase,
   FaGamepad,
@@ -12,6 +11,10 @@ import {
   FaTerminal,
   FaDocker,
   FaMailBulk,
+  FaLaptopCode,
+  FaServer,
+  FaBook,
+  FaLock,
 } from "react-icons/fa";
 import Image from "next/image";
 import { Metadata } from "next";
@@ -26,10 +29,7 @@ const AboutPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-16">
       <div className="container mx-auto px-4 relative">
         {/* Botão de Voltar Elegante */}
-        <Link
-          href="/"
-          className="inline-flex items-center text-tx-primary hover:text-primary transition duration-300 mb-12 group"
-        >
+        <Link href="/" className="inline-flex items-center hover:text-primary transition duration-300 mb-12 group">
           <FaArrowLeft className="mr-3 group-hover:-translate-x-1 transition duration-300" />
           <span className="font-medium">Voltar para a Loja</span>
         </Link>
@@ -39,13 +39,13 @@ const AboutPage = () => {
           <div className="md:flex items-center -mx-8">
             <div className="md:w-1/3 px-8 mb-6 md:mb-0 text-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-xs">
-                <Image src="/placeholder.jpg" alt="Minha Foto de Perfil" layout="fill" objectFit="cover" />
+                <Image src="/power.jpg" alt="Minha Foto de Perfil" layout="fill" objectFit="cover" />
 
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
-              <h2 className="text-xl font-semibold text-tx-primary mt-4">Olá! Eu sou o Daniel.</h2>
-              <p className="text-tx-primary text-sm">Estudante de Desenvolvimento Web & Criador deste Projeto</p>
-              <p className="flex text-tx-primary mt-2 font-semibold items-center justify-center gap-1">
+              <h2 className="text-xl font-semibold mt-4">Olá! Eu sou o Daniel.</h2>
+              <p className="text-sm">Desenvolvedor Web Júnior & Criador deste Projeto</p>
+              <p className="flex mt-2 font-semibold items-center justify-center gap-1">
                 <FaMailBulk className="text-tx-primary" /> Contato:{" "}
                 <Link href="mailto:asdanielsantos@gmail.com" className="text-primary hover:underline">
                   asdanielsantos@gmail.com
@@ -53,15 +53,16 @@ const AboutPage = () => {
               </p>
             </div>
             <div className="md:w-2/3 px-8">
-              <p className="text-tx-primary leading-relaxed mb-4">
-                Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos jogos que desenvolvi com
-                Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de 8 anos</strong>, o código foi minha
-                tela e os jogos, minhas criações. Agora, estou focado em construir experiências interativas na web.
+              <p className="leading-relaxed mb-4">
+                Sou um desenvolvedor web júnior em transição de carreira (cerca de 2 anos de experiência em projetos próprios),
+                com 8 anos de experiência em programação no desenvolvimento de jogos com Python. Nos últimos meses, mergulhei no
+                desenvolvimento web e construí este projeto fullstack de e-commerce como uma vitrine prática das minhas
+                habilidades.
               </p>
-              <p className="text-tx-primary leading-relaxed mb-4">
-                Este projeto de e-commerce é um passo crucial nessa transição, permitindo-me explorar a fundo o desenvolvimento
-                fullstack. Embora meu foco principal seja o backend, a visão completa do ciclo de desenvolvimento é o que me
-                motiva.
+              <p className="leading-relaxed mb-4">
+                No processo, além do que implementei diretamente no projeto, também aprendi diversas tecnologias e ferramentas que
+                ampliaram minha visão como desenvolvedor, incluindo Docker, Nginx, e a administração de servidores Linux em AWS
+                EC2.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
@@ -71,14 +72,91 @@ const AboutPage = () => {
                   <FaTerminal className="mr-2 text-tx-primary" /> Backend
                 </span>
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
-                  <FaGamepad className="mr-2 text-tx-primary" /> Desenvolvimento de Jogos
+                  <FaGamepad className="mr-2 text-tx-primary" /> Dev. de Jogos
                 </span>
                 <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-tx-primary">
-                  <FaBrain className="mr-2 text-tx-primary" /> Lógica de Programação
+                  <FaBrain className="mr-2 text-tx-primary" /> Lógica
                 </span>
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Seção Detalhada do Projeto E-commerce */}
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
+          <div className="flex items-center mb-6">
+            <FaShoppingCart className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Descrição Detalhada do Projeto</h2>
+          </div>
+          <p className="leading-relaxed mb-4">
+            Este projeto de e-commerce foi construído para simular um ambiente de produção real, enfrentando desafios técnicos e
+            arquiteturais que refletem as exigências de aplicações modernas. A experiência foi um divisor de águas na minha
+            jornada como desenvolvedor, permitindo aplicar boas práticas e consolidar conhecimentos em uma stack sólida.
+          </p>
+        </section>
+
+        {/* Seção de Backend */}
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
+          <div className="flex items-center mb-6">
+            <FaServer className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Backend: Arquitetura e Segurança</h2>
+          </div>
+          <p className="leading-relaxed mb-4">
+            O backend foi desenvolvido em Node.js, inspirado no Nest.js, com separação em módulos, serviços e controllers,
+            garantindo manutenibilidade e escalabilidade.
+          </p>
+          <ul className="list-disc list-inside mb-4">
+            <li>
+              <span className="font-semibold">Segurança:</span> Autenticação com JWT (HttpOnly), proteção contra sequestro de
+              sessão e autorização com RBAC (Role-Based Access Control).
+            </li>
+            <li>
+              <span className="font-semibold">Banco de Dados:</span> PostgreSQL com Prisma ORM.
+            </li>
+            <li>
+              <span className="font-semibold">Validação:</span> Biblioteca Zod, aplicada no backend e no frontend.
+            </li>
+            <li>
+              <span className="font-semibold">Hospedagem:</span> Deploy no Render, com testes de configuração na AWS EC2.
+            </li>
+          </ul>
+        </section>
+
+        {/* Seção de Frontend */}
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
+          <div className="flex items-center mb-6">
+            <FaLaptopCode className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Frontend: Desafios com Next.js 15</h2>
+          </div>
+          <p className="leading-relaxed mb-4">
+            O frontend foi desenvolvido em Next.js 15 + TypeScript com o App Router, enfrentando a curva de aprendizado de Server
+            Components vs Client Components. O projeto contou com a criação de um HTTP Client customizado e a implementação de um
+            proxy para autenticação em produção.
+          </p>
+          <ul className="list-disc list-inside mb-4">
+            <li>
+              <span className="font-semibold">Gerenciamento de Estado:</span> ContextAPI, Zustand e Tanstack React Query.
+            </li>
+            <li>
+              <span className="font-semibold">Formulários:</span> React Hook Form + FormData.
+            </li>
+          </ul>
+        </section>
+
+        {/* Seção de Recursos e Lições Aprendidas */}
+        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
+          <div className="flex items-center mb-6">
+            <FaBook className="text-primary text-3xl mr-4" />
+            <h2 className="text-xl font-semibold text-tx-primary">Recursos da Aplicação e Lições Aprendidas</h2>
+          </div>
+          <p className="leading-relaxed mb-4">
+            O sistema conta com autenticação, gerenciamento de produtos, pedidos, categorias, reviews e carrinho de compras. Cada
+            funcionalidade foi construída do zero, simulando a complexidade de um e-commerce real.
+          </p>
+          <p className="leading-relaxed mb-4">
+            <span className="font-semibold">Principais aprendizados:</span> fluxo de trabalho Git e GitHub, prevenção contra XSS e
+            CSRF, e a diferença entre ambientes de desenvolvimento e produção.
+          </p>
         </section>
 
         {/* Seção Detalhada Sobre Minhas Habilidades */}
@@ -87,83 +165,57 @@ const AboutPage = () => {
             <FaCode className="text-primary text-3xl mr-4" />
             <h2 className="text-xl font-semibold text-tx-primary">Minhas Habilidades e Ferramentas</h2>
           </div>
+          <p className="leading-relaxed mb-4">
+            Além do que implementei no projeto, também adquiri experiência com as seguintes tecnologias e ferramentas:
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaLayerGroup className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Frontend</h3>
               </div>
-              <p className="text-tx-primary text-sm">JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS</p>
+              <p className="text-sm">JavaScript, TypeScript, Next.js, React, HTML, CSS, Tailwind CSS</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaTerminal className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Backend</h3>
               </div>
-              <p className="text-tx-primary text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
+              <p className="text-sm">Node.js, NestJS (conhecimento), Prisma, RESTful APIs</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaDatabase className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Bancos de Dados</h3>
               </div>
-              <p className="text-tx-primary text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
+              <p className="text-sm">PostgreSQL, MongoDB (conhecimento), NoSQL</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
-                <FaPuzzlePiece className="text-primary text-xl mr-3" />
+                <FaLock className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Autenticação & Segurança</h3>
               </div>
-              <p className="text-tx-primary text-sm">JWT, Cookies HTTP-only, Zod para Validação</p>
+              <p className="text-sm">JWT, Cookies HTTP-only, Zod para Validação, RBAC</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaDocker className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Infraestrutura & DevOps</h3>
               </div>
-              <p className="text-tx-primary text-sm">Docker, Git, GitHub</p>
+              <p className="text-sm">Docker, Docker Compose, Git, GitHub, Nginx, Linux, AWS EC2</p>
             </div>
             <div className="rounded-md border border-lines p-6 hover:shadow-xs transition duration-300">
               <div className="flex items-center mb-3">
                 <FaBrain className="text-primary text-xl mr-3" />
                 <h3 className="text-lg font-semibold text-tx-primary">Habilidades Essenciais</h3>
               </div>
-              <p className="text-tx-primary text-sm">Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo</p>
+              <p className="text-sm">Lógica de Programação, Resolução de Problemas, Aprendizado Contínuo</p>
             </div>
           </div>
         </section>
 
-        {/* Seção Dedicada ao Projeto de E-commerce */}
-        <section className="bg-white shadow-xs rounded-xl p-8 mb-12">
-          <div className="flex items-center mb-6">
-            <FaShoppingCart className="text-primary text-3xl mr-4" />
-            <h2 className="text-xl font-semibold text-tx-primary">Sobre o Meu Projeto de E-commerce</h2>
-          </div>
-          <p className="text-tx-primary leading-relaxed mb-4">
-            Este projeto de e-commerce é mais do que um simples aprendizado; é a materialização da minha paixão pelo
-            desenvolvimento web e uma forma de consolidar meus conhecimentos em um cenário prático e desafiador.
-          </p>
-          <p className="text-tx-primary leading-relaxed mb-4">
-            Desde a arquitetura do backend até a experiência do usuário no frontend, cada detalhe foi cuidadosamente pensado e
-            implementado. O objetivo principal foi explorar um amplo espectro de tecnologias e aplicar as melhores práticas de
-            desenvolvimento.
-          </p>
-          <ul className="list-disc list-inside text-tx-primary mb-4">
-            <li>Sistema de autenticação completo com JWT e cookies HTTP-only para segurança.</li>
-            <li>Validação robusta de entrada de dados utilizando Zod.</li>
-            <li>Utilização do Prisma como ORM para interação eficiente com o banco de dados PostgreSQL.</li>
-            <li>Conhecimento e exploração de bancos de dados NoSQL como MongoDB.</li>
-            <li>Implementação de conceitos de RESTful APIs para comunicação entre frontend e backend.</li>
-            <li>Containerização com Docker para facilitar o desenvolvimento e a implantação.</li>
-          </ul>
-          <p className="text-tx-primary leading-relaxed">
-            Este projeto serve como um portfólio dinâmico, demonstrando minhas habilidades e minha dedicação em criar soluções web
-            completas e bem estruturadas.
-          </p>
-        </section>
-
         {/* Rodapé Sofisticado */}
-        <footer className="text-center text-tx-primary mt-16 py-8 border-t border-gray-300">
+        <footer className="text-center mt-16 py-8 border-t border-gray-300">
           <p className="mb-2">
             Feito com <span className="text-primary font-semibold">Next.js 15</span>,{" "}
             <span className="font-semibold">TypeScript</span> e muita paixão <FaCode className="inline" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { categoryService } from "@/services/categories";
 import Link from "next/link";
 import { Suspense, use, useState } from "react";

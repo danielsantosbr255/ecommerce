@@ -5,10 +5,10 @@ import { IoIosArrowBack } from "react-icons/io";
 const MAX_PAGES_DISPLAYED = 20;
 
 interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
+  page: number;
+  limit: number;
   path: string;
-  pageSize: number;
+  totalPages: number;
 }
 
 interface PaginationLinkProps {
@@ -61,13 +61,13 @@ const PaginationLink = ({ href, children, disabled, isActive, ariaLabel }: Pagin
   );
 };
 
-const Pagination = ({ currentPage, totalPages, path, pageSize }: PaginationProps) => {
+const Pagination = ({ page, limit, totalPages, path }: PaginationProps) => {
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
     const halfMaxDisplayed = Math.floor(MAX_PAGES_DISPLAYED / 2);
-    let startPage = Math.max(1, currentPage - halfMaxDisplayed);
+    let startPage = Math.max(1, page - halfMaxDisplayed);
     const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
 
     // Ajusta startPage e endPage para garantir que MAX_PAGES_DISPLAYED sejam exibidas
@@ -97,38 +97,30 @@ const Pagination = ({ currentPage, totalPages, path, pageSize }: PaginationProps
   return (
     <section className="flex items-center justify-center gap-2">
       {/* Botão de página anterior */}
-      <ArrowPagination
-        href={`${path}&page=${currentPage - 1}&pageSize=${pageSize}`}
-        disabled={currentPage <= 1}
-        ariaLabel="Página anterior"
-      >
+      <ArrowPagination href={`${path}&page=${page - 1}&limit=${limit}`} disabled={page <= 1} ariaLabel="Página anterior">
         <IoIosArrowBack />
       </ArrowPagination>
 
       {/* Números das páginas */}
-      {pageNumbers.map((page, index) =>
-        page === "..." ? (
+      {pageNumbers.map((_page, index) =>
+        _page === "..." ? (
           <span key={`ellipsis-${index}`} className="px-3 py-1 text-primary">
             ...
           </span>
         ) : (
           <PaginationLink
-            key={page}
-            href={`${path}&page=${page}&pageSize=${pageSize}`}
-            isActive={currentPage === page}
-            ariaLabel={`Página ${page}`}
+            key={_page}
+            href={`${path}&page=${_page}&limit=${limit}`}
+            isActive={page === _page}
+            ariaLabel={`Página ${_page}`}
           >
-            {page}
+            {_page}
           </PaginationLink>
         )
       )}
 
       {/* Botão de próxima página */}
-      <ArrowPagination
-        href={`${path}&page=${currentPage + 1}&pageSize=${pageSize}`}
-        disabled={currentPage >= totalPages}
-        ariaLabel="Próxima página"
-      >
+      <ArrowPagination href={`${path}&page=${page + 1}&limit=${limit}`} disabled={page >= totalPages} ariaLabel="Próxima página">
         <IoIosArrowBack className="rotate-180" />
       </ArrowPagination>
     </section>

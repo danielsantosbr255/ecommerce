@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { User } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import React, { useContext } from "react";
 import Button from "@/components/ui/Button";
 import { usePathname } from "next/navigation";

@@ -1,4 +1,4 @@
-import Sessions from "@/components/layout/Sessions";
+import Sessions from "@/components/common/Sessions";
 
 function page() {
   return (

@@ -49,7 +49,7 @@ export default function Profile() {
 
   return (
     <main className="flex flex-col w-full h-full">
-      <section className="bg-bg-secondary flex w-full p-6 rounded-lg items-center justify-between shadow-xs gap-3 my-2">
+      <section className="bg-bg-secondary flex flex-col sm:flex-row w-full p-6 rounded-lg items-center justify-between shadow-xs gap-3 my-2">
         <div className="flex gap-4 items-center">
           <span className="bg-bg-primary p-3 shadow rounded-full">
             <FaUserAstronaut className="text-primary" size={40} />
@@ -62,17 +62,16 @@ export default function Profile() {
           </div>
         </div>
 
-        <Button href="/account/security">
-          <FaUserEdit className="mr-2" size={20} /> Editar Dados
+        <Button href="/account/security" className="gap-2">
+          <FaUserEdit size={20} /> Editar Dados
         </Button>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
         <ProfileCard href="/account/security" label="Acesso e segurança" icon={<FaShieldAlt size={40} />}>
           <p>Alterar o login, nome ou celular</p>
         </ProfileCard>
 
-        {/* Cartão de Últimos Pedidos */}
         <ProfileCard href="/account/orders" label="Meus Pedidos" icon={<FaShoppingBasket size={40} />}>
           <p>Rastrear, devolver, cancelar um pedido, baixar a nota fiscal ou comprar novamente</p>
         </ProfileCard>
@@ -81,12 +80,10 @@ export default function Profile() {
           <p>Alterar, remover ou definir o endereço padrão</p>
         </ProfileCard>
 
-        {/* Cartão de Endereço Principal */}
         <ProfileCard href="/account/reviews" label="Avaliações" icon={<FaThumbsUp size={40} />}>
           <p>Avalie suas compras e visualize suas avaliações e comentários</p>
         </ProfileCard>
 
-        {/* Cartão de Favoritos Recentes */}
         <ProfileCard href="/account/favorites" label="Favoritos" icon={<FaHeart size={40} />}>
           <p>Consulte sua lista de produtos favoritados</p>
         </ProfileCard>

@@ -25,7 +25,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading: userLoading } = useQuery({ queryKey: ["user"], queryFn: userService.getOwn });
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => userService.getOne("me"),
+    staleTime: 0,
+  });
 
   const signUp = useCallback(
     async ({ name, email, password }: SignUpFormData) => {
@@ -35,7 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (result && result.session) {
           sessionStorage.setItem("accessToken", result.session.accessToken);
-          await queryClient.invalidateQueries({ queryKey: ["user"] });
           route.push("/account");
           toast.success("Conta criada com sucesso!");
         }
@@ -47,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
       }
     },
-    [route, queryClient]
+    [route]
   );
 
   const signIn = useCallback(

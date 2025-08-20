@@ -1,4 +1,4 @@
-import Sessions from "@/components/layout/Sessions";
+import Sessions from "@/components/common/Sessions";
 
 async function page() {
   return (

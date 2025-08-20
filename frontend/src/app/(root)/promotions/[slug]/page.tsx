@@ -43,7 +43,6 @@ const PromotionsPage = async ({ params }: { params: Promise<{ slug: string }> })
           ))}
         </div>
       </section>
-      )
     </main>
   );
 };

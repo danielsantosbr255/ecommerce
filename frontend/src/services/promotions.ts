@@ -7,8 +7,7 @@ class PromotionService {
       const response = await api.post("/promotions", promotionData);
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=promotions`);
       return response.data;
-    } catch (error) {
-      console.error("Erro ao enviar avaliação:", error);
+    } catch {
       return null;
     }
   }
@@ -21,8 +20,7 @@ class PromotionService {
         _noToken: true,
       });
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -30,14 +28,14 @@ class PromotionService {
   public async getOne(slug: string) {
     try {
       const promotionTag = `promotion-${slug}`;
+
       const response = await api.get<Promotion>(`/promotions/${slug}`, {
         cache: "force-cache",
         next: { revalidate: 3600 * 24, tags: ["promotions", promotionTag] },
         _noToken: true,
       });
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -47,8 +45,7 @@ class PromotionService {
       const response = await api.put(`/promotions/${id}`, promotionData);
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=promotions`);
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }
@@ -58,8 +55,7 @@ class PromotionService {
       const response = await api.delete(`/promotions/${id}`);
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?tag=promotions`);
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return null;
     }
   }

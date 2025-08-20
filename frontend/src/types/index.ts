@@ -163,16 +163,20 @@ export interface Product {
 }
 
 export interface Pagination {
-  totalItems: number;
-  currentPage: number;
-  pageSize: number;
+  total: number;
+  page: number;
+  limit: number;
   totalPages: number;
 }
 
 export interface SearchPageProps {
-  q?: string;
-  page?: string;
-  pageSize?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+  brandId?: string;
+  categoryId?: string;
+  orderBy?: string;
+  order?: "asc" | "desc";
 }
 
 export interface Order {

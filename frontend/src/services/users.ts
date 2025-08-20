@@ -1,5 +1,15 @@
-import { User } from "@/types";
+import { Pagination, User } from "@/types";
 import { api } from "@/lib/api";
+
+interface UserResponse {
+  data: User[];
+  meta: Pagination;
+}
+
+interface UserQueryParams {
+  page?: number;
+  limit?: number;
+}
 
 class UserService {
   public async create(userData: Omit<User, "id">) {
@@ -13,23 +23,24 @@ class UserService {
     }
   }
 
-  public async getOwn() {
+  public async getMany(query: UserQueryParams = { page: 1, limit: 20 }) {
+    const { page, limit } = query;
+    const params: Record<string, string> = {};
+
+    if (page) params["page"] = page.toString();
+    if (limit) params["limit"] = limit.toString();
+
+    const tag = `users-${JSON.stringify(params)}`;
+
     try {
-      const response = await api.get<User>("/users/me", { _auth: true });
+      const response = await api.get<UserResponse>("/users", {
+        cache: "force-cache",
+        next: { revalidate: 3600, tags: ["users", tag] },
+        params,
+        _auth: true,
+      });
       return response.data;
     } catch {
-      return null;
-    }
-  }
-
-  public async getAll() {
-    try {
-      const response = await api.get<User[]>("/users", { _auth: true });
-      return response.data;
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching users:", error);
-      }
       return null;
     }
   }
@@ -38,10 +49,7 @@ class UserService {
     try {
       const response = await api.get<User>(`/users/${id}`, { _auth: true });
       return response.data;
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error(`Error fetching user with ID ${id}:`, error);
-      }
+    } catch {
       return null;
     }
   }

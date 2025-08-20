@@ -14,7 +14,7 @@ interface Props {
 async function ProductList({ callback, label, icon, empty }: Props) {
   const result = await callback();
   if (!result) return null;
-  const { products } = result;
+  const { data: products } = result;
 
   if (!products || !products.length) {
     if (empty) return null;
@@ -40,7 +40,7 @@ export default function ProductSession({ callback, label, icon, empty }: Props) 
       {!empty && <SessionLabel label={label} icon={icon} />}
 
       <Suspense fallback={<ProductCarousel products={null} />}>
-        <ProductList callback={callback} />
+        <ProductList callback={callback} label={label} icon={icon} empty={empty} />
       </Suspense>
     </section>
   );

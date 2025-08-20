@@ -1,7 +1,7 @@
 import { api } from "@/lib/api";
 import { NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
-import { setCookiesFromResponse } from "@/lib/cookies";
+import { setCookiesFromResponse } from "@/lib/utils/cookies";
 
 export async function POST() {
   const serverHeaders = await headers();

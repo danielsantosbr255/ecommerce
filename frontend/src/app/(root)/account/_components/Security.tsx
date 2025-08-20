@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/providers/AuthContext";
 import { FaUserLock } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
-import { formatPhone } from "@/utils/formatters";
+import { formatPhone } from "@/lib/utils/formatters";
 import { TbPasswordUser } from "react-icons/tb";
 
 interface FormData {
@@ -58,9 +58,9 @@ export default function AccessAndSecurity() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-bg-secondary shadow-xs rounded-lg gap-4 p-1 grid grid-cols-[3fr_2fr] overflow-hidden"
+      className="bg-bg-secondary shadow-xs rounded-lg gap-4 p-1 grid grid-cols-1 lg:grid-cols-[3fr_2fr] overflow-hidden"
     >
-      <section className="bg-bg-secondary flex flex-col space-y-5 border-r-2 border-dashed border-lines p-5">
+      <section className="bg-bg-secondary flex flex-col space-y-5 lg:border-r-2 border-dashed border-lines p-5">
         <div className="flex items-center gap-3">
           <FaUserLock className="text-primary" size={20} />
           <h2 className="text-md font-semibold text-tx-primary">Configurações de Login</h2>
@@ -139,7 +139,7 @@ export default function AccessAndSecurity() {
         <Button type="submit">{isSubmitting ? <Loader2 className="animate-material-spin" /> : "Salvar Alterações"}</Button>
       </section>
 
-      <section className="bg-bg-secondary flex flex-col items-center justify-center">
+      <section className="bg-bg-secondary hidden lg:flex flex-col items-center justify-center">
         <div className="flex items-center gap-6">
           <TbPasswordUser className="text-primary/70" size={150} />
 

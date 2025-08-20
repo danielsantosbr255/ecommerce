@@ -1,8 +1,8 @@
 "use client";
 
 import Alert from "../ui/Alert";
-import { useRef, useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
+import { useRef, useState, useEffect } from "react";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([
@@ -56,7 +56,7 @@ export default function Notification() {
   return (
     <button
       ref={buttonRef}
-      className="relative flex items-center gap-0 py-2 px-4 text-tx-primary hover:bg-gray-100 hover:text-primary cursor-pointer rounded-md transition duration-300 focus:outline-none"
+      className="relative flex items-center gap-0 py-2 px-3 text-tx-primary hover:bg-gray-100 hover:text-primary cursor-pointer rounded-md transition duration-300 focus:outline-none"
       onClick={toggleNotifications}
     >
       <div className="relative">

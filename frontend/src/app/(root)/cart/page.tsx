@@ -1,4 +1,4 @@
-import CartItems from "./components/CartItems";
+import CartItems from "./_components/CartItems";
 import { FaCartArrowDown } from "react-icons/fa";
 
 export default function CartPage() {
