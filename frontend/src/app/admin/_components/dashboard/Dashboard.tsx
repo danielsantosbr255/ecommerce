@@ -9,11 +9,15 @@ import { FaBoxesPacking } from "react-icons/fa6";
 import { FaBoxes, FaShoppingBasket, FaUsers } from "react-icons/fa";
 
 export default function Dashboard() {
-  const { data: users } = useQuery({ queryKey: ["users"], queryFn: userService.getMany, staleTime: 60 * 1000 });
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => userService.getMany({ page: 1, limit: 10 }),
+    staleTime: 60 * 1000,
+  });
   const { data: orders } = useQuery({ queryKey: ["orders"], queryFn: orderService.getAll, staleTime: 60 * 1000 });
   const { data: result } = useQuery({ queryKey: ["products"], queryFn: () => productService.getMany() });
 
-  const totalUsers = users?.length || 0;
+  const totalUsers = users?.meta?.total || 0;
   const totalOrders = orders?.length || 0;
   const totalProducts = result?.meta?.total || 0;
 
