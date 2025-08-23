@@ -6,36 +6,42 @@ class CartController {
     this.service = service;
   }
 
-  addToCart = async (req, res) => {
+  create = async (req, res) => {
     const validatedData = validator.create(req.body);
-    const cart = await this.service.addItem({ userId: req.user.id, ...validatedData });
+    const cart = await this.service.create({ userId: req.userId, ...validatedData });
     res.json(cart);
   };
 
-  getOwnCart = async (req, res) => {
-    const cart = await this.service.getOwnCart(req.user.id);
+  getMany = async (req, res) => {
+    const cart = await this.service.getMany(req.query);
     res.json(cart);
   };
 
-  getCart = async (req, res) => {
-    const cart = await this.service.getCart(req.params.id);
+  getOne = async (req, res) => {
+    const cart = await this.service.getOne(req.params.id);
     res.json(cart);
   };
 
-  updateItem = async (req, res) => {
-    const validatedData = validator.update({ id: req.params.id, ...req.body });
-    const item = await this.service.updateItem(validatedData);
+  getByUserId = async (req, res) => {
+    const id = req.params.id === "me" ? req.userId : req.params.id;
+    const cart = await this.service.getByUserId(id);
+    res.json(cart);
+  };
+
+  update = async (req, res) => {
+    const validatedData = validator.update(req.body);
+    const item = await this.service.update(req.params.id, validatedData);
     res.json(item);
   };
 
   removeCart = async (req, res) => {
-    const cart = await this.service.removeCart({ userId: req.user.id });
+    const cart = await this.service.removeCart({ userId: req.userId });
     res.json({ message: "Carrinho removido!", cart });
   };
 
   removeItem = async (req, res) => {
     const validatedData = validator.remove({ id: req.params.id });
-    const item = await this.service.removeItem({ userId: req.user.id, ...validatedData });
+    const item = await this.service.removeItem({ userId: req.userId, ...validatedData });
     res.json({ message: "Item removido do carrinho!", item });
   };
 }

@@ -1,7 +1,16 @@
 const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 const key = Buffer.from(process.env.ENCRYPTION_KEY, "base64");
 if (key.length !== 32) throw new Error("ENCRYPTION_KEY must be 32 bytes (base64-encoded)");
+
+const verifyPassword = (password, cryptPassword) => {
+  return bcrypt.compare(password, cryptPassword);
+};
+
+const hashPassword = (password) => {
+  return bcrypt.hash(password, 10);
+};
 
 const encryptData = (data) => {
   const iv = crypto.randomBytes(12);
@@ -35,4 +44,4 @@ const encryptPayload = (payload) => {
   return encrypted;
 };
 
-module.exports = { encryptData, decryptData, encryptPayload };
+module.exports = { encryptData, decryptData, encryptPayload, hashPassword, verifyPassword };

@@ -1,22 +1,22 @@
 const { prisma } = require("../src/common/database/prisma");
-const authUtil = require("../src/common/utils/auth.util");
+const cryptoUtil = require("../src/common/utils/crypto.util");
 
 async function main() {
   //#region | Criar Usuários
   const adminUser = await prisma.user.upsert({
     where: { email: "admin@email.com" },
     update: {},
-    create: { email: "admin@email.com", name: "Administrador", password: await authUtil.hashPassword("gGCxU34aueNKwK") },
+    create: { email: "admin@email.com", name: "Administrador", password: await cryptoUtil.hashPassword("gGCxU34aueNKwK") },
   });
   const sellerUser = await prisma.user.upsert({
     where: { email: "seller@email.com" },
     update: {},
-    create: { email: "seller@email.com", name: "Vendedor", password: await authUtil.hashPassword("123123") },
+    create: { email: "seller@email.com", name: "Vendedor", password: await cryptoUtil.hashPassword("123123") },
   });
   const buyerUser = await prisma.user.upsert({
     where: { email: "buyer@email.com" },
     update: {},
-    create: { email: "buyer@email.com", name: "Comprador", password: await authUtil.hashPassword("123123") },
+    create: { email: "buyer@email.com", name: "Comprador", password: await cryptoUtil.hashPassword("123123") },
   });
   //#endregion
 

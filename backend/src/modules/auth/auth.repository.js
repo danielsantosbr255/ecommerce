@@ -11,7 +11,7 @@ class AuthRepository {
       where: { userId_userAgent: { userId, userAgent } },
       update: { accessToken, refreshToken, ipAddress, userAgent, os, browser, device, location, expiresAt },
       create: { userId, accessToken, refreshToken, ipAddress, userAgent, os, browser, device, location, expiresAt },
-      include: { user: true, user: { omit: { password: true } } },
+      include: { user: { omit: { password: true } } },
     });
   }
 

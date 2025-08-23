@@ -55,13 +55,11 @@ function PromotionArtisticSlot({ isLoading = false }: { isLoading?: boolean }) {
 
 function DiscountBadge({ discount, isLoading }: { discount: number; isLoading?: boolean }) {
   if (isLoading)
-    return (
-      <div className="w-20 h-20 items-center justify-center mx-auto md:mx-0 rounded-full shadow-lg bg-gray-200 animate-pulse" />
-    );
+    return <div className="items-center justify-center mx-auto md:mx-0 rounded-full shadow-lg bg-gray-200 animate-pulse" />;
   return (
-    <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary shadow-lg overflow-hidden mx-auto md:mx-0">
+    <div className="relative w-16 h-16 md:w-20 md:h-20 inline-flex items-center justify-center rounded-full bg-primary shadow-lg overflow-hidden mx-auto md:mx-0">
       <span className="absolute inset-0 border-4 border-t-transparent border-white/30 rounded-full animate-material-spin"></span>
-      <span className="text-xl font-bold text-tx-on-primary">-{discount}%</span>
+      <span className="text-sm md:text-xl font-bold text-tx-on-primary">-{discount}%</span>
     </div>
   );
 }
@@ -74,14 +72,12 @@ function ProductCard({ item, isLoading = false }: { item: Promotion["products"][
   const image = showSkeleton ? (
     <span className={`w-full h-full aspect-square !max-h-80 !max-w-80 m-auto ${skeleton}`} />
   ) : (
-    <ProductImage product={item.product} alt={item.product.title} className="aspect-square object-cover rounded-lg" />
+    <ProductImage product={item.product} className="aspect-square" />
   );
 
   return (
     <div className="flex flex-col gap-2">
-      <div
-        className={`flex flex-col relative bg-bg-secondary rounded-lg p-2 shadow-md hover:shadow-xl transition-all duration-300`}
-      >
+      <div className="flex flex-col relative bg-bg-secondary rounded-lg p-2 shadow-md hover:shadow-xl transition-all duration-300">
         {image}
 
         {showSkeleton ? (
@@ -122,18 +118,18 @@ function PromotionCard({ promotion, isLoading = false }: { promotion: Promotion 
   return (
     <Link
       href={promotion?.slug ? `/promotions/${promotion.slug}` : "#"}
-      className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 md:px-10 xl:px-20 lg:py-10 min-h-[280px] lg:min-h-[400px]"
+      className="relative flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 items-center w-full h-full group p-4 md:px-10 xl:px-20 lg:py-10 lg:min-h-[400px]"
     >
       <div className="flex flex-col gap-2 md:gap-4 text-center md:text-left">
         <h1
-          className={`text-3xl md:text-2xl xl:text-5xl font-bold ${orbitron.className} text-transparent ${
+          className={`text-2xl md:text-2xl xl:text-5xl font-bold ${orbitron.className} text-transparent ${
             isLoading ? skeleton : "bg-gradient-to-r from-primary to-pink-500 bg-clip-text"
           }`}
         >
-          {promotion?.title}
+          {promotion.title}
         </h1>
 
-        <p className={`text-primary/80 text-base md:text-sm xl:text-lg ${orbitron.className} ${isLoading && skeleton}`}>
+        <p className={`text-primary/80 text-sm md:text-sm xl:text-lg ${orbitron.className} ${isLoading && skeleton}`}>
           {promotion?.description}
         </p>
 

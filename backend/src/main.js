@@ -1,13 +1,24 @@
-require("dotenv").config();
 require("express-async-errors");
 
-const app = require("./app.module");
 const { connectDB } = require("./common/database/prisma");
+const { connectRedis } = require("./common/database/redis");
 
 const PORT = process.env.PORT || 3001;
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🔥 Servidor rodando em http://localhost:${PORT}`);
-  });
-});
+const start = async () => {
+  try {
+    await connectDB();
+    await connectRedis();
+
+    const app = require("./app.module");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Erro ao iniciar o servidor:", error);
+    process.exit(1);
+  }
+};
+
+start();

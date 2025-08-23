@@ -8,5 +8,6 @@ router.get("/users", verifyToken, controller.getMany);
 router.get("/users/:id", verifyToken, controller.getOne);
 router.put("/users/:id", verifyToken, controller.update);
 router.delete("/users/:id", verifyToken, controller.delete);
+router.get("/users/:id/resource", verifyToken, controller.getResource);
 
 module.exports = router;

@@ -7,7 +7,7 @@ class AddressController {
   }
 
   create = async (req, res) => {
-    const validateData = dataValidator.create({ ...req.body, userId: req.user.id });
+    const validateData = dataValidator.create({ ...req.body, userId: req.userId });
     const address = await this.service.create(validateData);
     res.json(address);
   };

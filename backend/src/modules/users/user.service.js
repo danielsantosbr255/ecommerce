@@ -1,5 +1,5 @@
 const repository = require("./user.repository");
-const authUtil = require("../../common/utils/auth.util");
+const cryptoUtil = require("../../common/utils/crypto.util");
 const CustomError = require("../../common/utils/CustomError");
 const { buildOrder } = require("../../common/utils/filter.util");
 const { getPagination, buildMeta } = require("../../common/utils/pagination.util");
@@ -58,15 +58,20 @@ class UserService {
 
     if (password && password.length === 0) password = undefined;
 
-    if (password && (await authUtil.verifyPassword(password, user.password))) {
+    if (password && (await cryptoUtil.verifyPassword(password, user.password))) {
       throw new CustomError("A senha não pode ser igual", 400);
     }
 
-    if (role && role === user.role) {
-      throw new CustomError(`O usuário ${user.name} já é ${role}`, 400);
+    if (role && user.roles.some((r) => r.role.name === role)) {
+      throw new CustomError("Usuário ja possui esse cargo", 400);
     }
 
-    const updatedUser = this.repository.update(ability, id, { name, email, password, role });
+    const updatedUser = this.repository.update(ability, id, {
+      name,
+      email,
+      password: cryptoUtil.hashPassword(password),
+      role,
+    });
 
     return { message: "Usuário atualizado com sucesso", user: updatedUser };
   }
@@ -75,6 +80,20 @@ class UserService {
     const user = await this.repository.remove(ability, id);
     if (!user) throw new CustomError("Usuário não encontrado", 404);
     return user;
+  }
+
+  // TEST: Get a specific resource related to the user
+  async getResource(id, query) {
+    const { resource, page = 1, limit = 10, sort, filter } = query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const resources = ["carts", "reviews", "orders", "addresses"];
+
+    if (resource && !resources.includes(resource)) {
+      throw new CustomError("Recurso inválido", 400);
+    }
+
+    return this.repository.getResource(id, { resource, skip, limit: parseInt(limit), sort, filter });
   }
 }
 

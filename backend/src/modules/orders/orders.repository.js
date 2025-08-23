@@ -37,8 +37,17 @@ class OrderRepository {
 
   getByUserId(userId, ability) {
     return this.prisma.order.findMany({
-      where: { userId, AND: [accessibleBy(ability).Order] },
-      include: { user: true, items: { include: { product: true } } },
+      where: { userId },
+      include: {
+        user: { select: { id: true, name: true } },
+        items: {
+          include: {
+            product: {
+              select: { id: true, title: true, images: { take: 1, select: { url: true } } },
+            },
+          },
+        },
+      },
     });
   }
 

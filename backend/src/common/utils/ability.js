@@ -1,7 +1,13 @@
 const { AbilityBuilder } = require("@casl/ability");
 const { createPrismaAbility } = require("@casl/prisma");
+const { prisma } = require("../database/prisma");
 
-function defineAbilityFor(user) {
+async function defineAbilityFor(userId) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
+  });
+
   const { can, build } = new AbilityBuilder(createPrismaAbility);
 
   if (user) {

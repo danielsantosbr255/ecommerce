@@ -70,6 +70,10 @@ module.exports = (error, req, res, next) => {
   let errors = [];
   let stackToLog = formatStackTrace(error.stack);
 
+  if (res.headersSent) {
+    return next(error); // não tenta responder de novo
+  }
+
   // --- Lógica para Resposta ao Frontend e Log no Backend ---
   if (error instanceof z.ZodError) {
     statusCode = 400;

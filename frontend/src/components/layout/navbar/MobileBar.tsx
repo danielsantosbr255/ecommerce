@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { JSX, useState } from "react";
-import MobileMenu from "./MobileMenu";
 import Logo from "@/components/ui/Logo";
 import { useRouter } from "next/navigation";
 import { Loader2, Menu } from "lucide-react";
@@ -11,13 +9,15 @@ import SearchBar from "@/components/ui/Searchbar";
 import { FaBuildingShield } from "react-icons/fa6";
 import { FaSignInAlt, FaUserAstronaut } from "react-icons/fa";
 
-const MobileBar = (): JSX.Element => {
+type Props = {
+  toggleMobileMenu: () => void;
+};
+
+const MobileBar = ({ toggleMobileMenu }: Props) => {
   const router = useRouter();
   const { user, userLoading } = useAuth();
 
-  const isAdmin = user && user.roles.length > 0;
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const isStaff = user && user.roles.length > 0;
 
   const handleSearch = (query?: string) => {
     if (query?.trim()) router.push(`/search?q=${query}`);
@@ -34,7 +34,7 @@ const MobileBar = (): JSX.Element => {
         <Logo size={20} name className="!h-15" />
 
         <div className="flex gap-4 justify-end items-center">
-          {isAdmin && (
+          {isStaff && (
             <Link href="/admin">
               <FaBuildingShield size={22} className="text-primary" />
             </Link>
@@ -47,8 +47,6 @@ const MobileBar = (): JSX.Element => {
           )}
         </div>
       </main>
-
-      <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />
 
       <div className="lg:hidden">
         <SearchBar onSearch={handleSearch} placeholder="Pesquisar produtos..." />

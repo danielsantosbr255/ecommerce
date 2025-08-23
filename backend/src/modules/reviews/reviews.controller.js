@@ -1,14 +1,13 @@
-const CustomError = require("../../common/utils/CustomError");
 const service = require("./reviews.service");
+const CustomError = require("../../common/utils/CustomError");
 
 class ReviewController {
   constructor() {
     this.service = service;
   }
 
-  create = async (req, res) => {
-    const userId = req.user?.id;
-    if (userId) req.body.userId = userId;
+  create = async (req, res) => {    
+    if (req.userId) req.body.userId = req.userId;
 
     const review = await this.service.create(req.body);
     res.status(201).json(review);

@@ -16,7 +16,7 @@ class SessionController {
   };
 
   getByUserId = async (req, res) => {
-    const id = req.params.id === "me" ? req.user.id : req.params.id;
+    const id = req.params.id === "me" ? req.userId : req.params.id;
     const sessions = await this.service.getByUserId(id, req.ability);
     res.json(sessions);
   };

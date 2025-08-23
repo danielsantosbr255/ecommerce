@@ -1,7 +1,6 @@
-const { accessibleBy } = require("@casl/prisma");
+const repository = require("./orders.repository");
 const { prisma } = require("../../common/database/prisma");
 const CustomError = require("../../common/utils/CustomError");
-const repository = require("./orders.repository");
 
 class OrderService {
   constructor() {
@@ -39,23 +38,23 @@ class OrderService {
   };
 
   getAll = (ability) => {
-    return repository.getAll(ability);
+    return this.repository.getAll(ability);
   };
 
   getOne = (id, ability) => {
-    return repository.getOne(id, ability);
+    return this.repository.getOne(id, ability);
   };
 
   getByUserId = (userId, ability) => {
-    return repository.getByUserId(userId, ability);
+    return this.repository.getByUserId(userId, ability);
   };
 
   update = (id, data, ability) => {
-    return repository.update(id, data, ability);
+    return this.repository.update(id, data, ability);
   };
 
   delete = (id, ability) => {
-    return repository.delete(id, ability);
+    return this.repository.delete(id, ability);
   };
 }
 

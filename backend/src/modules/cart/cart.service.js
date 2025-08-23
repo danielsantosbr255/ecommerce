@@ -1,82 +1,47 @@
-const { prisma } = require("../../common/database/prisma");
+const repository = require("./cart.repository");
+const productRepository = require("../products/products.repository");
+const { getPagination } = require("../../common/utils/pagination.util");
 
 class BrandService {
   constructor() {
-    this.prisma = prisma;
+    this.repository = repository;
   }
 
-  async addItem(data) {
+  async create(data) {
     const { userId, productId, quantity } = data;
 
-    const product = await this.prisma.product.findUnique({
-      where: { id: productId },
-      select: { stock: true },
-    });
+    const product = await productRepository.getById(productId);
 
     if (!product) throw new CustomError("Produto não encontrado.", 404);
     if (product.stock < quantity) throw new CustomError("Quantidade em estoque insuficiente.", 400);
 
-    let cart = await this.prisma.cart.findUnique({ where: { userId } });
-    if (!cart) cart = await this.prisma.cart.create({ data: { userId } });
+    const existingCart = await this.getByUserId(userId);
 
-    const cartItem = await this.prisma.cartItem.upsert({
-      where: { cartId_productId: { cartId: cart.id, productId } },
-      update: { quantity: { increment: quantity } },
-      create: { cartId: cart.id, productId, quantity },
-    });
-    return cartItem;
-  }
-
-  async getOwnCart(userId) {
-    const cart = await this.prisma.cart.findUnique({
-      where: { userId },
-      include: {
-        items: {
-          include: { product: { include: { images: true } } },
-          orderBy: { createdAt: "desc" },
-        },
-      },
-    });
-
-    if (!cart) {
-      await this.prisma.cart.create({ data: { userId } });
-      return [];
+    if (!existingCart) {
+      return await this.repository.create(userId, { productId, quantity });
     }
 
-    return cart.items;
+    return await this.repository.update(existingCart.id, { productId, quantity });
   }
 
-  async getCart(id) {
-    const cart = await this.prisma.cart.findUnique({
-      where: { id },
-      include: { items: { include: { product: true } } },
-    });
-
-    if (!cart) {
-      await this.prisma.cart.create({ data: { id } });
-      return [];
-    }
-
-    return cart.items;
+  getMany(query) {
+    return this.repository.getMany(query);
   }
 
-  updateItem(data) {
-    const { id, quantity } = data;
-
-    return this.prisma.cartItem.update({
-      where: { id },
-      data: { quantity },
-    });
+  getOne(id) {
+    return this.repository.getOne(id);
   }
 
-  removeCart(data) {
-    const { userId } = data;
-    return this.prisma.cart.delete({ where: { userId } });
+  getByUserId(userId) {
+    return this.repository.getByUserId(userId);
   }
 
-  removeItem(data) {
-    const { id } = data;
-    return this.prisma.cartItem.delete({ where: { id } });
+  update(id, data) {
+    return this.repository.update(id, data);
+  }
+
+  delete(id) {
+    return this.repository.delete(id);
   }
 }
 

@@ -42,8 +42,8 @@ class UserRepository {
       data: {
         name: data.name || user.name,
         email: data.email || user.email,
-        password: data.password ? authUtil.hashPassword(data.password, 10) : user.password,
-        role: role || user.role,
+        password: data.password || user.password,
+        roles: data.role ? { connect: { name: data.role } } : undefined,
       },
     });
   }
@@ -54,6 +54,24 @@ class UserRepository {
       omit: { password: true },
     });
   }
+
+  // TEST: Get a specific resource related to the user
+  getResource = async (id, { resource, skip, limit, sort, filter }) => {
+    const include = {
+      // roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } },
+    };
+
+    if (resource) {
+      include[resource] = {
+        skip,
+        take: limit,
+        orderBy: sort ? { [sort]: "asc" } : undefined,
+        where: filter ? JSON.parse(filter) : undefined,
+      };
+    }
+
+    return this.prisma.user.findUnique({ where: { id }, include });
+  };
 }
 
 module.exports = new UserRepository();

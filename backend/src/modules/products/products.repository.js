@@ -98,18 +98,11 @@ class ProductRepository {
           create: data.images,
           updateMany: keptImages.map((img) => ({
             where: { id: img.id },
-            data: {
-              order: img.order,
-              alt: img.alt,
-            },
+            data: { order: img.order, alt: img.alt },
           })),
         },
-        brand: {
-          connect: { id: data.brandId },
-        },
-        category: {
-          connect: { id: data.categoryId },
-        },
+        brand: { connect: { id: data.brandId } },
+        category: { connect: { id: data.categoryId } },
         specifications: {
           deleteMany: {},
           create: data.specifications || [],

@@ -6,10 +6,14 @@ import DesktopBar from "./DesktopBar";
 import { cn } from "@/lib/utils/utils";
 import SectionsBar from "./SectionsBar";
 import { useEffect, useState } from "react";
+import MobileMenu from "./MobileMenu";
+
+const DELAY = 500;
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const DELAY = 500;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -35,7 +39,7 @@ export default function Header() {
       >
         <Topbar
           className={cn(
-            `flex flex-col gap-2 mx-auto items-center justify-center overflow-hidden transition-all duration-${DELAY} ease-in-out`,
+            `flex flex-col gap-2 mx-auto items-center justify-center transition-all duration-${DELAY} ease-in-out`,
             scrolled ? "max-h-0 w-0 opacity-0" : "max-h-32 w-full opacity-100"
           )}
         />
@@ -47,7 +51,7 @@ export default function Header() {
           )}
         />
 
-        <MobileBar />
+        <MobileBar toggleMobileMenu={toggleMobileMenu} />
 
         <SectionsBar
           className={`transition-all duration-${DELAY} ease-initial ${
@@ -55,6 +59,8 @@ export default function Header() {
           }`}
         />
       </main>
+
+      <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />
     </header>
   );
 }
