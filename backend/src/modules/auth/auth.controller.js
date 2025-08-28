@@ -1,6 +1,8 @@
 const service = require("./auth.service");
 const tokenUtil = require("../../common/utils/token.util");
+const CustomError = require("../../common/utils/CustomError");
 const { getClientIp } = require("../../common/utils/getClientIp");
+const { getUserAgent } = require("../../common/utils/userAgent.util");
 const authValidator = require("../../common/validators/auth.validator");
 
 class AuthController {
@@ -24,33 +26,29 @@ class AuthController {
 
   signIn = async (req, res) => {
     const validatedData = authValidator.signIn(req.body);
-    
-    const ipAddress = getClientIp(req);
-    const userAgent = req.headers["user-agent"] || "Desconhecido";
-    
-    const user = await this.service.signIn(validatedData);
-    const session = await this.service.createSession({ userId: user.id, userAgent, ipAddress });
-    
-    req.session.userId = user.id;
-    tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
-    res.json({ session });
+    const ipAddress = getClientIp(req);
+    const ua = getUserAgent(req.headers["user-agent"] || "Desconhecido");
+
+    const user = await this.service.signIn(validatedData);
+
+    req.session.userId = user.id;
+    req.session.roles = user.roles.map((role) => role.role.name);
+    req.session.os = ua.os;
+    req.session.browser = ua.browser;
+    req.session.device = ua.device;
+    req.session.ipAddress = ipAddress;
+
+    res.json({ session: req.session });
   };
 
   signOut = async (req, res) => {
-    const ability = req.ability;
-    const userId = req.userId;
-    const userAgent = req.headers["user-agent"] || "Desconhecido";
-
-    try {
-      await this.service.signOut({ userId, userAgent, ability });
-      tokenUtil.clearTokens(res);
-    } catch (error) {
-      tokenUtil.clearTokens(res);
-      throw error;
-    } finally {
+    req.session.destroy((err) => {
+      if (err) throw new CustomError("Failed to logout", 500);
+      res.clearCookie("sid", { domain: process.env.COOKIE_DOMAIN, httpOnly: true });
+      res.clearCookie("_csrf");
       res.json({ message: "Deslogado com sucesso" });
-    }
+    });
   };
 
   refreshToken = async (req, res) => {
@@ -63,6 +61,11 @@ class AuthController {
     tokenUtil.setCookiesTokens(res, session.accessToken, session.refreshToken);
 
     res.json({ session });
+  };
+
+  getCSRFToken = (req, res) => {
+    console.log(req.csrfToken());
+    res.json({ csrfToken: req.csrfToken() });
   };
 }
 

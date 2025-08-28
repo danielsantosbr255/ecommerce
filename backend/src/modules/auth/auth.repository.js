@@ -48,7 +48,14 @@ class AuthRepository {
   }
 
   findByEmail(email) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        roles: {
+          include: { role: { include: { permissions: { include: { permission: true } } } } },
+        },
+      },
+    });
   }
 }
 

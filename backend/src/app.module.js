@@ -1,5 +1,7 @@
 const cors = require("cors");
+const helmet = require("helmet");
 const express = require("express");
+const csrf = require("@dr.pogodin/csurf");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const { RedisStore } = require("connect-redis");
@@ -7,6 +9,7 @@ const paypal = require("./common/payment/paypal");
 const { getRedis } = require("./common/database/redis");
 const errorHandler = require("./common/middlewares/error.handler");
 
+// Modules
 const AuthModule = require("./modules/auth/auth.module");
 const CartModule = require("./modules/cart/cart.module");
 const UsersModule = require("./modules/users/user.module");
@@ -28,12 +31,13 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://local
 
 const app = express();
 
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-app.use(
-  session({
+const setupSession = () => {
+  return session({
     store: redisStore,
     name: "sid",
     secret: process.env.SESSION_SECRET,
@@ -45,8 +49,11 @@ app.use(
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 1, // 1 dia
     },
-  })
-);
+  });
+};
+
+app.use(setupSession());
+app.use(csrf({ cookie: true }));
 
 app.use("/api", [
   UploadModule,

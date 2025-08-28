@@ -1,8 +1,7 @@
 const { z } = require("zod");
-const CustomError = require("../utils/CustomError"); // Ajuste o caminho se necessário
+const CustomError = require("../utils/CustomError");
 const { ANSIColors } = require("../../scripts/colors");
 
-// --- Funções Auxiliares (mantidas como estão) ---
 function formatZodErrorsForFrontend(error) {
   if (!error || !Array.isArray(error.issues)) {
     return ["Um erro inesperado de validação ocorreu."];
@@ -10,128 +9,107 @@ function formatZodErrorsForFrontend(error) {
 
   return error.issues.map((issue) => {
     const path = issue.path.join(".");
-    let message = "";
-
     switch (issue.code) {
       case "invalid_type":
-        message = `Campo '${path}': esperado ${issue.expected}, recebido ${issue.received}.`;
-        break;
+        return `Campo '${path}': esperado ${issue.expected}, recebido ${issue.received}.`;
       case "invalid_string":
-        if (issue.validation === "uuid") {
-          message = `Campo '${path}': formato UUID inválido.`;
-        } else if (issue.validation === "email") {
-          message = `Campo '${path}': formato de e-mail inválido.`;
-        } else {
-          message = `Campo '${path}': ${issue.message}.`;
-        }
-        break;
+        if (issue.validation === "uuid") return `Campo '${path}': formato UUID inválido.`;
+        if (issue.validation === "email") return `Campo '${path}': formato de e-mail inválido.`;
+        return `Campo '${path}': ${issue.message}.`;
       case "too_small":
-        message = `Campo '${path}': deve ser no mínimo ${issue.minimum} ${issue.type === "string" ? "caracteres" : "e"}.`;
-        break;
+        return `Campo '${path}': deve ser no mínimo ${issue.minimum} ${issue.type === "string" ? "caracteres" : "e"}.`;
       case "too_big":
-        message = `Campo '${path}': deve ser no máximo ${issue.maximum} ${issue.type === "string" ? "caracteres" : "e"}.`;
-        break;
+        return `Campo '${path}': deve ser no máximo ${issue.maximum} ${issue.type === "string" ? "caracteres" : "e"}.`;
       case "invalid_literal":
-        message = `Campo '${path}': valor inválido, esperado '${issue.expected}'.`;
-        break;
+        return `Campo '${path}': valor inválido, esperado '${issue.expected}'.`;
       case "custom":
-        message = `Campo '${path}': ${issue.message}.`;
-        break;
+        return `Campo '${path}': ${issue.message}.`;
       case "unrecognized_keys":
-        message = `Campos não reconhecidos: ${issue.keys.join(", ")}.`;
-        break;
+        return `Campos não reconhecidos: ${issue.keys.join(", ")}.`;
       case "invalid_enum_value":
-        message = `Campo '${path}': valor inválido, esperado um dos seguintes: ${issue.options
-          .map((opt) => `'${opt}'`)
-          .join(", ")}.`;
-        break;
+        return `Campo '${path}': valor inválido, esperado um dos seguintes: ${issue.options.map((opt) => `'${opt}'`).join(", ")}.`;
       default:
-        message = `Campo '${path}': ${issue.message || "Erro de validação desconhecido."}`;
+        return `Campo '${path}': ${issue.message || "Erro de validação desconhecido."}`;
     }
-    return message;
   });
 }
 
 function formatStackTrace(stack) {
   if (!stack) return "Stack trace não disponível.";
-
-  // Divide o stack em linhas, filtra linhas irrelevantes e formata
   return stack
     .split("\n")
-    .filter((line) => line.includes("at ") && !line.includes("node_modules")) // Filtra linhas de 'node_modules'
-    .map((line) => `  ${line.trim()}`) // Adiciona indentação para melhor leitura
+    .filter((line) => line.includes("at ") && !line.includes("node_modules"))
+    .map((line) => `  ${line.trim()}`)
     .join("\n");
 }
 
-// --- Middleware de Erro com Cores ---
+const errorConfigs = {
+  ZodError: {
+    statusCode: 400,
+    message: "Erro de validação nos dados fornecidos.",
+    getErrors: (error) => formatZodErrorsForFrontend(error),
+    logTitle: "ERRO DE VALIDAÇÃO ZOD DETECTADO",
+  },
+  CustomError: {
+    statusCode: (error) => error.statusCode,
+    message: (error) => error.message,
+    getErrors: (error) => error.errors || [],
+    logTitle: "CUSTOM ERROR DETECTADO",
+  },
+  EBADCSRFTOKEN: {
+    statusCode: 403,
+    message: "CSRF token inválido.",
+    getErrors: () => [],
+    logTitle: "ERRO DE CSRF DETECTADO",
+  },
+  Default: {
+    statusCode: 500,
+    message: () => (process.env.NODE_ENV === "production" ? "Ocorreu um erro inesperado. Tente novamente mais tarde." : "Ocorreu um erro interno desconhecido."),
+    getErrors: () => [],
+    logTitle: "ERRO INTERNO DO SERVIDOR",
+  },
+};
+
+// --- Centralized Logging Function ---
+function logError({ error, config, req, stackTrace }) {
+  console.error(`${ANSIColors.BRIGHT_RED}--- ❌ ${config.logTitle} ---${ANSIColors.RESET}`);
+  console.error(`${ANSIColors.YELLOW}Status: ${typeof config.statusCode === "function" ? config.statusCode(error) : config.statusCode}${ANSIColors.RESET}`);
+  console.error(`${ANSIColors.YELLOW}Mensagem: ${typeof config.message === "function" ? config.message(error) : config.message}${ANSIColors.RESET}`);
+  
+  if (error.name && config.logTitle === "ERRO INTERNO DO SERVIDOR") {
+    console.error(`${ANSIColors.YELLOW}Tipo do Erro: ${error.name}${ANSIColors.RESET}`);
+  }
+
+  const errors = config.getErrors(error);
+  if (errors.length > 0) {
+    console.error(`${ANSIColors.YELLOW}Detalhes do Erro:${ANSIColors.RESET}`);
+    errors.forEach((err) => console.error(`${ANSIColors.MAGENTA}- ${typeof err === "string" ? err : JSON.stringify(err, null, 2)}${ANSIColors.RESET}`));
+  }
+
+  console.error(`${ANSIColors.BLUE}Caminho da Requisição: ${req.method} ${req.originalUrl}${ANSIColors.RESET}`);
+  console.error(`${ANSIColors.BLUE}Stack Trace:\n${ANSIColors.RED}${stackTrace}${ANSIColors.RESET}`);
+  console.error(`${ANSIColors.BRIGHT_RED}----------------------------------${ANSIColors.RESET}\n`);
+}
+
+// --- Refactored Error Handler Middleware ---
 module.exports = (error, req, res, next) => {
-  let statusCode = error.statusCode || 500;
-  let message = "Erro interno no servidor.";
-  let errors = [];
-  let stackToLog = formatStackTrace(error.stack);
+  if (res.headersSent) return next(error);
 
-  if (res.headersSent) {
-    return next(error); // não tenta responder de novo
-  }
+  const stackTrace = formatStackTrace(error.stack);
+  const errorType = error instanceof z.ZodError ? "ZodError" : error instanceof CustomError ? "CustomError" : error.code === "EBADCSRFTOKEN" ? "EBADCSRFTOKEN" : "Default";
+  const config = errorConfigs[errorType];
 
-  // --- Lógica para Resposta ao Frontend e Log no Backend ---
-  if (error instanceof z.ZodError) {
-    statusCode = 400;
-    message = "Erro de validação nos dados fornecidos.";
-    errors = formatZodErrorsForFrontend(error);
+  const statusCode = typeof config.statusCode === "function" ? config.statusCode(error) : config.statusCode;
+  const message = typeof config.message === "function" ? config.message(error) : config.message;
+  const errors = config.getErrors(error);
 
-    // Log formatado com cores para erros Zod
-    console.error(`${ANSIColors.BRIGHT_RED}--- ❌ ERRO DE VALIDAÇÃO ZOD DETECTADO ---${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Status: ${statusCode}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Mensagem para o Frontend: ${message}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Erros Detalhados (Backend Log):${ANSIColors.RESET}`);
-    errors.forEach((err) => console.error(`${ANSIColors.MAGENTA}- ${err}${ANSIColors.RESET}`)); // Cada erro em magenta
-    console.error(`${ANSIColors.BLUE}Caminho da Requisição: ${req.method} ${req.originalUrl}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.BLUE}Stack Trace:\n${ANSIColors.RED}${stackToLog}${ANSIColors.RESET}`); // Stack em vermelho
-    console.error(`${ANSIColors.BRIGHT_RED}---------------------------------------${ANSIColors.RESET}\n`);
-  } else if (error instanceof CustomError) {
-    statusCode = error.statusCode;
-    message = error.message;
-    errors = error.errors;
+  logError({ error, config, req, stackTrace });
 
-    // Log formatado com cores para CustomErrors
-    console.error(`${ANSIColors.BRIGHT_RED}--- ❌ CUSTOM ERROR DETECTADO ---${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Status: ${statusCode}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Mensagem: ${message}${ANSIColors.RESET}`);
-    if (errors && errors.length > 0) {
-      console.error(`${ANSIColors.YELLOW}Detalhes do Erro:${ANSIColors.RESET}`);
-      // Itera sobre os erros para colorir cada um, se forem objetos
-      errors.forEach((err) => {
-        console.error(`${ANSIColors.MAGENTA}- ${JSON.stringify(err, null, 2)}${ANSIColors.RESET}`);
-      });
-    }
-    console.error(`${ANSIColors.BLUE}Caminho da Requisição: ${req.method} ${req.originalUrl}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.BLUE}Stack Trace:\n${ANSIColors.RED}${stackToLog}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.BRIGHT_RED}----------------------------------${ANSIColors.RESET}\n`);
-  } else {
-    // Erros genéricos ou internos
-    if (process.env.NODE_ENV === "production") {
-      message = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
-    } else {
-      message = error.message || "Ocorreu um erro interno desconhecido.";
-    }
-
-    // Log formatado com cores para erros internos
-    console.error(`${ANSIColors.BRIGHT_RED}--- ❌ ERRO INTERNO DO SERVIDOR ---${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Status: ${statusCode}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.YELLOW}Mensagem: ${error.message || message}${ANSIColors.RESET}`);
-    if (error.name) {
-      console.error(`${ANSIColors.YELLOW}Tipo do Erro: ${error.name}${ANSIColors.RESET}`);
-    }
-    console.error(`${ANSIColors.BLUE}Caminho da Requisição: ${req.method} ${req.originalUrl}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.BLUE}Stack Trace:\n${ANSIColors.RED}${stackToLog}${ANSIColors.RESET}`);
-    console.error(`${ANSIColors.BRIGHT_RED}-----------------------------------${ANSIColors.RESET}\n`);
-  }
-
-  // --- Resposta Final ao Frontend (sem cores, pois é JSON) ---
   res.status(statusCode).json({
+    success: false,
+    code: error.code,
     status: statusCode >= 400 && statusCode < 500 ? "fail" : "error",
-    message: message,
-    ...(errors.length > 0 && { errors: errors }),
+    message,
+    ...(errors.length > 0 && { errors }),
   });
 };

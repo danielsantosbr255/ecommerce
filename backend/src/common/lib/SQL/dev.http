@@ -1,0 +1,11 @@
+
+GET http://localhost:3001/users
+
+### SIGN-UP
+POST http://localhost:3001/users
+content-type: application/json
+
+{
+    "name": "Daniel Santos",
+    "email": "daniel@email.com"
+}

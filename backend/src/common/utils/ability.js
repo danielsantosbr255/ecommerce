@@ -1,32 +1,28 @@
 const { AbilityBuilder } = require("@casl/ability");
 const { createPrismaAbility } = require("@casl/prisma");
-const { prisma } = require("../database/prisma");
 
-async function defineAbilityFor(userId) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
-  });
-
+/**
+ * @param {{ id: string, roles: string[] }} user
+ * @param {{ name: string, permissions: { permission: { action: string, subject: string } }[] }[]} roles
+ * @return {import("@casl/ability").Ability}
+ */
+function defineAbilityFor(user, roles) {
   const { can, build } = new AbilityBuilder(createPrismaAbility);
 
-  if (user) {
-    const roles = user.roles.map((ur) => ({ ...ur.role, permissions: ur.role.permissions }));
+  if (!user) return build();
 
-    roles.forEach((role) => {
-      role.permissions.forEach((rp) => {
-        const { action, subject } = rp.permission;
-        can(action, subject);
-      });
-    });
+  user.roles.forEach((ur) => {
+    const role = roles.find((r) => r.name === ur);
+    const rolePermissions = role.permissions.map((p) => p.permission);
+    rolePermissions.forEach((permission) => can(permission.action, permission.subject));
+  });
 
-    can("read", "Order", { userId: user.id });
-    can("manage", "User", { id: user.id });
-    can("manage", "Address", { userId: user.id });
-    can("manage", "Session", { userId: user.id });
-    can("manage", "Review", { userId: user.id });
-    can("manage", "Cart", { userId: user.id });
-  }
+  can("read", "Order", { userId: user.id });
+  can("manage", "User", { id: user.id });
+  can("manage", "Address", { userId: user.id });
+  can("manage", "Session", { userId: user.id });
+  can("manage", "Review", { userId: user.id });
+  can("manage", "Cart", { userId: user.id });
 
   return build();
 }

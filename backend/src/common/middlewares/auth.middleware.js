@@ -1,45 +1,53 @@
+/** @import {Request, Response, NextFunction} from '../lib/types'; */
+
+const cache = require("../utils/cache");
 const { prisma } = require("../database/prisma");
-const tokenUtil = require("../utils/token.util");
-const cryptoUtil = require("../utils/crypto.util");
 const CustomError = require("../utils/CustomError");
 const { defineAbilityFor } = require("../utils/ability");
+const { getUserAgent } = require("../utils/userAgent.util");
 
-const verifyToken = async (req, res, next) => {
-  // const userAgent = req.headers["user-agent"] || "Desconhecido";
-  // const accessToken = req.headers["authorization"]?.split(" ")[1];
+/**
+ * Middleware de autenticação e definição de habilidades.
+ *
+ * @param {Request} req - Objeto da requisição
+ * @param {Response} res - Objeto da resposta
+ * @param {NextFunction} next - Função para chamar o próximo middleware
+ */
+const AuthGuard = async (req, res, next) => {
+  if (!req.session?.userId) throw new CustomError("Acesso negado!", 401);
+  const start = process.hrtime.bigint();
 
-  // if (!accessToken) throw new CustomError("Token não fornecido!", 401);
+  if (!cache.get("roles")) {
+    const roles = await prisma.role.findMany({
+      include: { permissions: { include: { permission: true } } },
+    });
+    cache.set("roles", roles);
+    console.log("Caching roles...");
+  }
 
-  // const decodedAccessToken = tokenUtil.verifyJWT(accessToken, process.env.ACCESS_TOKEN_SECRET);
-  // const encryptedPayload = cryptoUtil.encryptPayload({ userAgent });
+  const cachedRoles = cache.get("roles");
+  const user = { id: req.session.userId, roles: req.session.roles };
 
-  // if (decodedAccessToken.ctx !== encryptedPayload) {
-  //   console.error("❌ context not match");
-  //   throw new CustomError("Acesso negado!", 401);
-  // }
+  req.userId = user.id;
+  req.ability = defineAbilityFor(user, cachedRoles);
 
-  // const session = await prisma.session.findFirst({
-  //   where: { accessToken, userAgent },
-  //   include: {
-  //     user: {
-  //       include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } },
-  //       omit: { password: true },
-  //     },
-  //   },
-  // });
+  const stats = cache.getStats();
+  const size = stats.keys * stats.ksize * stats.vsize;
+  console.log(`Cache size: ${size} bytes`);
 
-  // if (!session || session.expiresAt < new Date()) {
-  //   throw new CustomError("Acesso negado!", 401);
-  // }
+  const userAgent = req.headers["user-agent"] || "Desconhecido";
+  const ua = getUserAgent(userAgent);
 
-  if (!req.session?.userId) {
+  if (ua.browser !== req.session.browser) {
+    console.error("❌ Context not match.");
     throw new CustomError("Acesso negado!", 401);
   }
 
-  req.userId = req.session?.userId;
-  // req.ability = defineAbilityFor(req.userId);
+  const end = process.hrtime.bigint();
+  const durationInSeconds = Number(end - start) / 1e9;
+  console.log(`⌚ Request Time: ${durationInSeconds.toFixed(3)}s`);
 
   next();
 };
 
-module.exports = { verifyToken };
+module.exports = { AuthGuard };

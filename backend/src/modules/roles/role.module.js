@@ -1,12 +1,12 @@
 const controller = require("./role.controller");
-const { verifyToken } = require("../../common/middlewares/auth.middleware");
+const { AuthGuard } = require("../../common/middlewares/auth.middleware");
 
 const router = require("express").Router();
 
-router.post("/roles", verifyToken, controller.create);
-router.get("/roles", verifyToken, controller.getAll);
-router.get("/roles/:id", verifyToken, controller.getOne);
-router.put("/roles/:id", verifyToken, controller.update);
-router.delete("/roles/:id", verifyToken, controller.remove);
+router.post("/roles", AuthGuard, controller.create);
+router.get("/roles", AuthGuard, controller.getAll);
+router.get("/roles/:id", AuthGuard, controller.getOne);
+router.put("/roles/:id", AuthGuard, controller.update);
+router.delete("/roles/:id", AuthGuard, controller.remove);
 
 module.exports = router;
