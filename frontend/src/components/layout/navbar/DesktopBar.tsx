@@ -18,7 +18,10 @@ export default function DesktopBar({ className }: { className?: string }) {
   const { user, userLoading } = useAuth();
   const isStaff = user && user.roles.length > 0;
 
-  const { data } = useQuery({ queryKey: ["cart"], queryFn: cartService.getOwnCart });
+  const { data } = useQuery({
+    queryKey: ["cart"],
+    queryFn: cartService.getOwnCart,
+  });
   const cartItemCount = data?.length ? data?.length : null;
 
   const handleSearch = (query?: string) => {
@@ -27,7 +30,12 @@ export default function DesktopBar({ className }: { className?: string }) {
   };
 
   return (
-    <main className={cn(className, "hidden w-full px-2 lg:grid grid-cols-[1fr_2fr_1fr] items-center justify-between")}>
+    <main
+      className={cn(
+        className,
+        "hidden w-full px-2 lg:grid grid-cols-[1fr_2fr_1fr] items-center justify-between"
+      )}
+    >
       <div className="flex w-full h-full items-center font-semibold">
         <Logo size={25} />
       </div>

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:clear": "rimraf .next/cache && next dev"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -54,6 +55,7 @@
     "@types/set-cookie-parser": "^2.4.10",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

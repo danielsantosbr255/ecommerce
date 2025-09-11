@@ -42,7 +42,10 @@ class CategoryService {
 
   public async update(slug: string, categoryData: Partial<Category>) {
     try {
-      const response = await api.put<Category>(`/categories/${slug}`, categoryData);
+      const response = await api.put<Category>(
+        `/categories/${slug}`,
+        categoryData
+      );
       return response.data;
     } catch (error) {
       console.error(error);

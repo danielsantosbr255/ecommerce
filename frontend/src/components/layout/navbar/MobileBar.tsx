@@ -27,7 +27,11 @@ const MobileBar = ({ toggleMobileMenu }: Props) => {
   return (
     <section className="block lg:hidden w-full">
       <main className="lg:hidden grid grid-cols-3 w-full h-auto px-1 justify-between text-primary items-center">
-        <button onClick={toggleMobileMenu} className="justify-start focus:outline-none cursor-pointer" aria-label="Abrir menu">
+        <button
+          onClick={toggleMobileMenu}
+          className="justify-start focus:outline-none cursor-pointer"
+          aria-label="Abrir menu"
+        >
           <Menu size={22} />
         </button>
 
@@ -43,7 +47,9 @@ const MobileBar = ({ toggleMobileMenu }: Props) => {
           {userLoading ? (
             <Loader2 size={25} className="animate-spin" />
           ) : (
-            <Link href={user ? "/account" : "/sign-in"}>{user ? <FaUserAstronaut size={22} /> : <FaSignInAlt />}</Link>
+            <Link href={user ? "/account" : "/sign-in"}>
+              {user ? <FaUserAstronaut size={22} /> : <FaSignInAlt />}
+            </Link>
           )}
         </div>
       </main>
