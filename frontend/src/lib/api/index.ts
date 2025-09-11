@@ -1,26 +1,14 @@
-import { Session } from "@/types";
 import { HttpError } from "./utils/errors";
-import { authManager } from "./utils/authManager";
 import { HttpService } from "./HttpService";
+// import { authManager } from "./utils/authManager";
 
 const isServer = typeof window === "undefined";
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
 export const api = new HttpService({
   baseURL: API_URL,
   withCredentials: true,
 });
-
-const refreshAccessToken = async (): Promise<string | null> => {
-  try {
-    const response = await api.post<{ session: Session }>(`${BASE_URL}/api/auth/refresh`);
-    if (response.status !== 200 || !response.data?.session) return null;
-    return response.data.session.accessToken;
-  } catch {
-    return null;
-  }
-};
 
 api.interceptors.request.use(async (config) => {
   const headers = new Headers(config.headers);
@@ -30,18 +18,19 @@ api.interceptors.request.use(async (config) => {
     const cookieStore = await cookies();
     const headerStore = await serverHeaders();
 
-    const token = cookieStore.get("accessToken")?.value;
-    if (token) authManager.set(token);
+    // const _csrfToken = cookieStore.get("_csrf")?.value;
+    // if (_csrfToken) authManager.set(_csrfToken);
 
     headers.set("Cookie", cookieStore.toString());
     headers.set("x-forwarded-for", headerStore.get("x-forwarded-for") || "127.0.0.1");
     headers.set("user-agent", headerStore.get("user-agent") || "Next.js Server");
   }
 
-  const token = authManager.get();
-  if (token && !headers.has("Authorization") && !config._noToken) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
+  // const _csrfToken = authManager.get();
+
+  // if (_csrfToken) {
+  //   headers.set("CSRF-Token", _csrfToken);
+  // }
 
   return { ...config, headers };
 });
@@ -57,15 +46,15 @@ api.interceptors.response.use(
 
     originalConfig._retry = true;
 
-    const newToken = await refreshAccessToken();
-    if (!newToken) {
-      authManager.clear();
-      throw error;
-    }
+    // const newToken = await refreshAccessToken();
+    // if (!newToken) {
+    //   authManager.clear();
+    //   throw error;
+    // }
 
-    authManager.set(newToken);
-    originalConfig.headers = new Headers(originalConfig.headers);
-    originalConfig.headers.set("Authorization", `Bearer ${newToken}`);
+    // authManager.set(newToken);
+    // originalConfig.headers = new Headers(originalConfig.headers);
+    // originalConfig.headers.set("Authorization", `Bearer ${newToken}`);
 
     return api.request(originalConfig.method || "GET", originalConfig.url || "", originalConfig.data, originalConfig);
   }

@@ -1,27 +1,21 @@
 const isServer = typeof window === "undefined";
 
 class AuthManager {
-  private accessToken: string | null = null;
+  private _csrf: string | null = null;
 
   get(): string | null {
-    if (!isServer) {
-      return sessionStorage.getItem("accessToken");
-    }
-    return this.accessToken;
+    if (!isServer) return sessionStorage.getItem("_csrf");
+    return this._csrf;
   }
 
   set(token: string): void {
-    if (!isServer) {
-      sessionStorage.setItem("accessToken", token);
-    }
-    this.accessToken = token;
+    if (!isServer) sessionStorage.setItem("_csrf", token);
+    this._csrf = token;
   }
 
   clear(): void {
-    if (!isServer) {
-      sessionStorage.removeItem("accessToken");
-    }
-    this.accessToken = null;
+    if (!isServer) sessionStorage.removeItem("_csrf");
+    this._csrf = null;
   }
 }
 

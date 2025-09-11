@@ -39,7 +39,7 @@ const AboutPage = () => {
           <div className="md:flex items-center -mx-8">
             <div className="md:w-1/3 px-8 mb-6 md:mb-0 text-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto shadow-xs">
-                <Image src="/power.jpg" alt="Minha Foto de Perfil" layout="fill" objectFit="cover" />
+                <Image src="/power.jpg" alt="Minha Foto de Perfil" fill objectFit="cover" />
 
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>

@@ -1,5 +1,3 @@
-export const revalidate = 3600; // Cache global de 1 hora
-
 import { Suspense } from "react";
 import { FaLink } from "react-icons/fa";
 import { productService } from "@/services/products";
@@ -8,6 +6,7 @@ import ProductDetail from "@/components/products/ProductDetails";
 import ProductReviews from "@/components/products/ProductReviews";
 import ProductSession from "@/components/products/ProductSession";
 import ProductReviewsForm from "@/components/products/ProductReviewsForm";
+import NotFoundTitle from "@/components/common/NotFoundTitle";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -15,9 +14,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   if (!product) {
     return (
-      <main className="flex flex-col w-full h-full mx-auto items-center justify-center">
+      <NotFoundTitle>
         <h1 className="text-2xl font-medium my-2 py-2 text-center">Produto não encontrado</h1>
-      </main>
+      </NotFoundTitle>
     );
   }
 
@@ -40,3 +39,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     </main>
   );
 }
+
+export const generateStaticParams = async () => {
+  const result = await productService.getMany();
+  if (!result) return [];
+
+  const products = result.data;
+  return products.map((product) => ({ slug: product.slug }));
+};
