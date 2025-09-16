@@ -1,8 +1,7 @@
 const repository = require("./cart.repository");
 const productRepository = require("../products/products.repository");
-const { getPagination } = require("../../common/utils/pagination.util");
 
-class BrandService {
+class CartService {
   constructor() {
     this.repository = repository;
   }
@@ -45,4 +44,4 @@ class BrandService {
   }
 }
 
-module.exports = new BrandService();
+module.exports = new CartService();
