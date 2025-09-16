@@ -35,7 +35,7 @@ const CategoryCard = ({ category }: { category: Category | null }) => {
         {isLoading ? skeleton : image}
       </Link>
 
-      <h3 className="text-tx-primary text-lg leading-5">{category.name}</h3>
+      <h3 className="text-sm md:text-lg leading-5">{category.name}</h3>
     </section>
   );
 };
