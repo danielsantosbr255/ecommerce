@@ -15,6 +15,7 @@
     "@casl/ability": "^6.7.3",
     "@casl/prisma": "^1.5.1",
     "@dr.pogodin/csurf": "^1.16.5",
+    "@paypal/paypal-server-sdk": "^1.1.0",
     "@prisma/client": "^6.13.0",
     "axios": "^1.9.0",
     "bcryptjs": "^3.0.2",

@@ -1,13 +1,14 @@
+process.loadEnvFile();
 require("express-async-errors");
 
-const { connectDB } = require("./common/database/prisma");
+const database = require("./common/database/database");
 const { connectRedis } = require("./common/database/redis");
 
 const PORT = process.env.PORT || 3001;
 
 const start = async () => {
   try {
-    await connectDB();
+    await database.connect();
     await connectRedis();
 
     const app = require("./app.module");

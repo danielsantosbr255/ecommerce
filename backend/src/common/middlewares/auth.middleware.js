@@ -1,10 +1,10 @@
 /** @import {Request, Response, NextFunction} from '../lib/types'; */
 
 const cache = require("../utils/cache");
-const { prisma } = require("../database/prisma");
 const CustomError = require("../utils/CustomError");
 const { defineAbilityFor } = require("../utils/ability");
-const { getUserAgent } = require("../utils/userAgent.util");
+const { getUserAgent } = require("../utils/user-agent.util");
+const RoleService = require("../../modules/roles/role.service");
 
 /**
  * Middleware de autenticação e definição de habilidades.
@@ -17,15 +17,9 @@ const AuthGuard = async (req, res, next) => {
   if (!req.session?.userId) throw new CustomError("Acesso negado!", 401);
   const start = process.hrtime.bigint();
 
-  if (!cache.get("roles")) {
-    const roles = await prisma.role.findMany({
-      include: { permissions: { include: { permission: true } } },
-    });
-    cache.set("roles", roles);
-    console.log("Caching roles...");
-  }
-
+  if (!cache.get("roles")) await RoleService.getAll();
   const cachedRoles = cache.get("roles");
+
   const user = { id: req.session.userId, roles: req.session.roles };
 
   req.userId = user.id;

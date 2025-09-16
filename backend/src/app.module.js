@@ -1,15 +1,12 @@
 const cors = require("cors");
 const helmet = require("helmet");
 const express = require("express");
-const csrf = require("@dr.pogodin/csurf");
-const session = require("express-session");
+// const csrf = require("@dr.pogodin/csurf");
 const cookieParser = require("cookie-parser");
-const { RedisStore } = require("connect-redis");
-const paypal = require("./common/payment/paypal");
-const { getRedis } = require("./common/database/redis");
+const { manageSession } = require("./common/utils/session");
 const errorHandler = require("./common/middlewares/error.handler");
 
-// Modules
+// #region | Modules
 const AuthModule = require("./modules/auth/auth.module");
 const CartModule = require("./modules/cart/cart.module");
 const UsersModule = require("./modules/users/user.module");
@@ -22,38 +19,28 @@ const AddressModule = require("./modules/address/address.module");
 const ReviewsModule = require("./modules/reviews/reviews.module");
 const SessionModule = require("./modules/sessions/session.module");
 const ProductsModule = require("./modules/products/products.module");
+const PaymentsModule = require("./modules/payments/payments.module");
 const PromotionsModule = require("./modules/promotions/promotions.module");
 const CategoriesModule = require("./modules/categories/categories.module");
 const PermissionsModule = require("./modules/permissions/permissions.module");
+// #endregion
 
-const redisStore = new RedisStore({ client: getRedis() });
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000"];
 
 const app = express();
+const router = express.Router();
 
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-const setupSession = () => {
-  return session({
-    store: redisStore,
-    name: "sid",
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 1, // 1 dia
-    },
-  });
-};
+app.use(manageSession());
+// app.use(csrf({ cookie: true }));
 
-app.use(setupSession());
-app.use(csrf({ cookie: true }));
+router.get("/", (req, res) => res.send("Hello world!"));
+
+app.use("/", router);
 
 app.use("/api", [
   UploadModule,
@@ -71,7 +58,12 @@ app.use("/api", [
   RolesModule,
   PermissionsModule,
   MembersModule,
+  PaymentsModule,
 ]);
+
+app.use("*", (req, res) => {
+  res.status(404).json({ message: "Endpoint não encontrado" });
+});
 
 app.use(errorHandler);
 

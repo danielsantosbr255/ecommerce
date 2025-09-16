@@ -2,7 +2,7 @@ const service = require("./auth.service");
 const tokenUtil = require("../../common/utils/token.util");
 const CustomError = require("../../common/utils/CustomError");
 const { getClientIp } = require("../../common/utils/getClientIp");
-const { getUserAgent } = require("../../common/utils/userAgent.util");
+const { getUserAgent } = require("../../common/utils/user-agent.util");
 const authValidator = require("../../common/validators/auth.validator");
 
 class AuthController {

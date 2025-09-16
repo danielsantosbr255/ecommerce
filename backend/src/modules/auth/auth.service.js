@@ -2,7 +2,7 @@ const repository = require("./auth.repository");
 const tokenUtil = require("../../common/utils/token.util");
 const cryptoUtil = require("../../common/utils/crypto.util");
 const CustomError = require("../../common/utils/CustomError");
-const { getUserAgent } = require("../../common/utils/userAgent.util");
+const { getUserAgent } = require("../../common/utils/user-agent.util");
 const { getLocationFromIP } = require("../../common/utils/location.util");
 
 class AuthService {

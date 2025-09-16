@@ -1,4 +1,5 @@
 const repository = require("./role.repository");
+const cache = require("../../common/utils/cache");
 const CustomError = require("../../common/utils/CustomError");
 const validator = require("../../common/validators/role.validator");
 
@@ -13,7 +14,14 @@ class RoleService {
   }
 
   async getAll() {
-    return await this.repository.getAll();
+    if (cache.get("roles")) return cache.get("roles");
+
+    const roles = await this.repository.getAll();
+    cache.set("roles", roles);
+
+    console.log("💾 Caching roles...");
+
+    return roles;
   }
 
   async getOne(id) {

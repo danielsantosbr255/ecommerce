@@ -1,6 +1,6 @@
 const { z } = require("zod");
 const CustomError = require("../utils/CustomError");
-const { ANSIColors } = require("../../scripts/colors");
+const { ANSIColors } = require("../utils/colors");
 
 function formatZodErrorsForFrontend(error) {
   if (!error || !Array.isArray(error.issues)) {
@@ -27,7 +27,9 @@ function formatZodErrorsForFrontend(error) {
       case "unrecognized_keys":
         return `Campos não reconhecidos: ${issue.keys.join(", ")}.`;
       case "invalid_enum_value":
-        return `Campo '${path}': valor inválido, esperado um dos seguintes: ${issue.options.map((opt) => `'${opt}'`).join(", ")}.`;
+        return `Campo '${path}': valor inválido, esperado um dos seguintes: ${issue.options
+          .map((opt) => `'${opt}'`)
+          .join(", ")}.`;
       default:
         return `Campo '${path}': ${issue.message || "Erro de validação desconhecido."}`;
     }
@@ -64,7 +66,10 @@ const errorConfigs = {
   },
   Default: {
     statusCode: 500,
-    message: () => (process.env.NODE_ENV === "production" ? "Ocorreu um erro inesperado. Tente novamente mais tarde." : "Ocorreu um erro interno desconhecido."),
+    message: () =>
+      process.env.NODE_ENV === "production"
+        ? "Ocorreu um erro inesperado. Tente novamente mais tarde."
+        : "Ocorreu um erro interno desconhecido.",
     getErrors: () => [],
     logTitle: "ERRO INTERNO DO SERVIDOR",
   },
@@ -73,9 +78,17 @@ const errorConfigs = {
 // --- Centralized Logging Function ---
 function logError({ error, config, req, stackTrace }) {
   console.error(`${ANSIColors.BRIGHT_RED}--- ❌ ${config.logTitle} ---${ANSIColors.RESET}`);
-  console.error(`${ANSIColors.YELLOW}Status: ${typeof config.statusCode === "function" ? config.statusCode(error) : config.statusCode}${ANSIColors.RESET}`);
-  console.error(`${ANSIColors.YELLOW}Mensagem: ${typeof config.message === "function" ? config.message(error) : config.message}${ANSIColors.RESET}`);
-  
+  console.error(
+    `${ANSIColors.YELLOW}Status: ${typeof config.statusCode === "function" ? config.statusCode(error) : config.statusCode}${
+      ANSIColors.RESET
+    }`
+  );
+  console.error(
+    `${ANSIColors.YELLOW}Mensagem: ${typeof config.message === "function" ? config.message(error) : config.message}${
+      ANSIColors.RESET
+    }`
+  );
+
   if (error.name && config.logTitle === "ERRO INTERNO DO SERVIDOR") {
     console.error(`${ANSIColors.YELLOW}Tipo do Erro: ${error.name}${ANSIColors.RESET}`);
   }
@@ -83,7 +96,9 @@ function logError({ error, config, req, stackTrace }) {
   const errors = config.getErrors(error);
   if (errors.length > 0) {
     console.error(`${ANSIColors.YELLOW}Detalhes do Erro:${ANSIColors.RESET}`);
-    errors.forEach((err) => console.error(`${ANSIColors.MAGENTA}- ${typeof err === "string" ? err : JSON.stringify(err, null, 2)}${ANSIColors.RESET}`));
+    errors.forEach((err) =>
+      console.error(`${ANSIColors.MAGENTA}- ${typeof err === "string" ? err : JSON.stringify(err, null, 2)}${ANSIColors.RESET}`)
+    );
   }
 
   console.error(`${ANSIColors.BLUE}Caminho da Requisição: ${req.method} ${req.originalUrl}${ANSIColors.RESET}`);
@@ -96,7 +111,14 @@ module.exports = (error, req, res, next) => {
   if (res.headersSent) return next(error);
 
   const stackTrace = formatStackTrace(error.stack);
-  const errorType = error instanceof z.ZodError ? "ZodError" : error instanceof CustomError ? "CustomError" : error.code === "EBADCSRFTOKEN" ? "EBADCSRFTOKEN" : "Default";
+  const errorType =
+    error instanceof z.ZodError
+      ? "ZodError"
+      : error instanceof CustomError
+      ? "CustomError"
+      : error.code === "EBADCSRFTOKEN"
+      ? "EBADCSRFTOKEN"
+      : "Default";
   const config = errorConfigs[errorType];
 
   const statusCode = typeof config.statusCode === "function" ? config.statusCode(error) : config.statusCode;

@@ -14,52 +14,50 @@ async function generateAccessToken() {
   return response.data.access_token;
 }
 
-exports.createOrder = async () => {
+const createOrder = async ({ items, currency_code = "BRL", brand_name = "Fireforge Labs", return_url, cancel_url }) => {
   const accessToken = await generateAccessToken();
 
-  const response = await axios({
-    method: "POST",
-    url: process.env.PAYPAL_BASE_URL + "/v2/checkout/orders",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data: {
+  // Calcula o valor total dos itens
+  const totalValue = items
+    .reduce((sum, item) => sum + parseFloat(item.unit_amount.value) * parseInt(item.quantity), 0)
+    .toFixed(2);
+
+  const response = await axios.post(
+    process.env.PAYPAL_BASE_URL + "/v2/checkout/orders",
+    {
       intent: "CAPTURE",
       purchase_units: [
         {
-          items: [
-            {
-              name: "Produto Teste",
-              description: "Produto Teste - Descricao",
-              quantity: "1",
-              unit_amount: {
-                currency_code: "BRL",
-                value: "10.00",
-              },
-            },
-          ],
+          items,
           amount: {
-            currency_code: "BRL",
-            value: "10.00",
+            currency_code,
+            value: totalValue,
             breakdown: {
               item_total: {
-                currency_code: "BRL",
-                value: "10.00",
+                currency_code,
+                value: totalValue,
               },
             },
           },
         },
       ],
       application_context: {
-        brand_name: "Fireforge Labs",
+        brand_name,
         landing_page: "NO_PREFERENCE",
         user_action: "PAY_NOW",
-        return_url: process.env.BASE_URL + "/success",
-        cancel_url: process.env.BASE_URL + "/cancel",
+        return_url: return_url || process.env.BASE_URL + "/success",
+        cancel_url: cancel_url || process.env.BASE_URL + "/cancel",
       },
     },
-  });
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
 
   return response.data.links.find((link) => link.rel === "approve").href;
 };
+
+module.exports = { createOrder };

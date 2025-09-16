@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // directUrl = env("DIRECT_URL")
 }
 
@@ -117,14 +117,32 @@ model Order {
   id         String       @id @default(uuid())
   userId     String
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalPrice Decimal
+  totalPrice Decimal      @db.Decimal(10, 2)
   status     ORDER_STATUS @default(PENDING)
   items      OrderItem[]
+  payments   Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("orders")
+}
+
+model Payment {
+  id                String  @id @default(uuid())
+  orderId           String
+  order             Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider          String
+  providerOrderId   String?
+  providerCaptureId String?
+  status            String
+  amount            Decimal
+  providerResponse  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payments")
 }
 
 model OrderItem {
