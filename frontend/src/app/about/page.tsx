@@ -44,7 +44,7 @@ const AboutPage = () => {
                 <div className="absolute inset-0 rounded-full bg-primary opacity-20 animate-ping"></div>
               </div>
               <h2 className="text-xl font-semibold text-tx-primary mt-4">Olá! Eu sou o Daniel.</h2>
-              <p className="text-tx-primary text-sm">Estudante de Desenvolvimento Web & Criador deste Projeto</p>
+              <p className="text-tx-primary text-sm">Desenvolvedor Web & Criador deste Projeto</p>
               <p className="flex text-tx-primary mt-2 font-semibold items-center justify-center gap-1">
                 <FaMailBulk className="text-tx-primary" /> Contato:{" "}
                 <Link href="mailto:asdanielsantos@gmail.com" className="text-primary hover:underline">
@@ -55,7 +55,7 @@ const AboutPage = () => {
             <div className="md:w-2/3 px-8">
               <p className="text-tx-primary leading-relaxed mb-4">
                 Minha jornada no mundo digital é uma aventura constante, desde as complexas mecânicas dos jogos que desenvolvi com
-                Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de 8 anos</strong>, o código foi minha
+                Python ao universo fascinante do desenvolvimento web. <strong>Durante mais de 5 anos</strong>, o código foi minha
                 tela e os jogos, minhas criações. Agora, estou focado em construir experiências interativas na web.
               </p>
               <p className="text-tx-primary leading-relaxed mb-4">
